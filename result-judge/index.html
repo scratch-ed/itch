@@ -14,8 +14,9 @@
     <input type="file" id="file" name="file">
 
     <script>
-        // test adding points to set
+        // test adding points to list
         var lines = [];
+        var color;
 
         window.devicePixelRatio = 1;
         /*
@@ -23,19 +24,45 @@
             in this case the penLine method. 
         */
         function makeProxiedRenderer(canvas) {
-            var render     = new ScratchRender(canvas);
+            var render = new ScratchRender(canvas);
+
+            //penLine
             var penLineOld = render.penLine;
             var handler = {
                 apply: function(target, thisArg, argumentsList) {
-                        console.log(`Called penLine with arguments: ${argumentsList}`);
-                        var p1 = {x:argumentsList[2], y:argumentsList[3]};
-                        var p2 = {x:argumentsList[4], y:argumentsList[5]};
-                        var line = {start:p1, end:p2};
-                        lines.push(line);
-                        return target.apply(thisArg,argumentsList);
-                    }
+                    console.log('Called penLine with arguments: ${argumentsList}');
+                    var p1 = {x:argumentsList[2], y:argumentsList[3]};
+                    var p2 = {x:argumentsList[4], y:argumentsList[5]};
+                    var line = {start:p1, end:p2};
+                    lines.push(line);
+                    color = argumentsList[1].color4f;
+                    return target.apply(thisArg,argumentsList);
+                }   
             };
             render.penLine = new Proxy(penLineOld,handler);
+
+            //penPoint
+            var penPointOld = render.penPoint;
+            var handler = {
+                apply: function(target, thisArg, argumentsList) {
+                    console.log(argumentsList);
+                    console.log('Called penPoint with arguments: ${argumentsList}');
+                    color = argumentsList[1].color4f;
+                    return target.apply(thisArg,argumentsList);
+                }
+            };
+            render.penPoint = new Proxy(penPointOld, handler);
+
+            //penClear
+            var penClearOld = render.penClear;
+            var handler = {
+                apply: function(target, thisArg, argumentsList) {
+                    console.log('Called penClear');
+                    return target.apply(thisArg, argumentsList);
+                }
+            }
+            render.penClear = new Proxy(penClearOld, handler);
+
             return render;
         }
         /*
@@ -93,6 +120,9 @@
             lines.forEach(lines => {
                 console.log(lines);
             });
+
+            if (lines.length < 4) return false; //no square without at least 4 sides
+
             // merge lines with same rico that overlap
             //TODO
             
@@ -114,24 +144,32 @@
             console.log(d4);
 
             // If d2 and d3 are the same, then following conditions must met to form a square. 
-            // 1) Square of length of d4 is same as twice the square of d2 
-            // 2) Square of length of d3 is same as twice the square of d2 
+            // 1) Square of d4 is same as twice the square of d2 
+            // 2) Square of d3 is same as twice the square of d2 
           
             if (isEqual(d2,d3) && isEqual(2 * d2,d4) && isEqual(2 * d2,distSq(p2, p3))) { 
                 var d = distSq(p2, p4); 
                 return (isEqual(d,distSq(p3, p4)) && isEqual(d,d2)); 
             }
 
+            // same for d3 and d4
+
             if (isEqual(d3,d4) && isEqual(2 * d3,d2) && isEqual(2 * d3,distSq(p3, p4))) { 
                 var d = distSq(p2, p3); 
                 return (isEqual(d,distSq(p2, p4)) && isEqual(d,d3)); 
             }  
+
+            // same for d2 and d4
 
             if (isEqual(d2,d4) && isEqual(2 * d2,d3) && isEqual(2 * d2,distSq(p2, p4))) { 
                 var d = distSq(p2, p3); 
                 return (isEqual(d,distSq(p3, p4)) && isEqual(d,d2)); 
             }
             return false;
+        }
+
+        function detectColor() {
+            return color;
         }
         
 	    </script>

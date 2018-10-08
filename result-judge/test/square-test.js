@@ -25,15 +25,33 @@ const runFile = (file, script) =>
 
 // Code which runs in chrome
 function testSquare() {
-    vm.greenFlag();
 	return detectSquare();
+}
+
+function testRectangle() {
+    return true;
+}
+
+function testColor() {
+    return detectColor();
 }
 
 // Async function which runs the tests
 async function runTests ()  {
     await test('isSquare', async t => {
         const isSquare = await runFile(process.argv[2],testSquare);
-       	t.ok(isSquare,"Goed gedaan, je hebt een vierkant getekend"); 
+       	t.ok(isSquare,"The figure is a square"); 
+
+        const isRectangle = testRectangle();
+        t.ok(isRectangle, "[ALWAYS TRUE] The figure is a rectangle");
+
+        const Sides = 4;
+        t.is(4, Sides, "[ALWAYS TRUE] It has four sides");
+
+        const isBlue = await runFile(process.argv[2],testColor);
+        const blue = [0,0,1,1];
+        t.same(isBlue, blue, "It is blue");
+
         t.end();
     });
     // close the browser window we used
