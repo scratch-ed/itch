@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <!-- Scratch Includes -->
+    <script src="lib/scratch-vm.min.js">       </script>
+    <script src="lib/scratch-storage.min.js">  </script>
+    <script src="lib/scratch-svg-renderer.js"> </script>
+    <script src="lib/audio_engine.js">         </script>
+    <script src="lib/scratch-render.min.js">   </script>
+
+    <h1 id="status">Result Scratch Tester</h1>
+    <canvas id="canvas" width="480" height="360" style="width: 480px"></canvas>
+    <canvas id="cpu"  width="480" height="360" style="width: 480px"></canvas>
+    <input type="file" id="file" name="file">
+
+    <script>
+        // test adding points to set
+        var lines = [];
+
+        window.devicePixelRatio = 1;
+        /*
+            Example of how to use a proxy over a method 
+            in this case the penLine method. 
+        */
+        function makeProxiedRenderer(canvas) {
+            var render     = new ScratchRender(canvas);
+            var penLineOld = render.penLine;
+            var handler = {
+                apply: function(target, thisArg, argumentsList) {
+                        console.log(`Called penLine with arguments: ${argumentsList}`);
+                        var p1 = {x:argumentsList[2], y:argumentsList[3]};
+                        var p2 = {x:argumentsList[4], y:argumentsList[5]};
+                        var line = {start:p1, end:p2};
+                        lines.push(line);
+                        return target.apply(thisArg,argumentsList);
+                    }
+            };
+            render.penLine = new Proxy(penLineOld,handler);
+            return render;
+        }
+        /*
+            Creates the ScratchVM and attach it to a canvas  
+        */
+        function makeScratchVM(canvas) {
+            var render  = makeProxiedRenderer(canvas);
+            var vm      = new VirtualMachine();
+            const audioEngine = new AudioEngine();
+            vm.attachAudioEngine(audioEngine);
+            const storage = new ScratchStorage();
+            vm.attachStorage(storage);
+            vm.attachRenderer(render);
+            vm.attachV2SVGAdapter(new ScratchSVGRenderer.SVGRenderer());
+            var adaptor  = new ScratchSVGRenderer.BitmapAdapter()
+            vm.attachV2BitmapAdapter(adaptor);
+            vm.render = render; 
+            return vm;
+        }
+
+        var canvas  = document.getElementById('canvas');
+        var vm      = makeScratchVM(canvas);        
+
+        document.getElementById('file').addEventListener('change', e => {
+            const reader = new FileReader();
+            const thisFileInput = e.target;
+            reader.onload = () => {
+                vm.start();
+                vm.loadProject(reader.result)
+                    .then(() => {
+                        vm.greenFlag();
+                        // we add a `#loaded` div to our document, the integration suite
+                        // waits for that element to show up to assume the vm is ready
+                        // to play!
+                        const div = document.createElement('div');
+                        div.id='loaded';
+                        document.body.appendChild(div);
+                    });
+            };
+            reader.readAsArrayBuffer(thisFileInput.files[0]);
+        });
+
+        function distSq(p1, p2) {
+            return (p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y) * (p1.y - p2.y);
+        }
+
+        function isEqual(d1, d2){
+            const threshold = 0.01
+            if (d1 - d2 < threshold && d1 - d2 > -threshold) return true;
+            return false;
+        }
+
+        function detectSquare() {
+            console.log(lines);
+            lines.forEach(lines => {
+                console.log(lines);
+            });
+            // merge lines with same rico that overlap
+            //TODO
+            
+            // check if four points are a square
+            var p1 = lines[0].start;
+            var p2 = lines[1].start;
+            var p3 = lines[2].start;
+            var p4 = lines[3].start;
+            console.log(p1);
+            console.log(p2);
+            console.log(p3);
+            console.log(p4);
+
+            var d2 = distSq(p1,p2); //distance from p1 to p2
+            var d3 = distSq(p1,p3); //distance from p1 to p3
+            var d4 = distSq(p1,p4); //distance from p1 to p4
+            console.log(d2);
+            console.log(d3);
+            console.log(d4);
+
+            // If d2 and d3 are the same, then following conditions must met to form a square. 
+            // 1) Square of length of d4 is same as twice the square of d2 
+            // 2) Square of length of d3 is same as twice the square of d2 
+          
+            if (isEqual(d2,d3) && isEqual(2 * d2,d4) && isEqual(2 * d2,distSq(p2, p3))) { 
+                var d = distSq(p2, p4); 
+                return (isEqual(d,distSq(p3, p4)) && isEqual(d,d2)); 
+            }
+
+            if (isEqual(d3,d4) && isEqual(2 * d3,d2) && isEqual(2 * d3,distSq(p3, p4))) { 
+                var d = distSq(p2, p3); 
+                return (isEqual(d,distSq(p2, p4)) && isEqual(d,d3)); 
+            }  
+
+            if (isEqual(d2,d4) && isEqual(2 * d2,d3) && isEqual(2 * d2,distSq(p2, p4))) { 
+                var d = distSq(p2, p3); 
+                return (isEqual(d,distSq(p3, p4)) && isEqual(d,d2)); 
+            }
+            return false;
+        }
+        
+	    </script>
+</body>
+</html>

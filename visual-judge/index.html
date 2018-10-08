@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <!-- Scratch Includes -->
+    <script src="lib/scratch-vm.min.js">       </script>
+    <script src="lib/scratch-storage.min.js">  </script>
+    <script src="lib/scratch-svg-renderer.js"> </script>
+    <script src="lib/audio_engine.js">         </script>
+    <script src="lib/scratch-render.min.js">   </script>
+
+    <h1 id="status">OpenCV Scratch Tester</h1>
+    <canvas id="canvas" width="480" height="360" style="width: 480px"></canvas>
+    <canvas id="cpu"  width="480" height="360" style="width: 480px"></canvas>
+    <input type="file" id="file" name="file">
+
+    <script>
+        window.devicePixelRatio = 1;
+        /*
+            Example of how to use a proxy over a method 
+            in this case the penLine method. 
+        */
+        function makeProxiedRenderer(canvas) {
+            var render     = new ScratchRender(canvas);
+            var penLineOld = render.penLine;
+            var handler = {
+                apply: function(target, thisArg, argumentsList) {
+                        console.log(`Called penLine with arguments: ${argumentsList}`);
+                        return target.apply(thisArg,argumentsList);
+                    }
+            };
+            render.penLine = new Proxy(penLineOld,handler);
+            return render;
+        }
+        /*
+            Creates the ScratchVM and attach it to a canvas  
+        */
+        function makeScratchVM(canvas) {
+            var render  = makeProxiedRenderer(canvas);
+            var vm      = new VirtualMachine();
+            const audioEngine = new AudioEngine();
+            vm.attachAudioEngine(audioEngine);
+            const storage = new ScratchStorage();
+            vm.attachStorage(storage);
+            vm.attachRenderer(render);
+            vm.attachV2SVGAdapter(new ScratchSVGRenderer.SVGRenderer());
+            var adaptor  = new ScratchSVGRenderer.BitmapAdapter()
+            vm.attachV2BitmapAdapter(adaptor);
+            vm.render = render; 
+            return vm;
+        }
+
+        var canvas  = document.getElementById('canvas');
+        var vm      = makeScratchVM(canvas);        
+
+        /* document.getElementById('file').addEventListener('click', e => {
+            document.body.removeChild(document.getElementById('loaded'));
+        }); */
+
+        document.getElementById('file').addEventListener('change', e => {
+            const reader = new FileReader();
+            const thisFileInput = e.target;
+            reader.onload = () => {
+                vm.start();
+                vm.loadProject(reader.result)
+                    .then(() => {
+                        vm.greenFlag();
+                        // we add a `#loaded` div to our document, the integration suite
+                        // waits for that element to show up to assume the vm is ready
+                        // to play!
+                        const div = document.createElement('div');
+                        div.id='loaded';
+                        document.body.appendChild(div);
+                    });
+            };
+            reader.readAsArrayBuffer(thisFileInput.files[0]);
+        });
+        
+	    // Get the contours of an image 
+        function getContours(src) {
+            let contours = new cv.MatVector();
+            let hierarchy = new cv.Mat();   
+            cv.findContours(src, contours, hierarchy, cv.RETR_CCOMP, cv.CHAIN_APPROX_SIMPLE);
+            return contours;
+        }
+
+        // Predicate over a list of contours
+        // Hardcoded for now 
+        function isSquare(contours) {
+            // We should find two contours one 
+            // for the outer and one for the inner square
+            if (contours.size() == 2) {
+                var cnt = contours.get(0);
+                var tmp = new cv.Mat();
+                cv.approxPolyDP(cnt, tmp, 3, true);
+                if (tmp.elemSize1() == 4) {
+                    var rect = cv.boundingRect(tmp);
+                    return (Math.round((rect.height / rect.width) * 100) == 100);
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        }
+
+        // Gets the image data of a canvas
+        function getBlackWhiteImage(id) {
+            const cvs = document.getElementById(id);
+            var   src = cv.imread(cvs);
+            // convert to greyscale 
+            cv.cvtColor(src, src, cv.COLOR_RGBA2GRAY, 0);
+            // negate the image 
+            cv.bitwise_not(src,src);
+            // apply a treshold on the image 
+            cv.threshold(src, src, 120, 200, cv.THRESH_BINARY);
+            return src;
+        }
+
+        // Detects a square on the cpu canvas 
+        function detectSquare() {
+            var img      = getBlackWhiteImage('cpu'); 
+            var contours = getContours(img);
+            return isSquare(contours);
+        }
+
+        function getVisibleComponents(render) {
+           return render._drawList.map(id => {
+                const drawable = render._allDrawables[id];
+                if (!(drawable._visible && drawable.skin)) {
+                    return;
+                }
+                drawable.updateMatrix();
+                drawable.skin.updateSilhouette();
+                return { id, drawable };
+            }).reverse().filter(Boolean);
+        }
+
+	    function writeImageData(render,imageData,drawBits) {
+            const color = new Uint8ClampedArray(3);
+            for (let x = -239; x <= 240; x++) {
+                for (let y = -180; y< 180; y++) {
+                    render.constructor.sampleColor3b([x, y], drawBits, color);
+                    const offset = (((179-y) * 480) + 239 + x) * 4;
+                    imageData.data.set(color, offset);
+                }
+            }
+        }
+
+        // The renderer uses a webgl canvas which doesn't allow for easy 2d
+        // image manipulation so we copy it to a 2d and then do the dection over this data 
+        function renderCpu(vm,id) {
+            const cpuCanvas    = document.getElementById(id);
+            const cpuCtx       = cpuCanvas.getContext('2d');
+            const cpuImageData = cpuCtx.getImageData(0, 0, cpuCanvas.width, cpuCanvas.height);
+            cpuImageData.data.fill(255);
+            const drawBits = getVisibleComponents(vm.render);
+            writeImageData(vm.render,cpuImageData,drawBits);
+            cpuCtx.putImageData(cpuImageData, 0, 0);
+        }
+
+    	// Visual feedback to indicate that OpenCV is loaded
+        function onOpenCvReady() {
+            document.getElementById('status').innerHTML = 'Scratch OpenCV Ready';
+        }
+
+    </script>
+    <!-- Loading the opencv library -->
+    <script async src="lib/opencv.js" onload="onOpenCvReady();" type="text/javascript"></script>
+</body>
+</html>

@@ -1,0 +1,1 @@
+Checks if code is optimized.
