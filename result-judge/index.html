@@ -122,6 +122,7 @@
 
             if (lines.length < 4) return false; //no square without at least 4 sides
 
+            //todo change this to lines, so that new added merged lines can merge with other lines.
             merged_lines=[];
             // merge lines with same rico that overlap
             for (var i = 0; i<lines.length; i++) {
@@ -136,31 +137,41 @@
                         var y1_i = p1_i.y;
                         var x2_i = p2_i.x;
                         var y2_i = p2_i.y;
+                        var verticaal_i = false;
 
                         if (x1_i == x2_i) { //don't divide by 0
-
+                            verticaal_i = true;;
                         } else { //calculate rico first line
                             var rico_i = (y2_i - y1_i) / (x2_i - x1_i);
                             console.log(rico_i);        
                         }
 
-                        var p1_j = lines[i].start;
-                        var p2_j = lines[i].end;
+                        var p1_j = lines[j].start;
+                        var p2_j = lines[j].end;
                         var x1_j = p1_j.x;
                         var y1_j = p1_j.y;
                         var x2_j = p2_j.x;
                         var y2_j = p2_j.y;
+                        var verticaal_j = false;
 
                         if (x1_j == x2_j) { //don't divide by 0
-
+                            var verticaal_j = true;
                         } else { //calculate rico second line
                             var rico_j = (y2_j - y1_j) / (x2_j - x1_j);
                             console.log(rico_j);
                         }
+                        if (verticaal_i && verticaal_j){
+                            if (x1_i == x1_j) {
+                                //merge
+                                if (distSq(p1_i,p2_j) > distSq(p1_j, p2_i)) {
+                                    merged_lines.push({start:p1_i, end:p2_j});
+                                } else {
+                                    merged_lines.push({start:p1_j, end:p2_i});
+                                }
+                            }
 
-                        if (x1_i == x1_j) {
-                            // todo
-                        } else if (isEqual(rico_i, rico_j)) {
+                        }
+                        if (!verticaal_i && !verticaal_j && isEqual(rico_i, rico_j)) {
                             // the lines are parallel or overlapping
                             // y = rico*x + b
                             // calculate b
