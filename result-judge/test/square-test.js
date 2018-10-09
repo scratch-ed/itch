@@ -47,13 +47,18 @@ async function runTests ()  {
 
         const Sides = 4;
         t.is(4, Sides, "[ALWAYS TRUE] It has four sides");
+        t.end();
+    });
 
+/*
+    await test('isBlue', async t => {
         const isBlue = await runFile(process.argv[2],testColor);
         const blue = [0,0,1,1];
         t.same(isBlue, blue, "It is blue");
-
         t.end();
     });
+*/
+
     // close the browser window we used
     //await chromeless.end();
 }

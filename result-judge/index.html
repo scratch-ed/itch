@@ -10,7 +10,6 @@
 
     <h1 id="status">Result Scratch Tester</h1>
     <canvas id="canvas" width="480" height="360" style="width: 480px"></canvas>
-    <canvas id="cpu"  width="480" height="360" style="width: 480px"></canvas>
     <input type="file" id="file" name="file">
 
     <script>
@@ -45,7 +44,6 @@
             var penPointOld = render.penPoint;
             var handler = {
                 apply: function(target, thisArg, argumentsList) {
-                    console.log(argumentsList);
                     console.log('Called penPoint with arguments: ${argumentsList}');
                     color = argumentsList[1].color4f;
                     return target.apply(thisArg,argumentsList);
@@ -116,6 +114,7 @@
         }
 
         function detectSquare() {
+            console.log("detecting squares");
             console.log(lines);
             lines.forEach(lines => {
                 console.log(lines);
@@ -123,9 +122,69 @@
 
             if (lines.length < 4) return false; //no square without at least 4 sides
 
+            merged_lines=[];
             // merge lines with same rico that overlap
-            //TODO
-            
+            for (var i = 0; i<lines.length; i++) {
+                for (var j = i; j<lines.length; j++) {
+                    if (i != j) {
+                        console.log('i: '+i);
+                        console.log('j: '+j);
+
+                        var p1_i = lines[i].start;
+                        var p2_i = lines[i].end;
+                        var x1_i = p1_i.x;
+                        var y1_i = p1_i.y;
+                        var x2_i = p2_i.x;
+                        var y2_i = p2_i.y;
+
+                        if (x1_i == x2_i) { //don't divide by 0
+
+                        } else { //calculate rico first line
+                            var rico_i = (y2_i - y1_i) / (x2_i - x1_i);
+                            console.log(rico_i);        
+                        }
+
+                        var p1_j = lines[i].start;
+                        var p2_j = lines[i].end;
+                        var x1_j = p1_j.x;
+                        var y1_j = p1_j.y;
+                        var x2_j = p2_j.x;
+                        var y2_j = p2_j.y;
+
+                        if (x1_j == x2_j) { //don't divide by 0
+
+                        } else { //calculate rico second line
+                            var rico_j = (y2_j - y1_j) / (x2_j - x1_j);
+                            console.log(rico_j);
+                        }
+
+                        if (x1_i == x1_j) {
+                            // todo
+                        } else if (isEqual(rico_i, rico_j)) {
+                            // the lines are parallel or overlapping
+                            // y = rico*x + b
+                            // calculate b
+                            var b_i = y1_i - (rico_i * x1_i);
+                            console.log('b: '+b_i);
+                            // if the second point satisfies the function and the startpoint of the second line lies on the first line, the lines overlap and we can merge them
+                            console.log('y1_j - rico_i*x1_j - b_i: '+(y1_j - rico_i*x1_j - b_i));
+                            if (y1_j - rico_i*x1_j - b_i == 0) {
+                                //todo check if overlap
+
+                                //merge
+                                if (distSq(p1_i,p2_j) > distSq(p1_j, p2_i)) {
+                                    merged_lines.push({start:p1_i, end:p2_j});
+                                } else {
+                                    merged_lines.push({start:p1_j, end:p2_i});
+                                }
+                                
+                            }
+                        }
+
+                    }
+                }
+            }
+            console.log(merged_lines);
             // check if four points are a square
             var p1 = lines[0].start;
             var p2 = lines[1].start;
@@ -169,6 +228,7 @@
         }
 
         function detectColor() {
+            console.log("detecting color");
             return color;
         }
         
