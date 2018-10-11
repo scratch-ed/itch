@@ -14,8 +14,7 @@
 
     <script>
         // test adding points to list
-        var lines = [];
-        var color;
+        var logdata = {index:0, lines:[], color:null, points:[]};
 
         window.devicePixelRatio = 1;
         /*
@@ -33,8 +32,8 @@
                     var p1 = {x:argumentsList[2], y:argumentsList[3]};
                     var p2 = {x:argumentsList[4], y:argumentsList[5]};
                     var line = {start:p1, end:p2};
-                    lines.push(line);
-                    color = argumentsList[1].color4f;
+                    logdata.lines.push(line);
+                    logdata.color = argumentsList[1].color4f;
                     return target.apply(thisArg,argumentsList);
                 }   
             };
@@ -45,7 +44,8 @@
             var handler = {
                 apply: function(target, thisArg, argumentsList) {
                     console.log('Called penPoint with arguments: ${argumentsList}');
-                    color = argumentsList[1].color4f;
+                    logdata.color = argumentsList[1].color4f;
+                    logdata.points.push({x:argumentsList[2], y:argumentsList[3]});
                     return target.apply(thisArg,argumentsList);
                 }
             };
@@ -115,11 +115,10 @@
 
         function detectSquare() {
             console.log("detecting squares");
-            console.log(lines);
-            lines.forEach(lines => {
-                console.log(lines);
-            });
+            console.log(logdata);
 
+            var lines = logdata.lines;
+            
             if (lines.length < 4) return false; //no square without at least 4 sides
 
             //todo change this to lines, so that new added merged lines can merge with other lines.
@@ -196,43 +195,40 @@
                 }
             }
             console.log(merged_lines);
-            // check if four points are a square
-            var p1 = lines[0].start;
-            var p2 = lines[1].start;
-            var p3 = lines[2].start;
-            var p4 = lines[3].start;
-            console.log(p1);
-            console.log(p2);
-            console.log(p3);
-            console.log(p4);
 
-            var d2 = distSq(p1,p2); //distance from p1 to p2
-            var d3 = distSq(p1,p3); //distance from p1 to p3
-            var d4 = distSq(p1,p4); //distance from p1 to p4
-            console.log(d2);
-            console.log(d3);
-            console.log(d4);
+
+            //
+            // check if four points are a square
+            //
+            const p1 = lines[0].start;
+            const p2 = lines[1].start;
+            const p3 = lines[2].start;
+            const p4 = lines[3].start;
+
+            const d2 = distSq(p1,p2); //distance squared from p1 to p2
+            const d3 = distSq(p1,p3); //distance squared from p1 to p3
+            const d4 = distSq(p1,p4); //distance squared from p1 to p4
 
             // If d2 and d3 are the same, then following conditions must met to form a square. 
             // 1) Square of d4 is same as twice the square of d2 
             // 2) Square of d3 is same as twice the square of d2 
           
             if (isEqual(d2,d3) && isEqual(2 * d2,d4) && isEqual(2 * d2,distSq(p2, p3))) { 
-                var d = distSq(p2, p4); 
+                const d = distSq(p2, p4); 
                 return (isEqual(d,distSq(p3, p4)) && isEqual(d,d2)); 
             }
 
             // same for d3 and d4
 
             if (isEqual(d3,d4) && isEqual(2 * d3,d2) && isEqual(2 * d3,distSq(p3, p4))) { 
-                var d = distSq(p2, p3); 
+                const d = distSq(p2, p3); 
                 return (isEqual(d,distSq(p2, p4)) && isEqual(d,d3)); 
             }  
 
             // same for d2 and d4
 
             if (isEqual(d2,d4) && isEqual(2 * d2,d3) && isEqual(2 * d2,distSq(p2, p4))) { 
-                var d = distSq(p2, p3); 
+                const d = distSq(p2, p3); 
                 return (isEqual(d,distSq(p3, p4)) && isEqual(d,d2)); 
             }
             return false;
@@ -240,7 +236,7 @@
 
         function detectColor() {
             console.log("detecting color");
-            return color;
+            return logdata.color;
         }
         
 	    </script>
