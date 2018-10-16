@@ -2,7 +2,7 @@
     Example of how to use a proxy over a method 
     in this case the penLine method. 
 */
-function makeProxiedRenderer(canvas) {
+function makeProxiedRenderer(canvas, logData) {
     var render = new ScratchRender(canvas);
 
     //penLine
@@ -13,8 +13,8 @@ function makeProxiedRenderer(canvas) {
             var p1 = {x:argumentsList[2], y:argumentsList[3]};
             var p2 = {x:argumentsList[4], y:argumentsList[5]};
             var line = {start:p1, end:p2};
-            logdata.lines.push(line);
-            logdata.color = argumentsList[1].color4f;
+            logData.lines.push(line);
+            logData.color = argumentsList[1].color4f;
             return target.apply(thisArg,argumentsList);
         }   
     };
@@ -22,11 +22,11 @@ function makeProxiedRenderer(canvas) {
 
     //penPoint
     var penPointOld = render.penPoint;
-    var handler = {
+    handler = {
         apply: function(target, thisArg, argumentsList) {
             console.log('Called penPoint with arguments: ${argumentsList}');
-            logdata.color = argumentsList[1].color4f;
-            logdata.points.push({x:argumentsList[2], y:argumentsList[3]});
+            logData.color = argumentsList[1].color4f;
+            logData.points.push({x:argumentsList[2], y:argumentsList[3]});
             return target.apply(thisArg,argumentsList);
         }
     };
@@ -34,12 +34,13 @@ function makeProxiedRenderer(canvas) {
 
     //penClear
     var penClearOld = render.penClear;
-    var handler = {
+    handler = {
         apply: function(target, thisArg, argumentsList) {
             console.log('Called penClear');
+            logData.lines = [];
             return target.apply(thisArg, argumentsList);
         }
-    }
+    };
     render.penClear = new Proxy(penClearOld, handler);
 
     return render;

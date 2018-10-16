@@ -38,7 +38,7 @@ async function runTests ()  {
         t.end();
     });
     // close the browser window we used
-    await chromeless.end();
+    //await chromeless.end();
 }
 
 runTests();

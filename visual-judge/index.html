@@ -43,7 +43,7 @@
             vm.attachStorage(storage);
             vm.attachRenderer(render);
             vm.attachV2SVGAdapter(new ScratchSVGRenderer.SVGRenderer());
-            var adaptor  = new ScratchSVGRenderer.BitmapAdapter()
+            var adaptor  = new ScratchSVGRenderer.BitmapAdapter();
             vm.attachV2BitmapAdapter(adaptor);
             vm.render = render; 
             return vm;
@@ -154,6 +154,7 @@
             const cpuImageData = cpuCtx.getImageData(0, 0, cpuCanvas.width, cpuCanvas.height);
             cpuImageData.data.fill(255);
             const drawBits = getVisibleComponents(vm.render);
+            console.log(drawBits);
             writeImageData(vm.render,cpuImageData,drawBits);
             cpuCtx.putImageData(cpuImageData, 0, 0);
         }
