@@ -46,6 +46,7 @@
             const thisFileInput = e.target;
             reader.onload = () => {
                 vm.start();
+                vm.setTurboMode(true);
                 vm.loadProject(reader.result)
                     .then(() => {
                         vm.greenFlag();

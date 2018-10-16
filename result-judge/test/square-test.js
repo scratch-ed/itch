@@ -36,8 +36,6 @@ async function runTests ()  {
     await test('isSquare', async t => {
         const logData = await runFile(process.argv[2]);
 
-        console.log(logData);
-
         //Replace these tests by a file containing tests
         t.ok(testFunctions.detectSquare(logData), "The figure is a square");
 

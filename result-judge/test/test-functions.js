@@ -42,7 +42,6 @@ function mergeLines(lines) {
             }
         } else {
             let rico = ((y2 - y1) / (x2 - x1));
-            console.log("rico: "+rico);
             const b = (y1 - (rico * x1)).toFixed(4);
             rico = rico.toFixed(4);
             if (rico in ricoDict) {
@@ -66,7 +65,6 @@ function mergeLines(lines) {
 
     for (const [rico, ld] of Object.entries(ricoDict)) {
         for (const [b, lines] of Object.entries(ld)) {
-            console.log(b, lines);
             let line = lines[0];
             for (let i = 1; i < lines.length; i++) {
                 if (distSq(line.start, lines[i].end) > distSq(line.end, lines[i].start)) {
@@ -98,11 +96,7 @@ exports.detectSquare = function(logData) {
     let lines = logData.lines;
     if (lines.length < 4) return false; //no square without at least 4 sides
 
-    console.log(lines);
-
     let merged_lines = mergeLines(lines);
-    console.log("merged lines:");
-    console.log(merged_lines);
     //
     // check if four points are a square
     //
