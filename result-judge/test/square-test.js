@@ -1,22 +1,31 @@
-const test = require('tap').test;
+var assert = require('assert');
 var testFunctions = require("./test-functions.js");
 var runCode = require("./runCode.js");
 
-async function squareTest() {
-    await test('isSquare', async t => {
-        //run the Scratch code and get the log data
-        let logData = await runCode.getLogData();
 
-        //Test if a square is present
-        t.ok(testFunctions.detectSquare(logData), "The figure is a square");
+describe("Tests for exercise: Square", function() {
 
-        //Test if everything is drawn in blue
-        const blue = [0,0,1,1];
-        t.same(testFunctions.detectColor(logData), blue, "The figure is blue");
+    let logData;
+    console.log("starting tests");
 
-        t.end();
-        await runCode.closeChrome();
+    before(async function(done) {
+        logData = await runCode.getLogData();
+        console.log("finished getting logData");
+        console.log(logData);
+        done();
     });
-}
 
-squareTest();
+    it('should detect a square', testFunctions.detectSquare(logData));
+
+    it('should be drawn in blue', () => {
+        const blue = [0,0,1,1];
+        testFunctions.detectColor(logData).should.equal(blue);
+    });
+
+    it('should be executed in less than 10 seconds', async () => {
+            // should set the timeout of this test to 1000 ms; instead will fail
+            this.timeout(10000);
+            logData = await runCode.getLogData();
+    });
+
+});
