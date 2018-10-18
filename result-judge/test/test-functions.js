@@ -91,6 +91,18 @@ function mergeLines(lines) {
     return merged_lines;
 }
 
+// If d1 and d2 are the same, then following conditions must met to form a square.
+// 1) Square of d3 is same as twice the square of d1
+// 2) Square of d2 is same as twice the square of d1
+function squareTest(d1,d2,d3,p1,p2,p3) {
+    if (isEqual(d1, d2) && isEqual(2 * d1, d3) && isEqual(2 * d1, distSq(p1, p2))) {
+        let d = distSq(p1, p3);
+        return (isEqual(d, distSq(p2, p3)) && isEqual(d, d1));
+    }
+    return false;
+}
+
+
 //exported test functions
 exports.detectSquare = function(logData) {
     let lines = logData.lines;
@@ -127,28 +139,10 @@ exports.detectSquare = function(logData) {
                         const d3 = distSq(p1, p3); //distance squared from p1 to p3
                         const d4 = distSq(p1, p4); //distance squared from p1 to p4
 
-                        // If d2 and d3 are the same, then following conditions must met to form a square.
-                        // 1) Square of d4 is same as twice the square of d2
-                        // 2) Square of d3 is same as twice the square of d2
-
-                        if (isEqual(d2, d3) && isEqual(2 * d2, d4) && isEqual(2 * d2, distSq(p2, p3))) {
-                            const d = distSq(p2, p4);
-                            return (isEqual(d, distSq(p3, p4)) && isEqual(d, d2));
-                        }
-
-                        // same for d3 and d4
-
-                        if (isEqual(d3, d4) && isEqual(2 * d3, d2) && isEqual(2 * d3, distSq(p3, p4))) {
-                            const d = distSq(p2, p3);
-                            return (isEqual(d, distSq(p2, p4)) && isEqual(d, d3));
-                        }
-
-                        // same for d2 and d4
-
-                        if (isEqual(d2, d4) && isEqual(2 * d2, d3) && isEqual(2 * d2, distSq(p2, p4))) {
-                            const d = distSq(p2, p3);
-                            return (isEqual(d, distSq(p3, p4)) && isEqual(d, d2));
-                        }
+                        //test if the points form a square
+                        if (squareTest(d2,d3,d4,p2,p3,p4)) return true;
+                        if (squareTest(d3,d4,d2,p3,p4,p2)) return true;
+                        if (squareTest(d2,d4,d3,p2,p4,p3)) return true;
                     }
                 }
             }
