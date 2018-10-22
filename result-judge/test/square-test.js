@@ -5,30 +5,18 @@ const expect = require('chai').expect;
 
 const maxExecutionTime = 10000;
 
-
 describe('square', function() {
     this.timeout(maxExecutionTime);
     let logData;
 
-    before(async function(done) {
-        try {
-            logData = await runCode.getLogData();
-            done();
-        } catch (e) {
-            console.log("Error: "+e);
-        }
-    });
-
-    describe('#find', () => {
-        it('should find data', async () => {
-            console.log(expect(logData));
-            return true;
-        });
+    before(async function() {
+        logData = await runCode.getLogData('square.sb3');
+        return logData;
     });
 
     describe('#findSquare', () => {
         it('should detect a square', async () => {
-            testFunctions.detectSquare(expect(logData));
+            expect(testFunctions.detectSquare(logData)).to.be.true;
         })
     });
 });
