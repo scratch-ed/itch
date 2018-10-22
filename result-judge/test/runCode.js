@@ -12,8 +12,10 @@ const path = require('path');
 const chromeless = new Chromeless();
 const indexHTML = path.resolve(__dirname, '../index.html');
 const testDir = (...args) => path.resolve(__dirname, '../scratch_code', ...args);
+
 const runFile = (file) =>
     // start each test by going to the index.html, and loading the scratch file
+    //console.log("running file");
     chromeless.goto(`file://${indexHTML}`)
         .setFileInput('#file', testDir(file))
         // the index.html handler for file input will add a #loaded element when it
@@ -33,20 +35,9 @@ async function closeChrome(){
 }
 
 // Async function which get the log data
-async function getLogData ()  {
-    return runFile(process.argv[2]);
-}
-
-function timedPromise(ms, callback) {
-    return new Promise(function(resolve, reject) {
-        // Set up the real work
-        callback(resolve, reject);
-
-        // Set up the timeout
-        setTimeout(function() {
-            reject('Promise timed out after ' + ms + ' ms');
-        }, ms);
-    });
+// Name of scratch code file in the second argument
+async function getLogData (fileName)  {
+    return runFile(fileName);
 }
 
 exports.closeChrome = closeChrome;
