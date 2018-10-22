@@ -1,7 +1,8 @@
-const assert = require('assert');
-const testFunctions = require("./test-functions.js");
 const runCode = require("./runCode.js");
 const expect = require('chai').expect;
+
+var lines = require("./test_functions/lines.js");
+var colors = require("./test_functions/colors.js");
 
 const maxExecutionTime = 10000;
 const fileName = 'square-segments-turned.sb3';
