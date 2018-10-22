@@ -102,6 +102,28 @@ function squareTest(d1,d2,d3,p1,p2,p3) {
     return false;
 }
 
+//Given points, test if they form a square
+function pointsAreSquare(points) {
+    //from the 8 points, there should be 4 pairs of equal points
+    points = removeDuplicates(points);
+    // only square if there are four unique points
+    if (points.length === 4) {
+        p1 = points[0];
+        p2 = points[1];
+        p3 = points[2];
+        p4 = points[3];
+
+        const d2 = distSq(p1, p2); //distance squared from p1 to p2
+        const d3 = distSq(p1, p3); //distance squared from p1 to p3
+        const d4 = distSq(p1, p4); //distance squared from p1 to p4
+
+        //test if the points form a square
+        if (squareTest(d2, d3, d4, p2, p3, p4)) return true;
+        if (squareTest(d3, d4, d2, p3, p4, p2)) return true;
+        if (squareTest(d2, d4, d3, p2, p4, p3)) return true;
+    }
+    return false;
+}
 
 //exported test functions
 exports.detectSquare = function(logData) {
@@ -126,29 +148,43 @@ exports.detectSquare = function(logData) {
                     const p41 = merged_lines[l].start;
                     const p42 = merged_lines[l].end;
                     let points = [p11, p12, p21, p22, p31, p32, p41, p42];
-                    //from the 8 points, there should be 4 pairs of equal points.
-                    points = removeDuplicates(points);
 
-                    if (points.length === 4) {
-                        p1 = points[0];
-                        p2 = points[1];
-                        p3 = points[2];
-                        p4 = points[3];
-
-                        const d2 = distSq(p1, p2); //distance squared from p1 to p2
-                        const d3 = distSq(p1, p3); //distance squared from p1 to p3
-                        const d4 = distSq(p1, p4); //distance squared from p1 to p4
-
-                        //test if the points form a square
-                        if (squareTest(d2,d3,d4,p2,p3,p4)) return true;
-                        if (squareTest(d3,d4,d2,p3,p4,p2)) return true;
-                        if (squareTest(d2,d4,d3,p2,p4,p3)) return true;
-                    }
+                    if (pointsAreSquare(points)) return true;
                 }
             }
         }
     }
 
+    return false;
+};
+
+function pointsAreTriangle(points) {
+    //from the 6 points, there should be 3 pairs of equal points
+    points = removeDuplicates(points);
+    // only square if there are four unique points
+    return points.length === 3;
+}
+
+exports.detectTriangle = function(logData) {
+    let lines = logData.lines;
+    if (lines.length < 3) return false;
+    let merged_lines = mergeLines(lines);
+    console.log(merged_lines);
+    for (let i = 0; i < merged_lines.length - 2; i++) {
+        for (let j = i+1; j < merged_lines.length - 1; j++) {
+            for (let k = j+1; k < merged_lines.length; k++) {
+                    const p11 = merged_lines[i].start;
+                    const p12 = merged_lines[i].end;
+                    const p21 = merged_lines[j].start;
+                    const p22 = merged_lines[j].end;
+                    const p31 = merged_lines[k].start;
+                    const p32 = merged_lines[k].end;
+                    let points = [p11, p12, p21, p22, p31, p32];
+
+                    if (pointsAreTriangle(points)) return true;
+            }
+        }
+    }
     return false;
 };
 
