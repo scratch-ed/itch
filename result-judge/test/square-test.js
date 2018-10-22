@@ -1,5 +1,6 @@
 const test = require('tap').test;
-var testFunctions = require("./test-functions.js");
+var lines = require("./test_functions/lines.js");
+var colors = require("./test_functions/colors.js");
 var runCode = require("./runCode.js");
 
 async function squareTest() {
@@ -8,11 +9,11 @@ async function squareTest() {
         let logData = await runCode.getLogData();
 
         //Test if a square is present
-        t.ok(testFunctions.detectSquare(logData), "The figure is a square");
+        t.ok(lines.detectSquare(logData), "The figure is a square");
 
         //Test if everything is drawn in blue
         const blue = [0,0,1,1];
-        t.same(testFunctions.detectColor(logData), blue, "The figure is blue");
+        t.same(colors.detectColor(logData), blue, "The figure is blue");
 
         t.end();
         await runCode.closeChrome();
