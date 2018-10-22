@@ -9,8 +9,7 @@
   },
   "dependencies": {
     "chai": "^4.2.0",
-    "chromeless": "^1.5.1",
-    "tap": "^11.0.0"
+    "chromeless": "^1.5.1"
   },
   "scripts": {
     "test": "mocha"

@@ -1,18 +1,24 @@
-const test = require('tap').test;
+const runCode = require("./runCode.js");
+const expect = require('chai').expect;
+
 var lines = require("./test_functions/lines.js");
-var runCode = require("./runCode.js");
 
-async function triangleTest() {
-    await test('isTriangle', async t => {
-        //run the Scratch code and get the log data
-        let logData = await runCode.getLogData();
+const maxExecutionTime = 10000;
+const fileName = 'triangle.sb3';
 
-        //Test if a square is present
-        t.ok(lines.detectTriangle(logData), "The figure is a triangle");
+describe('triangle', function() {
+    this.timeout(maxExecutionTime);
+    let logData;
 
-        t.end();
+    before(async function() {
+        logData = await runCode.getLogData(fileName);
         await runCode.closeChrome();
+        return logData;
     });
-}
 
-triangleTest();
+    describe('#findTriangle', () => {
+        it('should detect a square', async () => {
+            expect(lines.detectTriangle(logData)).to.be.true;
+        })
+    });
+});

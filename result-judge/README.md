@@ -7,17 +7,25 @@ First install the dependencies.
 npm install 
 ```
 
+Change the file name to the Scratch code you want to test, located in /scratch_code/
+```code
+const fileName = 'square-segments-turned.sb3';
+```
+
 Then run the code:
 ```code
-node test/square-test.js 'square.sb3'
+mocha test/square-test.js
 ```
 
 The expected output is:
 
 ```code
-TAP version 13
-# Subtest: isSquare
-    ok 1 - Goed gedaan, je hebt een vierkant getekend
-    1..1
-ok 1 - isSquare # time=5035.415ms
+  square
+    #findSquare
+      ✓ should detect a square
+    #checkColor
+      ✓ should be drawn in blue
+
+
+  2 passing (2s)
 ```
