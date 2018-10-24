@@ -4,9 +4,12 @@ const expect = require('chai').expect;
 var lines = require("./test_functions/lines.js");
 
 const maxExecutionTime = 10000;
-const fileName = 'triangle.sb3';
+const fileName = '10-squares.sb3';
 
-describe('triangle', function() {
+// Extra variables
+const numberOfSquares = 10;
+
+describe('square', function() {
     this.timeout(maxExecutionTime);
     let logData;
 
@@ -16,9 +19,10 @@ describe('triangle', function() {
         return logData;
     });
 
-    describe('#findTriangle', () => {
-        it('should detect a triangle', async () => {
-            expect(lines.findOneTriangle(logData)).to.be.true;
+    describe('#findSquares', () => {
+        it('should find '+numberOfSquares+' squares', async () => {
+            expect(lines.findSquares(logData)).to.equal(numberOfSquares);
         })
     });
+
 });

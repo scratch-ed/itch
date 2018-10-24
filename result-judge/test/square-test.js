@@ -19,7 +19,7 @@ describe('square', function() {
 
     describe('#findSquare', () => {
         it('should detect a square', async () => {
-            expect(lines.detectSquare(logData)).to.be.true;
+            expect(lines.findOneSquare(logData)).to.be.true;
         })
     });
 

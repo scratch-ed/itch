@@ -135,8 +135,8 @@ function pointsAreSquare(points) {
     return false;
 }
 
-//exported test functions
-function detectSquare(logData) {
+function findSquares(logData) {
+    let numberOfSquares = 0;
     let lines = logData.lines;
     if (lines.length < 4) return false; //no square without at least 4 sides
 
@@ -159,13 +159,17 @@ function detectSquare(logData) {
                     const p42 = merged_lines[l].end;
                     let points = [p11, p12, p21, p22, p31, p32, p41, p42];
 
-                    if (pointsAreSquare(points)) return true;
+                    if (pointsAreSquare(points)) numberOfSquares++;
                 }
             }
         }
     }
+    return numberOfSquares;
+}
 
-    return false;
+//exported test functions
+function findOneSquare(logData) {
+    return findSquares(logData) > 0;
 }
 
 function pointsAreTriangle(points) {
@@ -175,7 +179,9 @@ function pointsAreTriangle(points) {
     return points.length === 3;
 }
 
-function detectTriangle(logData) {
+function findTriangles(logData) {
+
+    let numberOfTriangles = 0;
     let lines = logData.lines;
     if (lines.length < 3) return false;
     let merged_lines = mergeLines(lines);
@@ -191,17 +197,25 @@ function detectTriangle(logData) {
                 const p32 = merged_lines[k].end;
                 let points = [p11, p12, p21, p22, p31, p32];
 
-                if (pointsAreTriangle(points)) return true;
+                if (pointsAreTriangle(points)) numberOfTriangles++;
             }
         }
     }
-    return false;
+    return numberOfTriangles;
 }
+
+function findOneTriangle(logData) {
+    return findTriangles(logData) > 0;
+}
+
+
 
 module.exports = {
     pointsAreSquare,
     pointsAreTriangle,
-    detectSquare,
-    detectTriangle,
+    findSquares,
+    findOneSquare,
+    findTriangles,
+    findOneTriangle,
     mergeLines
 };
