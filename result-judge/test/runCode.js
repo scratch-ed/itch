@@ -35,10 +35,12 @@ async function closeChrome(){
 }
 
 // Async function which get the log data
-// Name of scratch code file in the second argument
-async function getLogData (fileName)  {
-    return runFile(fileName);
+// Name of scratch code file as argument
+async function run (fileName)  {
+    const log = runFile(fileName);
+    //await chromeless.end();
+    return log;
 }
 
 exports.closeChrome = closeChrome;
-exports.getLogData = getLogData;
+exports.run = run;

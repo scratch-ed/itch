@@ -135,9 +135,8 @@ function pointsAreSquare(points) {
     return false;
 }
 
-function findSquares(logData) {
+function findSquares(lines) {
     let numberOfSquares = 0;
-    let lines = logData.lines;
     if (lines.length < 4) return false; //no square without at least 4 sides
 
     let merged_lines = mergeLines(lines);
@@ -168,8 +167,8 @@ function findSquares(logData) {
 }
 
 //exported test functions
-function findOneSquare(logData) {
-    return findSquares(logData) > 0;
+function findOneSquare(lines) {
+    return findSquares(lines) > 0;
 }
 
 function pointsAreTriangle(points) {
