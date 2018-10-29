@@ -114,8 +114,6 @@ function mergeLines(lines) {
 
 //Given points, test if they form a square
 function pointsAreSquare(points) {
-    //from the 8 points, there should be 4 pairs of equal points
-    points = removeDuplicates(points);
     // only square if there are four unique points
     if (points.length === 4) {
         p1 = points[0];
@@ -135,9 +133,8 @@ function pointsAreSquare(points) {
     return false;
 }
 
-function findSquares(logData) {
-    let numberOfSquares = 0;
-    let lines = logData.lines;
+function findSquares(lines) {
+    let squares = [];
     if (lines.length < 4) return false; //no square without at least 4 sides
 
     let merged_lines = mergeLines(lines);
@@ -159,29 +156,29 @@ function findSquares(logData) {
                     const p42 = merged_lines[l].end;
                     let points = [p11, p12, p21, p22, p31, p32, p41, p42];
 
-                    if (pointsAreSquare(points)) numberOfSquares++;
+                    //from the 8 points, there should be 4 pairs of equal points
+                    points = removeDuplicates(points);
+
+                    if (pointsAreSquare(points)) squares.push(points);
                 }
             }
         }
     }
-    return numberOfSquares;
+    return squares;
 }
 
 //exported test functions
-function findOneSquare(logData) {
-    return findSquares(logData) > 0;
+function findOneSquare(lines) {
+    return findSquares(lines) > 0;
 }
 
 function pointsAreTriangle(points) {
-    //from the 6 points, there should be 3 pairs of equal points
-    points = removeDuplicates(points);
     // only square if there are four unique points
     return points.length === 3;
 }
 
 function findTriangles(logData) {
-
-    let numberOfTriangles = 0;
+    let triangles = [];
     let lines = logData.lines;
     if (lines.length < 3) return false;
     let merged_lines = mergeLines(lines);
@@ -197,11 +194,14 @@ function findTriangles(logData) {
                 const p32 = merged_lines[k].end;
                 let points = [p11, p12, p21, p22, p31, p32];
 
-                if (pointsAreTriangle(points)) numberOfTriangles++;
+                //from the 6 points, there should be 3 pairs of equal points
+                points = removeDuplicates(points);
+
+                if (pointsAreTriangle(points)) triangles.push(points);
             }
         }
     }
-    return numberOfTriangles;
+    return triangles;
 }
 
 function findOneTriangle(logData) {
