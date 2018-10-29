@@ -16,35 +16,24 @@ const testDir = (...args) => path.resolve(__dirname, '../scratch_code', ...args)
 //test functions imports
 var lineFunctions = require("./test_functions/lines.js");
 
-const runFile = (fileName) =>
-    // start each test by going to the index.html, and loading the scratch file
-    console.log('10-squares.sb3');
-    chromeless.goto(`file://${indexHTML}`)
-        .setFileInput('#file', testDir('10-squares.sb3'))
-        // the index.html handler for file input will add a #loaded element when it
-        // finishes.
-        .wait('#loaded')
-        .evaluate(startTests);
 //Code which runs in chrome
 //Returns the log after running the code
 function startTests() {
     return getLog();
 }
 
-async function getLogData (fileName)  {
-    return runFile(fileName);
-}
-
 class Lines {
 
     constructor(lineData) {
         this.lines = lineData;
-        this._squares = lineFunctions.findSquares(this.lines);
     }
 
     get squares() {
-        console.log("returning squares");
-        return this._squares;
+        return lineFunctions.findSquares(this.lines);
+    }
+
+    get triangles() {
+        return lineFunctions.findTriangles(this.lines);
     }
 
 }
@@ -77,11 +66,19 @@ module.exports = class Scratch {
     }
 
     async run() {
-        console.log(this._fileName);
-        const log = getLogData(this._fileName);
+        const log = await Scratch.runFile(this._fileName);
         await chromeless.end();
         this.fill(log);
         return true;
+    }
+
+    static runFile(fileName) {
+        return chromeless.goto(`file://${indexHTML}`)
+            .setFileInput('#file', testDir(fileName))
+            // the index.html handler for file input will add a #loaded element when it
+            // finishes.
+            .wait('#loaded')
+            .evaluate(startTests);
     }
 
 };
