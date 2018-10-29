@@ -84,9 +84,15 @@ module.exports = class Scratch {
     }
 
     async run() {
-        this._vmInit = await this.runFile(this._fileName, this.maxDuration);
-        this._vmEnd = await this.greenFlag();
-        //this._log = await this.getLog()
+        // load vm
+        const data = await Scratch.runFile(this._fileName, this.maxDuration);
+        this._vmInit = data.vmInit;
+        this._vmEnd = data.vmEnd;
+        this._log = data.log;
+
+        console.log(this._vmInit);
+        console.log(this._vmEnd);
+        console.log(this._log);
         //this.fill(this._log);
         //await chromeless.end();
         return true;
@@ -96,20 +102,15 @@ module.exports = class Scratch {
     // Functions run in Chromeless
     //
     greenFlag() {
-        return chromeless.goto(`file://${indexHTML}`)
+        chromeless.goto(`file://${indexHTML}`)
+            .wait(1000)
             .evaluate(() => {
                 vmGreenFlag();
             })
+
     }
 
-    getLog() {
-        return chromeless.goto(`file://${indexHTML}`)
-            .evaluate(() => {
-                getLog();
-            })
-    }
-
-    runFile(fileName, maxDuration) {
+    static runFile(fileName, maxDuration) {
         return chromeless.goto(`file://${indexHTML}`)
             .setFileInput('#file', testDir(fileName))
             // the index.html handler for file input will add a #loaded element when it
@@ -117,8 +118,8 @@ module.exports = class Scratch {
             .wait('#loaded')
             .wait(maxDuration)
             .evaluate(() => {
-                getVm();
-            });
+                getData();
+            })
     }
 
     enableTurbo() {
