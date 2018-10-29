@@ -2,9 +2,9 @@ var Scratch = require("./Scratch.js");
 const expect = require('chai').expect;
 const scratch = new Scratch();
 
-const maxTestingTime = 12000;
-const maxExecutionTime = 10000;
-const maxExpectedTime = 500;
+const maxTestingTime = 20000;
+const maxExecutionTime = 15000;
+const maxExpectedTime = 2000;
 const fileName = 'voetbal.sb3';
 
 scratch.enableTurbo();

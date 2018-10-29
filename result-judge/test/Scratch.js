@@ -16,6 +16,10 @@ const testDir = (...args) => path.resolve(__dirname, '../scratch_code', ...args)
 //test functions imports
 var lineFunctions = require("./test_functions/lines.js");
 
+function getAllData() {
+    getData();
+}
+
 class Lines {
 
     constructor(lineData) {
@@ -86,6 +90,8 @@ module.exports = class Scratch {
     async run() {
         // load vm
         const data = await Scratch.runFile(this._fileName, this.maxDuration);
+        console.log("should wait 10 seconds before showing this msg");
+        console.log(data);
         this._vmInit = data.vmInit;
         this._vmEnd = data.vmEnd;
         this._log = data.log;
@@ -116,10 +122,9 @@ module.exports = class Scratch {
             // the index.html handler for file input will add a #loaded element when it
             // finishes.
             .wait('#loaded')
+            .wait(10000)
             .wait(maxDuration)
-            .evaluate(() => {
-                getData();
-            })
+            .evaluate(getAllData);
     }
 
     enableTurbo() {

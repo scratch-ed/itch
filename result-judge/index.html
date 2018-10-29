@@ -68,7 +68,8 @@
         });
 
         function getData() {
-            return {vmInit: vmInit, vmEnd: vm, log: logData};
+            const data = {vmInit: vmInit, vmEnd: vm, log: logData};
+            return data;
         }
 
         function setTurbomode(b) {
