@@ -36,6 +36,10 @@ class Lines {
         return lineFunctions.findTriangles(this.lines);
     }
 
+    get mergedLines() {
+        return lineFunctions.mergeLines(this.lines);
+    }
+
 }
 
 module.exports = class Scratch {
@@ -82,12 +86,3 @@ module.exports = class Scratch {
     }
 
 };
-
-
-/// EXPORTS ///
-/*
-exports.loadFile = loadFile;
-exports.run = run;
-exports.Scratch = Scratch;
-*/
-//exports.Scratch = Scratch;

@@ -1,32 +1,22 @@
-const runCode = require("./Scratch.js");
+var Scratch = require("./Scratch.js");
 const expect = require('chai').expect;
-
-var lines = require("./test_functions/lines.js");
-var colors = require("./test_functions/colors.js");
+const scratch = new Scratch();
 
 const maxExecutionTime = 10000;
-const fileName = 'square-segments-turned.sb3';
+const fileName = 'square.sb3';
+
+scratch.loadFile(fileName);
 
 describe('square', function() {
     this.timeout(maxExecutionTime);
-    let logData;
 
     before(async function() {
-        logData = await runCode.getLogData(fileName);
-        await runCode.closeChrome();
-        return logData;
+        await scratch.run();
     });
 
     describe('#findSquare', () => {
-        it('should detect a square', async () => {
-            expect(lines.findOneSquare(logData)).to.be.true;
-        })
-    });
-
-    describe('#checkColor', () => {
-        it('should be drawn in blue', async () => {
-            const blue = [0,0,1,1];
-            expect(colors.detectColor(logData)).to.deep.equal(blue);
+        it(`should find exactly one square`, async () => {
+            expect(scratch.lines.squares.length).to.equal(1);
         })
     });
 

@@ -167,11 +167,6 @@ function findSquares(lines) {
     return squares;
 }
 
-//exported test functions
-function findOneSquare(lines) {
-    return findSquares(lines) > 0;
-}
-
 function pointsAreTriangle(points) {
     // only square if there are four unique points
     return points.length === 3;
@@ -204,18 +199,9 @@ function findTriangles(logData) {
     return triangles;
 }
 
-function findOneTriangle(logData) {
-    return findTriangles(logData) > 0;
-}
-
-
 
 module.exports = {
-    pointsAreSquare,
-    pointsAreTriangle,
     findSquares,
-    findOneSquare,
     findTriangles,
-    findOneTriangle,
     mergeLines
 };
