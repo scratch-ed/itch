@@ -17,6 +17,7 @@
     <script>
         // maybe don't use global here
         var logData = {index:0, lines:[], color:null, points:[]};
+        var turboEnabled = false;
 
         window.devicePixelRatio = 1;
 
@@ -46,7 +47,7 @@
             const thisFileInput = e.target;
             reader.onload = () => {
                 vm.start();
-                vm.setTurboMode(true);
+                if (turboEnabled) vm.setTurboMode(true);
                 vm.loadProject(reader.result)
                     .then(() => {
                         vm.greenFlag();
@@ -64,6 +65,10 @@
 
         function getLog() {
             return logData;
+        }
+
+        function setTurbomode(b) {
+            turboEnabled = b;
         }
         
 	    </script>

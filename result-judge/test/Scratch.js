@@ -44,6 +44,10 @@ class Lines {
 
 module.exports = class Scratch {
 
+    constructor () {
+        this.maxDuration = 1; // Do not wait when no max duration is given
+    }
+
     fill(logData) {
         this.log = logData;
         this.lines = new Lines(logData.lines);
@@ -65,24 +69,40 @@ module.exports = class Scratch {
         this._lines = value;
     }
 
+    get maxDuration() {
+        return this._maxDuration;
+    }
+
+    set maxDuration(value) {
+        this._maxDuration = value;
+    }
+
     loadFile(fileName) {
         this._fileName = fileName;
     }
 
     async run() {
-        const log = await Scratch.runFile(this._fileName);
+        const log = await Scratch.runFile(this._fileName, this.maxDuration);
         await chromeless.end();
         this.fill(log);
         return true;
     }
 
-    static runFile(fileName) {
+    static runFile(fileName, maxDuration) {
         return chromeless.goto(`file://${indexHTML}`)
             .setFileInput('#file', testDir(fileName))
             // the index.html handler for file input will add a #loaded element when it
             // finishes.
             .wait('#loaded')
+            .wait(maxDuration)
             .evaluate(startTests);
+    }
+
+    enableTurbo() {
+        return chromeless.goto(`file://${indexHTML}`)
+            .evaluate(() => {
+                setTurbomode(true);
+            })
     }
 
 };

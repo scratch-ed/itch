@@ -5,12 +5,14 @@ const scratch = new Scratch();
 const maxExecutionTime = 10000;
 const fileName = '10-squares.sb3';
 
+scratch.enableTurbo();
 scratch.loadFile(fileName);
 
 describe('square', function() {
     this.timeout(maxExecutionTime);
 
     before(async function() {
+        // scratch.maxDuration = 10000; // Set max duration on 10 seconds
         await scratch.run();
     });
 
