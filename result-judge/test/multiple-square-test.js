@@ -1,25 +1,29 @@
-const Scratch = require("./runCode.js");
+var Scratch = require("./Scratch.js");
 const expect = require('chai').expect;
 
-var lines = require("./test_functions/lines.js");
+let scratch = new Scratch();
 
 const maxExecutionTime = 10000;
 const fileName = '10-squares.sb3';
 
+
+
 describe('square', function() {
     this.timeout(maxExecutionTime);
-    let logData;
 
     before(async function() {
-        logData = await Scratch.run(fileName);
+        console.log("loading file");
+        scratch.loadFile(fileName);
+        console.log("running code");
+        return await scratch.run();
     });
 
     describe('#findSquares', () => {
         const expectedNumberOfSquares = 10;
 
         it(`should find ${expectedNumberOfSquares} squares`, async () => {
-            expect(lines.findSquares(logData.lines)).to.equal(expectedNumberOfSquares);
-            // expect(Scratch.lines.squares().length).to.equal(expectedNumberOfSquares);
+            console.log(scratch.lines);
+            expect(scratch.lines.squares.length).to.equal(expectedNumberOfSquares);
         })
     });
 

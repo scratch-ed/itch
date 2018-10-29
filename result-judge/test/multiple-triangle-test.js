@@ -1,4 +1,4 @@
-const Scratch = require("./runCode.js");
+const Scratch = require("./Scratch.js");
 const expect = require('chai').expect;
 
 var lines = require("./test_functions/lines.js");
