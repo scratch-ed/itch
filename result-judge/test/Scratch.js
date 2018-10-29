@@ -16,16 +16,18 @@ const testDir = (...args) => path.resolve(__dirname, '../scratch_code', ...args)
 //test functions imports
 var lineFunctions = require("./test_functions/lines.js");
 
-//Code which runs in chrome
-//Returns the log after running the code
-function startTests() {
-    return getLog();
-}
-
 class Lines {
 
     constructor(lineData) {
         this.lines = lineData;
+    }
+
+    get () {
+        return this._lines;
+    }
+
+    set lines(value) {
+        this._lines = value;
     }
 
     get squares() {
@@ -82,20 +84,41 @@ module.exports = class Scratch {
     }
 
     async run() {
-        const log = await Scratch.runFile(this._fileName, this.maxDuration);
-        await chromeless.end();
-        this.fill(log);
+        this._vmInit = await this.runFile(this._fileName, this.maxDuration);
+        this._vmEnd = await this.greenFlag();
+        //this._log = await this.getLog()
+        //this.fill(this._log);
+        //await chromeless.end();
         return true;
     }
 
-    static runFile(fileName, maxDuration) {
+    //
+    // Functions run in Chromeless
+    //
+    greenFlag() {
+        return chromeless.goto(`file://${indexHTML}`)
+            .evaluate(() => {
+                vmGreenFlag();
+            })
+    }
+
+    getLog() {
+        return chromeless.goto(`file://${indexHTML}`)
+            .evaluate(() => {
+                getLog();
+            })
+    }
+
+    runFile(fileName, maxDuration) {
         return chromeless.goto(`file://${indexHTML}`)
             .setFileInput('#file', testDir(fileName))
             // the index.html handler for file input will add a #loaded element when it
             // finishes.
             .wait('#loaded')
             .wait(maxDuration)
-            .evaluate(startTests);
+            .evaluate(() => {
+                getVm();
+            });
     }
 
     enableTurbo() {

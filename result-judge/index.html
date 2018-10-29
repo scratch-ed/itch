@@ -47,10 +47,8 @@
             const thisFileInput = e.target;
             reader.onload = () => {
                 vm.start();
-                if (turboEnabled) vm.setTurboMode(true);
                 vm.loadProject(reader.result)
                     .then(() => {
-                        vm.greenFlag();
                         // we add a `#loaded` div to our document, the integration suite
                         // waits for that element to show up to assume the vm is ready
                         // to play!
@@ -62,6 +60,16 @@
             };
             reader.readAsArrayBuffer(thisFileInput.files[0]);
         });
+
+        function vmGreenFlag() {
+            //if (turboEnabled) vm.setTurboMode(true);
+            vm.greenFlag();
+            console.log(vm);
+        }
+
+        function getVm() {
+            return vm;
+        }
 
         function getLog() {
             return logData;

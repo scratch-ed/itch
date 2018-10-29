@@ -5,8 +5,11 @@ const scratch = new Scratch();
 const maxExecutionTime = 10000;
 const fileName = 'triangle.sb3';
 
-scratch.enableTurbo();
-scratch.loadFile(fileName);
+
+before(function() {
+    scratch.enableTurbo();
+    scratch.loadFile(fileName);
+});
 
 describe('triangle', function() {
     this.timeout(maxExecutionTime);
