@@ -171,12 +171,10 @@ function pointsAreTriangle(points) {
     return points.length === 3;
 }
 
-function findTriangles(logData) {
+function findTriangles(lines) {
     let triangles = [];
-    let lines = logData.lines;
     if (lines.length < 3) return false;
     let merged_lines = mergeLines(lines);
-    console.log(merged_lines);
     for (let i = 0; i < merged_lines.length - 2; i++) {
         for (let j = i+1; j < merged_lines.length - 1; j++) {
             for (let k = j+1; k < merged_lines.length; k++) {

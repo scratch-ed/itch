@@ -7,7 +7,7 @@ const maxExecutionTime = 15000;
 const maxExpectedTime = 2000;
 const fileName = 'voetbal.sb3';
 
-scratch.enableTurbo();
+scratch.executionTime = 8000;
 scratch.loadFile(fileName);
 
 describe('Voetbal', function() {
