@@ -51,7 +51,7 @@ class Lines {
 module.exports = class Scratch {
 
     constructor () {
-        this.maxDuration = 1; // Do not wait when no max duration is given
+        this.executionTime = 1000; // Default: execute the code for 1 second
     }
 
     fill(logData) {
@@ -75,12 +75,12 @@ module.exports = class Scratch {
         this._lines = value;
     }
 
-    get maxDuration() {
-        return this._maxDuration;
+    get executionTime() {
+        return this._executionTime;
     }
 
-    set maxDuration(value) {
-        this._maxDuration = value;
+    set executionTime(value) {
+        this._executionTime = value;
     }
 
     loadFile(fileName) {
@@ -88,8 +88,8 @@ module.exports = class Scratch {
     }
 
     async run() {
-        // load vm
-        const log = await Scratch.runFile(this._fileName, this.maxDuration);
+        // run file in Scratch vm
+        const log = await Scratch.runFile(this._fileName, this.executionTime);
         this.fill(log);
         //await chromeless.end();
         return true;
@@ -98,8 +98,9 @@ module.exports = class Scratch {
     //
     // Functions running in Chrome with Chromeless
     //
-    static runFile(fileName, maxDuration) {
+    static runFile(fileName, executionTime) {
         return chromeless.goto(`file://${indexHTML}`)
+            .type(executionTime.toString(), '#executionTime')
             .setFileInput('#file', testDir(fileName))
             // the index.html handler for file input will add a #loaded element when it
             // finishes.

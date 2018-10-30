@@ -8,8 +8,9 @@ const SLOW = .1;
 document.getElementById('file').addEventListener('change', e => {
     const reader = new FileReader();
     const thisFileInput = e.target;
+    const executionTime = parseInt(document.getElementById('executionTime').value);
     reader.onload = () => {
-        runBenchmark(reader.result);
+        runBenchmark(reader.result, executionTime);
     };
     console.log(thisFileInput.files[0]);
     reader.readAsArrayBuffer(thisFileInput.files[0]);
@@ -363,7 +364,7 @@ class ProfilerRun {
  * Run the benchmark with given parameters in the location's hash field or
  * using defaults.
  */
-const runBenchmark = function (file) {
+const runBenchmark = function (file, executionTime) {
     // Lots of global variables to make debugging easier
     // Instantiate the VM.
     const vm = new window.VirtualMachine();
@@ -373,7 +374,6 @@ const runBenchmark = function (file) {
     vm.loadProject(file);
 
     const storage = new ScratchStorage(); /* global ScratchStorage */
-    const AssetType = storage.AssetType;
     vm.attachStorage(storage);
 
     new LoadingProgress(progress => {
@@ -384,7 +384,7 @@ const runBenchmark = function (file) {
     }).on(storage);
 
     let warmUpTime = 0;
-    let maxRecordedTime = 1000;
+    let maxRecordedTime = executionTime;
 
     new ProfilerRun({
         vm,
