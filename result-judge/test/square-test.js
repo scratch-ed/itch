@@ -2,10 +2,9 @@ var Scratch = require("./Scratch.js");
 const expect = require('chai').expect;
 const scratch = new Scratch();
 
-const maxExecutionTime = 10000;
+const maxExecutionTime = 15000;
 const fileName = 'square.sb3';
 
-scratch.enableTurbo();
 scratch.loadFile(fileName);
 
 describe('square', function() {

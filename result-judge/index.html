@@ -1,81 +1,89 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Scratch VM Benchmark</title>
+    <link rel="stylesheet" href="./benchmark.css" type="text/css" media="screen">
+</head>
 <body>
-    <!-- Scratch Includes -->
-    <script src="lib/scratch-vm.min.js">       </script>
-    <script src="lib/scratch-storage.min.js">  </script>
-    <script src="lib/scratch-svg-renderer.js"> </script>
-    <script src="lib/audio_engine.js">         </script>
-    <script src="lib/scratch-render.min.js">   </script>
-    <script src="proxy-library.js">            </script>
+<h2>Scratch VM Benchmark</h2>
+<p class="description">
+    Welcome to the scratch-vm benchmark. This tool helps you profile a scratch
+    project. When you load the page, it:
+<ol class="description">
+    <li>loads the project and enables turbo mode
+    <li>profiles
+    <li>stops and reports
+</ol>
+</p>
+<div class="run-form">
+    <input type="file" id="file" value="">
+</div>
+</br>
 
-    <h1 id="status">Result Scratch Tester</h1>
-    <canvas id="canvas" width="480" height="360" style="width: 480px"></canvas>
-    <input type="file" id="file" name="file">
+<canvas id="scratch-stage"></canvas><br />
 
-    <script>
+<div class="loading">
+    <label>Loading:</label>
+    <span class="loading-complete">0</span> / <span class="loading-total">0</span>
+</div>
+<div class="profile-count-group">
+    <div class="profile-count">
+        <label>Percent of time worked:</label>
+        <span class="profile-count-value profile-count-amount-recorded">...</span>
+    </div>
+    <div class="profile-count">
+        <label>Steps looped:</label>
+        <span class="profile-count-value profile-count-steps-looped">...</span>
+    </div>
+    <div class="profile-count">
+        <label>Blocks executed:</label>
+        <span class="profile-count-value profile-count-blocks-executed">...</span>
+    </div>
+</div>
 
-        console.log("chrome code");
-        // maybe don't use global here
-        var logData = {index:0, lines:[], color:null, points:[]};
-        var vmInit;
-        var turboEnabled = false;
+<div class="profile-tables">
+    <table class="profile-count-frame-table" cellspacing="0">
+        <thead>
+        <tr class="profile-count-frame-head"><th>Frame</th><th>Self Time</th><th>Total Time</th><th>Executions</th></tr>
+        </thead>
+        <tbody>
+        <tr class="profiler-count-running"><td colspan="4"></td></tr>
+        </tbody>
+    </table>
 
-        window.devicePixelRatio = 1;
+    <table class="profile-count-opcode-table" cellspacing="0">
+        <thead>
+        <tr class="profile-count-opcode-head">
+            <th>opcode</th><th>Self Time</th><th>Total Time</th><th>Executions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="profiler-count-running"><td colspan="4"></td></tr>
+        </tbody>
+    </table>
+</div>
 
-        /*
-            Creates the ScratchVM and attach it to a canvas  
-        */
-        function makeScratchVM(canvas) {
-            var render  = makeProxiedRenderer(canvas, logData);
-            var vm      = new VirtualMachine();
-            const audioEngine = new AudioEngine();
-            vm.attachAudioEngine(audioEngine);
-            const storage = new ScratchStorage();
-            vm.attachStorage(storage);
-            vm.attachRenderer(render);
-            vm.attachV2SVGAdapter(new ScratchSVGRenderer.SVGRenderer());
-            var adaptor  = new ScratchSVGRenderer.BitmapAdapter();
-            vm.attachV2BitmapAdapter(adaptor);
-            vm.render = render; 
-            return vm;
-        }
+<div id="blocks"></div>
 
-        var canvas  = document.getElementById('canvas');
-        var vm      = makeScratchVM(canvas);
 
-        document.getElementById('file').addEventListener('change', e => {
-            const reader = new FileReader();
-            const thisFileInput = e.target;
-            reader.onload = () => {
-                vm.start();
-                //if (turboEnabled) vm.enableTurbo();
-                vm.loadProject(reader.result)
-                    .then(() => {
-                        vmInit = vm;
-                        console.log(vmInit);
-                        vm.greenFlag();
-                        // we add a `#loaded` div to our document, the integration suite
-                        // waits for that element to show up to assume the vm is ready
-                        // to play!
-                        const div = document.createElement('div');
-                        div.id='loaded';
-                        document.body.appendChild(div);
-                        console.log(vm);
-                    });
-            };
-            reader.readAsArrayBuffer(thisFileInput.files[0]);
-        });
 
-        function getData() {
-            const data = {vmInit: vmInit, vmEnd: vm, log: logData};
-            return data;
-        }
-
-        function setTurbomode(b) {
-            turboEnabled = b;
-        }
-        
-	    </script>
+<!-- Audio module -->
+<script src="lib/audio_engine.js">         </script>
+<!-- FPS counter, Blocks, Renderer -->
+<!-- <script src="./vendor.js"></script> -->
+<!-- Storage module -->
+<script src="lib/scratch-storage.min.js">  </script>
+<!-- Stage rendering -->
+<script src="lib/scratch-render.min.js">   </script>
+<!-- SVG rendering -->
+<script src="lib/scratch-svg-renderer.js"> </script>
+<!-- VM -->
+<script src="lib/scratch-vm.min.js">       </script>
+<!-- Proxied renderer -->
+<script src="proxy-library.js">            </script>
+<!-- Playground -->
+<script src="./benchmark.js"></script>
 </body>
 </html>

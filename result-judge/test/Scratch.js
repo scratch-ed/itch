@@ -92,12 +92,7 @@ module.exports = class Scratch {
         const data = await Scratch.runFile(this._fileName, this.maxDuration);
         console.log("should wait 10 seconds before showing this msg");
         console.log(data);
-        this._vmInit = data.vmInit;
-        this._vmEnd = data.vmEnd;
         this._log = data.log;
-
-        console.log(this._vmInit);
-        console.log(this._vmEnd);
         console.log(this._log);
         //this.fill(this._log);
         //await chromeless.end();
@@ -105,33 +100,14 @@ module.exports = class Scratch {
     }
 
     //
-    // Functions run in Chromeless
+    // Functions running in Chrome with Chromeless
     //
-    greenFlag() {
-        chromeless.goto(`file://${indexHTML}`)
-            .wait(1000)
-            .evaluate(() => {
-                vmGreenFlag();
-            })
-
-    }
-
     static runFile(fileName, maxDuration) {
         return chromeless.goto(`file://${indexHTML}`)
             .setFileInput('#file', testDir(fileName))
             // the index.html handler for file input will add a #loaded element when it
             // finishes.
             .wait('#loaded')
-            .wait(10000)
-            .wait(maxDuration)
             .evaluate(getAllData);
     }
-
-    enableTurbo() {
-        return chromeless.goto(`file://${indexHTML}`)
-            .evaluate(() => {
-                setTurbomode(true);
-            })
-    }
-
 };
