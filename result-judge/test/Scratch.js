@@ -54,9 +54,18 @@ module.exports = class Scratch {
         this.executionTime = 1000; // Default: execute the code for 1 second
     }
 
-    fill(logData) {
-        this.log = logData;
-        this.lines = new Lines(logData.lines);
+    fill(data) {
+        this.log = data.log;
+        this.lines = new Lines(data.log.lines);
+        this.blocks = data.blocks;
+    }
+
+    get blocks() {
+        return this._blocks;
+    }
+
+    set blocks(value) {
+        this._blocks = value;
     }
 
     get log() {
@@ -89,8 +98,8 @@ module.exports = class Scratch {
 
     async run() {
         // run file in Scratch vm
-        const log = await Scratch.runFile(this._fileName, this.executionTime);
-        this.fill(log);
+        const data = await Scratch.runFile(this._fileName, this.executionTime);
+        this.fill(data);
         //await chromeless.end();
         return true;
     }
@@ -106,7 +115,7 @@ module.exports = class Scratch {
             // finishes.
             .wait('#loaded')
             .evaluate(() => {
-                return logData;
+                return {log:logData, blocks:blocks};
             });
     }
 };

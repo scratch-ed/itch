@@ -1,7 +1,7 @@
 const Scratch = window.Scratch = window.Scratch || {};
 
 var logData = {index:0, lines:[], color:null, points:[]};
-var  data;
+var blocks = [];
 
 const SLOW = .1;
 
@@ -68,8 +68,9 @@ class StatTable {
 }
 
 class StatView {
-    constructor (name) {
+    constructor (name, isOpcode) {
         this.name = name;
+        this.isOpcode = isOpcode;
         this.executions = 0;
         this.selfTime = 0;
         this.totalTime = 0;
@@ -110,6 +111,10 @@ class StatView {
         row.appendChild(cell);
 
         table.appendChild(row);
+
+        if (this.isOpcode) {
+            blocks.push({name:this.name, executions:this.executions});
+        }
     }
 }
 
@@ -177,7 +182,7 @@ class Frames {
 
     update (id, selfTime, totalTime) {
         if (!this.frames[id]) {
-            this.frames[id] = new StatView(this.profiler.nameById(id));
+            this.frames[id] = new StatView(this.profiler.nameById(id), false);
         }
         this.frames[id].update(selfTime, totalTime);
     }
@@ -235,7 +240,7 @@ class Opcodes {
     update (id, selfTime, totalTime, arg) {
         if (id === this.blockFunctionId) {
             if (!this.opcodes[arg]) {
-                this.opcodes[arg] = new StatView(arg);
+                this.opcodes[arg] = new StatView(arg, true);
             }
             this.opcodes[arg].update(selfTime, totalTime);
         }
