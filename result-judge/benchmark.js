@@ -16,7 +16,7 @@ document.getElementById('file').addEventListener('change', e => {
 });
 
 function getData() {
-    return true;
+    return logData;
 }
 
 class LoadingProgress {
@@ -319,7 +319,6 @@ class ProfilerRun {
             runningStats.update(id, selfTime, totalTime, arg);
             opcodes.update(id, selfTime, totalTime, arg);
             frames.update(id, selfTime, totalTime, arg);
-            if (profiler.idByName('blockFunction') == id) console.log( arg);
         };
     }
 
@@ -355,6 +354,10 @@ class ProfilerRun {
                     opcodes: this.opcodes.opcodes
                 }, '*');
 
+                const div = document.createElement('div');
+                div.id='loaded';
+                document.body.appendChild(div);
+
             }, 100 + this.warmUpTime + this.maxRecordedTime);
         });
     }
@@ -385,7 +388,7 @@ const runBenchmark = function (file) {
     }).on(storage);
 
     let warmUpTime = 0;
-    let maxRecordedTime = 3000;
+    let maxRecordedTime = 1000;
 
     new ProfilerRun({
         vm,

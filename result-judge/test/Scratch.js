@@ -108,6 +108,7 @@ module.exports = class Scratch {
             // the index.html handler for file input will add a #loaded element when it
             // finishes.
             .wait('#loaded')
+            .wait(2000)
             .evaluate(getAllData);
     }
 };
