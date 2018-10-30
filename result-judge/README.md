@@ -7,9 +7,9 @@ First install the dependencies.
 npm install 
 ```
 
-Change the file name to the Scratch code you want to test, located in /scratch_code/
+Change the file name in the test file (eg. multiple-squares.js) to the Scratch code you want to test, located in /scratch_code/
 ```code
-const fileName = 'square-segments-turned.sb3';
+const fileName = '10-squares.sb3';
 ```
 
 Then run the code:
@@ -22,10 +22,7 @@ The expected output is:
 ```code
   square
     #findSquare
-      ✓ should detect a square
-    #checkColor
-      ✓ should be drawn in blue
+      ✓ should find 10 squares
 
-
-  2 passing (2s)
+  1 passing (2s)
 ```
