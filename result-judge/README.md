@@ -14,7 +14,7 @@ const fileName = '10-squares.sb3';
 
 Then run the code:
 ```code
-mocha test/square-test.js
+mocha test/multiple-squares.js
 ```
 
 The expected output is:
