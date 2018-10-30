@@ -141,7 +141,6 @@ function findSquares(lines) {
     //
     // check if four points are a square
     //
-
     for (let i = 0; i < merged_lines.length - 3; i++) {
         for (let j = i+1; j < merged_lines.length - 2; j++) {
             for (let k = j+1; k < merged_lines.length - 1; k++) {

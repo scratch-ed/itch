@@ -15,10 +15,6 @@ document.getElementById('file').addEventListener('change', e => {
     reader.readAsArrayBuffer(thisFileInput.files[0]);
 });
 
-function getData() {
-    return logData;
-}
-
 class LoadingProgress {
     constructor (callback) {
         this.total = 0;

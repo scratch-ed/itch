@@ -14,11 +14,7 @@ const indexHTML = path.resolve(__dirname, '../index.html');
 const testDir = (...args) => path.resolve(__dirname, '../scratch_code', ...args);
 
 //test functions imports
-var lineFunctions = require("./test_functions/lines.js");
-
-function getAllData() {
-    getData();
-}
+const lineFunctions = require("./test_functions/lines.js");
 
 class Lines {
 
@@ -27,6 +23,10 @@ class Lines {
     }
 
     get () {
+        return this._lines;
+    }
+
+    get lines() {
         return this._lines;
     }
 
@@ -89,12 +89,8 @@ module.exports = class Scratch {
 
     async run() {
         // load vm
-        const data = await Scratch.runFile(this._fileName, this.maxDuration);
-        console.log("should wait 10 seconds before showing this msg");
-        console.log(data);
-        this._log = data.log;
-        console.log(this._log);
-        //this.fill(this._log);
+        const log = await Scratch.runFile(this._fileName, this.maxDuration);
+        this.fill(log);
         //await chromeless.end();
         return true;
     }
@@ -108,7 +104,8 @@ module.exports = class Scratch {
             // the index.html handler for file input will add a #loaded element when it
             // finishes.
             .wait('#loaded')
-            .wait(2000)
-            .evaluate(getAllData);
+            .evaluate(() => {
+                return logData;
+            });
     }
 };
