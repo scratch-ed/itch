@@ -2,14 +2,14 @@ var Scratch = require("./Scratch.js");
 const expect = require('chai').expect;
 const scratch = new Scratch();
 
-const maxExecutionTime = 10000;
+const maxTestingTime = 10000;
 const fileName = '10-triangles.sb3';
 
-scratch.enableTurbo();
 scratch.loadFile(fileName);
+scratch.executionTime = 1000;
 
 describe('triangle', function() {
-    this.timeout(maxExecutionTime);
+    this.timeout(maxTestingTime);
 
     before(async function() {
         await scratch.run();
