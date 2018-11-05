@@ -23,14 +23,15 @@ describe('Voetbal', function() {
     describe('testOnResult', function() {
 
         describe('#before starting', function() {
-            it(`should not show the ball`, async function() {
-                //expect(scratch.sprites.findByName('ball').isShown()).to.be.false;
+            it(`should not show the ball at the start`, async function() {
+                expect(scratch.sprites.isVisibleAtStart('ball')).to.be.false;
             });
         });
 
         describe('#during execution', function() {
-            it(`should show the ball`, async function() {
-                //expect(scratch.sprites.findByName('ball').isShown()).to.be.true;
+            it(`should show the ball just before moving`, async function() {
+                let sprites = scratch.sprites.getSpritesBeforeFirstBlockOccurance('motion_goto');
+                expect(scratch.sprites.isVisible('ball', sprites)).to.be.true;
             });
         });
 
@@ -49,8 +50,8 @@ describe('Voetbal', function() {
                 expect(scratch.playground.mergedLines.length).to.equal(scratch.playground.lines.length);
             });
 
-            it(`should not show the ball`, async function() {
-                //expect(scratch.sprites.findByName('ball').isShown()).to.be.false;
+            it(`should not show the ball at the end`, async function() {
+                expect(scratch.sprites.isVisibleAtEnd('ball')).to.be.false;
             });
         });
 
@@ -58,6 +59,21 @@ describe('Voetbal', function() {
 
     describe('testOnCode', function() {
 
+        describe('#usesPen', () => {
+            it(`should contain a penDown block`, async () => {
+                expect(scratch.allBlocks.containsBlock('pen_penDown')).to.be.true;
+            });
+
+            it(`should contain a block to change the pen's color to white`, async () => {
+                expect(scratch.allBlocks.containsBlock('pen_setPenColorParamTo')).to.be.true;
+            });
+        });
+
+        describe('#usesWaitBlock', () => {
+            it(`executes at least 7 wait blocks`, async () => {
+                expect(scratch.allBlocks.numberOfExecutions('control_wait')).to.be.above(6);
+            });
+        });
 
     });
 });

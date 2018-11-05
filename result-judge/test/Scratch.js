@@ -16,6 +16,7 @@ const testDir = (...args) => path.resolve(__dirname, '../scratch_code', ...args)
 //test functions imports
 const lineFunctions = require("./test_functions/lines.js");
 const blockFunctions = require("./test_functions/blocks.js");
+const spriteFunctions = require("./test_functions/sprites.js");
 
 class Playground {
     constructor(log) {
@@ -45,7 +46,7 @@ class Playground {
 
 class AllBlocks {
     constructor(blocks) {
-        //console.log(blocks);
+        console.log(blocks);
         this.blocks = blocks;
     }
 
@@ -78,8 +79,8 @@ class Vm {
 }
 
 class Sprites {
-    constructor(sprites, spritesLog) {
-        this.data = data.spritesLog[data.spritesLog.length - 1].sprites;
+    constructor(spritesLog) {
+        this.sprites = spritesLog[spritesLog.length - 1].sprites; //sprites in the final states
         this.log = spritesLog;
     }
 
@@ -87,24 +88,54 @@ class Sprites {
         return this.data;
     }
 
-    getSpriteByName(name) {
-        return spriteFunctions.getSpriteByName(name, this.data);
+    getSpriteIdByName(spriteName) {
+        return spriteFunctions.getSpriteIdByName(spriteName, this.sprites);
     }
 
-    getSpriteById(id) {
-        return spriteFunctions.getSpriteById(id, this.data);
+    getSpriteById(spriteId) {
+        return spriteFunctions.getSpriteById(spriteId, this.sprites);
     }
 
-    containsLoop(sprite) {
-        return spriteFunctions.containsLoop(sprite, this.data);
+    containsLoop(spriteId) {
+        return spriteFunctions.containsLoop(spriteId, this.sprites);
     }
 
     getStartSprites() {
         return this.log[0].sprites;
     }
 
-    isShownAtStart(sprite) {
-        return spriteFunctions.isShown(sprite, this.getStartSprites());
+    getSpritesAfterFirstBlockOccurance(blockName) {
+        return spriteFunctions.getSpritesAfterBlock(blockName, 1, this.log);
+    }
+
+    getSpritesBeforeFirstBlockOccurance(blockName) {
+        return spriteFunctions.getSpritesBeforeBlock(blockName, 1, this.log);
+    }
+
+    getSpritesAfterBlock(blockName, occurance) {
+        return spriteFunctions.getSpritesAfterBlock(blockName, occurance, this.log);
+    }
+
+    getSpritesBeforeBlock(blockName, occurance) {
+        return spriteFunctions.getSpritesBeforeBlock(blockName, occurance, this.log);
+    }
+
+    isVisibleAtStart(spriteName) {
+        return this.isVisible(spriteName, this.getStartSprites());
+    }
+
+    isVisibleAtEnd(spriteName) {
+        return this.isVisible(spriteName, this.sprites);
+    }
+
+    isVisible(spriteName, sprites) {
+        let spriteId = this.getSpriteIdByName(spriteName, sprites);
+        return spriteFunctions.isVisible(spriteId, sprites);
+    }
+
+    getBlocks(spriteName) {
+        let spriteId = this.getSpriteIdByName(spriteName, this.sprites);
+        return spriteFunctions.getBlocks(spriteId, this.sprites);
     }
 
 

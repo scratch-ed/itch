@@ -333,11 +333,12 @@ class ProfilerRun {
         const stepId = profiler.idByName('Runtime._step');
         const blockId = profiler.idByName('blockFunction');
 
-        let i = 0;
         let firstState = true;
         profiler.onFrame = ({id, selfTime, totalTime, arg}) => {
             if (firstState) {
                 spritesLog.push({block:'START', sprites:JSON.parse(JSON.stringify(this.vm.runtime.targets))});
+                console.log(JSON.parse(JSON.stringify(this.vm.runtime.targets)));
+                console.log(profiler.nameById(id));
                 firstState = false;
             }
             if (id === stepId) {
@@ -389,7 +390,6 @@ class ProfilerRun {
                 document.body.appendChild(div)
 
                 vmData = JSON.parse(JSON.stringify(this.vm));
-                //sprites = JSON.parse(JSON.stringify(this.vm.runtime.targets));
 
             }, 100 + this.warmUpTime + this.maxRecordedTime);
         });
