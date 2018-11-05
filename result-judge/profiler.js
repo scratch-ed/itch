@@ -5,6 +5,7 @@ var logData = {index:0, lines:[], color:null, points:[]};
 var blocks = [];
 var vmData;
 var sprites;
+var spritesLog = [];
 
 const SLOW = .1;
 
@@ -330,15 +331,24 @@ class ProfilerRun {
         const vmStates = this.vmStates = new VmStates(profiler);
 
         const stepId = profiler.idByName('Runtime._step');
+        const blockId = profiler.idByName('blockFunction');
+
         let i = 0;
+        let firstState = true;
         profiler.onFrame = ({id, selfTime, totalTime, arg}) => {
+            if (firstState) {
+                spritesLog.push({block:'START', sprites:JSON.parse(JSON.stringify(this.vm.runtime.targets))});
+                firstState = false;
+            }
             if (id === stepId) {
                 runningStatsView.render();
+            }
+            if (id === blockId) {
+                spritesLog.push({block:arg, sprites:JSON.parse(JSON.stringify(this.vm.runtime.targets))});
             }
             runningStats.update(id, selfTime, totalTime, arg);
             opcodes.update(id, selfTime, totalTime, arg);
             frames.update(id, selfTime, totalTime, arg);
-            //vmStates.update(id, selfTime, totalTIme, arg);
         };
     }
 
@@ -379,7 +389,7 @@ class ProfilerRun {
                 document.body.appendChild(div)
 
                 vmData = JSON.parse(JSON.stringify(this.vm));
-                sprites = JSON.parse(JSON.stringify(this.vm.runtime.targets));
+                //sprites = JSON.parse(JSON.stringify(this.vm.runtime.targets));
 
             }, 100 + this.warmUpTime + this.maxRecordedTime);
         });

@@ -16,7 +16,7 @@ describe('square', function() {
         await scratch.run();
     });
 
-    describe('onResult', function() {
+    describe('testOnResult', function() {
 
         describe('#findSquare', () => {
             it(`should find exactly one square`, async () => {
@@ -26,7 +26,7 @@ describe('square', function() {
 
     });
 
-    describe('onCode', function() {
+    describe('testOnCode', function() {
 
         describe('#usesLoop', () => {
             it(`should be coded by using a loop`, async () => {

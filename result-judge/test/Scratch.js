@@ -78,9 +78,9 @@ class Vm {
 }
 
 class Sprites {
-    constructor(sprites) {
-        //console.log(sprites);
-        this.data = sprites;
+    constructor(sprites, spritesLog) {
+        this.data = data.spritesLog[data.spritesLog.length - 1].sprites;
+        this.log = spritesLog;
     }
 
     listSprites() {
@@ -99,6 +99,15 @@ class Sprites {
         return spriteFunctions.containsLoop(sprite, this.data);
     }
 
+    getStartSprites() {
+        return this.log[0].sprites;
+    }
+
+    isShownAtStart(sprite) {
+        return spriteFunctions.isShown(sprite, this.getStartSprites());
+    }
+
+
 }
 
 module.exports = class Scratch {
@@ -112,7 +121,7 @@ module.exports = class Scratch {
         this.playground = new Playground(data.log);
         this.allBlocks = new AllBlocks(data.blocks);
         //this.vm = new Vm(data.vm);
-        this.sprites = new Sprites(data.sprites);
+        this.sprites = new Sprites(data.spritesLog);
 
     }
 
@@ -149,7 +158,7 @@ module.exports = class Scratch {
             // finishes.
             .wait('#loaded')
             .evaluate(() => {
-                return {log:logData, blocks:blocks, sprites:sprites, vm:vmData};
+                return {log:logData, blocks:blocks, spritesLog: spritesLog, vm:vmData};
             });
     }
 };
