@@ -18,7 +18,7 @@ describe('triangle', function() {
 
     describe('#findTriangle', () => {
         it(`should find exactly one triangle`, async () => {
-            expect(scratch.lines.triangles.length).to.equal(1);
+            expect(scratch.playground.triangles.length).to.equal(1);
         })
     });
 

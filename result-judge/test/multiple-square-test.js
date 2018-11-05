@@ -25,7 +25,7 @@ describe('square', function() {
         const expectedNumberOfSquares = 10;
 
         it(`should find ${expectedNumberOfSquares} squares`, async () => {
-            expect(scratch.lines.squares.length).to.equal(expectedNumberOfSquares);
+            expect(scratch.playground.squares.length).to.equal(expectedNumberOfSquares);
         })
     });
 
