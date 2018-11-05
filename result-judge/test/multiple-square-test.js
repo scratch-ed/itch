@@ -5,7 +5,7 @@ const scratch = new Scratch();
 const maxTestingTime = 12000;
 const maxExecutionTime = 10000;
 const maxExpectedTime = 500;
-const executionTime = 2000;
+const executionTime = 5000;
 const fileName = '10-squares.sb3';
 
 scratch.loadFile(fileName);

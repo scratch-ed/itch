@@ -16,10 +16,39 @@ describe('square', function() {
         await scratch.run();
     });
 
-    describe('#findSquare', () => {
-        it(`should find exactly one square`, async () => {
-            expect(scratch.lines.squares.length).to.equal(1);
-        })
+    describe('onResult', function() {
+
+        describe('#findSquare', () => {
+            it(`should find exactly one square`, async () => {
+                expect(scratch.playground.squares.length).to.equal(1);
+            })
+        });
+
     });
+
+    describe('onCode', function() {
+
+        describe('#usesLoop', () => {
+            it(`should be coded by using a loop`, async () => {
+                expect(scratch.allBlocks.containsLoop()).to.be.true;
+            })
+        });
+
+        describe('#repeatedCode', () => {
+            it(`should repeat the code in the loop at least twice`, async () => {
+                expect(scratch.allBlocks.numberOfExecutions('control_repeat')).to.be.above(2);
+            })
+        });
+
+        describe('#usesPenDown', () => {
+            it(`should contain a penDown block`, async () => {
+                expect(scratch.allBlocks.containsBlock('pen_penDown')).to.be.true;
+            })
+        });
+
+    });
+
+
+
 
 });
