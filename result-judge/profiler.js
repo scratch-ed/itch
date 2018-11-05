@@ -1,5 +1,6 @@
 const Scratch = window.Scratch = window.Scratch || {};
 var executionTime;
+var input;
 
 var logData = {index:0, lines:[], color:null, points:[]};
 var blocks = [];
@@ -19,6 +20,32 @@ document.getElementById('file').addEventListener('change', e => {
     console.log(thisFileInput.files[0]);
     reader.readAsArrayBuffer(thisFileInput.files[0]);
 });
+
+function enterInput(str, vm) {
+    let l = str.length;
+    for (let i = 0; i < l; i++) {
+        let c = str.charAt(i);
+        console.log(c);
+        console.log(c.charCodeAt(0));
+        vm.postIOData('keyboard', {
+            keyCode: c.charCodeAt(0),
+            isDown: true
+        });
+        vm.postIOData('keyboard', {
+            keyCode: c.charCodeAt(0),
+            isDown: false
+        });
+    }
+    vm.postIOData('keyboard', {
+        keyCode: 13,
+        isDown: true
+    });
+    vm.postIOData('keyboard', {
+        keyCode: 13,
+        isDown: false
+    });
+
+}
 
 class LoadingProgress {
     constructor (callback) {
@@ -334,6 +361,7 @@ class ProfilerRun {
         const blockId = profiler.idByName('blockFunction');
 
         let firstState = true;
+        let i = 0;
         profiler.onFrame = ({id, selfTime, totalTime, arg}) => {
             if (firstState) {
                 spritesLog.push({block:'START', sprites:JSON.parse(JSON.stringify(this.vm.runtime.targets))});
@@ -346,6 +374,12 @@ class ProfilerRun {
             }
             if (id === blockId) {
                 spritesLog.push({block:arg, sprites:JSON.parse(JSON.stringify(this.vm.runtime.targets))});
+                if (arg === 'sensing_askandwait') {
+                    console.log('entering input');
+                    console.log(input);
+                    enterInput(input[i], this.vm)
+                    i++;
+                }
             }
             runningStats.update(id, selfTime, totalTime, arg);
             opcodes.update(id, selfTime, totalTime, arg);
@@ -437,67 +471,6 @@ const runBenchmark = function (file, executionTime) {
     /* global ScratchSVGRenderer */
     vm.attachV2SVGAdapter(new ScratchSVGRenderer.SVGRenderer());
     vm.attachV2BitmapAdapter(new ScratchSVGRenderer.BitmapAdapter());
-
-    // Feed mouse events as VM I/O events.
-    document.addEventListener('mousemove', e => {
-        const rect = canvas.getBoundingClientRect();
-        const coordinates = {
-            x: e.clientX - rect.left,
-            y: e.clientY - rect.top,
-            canvasWidth: rect.width,
-            canvasHeight: rect.height
-        };
-        Scratch.vm.postIOData('mouse', coordinates);
-    });
-    canvas.addEventListener('mousedown', e => {
-        const rect = canvas.getBoundingClientRect();
-        const data = {
-            isDown: true,
-            x: e.clientX - rect.left,
-            y: e.clientY - rect.top,
-            canvasWidth: rect.width,
-            canvasHeight: rect.height
-        };
-        Scratch.vm.postIOData('mouse', data);
-        e.preventDefault();
-    });
-    canvas.addEventListener('mouseup', e => {
-        const rect = canvas.getBoundingClientRect();
-        const data = {
-            isDown: false,
-            x: e.clientX - rect.left,
-            y: e.clientY - rect.top,
-            canvasWidth: rect.width,
-            canvasHeight: rect.height
-        };
-        Scratch.vm.postIOData('mouse', data);
-        e.preventDefault();
-    });
-
-    // Feed keyboard events as VM I/O events.
-    document.addEventListener('keydown', e => {
-        // Don't capture keys intended for Blockly inputs.
-        if (e.target !== document && e.target !== document.body) {
-            return;
-        }
-        Scratch.vm.postIOData('keyboard', {
-            keyCode: e.keyCode,
-            isDown: true
-        });
-        e.preventDefault();
-    });
-    document.addEventListener('keyup', e => {
-        // Always capture up events,
-        // even those that have switched to other targets.
-        Scratch.vm.postIOData('keyboard', {
-            keyCode: e.keyCode,
-            isDown: false
-        });
-        // E.g., prevent scroll.
-        if (e.target !== document && e.target !== document.body) {
-            e.preventDefault();
-        }
-    });
 
     // Run threads
     vm.start();

@@ -145,6 +145,7 @@ module.exports = class Scratch {
 
     constructor () {
         this.executionTime = 1000; // Default: execute the code for 1 second
+        this.input = [];
     }
 
     fill(data) {
@@ -164,13 +165,21 @@ module.exports = class Scratch {
         this._executionTime = value;
     }
 
+    get input() {
+        return this._input;
+    }
+
+    set input(value) {
+        this._input = value;
+    }
+
     loadFile(fileName) {
         this._fileName = fileName;
     }
 
     async run() {
         // run file in Scratch vm
-        const data = await Scratch.runFile(this._fileName, this.executionTime);
+        const data = await Scratch.runFile(this._fileName, this.executionTime, this.input);
         this.fill(data);
         //await chromeless.end();
         return true;
@@ -179,11 +188,12 @@ module.exports = class Scratch {
     //
     // Functions running in Chrome with Chromeless
     //
-    static runFile(fileName, executionTime) {
+    static runFile(fileName, executionTime, input) {
         return chromeless.goto(`file://${indexHTML}`)
-            .evaluate((executionTime) => {
+            .evaluate((executionTime, input) => {
                 this.executionTime = executionTime;
-            }, executionTime)
+                this.input = input;
+            }, executionTime, input)
             .setFileInput('#file', testDir(fileName))
             // the index.html handler for file input will add a #loaded element when it
             // finishes.
