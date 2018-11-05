@@ -4,7 +4,7 @@ const scratch = new Scratch();
 
 const maxTestingTime = 5000;
 const executionTime = 1000;
-const fileName = 'triangle.sb3';
+const fileName = 'square (1).sb3';
 
 scratch.loadFile(fileName);
 scratch.executionTime = executionTime;
@@ -18,7 +18,7 @@ describe('triangle', function() {
 
     describe('#findTriangle', () => {
         it(`should find exactly one triangle`, async () => {
-            expect(scratch.lines.triangles.length).to.equal(1);
+            expect(scratch.playground.triangles.length).to.equal(1);
         })
     });
 

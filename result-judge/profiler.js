@@ -1,16 +1,19 @@
 const Scratch = window.Scratch = window.Scratch || {};
+var executionTime;
 
 var logData = {index:0, lines:[], color:null, points:[]};
 var blocks = [];
+var vmData;
+var sprites;
 
 const SLOW = .1;
+
 
 document.getElementById('file').addEventListener('change', e => {
     const reader = new FileReader();
     const thisFileInput = e.target;
-    const executionTime = parseInt(document.getElementById('executionTime').value);
     reader.onload = () => {
-        runBenchmark(reader.result, executionTime);
+        runBenchmark(reader.result, this.executionTime);
     };
     console.log(thisFileInput.files[0]);
     reader.readAsArrayBuffer(thisFileInput.files[0]);
@@ -188,6 +191,17 @@ class Frames {
     }
 }
 
+class VmStates {
+    constructor (profiler) {
+        this.profiler = profiler;
+        this.index = 0;
+    }
+
+    update (id, selfTime, totalTime) {
+        this.index++;
+    }
+}
+
 const frameOrder = [
     'blockFunction',
     'execute',
@@ -313,7 +327,10 @@ class ProfilerRun {
             frames
         });
 
+        const vmStates = this.vmStates = new VmStates(profiler);
+
         const stepId = profiler.idByName('Runtime._step');
+        let i = 0;
         profiler.onFrame = ({id, selfTime, totalTime, arg}) => {
             if (id === stepId) {
                 runningStatsView.render();
@@ -321,6 +338,7 @@ class ProfilerRun {
             runningStats.update(id, selfTime, totalTime, arg);
             opcodes.update(id, selfTime, totalTime, arg);
             frames.update(id, selfTime, totalTime, arg);
+            //vmStates.update(id, selfTime, totalTIme, arg);
         };
     }
 
@@ -358,7 +376,10 @@ class ProfilerRun {
 
                 const div = document.createElement('div');
                 div.id='loaded';
-                document.body.appendChild(div);
+                document.body.appendChild(div)
+
+                vmData = JSON.parse(JSON.stringify(this.vm));
+                sprites = JSON.parse(JSON.stringify(this.vm.runtime.targets));
 
             }, 100 + this.warmUpTime + this.maxRecordedTime);
         });
@@ -389,12 +410,11 @@ const runBenchmark = function (file, executionTime) {
     }).on(storage);
 
     let warmUpTime = 0;
-    let maxRecordedTime = executionTime;
 
     new ProfilerRun({
         vm,
         warmUpTime,
-        maxRecordedTime
+        maxRecordedTime: executionTime
     }).run();
 
     // Instantiate the renderer and connect it to the VM.
@@ -471,5 +491,6 @@ const runBenchmark = function (file, executionTime) {
 
     // Run threads
     vm.start();
+
 };
 

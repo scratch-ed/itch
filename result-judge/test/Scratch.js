@@ -15,15 +15,11 @@ const testDir = (...args) => path.resolve(__dirname, '../scratch_code', ...args)
 
 //test functions imports
 const lineFunctions = require("./test_functions/lines.js");
+const blockFunctions = require("./test_functions/blocks.js");
 
-class Lines {
-
-    constructor(lineData) {
-        this.lines = lineData;
-    }
-
-    get () {
-        return this._lines;
+class Playground {
+    constructor(log) {
+        this.lines = log.lines;
     }
 
     get lines() {
@@ -45,6 +41,63 @@ class Lines {
     get mergedLines() {
         return lineFunctions.mergeLines(this.lines);
     }
+}
+
+class AllBlocks {
+    constructor(blocks) {
+        //console.log(blocks);
+        this.blocks = blocks;
+    }
+
+    get blocks() {
+        return this._blocks;
+    }
+
+    set blocks(value) {
+        this._blocks = value;
+    }
+
+    containsLoop() {
+        return blockFunctions.containsLoop(this.blocks);
+    }
+
+    containsBlock(blockName) {
+        return blockFunctions.containsBlock(blockName, this.blocks);
+    }
+
+    numberOfExecutions(blockName) {
+        return blockFunctions.countExecutions(blockName, this.blocks);
+    }
+}
+
+class Vm {
+    constructor(vm) {
+        //console.log(data);
+        this.vm = vm;
+    }
+}
+
+class Sprites {
+    constructor(sprites) {
+        //console.log(sprites);
+        this.data = sprites;
+    }
+
+    listSprites() {
+        return this.data;
+    }
+
+    getSpriteByName(name) {
+        return spriteFunctions.getSpriteByName(name, this.data);
+    }
+
+    getSpriteById(id) {
+        return spriteFunctions.getSpriteById(id, this.data);
+    }
+
+    containsLoop(sprite) {
+        return spriteFunctions.containsLoop(sprite, this.data);
+    }
 
 }
 
@@ -56,32 +109,11 @@ module.exports = class Scratch {
 
     fill(data) {
         this.log = data.log;
-        this.lines = new Lines(data.log.lines);
-        this.blocks = data.blocks;
-    }
+        this.playground = new Playground(data.log);
+        this.allBlocks = new AllBlocks(data.blocks);
+        //this.vm = new Vm(data.vm);
+        this.sprites = new Sprites(data.sprites);
 
-    get blocks() {
-        return this._blocks;
-    }
-
-    set blocks(value) {
-        this._blocks = value;
-    }
-
-    get log() {
-        return this._log;
-    }
-
-    set log(value) {
-        this._log = value;
-    }
-
-    get lines() {
-        return this._lines;
-    }
-
-    set lines(value) {
-        this._lines = value;
     }
 
     get executionTime() {
@@ -109,13 +141,15 @@ module.exports = class Scratch {
     //
     static runFile(fileName, executionTime) {
         return chromeless.goto(`file://${indexHTML}`)
-            .type(executionTime.toString(), '#executionTime')
+            .evaluate((executionTime) => {
+                this.executionTime = executionTime;
+            }, executionTime)
             .setFileInput('#file', testDir(fileName))
             // the index.html handler for file input will add a #loaded element when it
             // finishes.
             .wait('#loaded')
             .evaluate(() => {
-                return {log:logData, blocks:blocks};
+                return {log:logData, blocks:blocks, sprites:sprites, vm:vmData};
             });
     }
 };

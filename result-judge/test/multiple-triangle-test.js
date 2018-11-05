@@ -19,7 +19,7 @@ describe('triangle', function() {
         const expectedNumberOfTriangles = 10;
 
         it(`should find ${expectedNumberOfTriangles} triangles`, async () => {
-            expect(scratch.lines.triangles.length).to.equal(expectedNumberOfTriangles);
+            expect(scratch.playground.triangles.length).to.equal(expectedNumberOfTriangles);
         })
     });
 

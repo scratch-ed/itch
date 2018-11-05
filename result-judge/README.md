@@ -7,9 +7,9 @@ First install the dependencies.
 npm install 
 ```
 
-Change the file name in the test file (eg. multiple-squares.js) to the Scratch code you want to test, located in /scratch_code/
+Change the file name in the test file (eg. square-test.js) to the Scratch code you want to test, located in /scratch_code/
 ```code
-const fileName = '10-squares.sb3';
+const fileName = 'square.sb3';
 ```
 
 Then run the code:
@@ -20,9 +20,22 @@ mocha test/multiple-squares.js
 The expected output is:
 
 ```code
-  square
-    #findSquare
-      ✓ should find 10 squares
+mocha test/square-test.js
 
-  1 passing (2s)
+
+  square
+    onResult
+      #findSquare
+        ✓ should find exactly one square
+    onCode
+      #usesLoop
+        ✓ should be coded by using a loop
+      #repeatedCode
+        ✓ should repeat the code in the loop at least twice
+      #usesPenDown
+        ✓ should contain a penDown block
+
+
+  4 passing (3s)
+
 ```
