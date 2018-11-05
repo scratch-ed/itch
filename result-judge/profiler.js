@@ -1,6 +1,7 @@
 const Scratch = window.Scratch = window.Scratch || {};
 var executionTime;
-var input;
+var keyInput;
+var mouseInput;
 
 var logData = {index:0, lines:[], color:null, points:[]};
 var blocks = [];
@@ -23,28 +24,26 @@ document.getElementById('file').addEventListener('change', e => {
 
 function enterInput(str, vm) {
     let l = str.length;
+    console.log(str);
     for (let i = 0; i < l; i++) {
         let c = str.charAt(i);
-        console.log(c);
-        console.log(c.charCodeAt(0));
         vm.postIOData('keyboard', {
-            keyCode: c.charCodeAt(0),
+            key: c,
             isDown: true
         });
         vm.postIOData('keyboard', {
-            keyCode: c.charCodeAt(0),
+            key: c,
             isDown: false
         });
     }
     vm.postIOData('keyboard', {
-        keyCode: 13,
+        key: 'Enter',
         isDown: true
     });
     vm.postIOData('keyboard', {
-        keyCode: 13,
+        key: 'Enter',
         isDown: false
     });
-
 }
 
 class LoadingProgress {
@@ -374,10 +373,10 @@ class ProfilerRun {
             }
             if (id === blockId) {
                 spritesLog.push({block:arg, sprites:JSON.parse(JSON.stringify(this.vm.runtime.targets))});
-                if (arg === 'sensing_askandwait') {
-                    console.log('entering input');
-                    console.log(input);
-                    enterInput(input[i], this.vm)
+                if (arg === 'sensing_askandwait' || arg === 'event_whenkeypressed' || arg === 'sensing_keypressed') {
+                    console.log('entering keyInput');
+                    console.log(keyInput);
+                    enterInput(keyInput[i], this.vm);
                     i++;
                 }
             }

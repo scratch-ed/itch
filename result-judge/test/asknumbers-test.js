@@ -13,7 +13,7 @@ describe('AskNumbers', function() {
     this.timeout(maxTestingTime);
 
     before(async function() {
-        scratch.input = ["1", "3"];
+        scratch.keyInput = ["120", "33"];
         await scratch.run();
     });
 
