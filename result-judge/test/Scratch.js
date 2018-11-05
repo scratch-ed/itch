@@ -58,6 +58,8 @@ module.exports = class Scratch {
         this.log = data.log;
         this.lines = new Lines(data.log.lines);
         this.blocks = data.blocks;
+        console.log(this.blocks);
+        console.log(this.lines);
     }
 
     get blocks() {
@@ -109,6 +111,9 @@ module.exports = class Scratch {
     //
     static runFile(fileName, executionTime) {
         return chromeless.goto(`file://${indexHTML}`)
+            .evaluate((executionTime) => {
+                //todo
+            }, executionTime)
             .type(executionTime.toString(), '#executionTime')
             .setFileInput('#file', testDir(fileName))
             // the index.html handler for file input will add a #loaded element when it

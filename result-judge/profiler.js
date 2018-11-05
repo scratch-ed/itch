@@ -2,8 +2,13 @@ const Scratch = window.Scratch = window.Scratch || {};
 
 var logData = {index:0, lines:[], color:null, points:[]};
 var blocks = [];
+var vmData = [];
 
 const SLOW = .1;
+
+function setVariables(value) {
+
+}
 
 document.getElementById('file').addEventListener('change', e => {
     const reader = new FileReader();
@@ -188,6 +193,18 @@ class Frames {
     }
 }
 
+class VmStates {
+    constructor (profiler) {
+        this.profiler = profiler;
+        this.index = 0;
+    }
+
+    update (id, selfTime, totalTime) {
+        vmData.push({index: this.index, frameId:id, vmState:vm});
+        this.index++;
+    }
+}
+
 const frameOrder = [
     'blockFunction',
     'execute',
@@ -313,7 +330,10 @@ class ProfilerRun {
             frames
         });
 
+        const vmStates = this.vmStates = new VmStates(profiler);
+
         const stepId = profiler.idByName('Runtime._step');
+        let i = 0;
         profiler.onFrame = ({id, selfTime, totalTime, arg}) => {
             if (id === stepId) {
                 runningStatsView.render();
@@ -321,6 +341,7 @@ class ProfilerRun {
             runningStats.update(id, selfTime, totalTime, arg);
             opcodes.update(id, selfTime, totalTime, arg);
             frames.update(id, selfTime, totalTime, arg);
+            //vmStates.update(id, selfTime, totalTIme, arg);
         };
     }
 
@@ -471,5 +492,7 @@ const runBenchmark = function (file, executionTime) {
 
     // Run threads
     vm.start();
+    console.log(vm);
+
 };
 
