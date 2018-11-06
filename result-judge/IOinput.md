@@ -64,3 +64,62 @@ Removed from profiler.js, as no IO input is used.
             e.preventDefault();
         }
     });
+
+    ---
+
+    TODO Checkout VM functions:
+    key: "_onAnswer",
+        value: function(A) {
+            this._answer = A;
+            var e = this._questionList.shift();
+            if (e) {
+                var n = t(e, 5),
+                    l = (n[0], n[1]),
+                    r = n[2],
+                    a = n[3],
+                    i = n[4];
+                a && !i && this.runtime.emit("SAY", r, "say", ""), l(), this._askNextQuestion()
+            }
+        }
+    }, {
+        key: "_resetAnswer",
+        value: function() {
+            this._answer = ""
+        }
+    }, {
+        key: "_enqueueAsk",
+        value: function(A, e, n, t, l) {
+            this._questionList.push([A, e, n, t, l])
+        }
+    }, {
+        key: "_askNextQuestion",
+        value: function() {
+            if (this._questionList.length > 0) {
+                var A = t(this._questionList[0], 5),
+                    e = A[0],
+                    n = (A[1], A[2]),
+                    l = A[3],
+                    r = A[4];
+                l && !r ? (this.runtime.emit("SAY", n, "say", e), this.runtime.emit("QUESTION", "")) : this.runtime.emit("QUESTION", e)
+            }
+        }
+    }, {
+        key: "_clearAllQuestions",
+        value: function() {
+            this._questionList = [], this.runtime.emit("QUESTION", null)
+        }
+    }, {
+        key: "askAndWait",
+        value: function(A, e) {
+            var n = this,
+                t = e.target;
+            return new Promise(function(e) {
+                var l = n._questionList.length > 0;
+                n._enqueueAsk(String(A.QUESTION), e, t, t.visible, t.isStage), l || n._askNextQuestion()
+            })
+        }
+    }, {
+        key: "getAnswer",
+        value: function() {
+            return this._answer
+        }
