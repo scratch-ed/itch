@@ -21,6 +21,7 @@ const spriteFunctions = require("./test_functions/sprites.js");
 class Playground {
     constructor(log) {
         this.lines = log.lines;
+        this.responses = log.responses;
     }
 
     get lines() {
@@ -29,6 +30,14 @@ class Playground {
 
     set lines(value) {
         this._lines = value;
+    }
+
+    get responses() {
+        return this._responses;
+    }
+
+    set responses(value) {
+        this._responses = value;
     }
 
     get squares() {
@@ -46,7 +55,7 @@ class Playground {
 
 class AllBlocks {
     constructor(blocks) {
-        console.log(blocks);
+        //console.log(blocks);
         this.blocks = blocks;
     }
 

@@ -9,7 +9,7 @@ function makeProxiedRenderer(canvas, logData) {
     var penLineOld = render.penLine;
     var handler = {
         apply: function(target, thisArg, argumentsList) {
-            console.log('Called penLine with arguments: ${argumentsList}');
+            console.log(`Called penLine with arguments: ${argumentsList}`);
             var p1 = {x:argumentsList[2], y:argumentsList[3]};
             var p2 = {x:argumentsList[4], y:argumentsList[5]};
             var line = {start:p1, end:p2};
@@ -24,7 +24,7 @@ function makeProxiedRenderer(canvas, logData) {
     var penPointOld = render.penPoint;
     handler = {
         apply: function(target, thisArg, argumentsList) {
-            console.log('Called penPoint with arguments: ${argumentsList}');
+            console.log(`Called penPoint with arguments: ${argumentsList}`);
             logData.color = argumentsList[1].color4f;
             logData.points.push({x:argumentsList[2], y:argumentsList[3]});
             return target.apply(thisArg,argumentsList);
@@ -42,6 +42,28 @@ function makeProxiedRenderer(canvas, logData) {
         }
     };
     render.penClear = new Proxy(penClearOld, handler);
+
+
+    // text bubble creation
+    var createTextSkinOld = render.createTextSkin;
+    handler = {
+        apply: function (target, thisArg, argumentsList) {
+            console.log(`Called createTextSkin with arguments: ${argumentsList}`);
+            logData.responses.push(argumentsList[1]);
+            return target.apply(thisArg, argumentsList);
+        }
+    };
+    render.createTextSkin = new Proxy(createTextSkinOld, handler);
+
+    var updateTextSkinOld = render.updateTextSkin;
+    handler = {
+        apply: function (target, thisArg, argumentsList) {
+            console.log(`Called updateTextSkin with arguments: ${argumentsList}`);
+            logData.responses.push(argumentsList[2]);
+            return target.apply(thisArg, argumentsList);
+        }
+    };
+    render.updateTextSkin = new Proxy(updateTextSkinOld, handler);
 
     return render;
 }

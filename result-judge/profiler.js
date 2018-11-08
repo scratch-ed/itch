@@ -3,7 +3,7 @@ var executionTime;
 var keyInput;
 var mouseInput;
 
-var logData = {index:0, lines:[], color:null, points:[]};
+var logData = {index:0, lines:[], color:null, points:[], responses:[]};
 var blocks = [];
 var vmData;
 var sprites;
@@ -21,30 +21,6 @@ document.getElementById('file').addEventListener('change', e => {
     console.log(thisFileInput.files[0]);
     reader.readAsArrayBuffer(thisFileInput.files[0]);
 });
-
-function enterInput(str, vm) {
-    let l = str.length;
-    console.log(str);
-    for (let i = 0; i < l; i++) {
-        let c = str.charAt(i);
-        vm.postIOData('keyboard', {
-            key: c,
-            isDown: true
-        });
-        vm.postIOData('keyboard', {
-            key: c,
-            isDown: false
-        });
-    }
-    vm.postIOData('keyboard', {
-        key: 'Enter',
-        isDown: true
-    });
-    vm.postIOData('keyboard', {
-        key: 'Enter',
-        isDown: false
-    });
-}
 
 class LoadingProgress {
     constructor (callback) {
@@ -374,9 +350,8 @@ class ProfilerRun {
             if (id === blockId) {
                 spritesLog.push({block:arg, sprites:JSON.parse(JSON.stringify(this.vm.runtime.targets))});
                 if (arg === 'sensing_askandwait' || arg === 'event_whenkeypressed' || arg === 'sensing_keypressed') {
-                    console.log('entering keyInput');
-                    console.log(keyInput);
-                    enterInput(keyInput[i], this.vm);
+                    // Enters the next value of the keyInput list as answer
+                    this.vm.runtime.emit("ANSWER", keyInput[i]);
                     i++;
                 }
             }

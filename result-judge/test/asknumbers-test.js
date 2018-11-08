@@ -2,8 +2,8 @@ var Scratch = require("./Scratch.js");
 const expect = require('chai').expect;
 const scratch = new Scratch();
 
-const maxTestingTime = 18000;
-const executionTime = 10000;
+const maxTestingTime = 5000;
+const executionTime = 2000;
 const fileName = 'asknumbers.sb3';
 
 scratch.loadFile(fileName);
@@ -21,7 +21,7 @@ describe('AskNumbers', function() {
 
         describe('#calculatesSum', () => {
             it(`should give the sum of the two input numbers`, async () => {
-                //expect(scratch.playground.squares.length).to.equal(1);
+                expect(scratch.playground.responses).to.contain("153");
             })
         });
 
@@ -36,10 +36,17 @@ describe('AskNumbers', function() {
         });
 
         describe('#usesSay', () => {
-            it(`should use the Ask block`, async () => {
+            it(`should use the Say block`, async () => {
                 expect(scratch.allBlocks.containsBlock('looks_say')).to.be.true;
             })
         });
+
+        describe('#usesSay', () => {
+            it(`should use the Operator Add block`, async () => {
+                expect(scratch.allBlocks.containsBlock('operator_add')).to.be.true;
+            })
+        });
+
 
     });
 
