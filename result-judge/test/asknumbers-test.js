@@ -2,7 +2,7 @@ var Scratch = require("./Scratch.js");
 const expect = require('chai').expect;
 const scratch = new Scratch();
 
-const maxTestingTime = 5000;
+const maxTestingTime = 7000;
 const executionTime = 2000;
 const fileName = 'asknumbers.sb3';
 
