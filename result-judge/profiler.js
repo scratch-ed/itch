@@ -395,7 +395,7 @@ class ProfilerRun {
 
                 const div = document.createElement('div');
                 div.id='loaded';
-                document.body.appendChild(div)
+                document.body.appendChild(div);
 
                 vmData = JSON.parse(JSON.stringify(this.vm));
 
@@ -446,8 +446,23 @@ const runBenchmark = function (file, executionTime) {
     vm.attachV2SVGAdapter(new ScratchSVGRenderer.SVGRenderer());
     vm.attachV2BitmapAdapter(new ScratchSVGRenderer.BitmapAdapter());
 
+    // On end
+    /*vm.runtime.on("PROJECT_STOP_ALL", () => {
+        const div = document.createElement('div');
+        div.id='loaded';
+        document.body.appendChild(div);
+        vmData = JSON.parse(JSON.stringify(this.vm));
+    });
+    */
+/*
+    const div = document.createElement('div');
+    div.id='loaded';
+    document.body.appendChild(div);
+    */
+
     // Run threads
     vm.start();
 
 };
+
 
