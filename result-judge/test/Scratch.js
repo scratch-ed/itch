@@ -197,16 +197,29 @@ module.exports = class Scratch {
 
     async run() {
         // run file in Scratch vm
-        const data = await Scratch.runFile(this._fileName, this.executionTime, this.keyInput, this.mouseInput);
-        this.fill(data);
+        let loaded = await Scratch._runFile(this._fileName, this.executionTime, this.keyInput, this.mouseInput);
+        this.isLoaded = loaded;
+        let test = await Scratch._setInput(this.keyInput, this.mouseInput);
+        console.log(test);
         //await chromeless.end();
         return true;
+    }
+
+    async clickGreenFlag() {
+        console.log("clickGreenFlag()");
+        const data = await Scratch._greenFlag();
+        this.fill(data);
+        return true;
+    }
+
+    async setInput () {
+        return await Scratch._setInput(this.keyInput, this.mouseInput);
     }
 
     //
     // Functions running in Chrome with Chromeless
     //
-    static runFile(fileName, executionTime, keyInput, mouseInput) {
+    static _runFile(fileName, executionTime, keyInput, mouseInput) {
         return chromeless.goto(`file://${indexHTML}`)
             .evaluate((executionTime, keyInput, mouseInput) => {
                 this.executionTime = executionTime;
@@ -217,6 +230,25 @@ module.exports = class Scratch {
             // the index.html handler for file input will add a #loaded element when it
             // finishes.
             .wait('#loaded')
+            .evaluate(() => {
+                return true;
+            })
+    }
+
+    static _setInput(keyInput, mouseInput) {
+        return chromeless.evaluate((keyInput, mouseInput) => {
+            console.log("Setting input");
+            this.keyInput = keyInput;
+            this.mouseInput = mouseInput;
+        }, keyInput, mouseInput)
+    }
+
+    static _greenFlag() {
+        return chromeless.evaluate(() => {
+                console.log("Executing greenFlag()");
+                startProfilerRun();
+            })
+            .wait("#ended")
             .evaluate(() => {
                 return {log:logData, blocks:blocks, spritesLog: spritesLog, vm:vmData};
             });

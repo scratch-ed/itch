@@ -14,6 +14,7 @@ describe('square', function() {
 
     before(async function() {
         await scratch.run();
+        await scratch.clickGreenFlag();
     });
 
     describe('testOnResult', function() {

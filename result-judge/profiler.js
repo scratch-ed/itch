@@ -16,9 +16,9 @@ document.getElementById('file').addEventListener('change', e => {
     const reader = new FileReader();
     const thisFileInput = e.target;
     reader.onload = () => {
-        runBenchmark(reader.result, this.executionTime);
+        runBenchmark(reader.result);
     };
-    console.log(thisFileInput.files[0]);
+    //console.log(thisFileInput.files[0]);
     reader.readAsArrayBuffer(thisFileInput.files[0]);
 });
 
@@ -393,8 +393,9 @@ class ProfilerRun {
                     opcodes: this.opcodes.opcodes
                 }, '*');
 
+                console.log("Ended run");
                 const div = document.createElement('div');
-                div.id='loaded';
+                div.id='ended';
                 document.body.appendChild(div);
 
                 vmData = JSON.parse(JSON.stringify(this.vm));
@@ -408,7 +409,7 @@ class ProfilerRun {
  * Run the benchmark with given parameters in the location's hash field or
  * using defaults.
  */
-const runBenchmark = function (file, executionTime) {
+const runBenchmark = function (file) {
     // Lots of global variables to make debugging easier
     // Instantiate the VM.
     const vm = new window.VirtualMachine();
@@ -427,14 +428,6 @@ const runBenchmark = function (file, executionTime) {
             .innerText = progress.complete;
     }).on(storage);
 
-    let warmUpTime = 0;
-
-    new ProfilerRun({
-        vm,
-        warmUpTime,
-        maxRecordedTime: executionTime
-    }).run();
-
     // Instantiate the renderer and connect it to the VM.
     const canvas = document.getElementById('scratch-stage');
     const renderer = new window.makeProxiedRenderer(canvas, logData);
@@ -446,23 +439,27 @@ const runBenchmark = function (file, executionTime) {
     vm.attachV2SVGAdapter(new ScratchSVGRenderer.SVGRenderer());
     vm.attachV2BitmapAdapter(new ScratchSVGRenderer.BitmapAdapter());
 
-    // On end
-    /*vm.runtime.on("PROJECT_STOP_ALL", () => {
-        const div = document.createElement('div');
-        div.id='loaded';
-        document.body.appendChild(div);
-        vmData = JSON.parse(JSON.stringify(this.vm));
-    });
-    */
-/*
+    vm.start();
+
+    console.log("Finished loading");
     const div = document.createElement('div');
     div.id='loaded';
     document.body.appendChild(div);
-    */
 
-    // Run threads
-    vm.start();
+
 
 };
+
+function startProfilerRun () {
+    console.log("Starting run");
+    // Run threads
+    const vm = Scratch.vm;
+
+    new ProfilerRun({
+        vm,
+        warmUpTime: 0,
+        maxRecordedTime: executionTime
+    }).run();
+}
 
 

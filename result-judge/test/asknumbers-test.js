@@ -13,13 +13,34 @@ describe('AskNumbers', function() {
     this.timeout(maxTestingTime);
 
     before(async function() {
-        scratch.keyInput = ["120", "33"];
         await scratch.run();
     });
 
     describe('testOnResult', function() {
 
-        describe('#calculatesSum', () => {
+        describe('#calculatesSum1', () => {
+
+            before(async function() {
+                scratch.keyInput = ["120", "33"];
+                await scratch.setInput();
+                console.log("clicking green flag");
+                await scratch.clickGreenFlag();
+            });
+
+            it(`should give the sum of the two input numbers`, async () => {
+                let sum = parseInt(scratch.keyInput[0]) + parseInt(scratch.keyInput[1]);
+                expect(scratch.playground.responses).to.contain(sum.toString());
+            })
+        });
+
+        describe('#calculatesSum2', () => {
+
+            before(async function() {
+                scratch.keyInput = ["10", "20"];
+                await scratch.setInput();
+                await scratch.clickGreenFlag();
+            });
+
             it(`should give the sum of the two input numbers`, async () => {
                 let sum = parseInt(scratch.keyInput[0]) + parseInt(scratch.keyInput[1]);
                 expect(scratch.playground.responses).to.contain(sum.toString());
