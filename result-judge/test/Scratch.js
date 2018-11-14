@@ -156,6 +156,7 @@ module.exports = class Scratch {
         this.executionTime = 1000; // Default: execute the code for 1 second
         this.keyInput = [];
         this.mouseInput = [];
+        this.chromeless = new Chromeless();
     }
 
     fill(data) {
@@ -197,9 +198,9 @@ module.exports = class Scratch {
 
     async run() {
         // run file in Scratch vm
-        let loaded = await Scratch._runFile(this._fileName, this.executionTime, this.keyInput, this.mouseInput);
+        let loaded = await this._runFile(this._fileName, this.executionTime, this.keyInput, this.mouseInput);
         this.isLoaded = loaded;
-        let test = await Scratch._setInput(this.keyInput, this.mouseInput);
+        let test = await this._setInput(this.keyInput, this.mouseInput);
         console.log(test);
         //await chromeless.end();
         return true;
@@ -207,27 +208,28 @@ module.exports = class Scratch {
 
     async clickGreenFlag() {
         console.log("clickGreenFlag()");
-        const data = await Scratch._greenFlag();
+        const data = await this._greenFlag();
+        console.log("green flag clicked");
         this.fill(data);
         return true;
     }
 
     async setInput () {
-        return await Scratch._setInput(this.keyInput, this.mouseInput);
+        return await this._setInput(this.keyInput, this.mouseInput);
     }
 
     //
     // Functions running in Chrome with Chromeless
     //
-    static _runFile(fileName, executionTime, keyInput, mouseInput) {
-        return chromeless.goto(`file://${indexHTML}`)
+    async _runFile(fileName, executionTime, keyInput, mouseInput) {
+        return this.chromeless.goto(`file://${indexHTML}`)
             .evaluate((executionTime, keyInput, mouseInput) => {
                 this.executionTime = executionTime;
                 this.keyInput = keyInput;
                 this.mouseInput = mouseInput;
             }, executionTime, keyInput, mouseInput)
             .setFileInput('#file', testDir(fileName))
-            // the index.html handler for file input will add a #loaded element when it
+            // the profiler.js handler for file input will add a #loaded element when it
             // finishes.
             .wait('#loaded')
             .evaluate(() => {
@@ -235,22 +237,24 @@ module.exports = class Scratch {
             })
     }
 
-    static _setInput(keyInput, mouseInput) {
-        return chromeless.evaluate((keyInput, mouseInput) => {
+    async _setInput(keyInput, mouseInput) {
+        return this.chromeless.evaluate((keyInput, mouseInput) => {
             console.log("Setting input");
             this.keyInput = keyInput;
             this.mouseInput = mouseInput;
         }, keyInput, mouseInput)
     }
 
-    static _greenFlag() {
-        return chromeless.evaluate(() => {
+    async _greenFlag() {
+        console.log("in _greenFlag");
+        return (this.chromeless.evaluate(() => {
                 console.log("Executing greenFlag()");
                 startProfilerRun();
-            })
-            .wait("#ended")
-            .evaluate(() => {
-                return {log:logData, blocks:blocks, spritesLog: spritesLog, vm:vmData};
-            });
+                })
+                .wait("#ended")
+                .evaluate(() => {
+                    return {log:logData, blocks:blocks, spritesLog: spritesLog, vm:vmData};
+                })
+            )
     }
 };

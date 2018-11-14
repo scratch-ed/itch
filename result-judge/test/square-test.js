@@ -14,6 +14,9 @@ describe('square', function() {
 
     before(async function() {
         await scratch.run();
+        scratch.keyInput = ['a'];
+        await scratch.setInput();
+        console.log("clickGreenFlag function");
         await scratch.clickGreenFlag();
     });
 
