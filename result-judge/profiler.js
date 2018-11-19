@@ -9,6 +9,8 @@ var vmData;
 var sprites;
 var spritesLog = [];
 
+var profilerRun;
+
 const SLOW = .1;
 
 
@@ -70,6 +72,13 @@ class StatTable {
                 isSlow: frame => this.isSlow(key, frame)
             });
         }
+    }
+
+
+    clear() {
+        const table = this.table;
+        Array.from(table.children)
+            .forEach(node => table.removeChild(node));
     }
 }
 
@@ -177,6 +186,7 @@ class RunningStatsView {
         stepsLoopedDom.innerText = executed.steps;
         blocksExecutedDom.innerText = executed.blocks;
     }
+
 }
 
 class Frames {
@@ -191,17 +201,6 @@ class Frames {
             this.frames[id] = new StatView(this.profiler.nameById(id), false);
         }
         this.frames[id].update(selfTime, totalTime);
-    }
-}
-
-class VmStates {
-    constructor (profiler) {
-        this.profiler = profiler;
-        this.index = 0;
-    }
-
-    update (id, selfTime, totalTime) {
-        this.index++;
     }
 }
 
@@ -293,6 +292,7 @@ class OpcodeTable extends StatTable {
 
 class ProfilerRun {
     constructor ({vm, maxRecordedTime, warmUpTime}) {
+        console.log("new Profiler run created");
         this.vm = vm;
         this.maxRecordedTime = maxRecordedTime;
         this.warmUpTime = warmUpTime;
@@ -330,14 +330,13 @@ class ProfilerRun {
             frames
         });
 
-        const vmStates = this.vmStates = new VmStates(profiler);
-
         const stepId = profiler.idByName('Runtime._step');
         const blockId = profiler.idByName('blockFunction');
 
         let firstState = true;
         let i = 0;
         profiler.onFrame = ({id, selfTime, totalTime, arg}) => {
+            console.log(i);
             if (firstState) {
                 spritesLog.push({block:'START', sprites:JSON.parse(JSON.stringify(this.vm.runtime.targets))});
                 console.log(JSON.parse(JSON.stringify(this.vm.runtime.targets)));
@@ -362,6 +361,7 @@ class ProfilerRun {
     }
 
     run () {
+        console.log("Profiler run()");
         window.parent.postMessage({
             type: 'BENCH_MESSAGE_LOADING'
         }, '*');
@@ -371,37 +371,47 @@ class ProfilerRun {
                 window.parent.postMessage({
                     type: 'BENCH_MESSAGE_WARMING_UP'
                 }, '*');
+                console.log("BENCH_MESSAGE_WARMING_UP");
                 this.vm.greenFlag();
             }, 100);
             setTimeout(() => {
                 window.parent.postMessage({
                     type: 'BENCH_MESSAGE_ACTIVE'
                 }, '*');
+                console.log("BENCH_MESSAGE_ACTIVE");
                 this.vm.runtime.profiler = this.profiler;
             }, 100 + this.warmUpTime);
             setTimeout(() => {
+                // Timeout exceeded
                 this.vm.stopAll();
-                clearTimeout(this.vm.runtime._steppingInterval);
-                this.vm.runtime.profiler = null;
-
-                this.frameTable.render();
-                this.opcodeTable.render();
-
-                window.parent.postMessage({
-                    type: 'BENCH_MESSAGE_COMPLETE',
-                    frames: this.frames.frames,
-                    opcodes: this.opcodes.opcodes
-                }, '*');
-
-                console.log("Ended run");
-                const div = document.createElement('div');
-                div.id='ended';
-                document.body.appendChild(div);
-
-                vmData = JSON.parse(JSON.stringify(this.vm));
-
             }, 100 + this.warmUpTime + this.maxRecordedTime);
         });
+
+        this.vm.runtime.on('PROJECT_RUN_STOP', () => {
+            clearTimeout(this.vm.runtime._steppingInterval);
+            this.vm.runtime.profiler = null;
+
+            this.frameTable.render();
+            this.opcodeTable.render();
+
+            window.parent.postMessage({
+                type: 'BENCH_MESSAGE_COMPLETE',
+                frames: this.frames.frames,
+                opcodes: this.opcodes.opcodes
+            }, '*');
+
+            console.log("Ended run");
+            const div = document.createElement('div');
+            div.id='ended';
+            document.body.appendChild(div);
+
+            vmData = JSON.parse(JSON.stringify(this.vm));
+        });
+    }
+
+    clear() {
+        this.frameTable.clear();
+        this.opcodeTable.clear();
     }
 }
 
@@ -439,8 +449,6 @@ const runBenchmark = function (file) {
     vm.attachV2SVGAdapter(new ScratchSVGRenderer.SVGRenderer());
     vm.attachV2BitmapAdapter(new ScratchSVGRenderer.BitmapAdapter());
 
-    vm.start();
-
     console.log("Finished loading");
     const div = document.createElement('div');
     div.id='loaded';
@@ -454,12 +462,23 @@ function startProfilerRun () {
     console.log("Starting run");
     // Run threads
     const vm = Scratch.vm;
+    vm.start();
 
-    new ProfilerRun({
+    if(profilerRun) {
+        profilerRun.clear();
+    }
+
+    vm.refreshWorkspace();
+
+    console.log(keyInput);
+
+    profilerRun = new ProfilerRun({
         vm,
         warmUpTime: 0,
         maxRecordedTime: executionTime
-    }).run();
+    });
+
+    profilerRun.run();
 }
 
 

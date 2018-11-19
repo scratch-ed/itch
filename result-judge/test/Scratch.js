@@ -207,10 +207,8 @@ module.exports = class Scratch {
     }
 
     async clickGreenFlag() {
-        console.log("clickGreenFlag()");
         await this._greenFlag();
         const data = await this._waitForEnded();
-        console.log("green flag clicked");
         this.fill(data);
         return true;
     }
@@ -247,9 +245,7 @@ module.exports = class Scratch {
     }
 
     async _greenFlag(keyInput, mouseInput) {
-        console.log("in _greenFlag");
         let p = this.chromeless.evaluate(() => {
-            console.log("start Profiler RUn");
             startProfilerRun();
         });
     }

@@ -14,15 +14,33 @@ describe('square', function() {
 
     before(async function() {
         await scratch.run();
-        scratch.keyInput = ['a'];
-        await scratch.setInput();
-        console.log("clickGreenFlag function");
-        await scratch.clickGreenFlag();
     });
 
     describe('testOnResult', function() {
 
+        before(async function() {
+            scratch.keyInput = ['a'];
+            await scratch.setInput();
+            await scratch.clickGreenFlag();
+        });
+
         describe('#findSquare', () => {
+            it(`should find exactly one square`, async () => {
+                expect(scratch.playground.squares.length).to.equal(1);
+            })
+        });
+
+    });
+
+    describe('testOnResult2', function() {
+
+        before(async function() {
+            scratch.keyInput = ['b'];
+            await scratch.setInput();
+            await scratch.clickGreenFlag();
+        });
+
+        describe('#findSquare2', () => {
             it(`should find exactly one square`, async () => {
                 expect(scratch.playground.squares.length).to.equal(1);
             })
