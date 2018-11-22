@@ -156,7 +156,7 @@ module.exports = class Scratch {
         this.executionTime = 1000; // Default: execute the code for 1 second
         this.keyInput = [];
         this.mouseInput = [];
-        this.chromeless = new Chromeless();
+        this.numberOfRun = 0;
     }
 
     fill(data) {
@@ -198,17 +198,18 @@ module.exports = class Scratch {
 
     async run() {
         // run file in Scratch vm
+        this.chromeless = new Chromeless();
         let loaded = await this._runFile(this._fileName, this.executionTime, this.keyInput, this.mouseInput);
         this.isLoaded = loaded;
         let test = await this._setInput(this.keyInput, this.mouseInput);
-        console.log(test);
         //await chromeless.end();
         return true;
     }
 
     async clickGreenFlag() {
         await this._greenFlag();
-        const data = await this._waitForEnded();
+        const data = await this._waitForEnded(this.numberOfRun);
+        //this.numberOfRun++;
         this.fill(data);
         return true;
     }
@@ -250,8 +251,8 @@ module.exports = class Scratch {
         });
     }
 
-    async _waitForEnded() {
-        return this.chromeless.wait('#ended')
+    async _waitForEnded(numberOfRun) {
+        return this.chromeless.wait(`#ended_${numberOfRun}`)
             .evaluate(() => {
                 return {log: logData, blocks: blocks, spritesLog: spritesLog, vm: vmData};
             });

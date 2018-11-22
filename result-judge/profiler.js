@@ -2,6 +2,7 @@ const Scratch = window.Scratch = window.Scratch || {};
 var executionTime;
 var keyInput;
 var mouseInput;
+let numberOfRun = 0;
 
 var logData = {index:0, lines:[], color:null, points:[], responses:[]};
 var blocks = [];
@@ -402,7 +403,8 @@ class ProfilerRun {
 
             console.log("Ended run");
             const div = document.createElement('div');
-            div.id='ended';
+            div.id=`ended_${numberOfRun}`;
+            numberOfRun++;
             document.body.appendChild(div);
 
             vmData = JSON.parse(JSON.stringify(this.vm));
@@ -454,7 +456,11 @@ const runBenchmark = function (file) {
     div.id='loaded';
     document.body.appendChild(div);
 
-
+    profilerRun = new ProfilerRun({
+        vm,
+        warmUpTime: 0,
+        maxRecordedTime: executionTime
+    });
 
 };
 
