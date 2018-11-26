@@ -29,7 +29,7 @@ describe('AskNumbers', function() {
 
             it(`should give the sum of two input numbers:`, async () => {
                 let sum = parseInt(scratch.keyInput[0]) + parseInt(scratch.keyInput[1]);
-                expect(scratch.playground.responses).to.contain(sum.toString());
+                expect(scratch.playground.say).to.contain(sum.toString());
             })
         });
 

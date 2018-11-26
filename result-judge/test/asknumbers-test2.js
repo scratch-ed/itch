@@ -28,6 +28,7 @@ describe('AskNumbers', function() {
                     await scratch.run();
                     await scratch.setInput();
                     await scratch.clickGreenFlag();
+                    await scratch.end();
 
                     let sum = parseInt(input[i]) + parseInt(input[i+1]);
                     expect(scratch.playground.responses).to.contain(sum.toString());
