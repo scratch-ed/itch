@@ -21,7 +21,8 @@ const spriteFunctions = require("./test_functions/sprites.js");
 class Playground {
     constructor(log) {
         this.lines = log.lines;
-        this.responses = log.responses;
+        this.say = log.responses;
+        this.ask = log.responses;
     }
 
     get lines() {

@@ -92,13 +92,9 @@ function createProfiler() {
 
     Scratch.opcodes = new Opcodes();
     let firstState = true;
-    let i = 0;
     profiler.onFrame = ({id, selfTime, totalTime, arg}) => {
-        console.log(i);
         if (firstState) {
             spritesLog.push({block:'START', sprites:JSON.parse(JSON.stringify(vm.runtime.targets))});
-            console.log(JSON.parse(JSON.stringify(vm.runtime.targets)));
-            console.log(profiler.nameById(id));
             firstState = false;
         }
         if (id === blockId) {
@@ -106,8 +102,7 @@ function createProfiler() {
             spritesLog.push({block:arg, sprites:JSON.parse(JSON.stringify(vm.runtime.targets))});
             if (arg === 'sensing_askandwait' || arg === 'event_whenkeypressed' || arg === 'sensing_keypressed') {
                 // Enters the next value of the keyInput list as answer
-                vm.runtime.emit("ANSWER", keyInput[i]);
-                i++;
+                vm.runtime.emit("ANSWER", keyInput.shift());
             }
         }
     };
@@ -130,6 +125,10 @@ function greenFlag(){
         // Timeout exceeded
         vm.stopAll();
     }, 100 + this.maxRecordedTime);
+
+    vm.runtime.on('QUESTION', () => {
+        //vm.runtime.emit("ANSWER", 5);
+    });
 
     vm.runtime.on('PROJECT_RUN_STOP', () => {
         clearTimeout(vm.runtime._steppingInterval);
