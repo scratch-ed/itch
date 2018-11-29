@@ -226,16 +226,21 @@ module.exports = class Scratch {
     // Functions running in Chrome with Chromeless
     //
     async _runFile(fileName, executionTime, keyInput, mouseInput) {
-        return this.chromeless.goto(`file://${indexHTML}`)
+        await this.chromeless.goto(`file://${indexHTML}`)
             .evaluate((executionTime, keyInput, mouseInput) => {
                 this.executionTime = executionTime;
                 this.keyInput = keyInput;
                 this.mouseInput = mouseInput;
-            }, executionTime, keyInput, mouseInput)
-            .setFileInput('#file', testDir(fileName))
+            }, executionTime, keyInput, mouseInput);
+
+        await this.chromeless.setFileInput('#file', testDir(fileName));
+
+        return await this.chromeless.evaluate(() => {
+                return promise;
+            })
             // the profiler.js handler for file input will add a #loaded element when it
             // finishes.
-            .wait('#loaded')
+            //.wait('#loaded')
             .evaluate(() => {
                 return true;
             })
@@ -250,15 +255,23 @@ module.exports = class Scratch {
     }
 
     async _createProfiler() {
-        let p = this.chromeless.evaluate(() => {
+        return this.chromeless.evaluate(() => {
             createProfiler();
         })
     }
 
     async _greenFlag() {
-        let p = this.chromeless.evaluate(() => {
+        return this.chromeless.evaluate(() => {
             greenFlag();
-        });
+        })
+    }
+
+    async vmGreenFlag() {
+        return this.chromeless.evaluate(() => {
+            console.log("vmGreenFlag");
+            Scratch.vm.greenFlag();
+            console.log("greenFlag");
+        })
     }
 
     async _waitForEnded(numberOfRun) {
@@ -266,5 +279,15 @@ module.exports = class Scratch {
             .evaluate(() => {
                 return {log: logData, blocks: blocks, spritesLog: spritesLog, vm: vmData};
             });
+    }
+
+    async _promiseTest() {
+        console.log("promiseTest");
+        await this.chromeless.evaluate(() => {
+            return new Promise((resolve, reject) => {
+
+            });
+        });
+
     }
 };

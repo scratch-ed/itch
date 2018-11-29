@@ -3,6 +3,7 @@ var executionTime;
 var keyInput;
 var mouseInput;
 let numberOfRun = 0;
+let startTimestamp;
 
 var logData = {index:0, lines:[], color:null, points:[], responses:[]};
 var blocks = [];
@@ -15,6 +16,24 @@ var profilerRun;
 /**
  * When a new file is loaded by calling chromeless.setFile(fileName), the project gets initialized.
  */
+/*
+function loadFile() {
+    return new Promise((resolve, reject) => {
+        let file = document.getElementById('file');
+        console.log(file);
+        const reader = new FileReader();
+        reader.onload = () => {
+            init(reader.result);
+            resolve();
+        };
+        console.log(file.files[0]);
+        reader.readAsArrayBuffer(file.files[0]);
+    })
+}
+*/
+
+let promise = new Promise();
+
 document.getElementById('file').addEventListener('change', e => {
     const reader = new FileReader();
     const thisFileInput = e.target;
@@ -36,13 +55,18 @@ function init(file) {
     vm.setTurboMode(true);
     vm.loadProject(file);
 
+    //Start timer
+    let date = new Date();
+    startTimestamp = date.getTime();
+    console.log("start timestamp:", startTimestamp); //TODO replace this with init event
+
     // Storage
     const storage = new ScratchStorage(); /* global ScratchStorage */
     vm.attachStorage(storage);
 
     // Instantiate the renderer and connect it to the VM.
     const canvas = document.getElementById('scratch-stage');
-    const renderer = new window.makeProxiedRenderer(canvas, logData);
+    const renderer = new window.makeProxiedRenderer(canvas, logData, startTimestamp);
     Scratch.renderer = renderer;
     vm.attachRenderer(renderer);
 
@@ -57,6 +81,8 @@ function init(file) {
     const div = document.createElement('div');
     div.id='loaded';
     document.body.appendChild(div);
+
+    promise.resolve();
 
     vm.start();
 };
@@ -80,6 +106,11 @@ class Opcodes {
     }
 }
 
+function getTimeStamp() {
+    let date = new Date();
+    return date.getTime() - startTimestamp;
+}
+
 function createProfiler() {
     const vm = Scratch.vm;
 
@@ -99,14 +130,16 @@ function createProfiler() {
             firstState = false;
         }
         if (id === blockId) {
-            console.log(arg);
+            console.log(`${getTimeStamp()}: ${arg}`);
             Scratch.opcodes.update(arg);
             spritesLog.push({block:arg, sprites:JSON.parse(JSON.stringify(vm.runtime.targets))});
         }
     };
 }
 
-function greenFlag(){
+
+
+async function greenFlag(){
     console.log("clickGreenFlag()");
 
     const vm = Scratch.vm;
@@ -117,7 +150,7 @@ function greenFlag(){
     setTimeout(() => {
         console.log("vm.greenFlag()");
         vm.greenFlag();
-        vm.runtime.profiler = Scratch.profiler;
+        //vm.runtime.profiler = Scratch.profiler;
     }, START_DELAY);
 
     /*setTimeout(() => {
@@ -129,36 +162,43 @@ function greenFlag(){
     setTimeout(() => {
 
         vm.runtime.on('PROJECT_START', () => {
-           console.log("project start event: ", numberOfRun);
+            let date = new Date();
+            let timestamp = date.getTime() - startTimestamp;
+            console.log(`${timestamp}: project start event: ${numberOfRun}`);
         });
 
         vm.runtime.on('SAY', (target, type, text) => {
-            console.log("say: ", text);
+            let date = new Date();
+            let timestamp = date.getTime() - startTimestamp;
+            console.log(`${timestamp}: say: ${text}`);
         });
 
         vm.runtime.on('QUESTION', (question) => {
             if (question != null) {
+                let date = new Date();
+                let timestamp = date.getTime() - startTimestamp;
                 let x = keyInput.shift();
-                console.log("input: ", x);
+                console.log(`${timestamp}: input: ${x}`);
                 vm.runtime.emit("ANSWER", x);
             }
         });
 
         vm.runtime.on('PROJECT_RUN_STOP', () => {
-            clearTimeout(vm.runtime._steppingInterval);
+            //clearTimeout(vm.runtime._steppingInterval);
+
             //vm.runtime.disableProfiling();
-            vm.runtime.profiler = null;
+            //vm.runtime.profiler = null;
             Scratch.opcodes.end();
-            console.log("Ended run");
+            let date = new Date();
+            let timestamp = date.getTime() - startTimestamp;
+            console.log(`${timestamp}: Ended run`);
 
             vmData = JSON.parse(JSON.stringify(vm));
 
-            setTimeout(() => {
-                const div = document.createElement('div');
-                div.id=`ended_${numberOfRun}`;
-                numberOfRun++;
-                document.body.appendChild(div);
-            }, START_DELAY);
+            const div = document.createElement('div');
+            div.id=`ended_${numberOfRun}`;
+            numberOfRun++;
+            document.body.appendChild(div);
 
         });
 

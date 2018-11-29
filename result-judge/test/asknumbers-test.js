@@ -22,6 +22,7 @@ describe('AskNumbers', function() {
 
             before(async function() {
                 scratch.keyInput = ["120", "33"];
+                //await scratch._promiseTest();
                 await scratch.setInput();
                 await scratch.clickGreenFlag();
             });
@@ -37,7 +38,7 @@ describe('AskNumbers', function() {
             before(async function() {
                 scratch.keyInput = ["10", "20"];
                 await scratch.setInput();
-                await scratch.clickGreenFlag();
+                await scratch.vmGreenFlag();
             });
 
             it(`should give the sum of the two input numbers`, async () => {
