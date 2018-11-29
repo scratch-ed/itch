@@ -211,6 +211,7 @@ module.exports = class Scratch {
 
     async clickGreenFlag() {
         await this._greenFlag();
+        await this._createProfiler();
         const data = await this._waitForEnded(this.numberOfRun);
         this.numberOfRun++;
         this.fill(data);
@@ -248,9 +249,14 @@ module.exports = class Scratch {
         }, keyInput, mouseInput)
     }
 
-    async _greenFlag(keyInput, mouseInput) {
+    async _createProfiler() {
         let p = this.chromeless.evaluate(() => {
             createProfiler();
+        })
+    }
+
+    async _greenFlag() {
+        let p = this.chromeless.evaluate(() => {
             greenFlag();
         });
     }

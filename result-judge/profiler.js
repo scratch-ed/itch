@@ -128,6 +128,10 @@ function greenFlag(){
 
     setTimeout(() => {
 
+        vm.runtime.on('PROJECT_START', () => {
+           console.log("project start event: ", numberOfRun);
+        });
+
         vm.runtime.on('SAY', (target, type, text) => {
             console.log("say: ", text);
         });
@@ -142,7 +146,7 @@ function greenFlag(){
 
         vm.runtime.on('PROJECT_RUN_STOP', () => {
             clearTimeout(vm.runtime._steppingInterval);
-            vm.runtime.disableProfiling();
+            //vm.runtime.disableProfiling();
             vm.runtime.profiler = null;
             Scratch.opcodes.end();
             console.log("Ended run");
