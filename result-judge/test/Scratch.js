@@ -200,9 +200,7 @@ module.exports = class Scratch {
     async run() {
         // run file in Scratch vm
         this.chromeless = new Chromeless();
-        let loaded = await this._runFile(this._fileName, this.executionTime, this.keyInput, this.mouseInput);
-        this.isLoaded = loaded;
-        let test = await this._setInput(this.keyInput, this.mouseInput);
+        await this._runFile(this._fileName, this.executionTime, this.keyInput, this.mouseInput);
         //await chromeless.end();
         return true;
     }

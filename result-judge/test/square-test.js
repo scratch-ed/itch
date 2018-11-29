@@ -19,8 +19,8 @@ describe('square', function() {
     describe('testOnResult', function() {
 
         before(async function() {
-            scratch.keyInput = ['a'];
-            await scratch.setInput();
+            //scratch.keyInput = ['a'];
+            //await scratch.setInput();
             await scratch.clickGreenFlag();
         });
 
@@ -35,8 +35,8 @@ describe('square', function() {
     describe('testOnResult2', function() {
 
         before(async function() {
-            scratch.keyInput = ['b'];
-            await scratch.setInput();
+            //scratch.keyInput = ['b'];
+            //await scratch.setInput();
             await scratch.clickGreenFlag();
         });
 
