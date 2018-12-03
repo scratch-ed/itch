@@ -18,7 +18,25 @@ describe('square', function() {
 
     describe('testOnResult', function() {
 
+        before(async function() {
+            await scratch.clickGreenFlag();
+        });
+
         describe('#findSquare', () => {
+            it(`should find exactly one square`, async () => {
+                expect(scratch.playground.squares.length).to.equal(1);
+            })
+        });
+
+    });
+
+    describe('testOnResult2', function() {
+
+        before(async function() {
+            await scratch.clickGreenFlag();
+        });
+
+        describe('#findSquare2', () => {
             it(`should find exactly one square`, async () => {
                 expect(scratch.playground.squares.length).to.equal(1);
             })

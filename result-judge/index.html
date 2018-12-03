@@ -24,63 +24,19 @@
 
 <canvas id="scratch-stage"></canvas><br />
 
-<div class="loading">
-    <label>Loading:</label>
-    <span class="loading-complete">0</span> / <span class="loading-total">0</span>
-</div>
-<div class="profile-count-group">
-    <div class="profile-count">
-        <label>Percent of time worked:</label>
-        <span class="profile-count-value profile-count-amount-recorded">...</span>
-    </div>
-    <div class="profile-count">
-        <label>Steps looped:</label>
-        <span class="profile-count-value profile-count-steps-looped">...</span>
-    </div>
-    <div class="profile-count">
-        <label>Blocks executed:</label>
-        <span class="profile-count-value profile-count-blocks-executed">...</span>
-    </div>
-</div>
-
-<div class="profile-tables">
-    <table class="profile-count-frame-table" cellspacing="0">
-        <thead>
-        <tr class="profile-count-frame-head"><th>Frame</th><th>Self Time</th><th>Total Time</th><th>Executions</th></tr>
-        </thead>
-        <tbody>
-        <tr class="profiler-count-running"><td colspan="4"></td></tr>
-        </tbody>
-    </table>
-
-    <table class="profile-count-opcode-table" cellspacing="0">
-        <thead>
-        <tr class="profile-count-opcode-head">
-            <th>opcode</th><th>Self Time</th><th>Total Time</th><th>Executions</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr class="profiler-count-running"><td colspan="4"></td></tr>
-        </tbody>
-    </table>
-</div>
-
-<div id="blocks"></div>
-
-
 
 <!-- Audio module -->
 <script src="lib/audio_engine.js">         </script>
 <!-- FPS counter, Blocks, Renderer -->
 <!-- <script src="./vendor.js"></script> -->
 <!-- Storage module -->
-<script src="lib/scratch-storage.min.js">  </script>
+<script src="lib/scratch-storage.js">  </script>
 <!-- Stage rendering -->
-<script src="lib/scratch-render.min.js">   </script>
+<script src="lib/scratch-render.js">   </script>
 <!-- SVG rendering -->
 <script src="lib/scratch-svg-renderer.js"> </script>
 <!-- VM -->
-<script src="lib/scratch-vm.min.js">       </script>
+<script src="lib/scratch-vm.js">       </script>
 <!-- Proxied renderer -->
 <script src="proxy-library.js">            </script>
 <!-- Playground -->

@@ -21,7 +21,8 @@ const spriteFunctions = require("./test_functions/sprites.js");
 class Playground {
     constructor(log) {
         this.lines = log.lines;
-        this.responses = log.responses;
+        this.say = log.responses;
+        this.ask = log.responses;
     }
 
     get lines() {
@@ -156,6 +157,8 @@ module.exports = class Scratch {
         this.executionTime = 1000; // Default: execute the code for 1 second
         this.keyInput = [];
         this.mouseInput = [];
+        this.numberOfRun = 0;
+        this.chromeless = new Chromeless();
     }
 
     fill(data) {
@@ -196,29 +199,83 @@ module.exports = class Scratch {
     }
 
     async run() {
-        // run file in Scratch vm
-        const data = await Scratch.runFile(this._fileName, this.executionTime, this.keyInput, this.mouseInput);
+        await this._runFile(this._fileName, this.executionTime, this.keyInput, this.mouseInput);
+        await this._createProfiler();
+    }
+
+    async end() {
+        await this.chromeless.end();
+    }
+
+    async createProfiler() {
+        await this._createProfiler();
+    }
+
+    async clickGreenFlag() {
+        const data = await this._greenFlag();
         this.fill(data);
-        //await chromeless.end();
         return true;
+    }
+
+    async setInput () {
+        return await this._setInput(this.keyInput, this.mouseInput);
     }
 
     //
     // Functions running in Chrome with Chromeless
     //
-    static runFile(fileName, executionTime, keyInput, mouseInput) {
-        return chromeless.goto(`file://${indexHTML}`)
-            .evaluate((executionTime, keyInput, mouseInput) => {
+    async _runFile(fileName, executionTime, keyInput, mouseInput) {
+        await this.chromeless.goto(`file://${indexHTML}`);
+
+        await this.chromeless.evaluate((executionTime, keyInput, mouseInput) => {
                 this.executionTime = executionTime;
                 this.keyInput = keyInput;
                 this.mouseInput = mouseInput;
-            }, executionTime, keyInput, mouseInput)
-            .setFileInput('#file', testDir(fileName))
-            // the index.html handler for file input will add a #loaded element when it
-            // finishes.
-            .wait('#loaded')
-            .evaluate(() => {
-                return {log:logData, blocks:blocks, spritesLog: spritesLog, vm:vmData};
+            }, executionTime, keyInput, mouseInput);
+
+        await this.chromeless.setFileInput('#file', testDir(fileName));
+
+        return await this.chromeless.evaluate(() => {
+                return Scratch.loaded.promise;
+            })
+    }
+
+    async _setInput(keyInput, mouseInput) {
+        return this.chromeless.evaluate((keyInput, mouseInput) => {
+            console.log("Setting input");
+            this.keyInput = keyInput;
+            this.mouseInput = mouseInput;
+        }, keyInput, mouseInput)
+    }
+
+    async _createProfiler() {
+        return this.chromeless.evaluate(() => {
+            createProfiler();
+        })
+    }
+
+    async _greenFlag() {
+        await this.chromeless.evaluate(() => {
+            greenFlag();
+        });
+
+        await this.chromeless.evaluate(() => {
+            return Scratch.ended.promise;
+        });
+
+        return await this.chromeless.evaluate(() => {
+            return {log: logData, blocks: blocks, spritesLog: spritesLog, vm: vmData};
+        });
+    }
+
+    async _promiseTest() {
+        await this.chromeless.evaluate(() => {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    resolve();
+                }, 2000)
             });
+        });
+
     }
 };
