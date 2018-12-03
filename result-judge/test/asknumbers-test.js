@@ -20,14 +20,15 @@ describe('AskNumbers', function() {
 
         describe('#calculatesSum1', () => {
 
+            const input = ["120", "33"];
+
             before(async function() {
-                scratch.keyInput = ["120", "33"];
-                //await scratch._promiseTest();
+                scratch.keyInput = input;
                 await scratch.setInput();
                 await scratch.clickGreenFlag();
             });
 
-            it(`should give the sum of two input numbers:`, async () => {
+            it(`should give the sum of ${input[0]} and ${input[1]}:`, async () => {
                 let sum = parseInt(scratch.keyInput[0]) + parseInt(scratch.keyInput[1]);
                 expect(scratch.playground.say).to.contain(sum.toString());
             })
@@ -38,10 +39,24 @@ describe('AskNumbers', function() {
             before(async function() {
                 scratch.keyInput = ["10", "20"];
                 await scratch.setInput();
-                await scratch.vmGreenFlag();
+                await scratch.clickGreenFlag();
             });
 
-            it(`should give the sum of the two input numbers`, async () => {
+            it(`should give the sum of ${scratch.keyInput[0]} and ${scratch.keyInput[1]}`, async () => {
+                let sum = parseInt(scratch.keyInput[0]) + parseInt(scratch.keyInput[1]);
+                expect(scratch.playground.say).to.contain(sum.toString());
+            })
+        });
+
+        describe('#calculatesSum3', () => {
+
+            before(async function() {
+                scratch.keyInput = ["1", "20"];
+                await scratch.setInput();
+                await scratch.clickGreenFlag();
+            });
+
+            it(`should give the sum of ${scratch.keyInput[0]} and ${scratch.keyInput[1]}`, async () => {
                 let sum = parseInt(scratch.keyInput[0]) + parseInt(scratch.keyInput[1]);
                 expect(scratch.playground.say).to.contain(sum.toString());
             })

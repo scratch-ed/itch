@@ -2,8 +2,8 @@ var Scratch = require("./Scratch.js");
 const expect = require('chai').expect;
 const scratch = new Scratch();
 
-const maxTestingTime = 18000;
-const executionTime = 5000;
+const maxTestingTime = 7000;
+const executionTime = 2000;
 const fileName = 'asknumbers.sb3';
 
 scratch.loadFile(fileName);
@@ -12,30 +12,29 @@ scratch.executionTime = executionTime;
 describe('AskNumbers', function() {
     this.timeout(maxTestingTime);
 
+    const input = ["120", "33", "5", "8", "10", "40"];
+
     before(async function() {
-        //await scratch.run();
+        await scratch.run();
+        scratch.keyInput = input;
+        await scratch.setInput();
     });
 
     describe('testOnResult', function() {
 
-        describe('#calculatesSum1', () => {
+        describe('#calculatesSum', () => {
 
-            let input = ["120", "33", "2", "3", "1", "1"];
+            beforeEach(async function() {
+                await scratch.clickGreenFlag();
+            });
 
-            it(`should give the sum of two input numbers:`, async () => {
-                for (let i = 0; i < input.length; i+=2) {
-                    scratch.keyInput = [input[i], input[i+1]];
-                    await scratch.run();
-                    await scratch.setInput();
-                    await scratch.clickGreenFlag();
-                    await scratch.end();
-
-                    let sum = parseInt(input[i]) + parseInt(input[i+1]);
-                    expect(scratch.playground.responses).to.contain(sum.toString());
-                }
-            })
+            for (let i = 0; i < input.length; i+=2) {
+                it(`should give the sum of ${input[i]} and ${input[i+1]}`, async () => {
+                    let sum = parseInt(scratch.keyInput[i]) + parseInt(scratch.keyInput[i+1]);
+                    expect(scratch.playground.say).to.contain(sum.toString());
+                })
+            }
         });
-
     });
 
     describe('testOnCode', function() {
@@ -57,11 +56,5 @@ describe('AskNumbers', function() {
                 expect(scratch.allBlocks.containsBlock('operator_add')).to.be.true;
             })
         });
-
-
     });
-
-
-
-
 });

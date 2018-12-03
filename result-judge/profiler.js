@@ -11,28 +11,19 @@ var vmData;
 var sprites;
 var spritesLog = [];
 
-var profilerRun;
 
-/**
- * When a new file is loaded by calling chromeless.setFile(fileName), the project gets initialized.
- */
-/*
-function loadFile() {
-    return new Promise((resolve, reject) => {
-        let file = document.getElementById('file');
-        console.log(file);
-        const reader = new FileReader();
-        reader.onload = () => {
-            init(reader.result);
-            resolve();
-        };
-        console.log(file.files[0]);
-        reader.readAsArrayBuffer(file.files[0]);
-    })
+//todo: in library steken
+class Future {
+    constructor() {
+        this.promise = new Promise((resolve, reject) => {
+            this.resolve = resolve;
+            this.reject = reject;
+        });
+    }
 }
-*/
 
-let promise = new Promise();
+
+Scratch.loaded = new Future();
 
 document.getElementById('file').addEventListener('change', e => {
     const reader = new FileReader();
@@ -42,6 +33,30 @@ document.getElementById('file').addEventListener('change', e => {
     };
     reader.readAsArrayBuffer(thisFileInput.files[0]);
 });
+
+function getTimeStamp() {
+    let date = new Date();
+    return date.getTime() - startTimestamp;
+}
+
+class Opcodes {
+    constructor() {
+        this.opcodes = {};
+    }
+
+    update(arg) {
+        if (!this.opcodes[arg]) {
+            this.opcodes[arg] = 0;
+        }
+        this.opcodes[arg]++;
+    }
+
+    end() {
+        for (let arg in this.opcodes) {
+            blocks.push({name:arg, executions:this.opcodes[arg]});
+        }
+    }
+}
 
 /**
  * Init vm
@@ -77,38 +92,44 @@ function init(file) {
     vm.attachV2SVGAdapter(new ScratchSVGRenderer.SVGRenderer());
     vm.attachV2BitmapAdapter(new ScratchSVGRenderer.BitmapAdapter());
 
-    console.log("Finished loading");
-    const div = document.createElement('div');
-    div.id='loaded';
-    document.body.appendChild(div);
 
-    promise.resolve();
+    // VM event handlers
+    vmHandleEvents(vm);
 
+    // VM start
     vm.start();
-};
 
-class Opcodes {
-    constructor() {
-        this.opcodes = {};
-    }
+    console.log("Finished loading");
+    Scratch.loaded.resolve();
 
-    update(arg) {
-        if (!this.opcodes[arg]) {
-            this.opcodes[arg] = 0;
-        }
-        this.opcodes[arg]++;
-    }
-
-    end() {
-        for (let arg in this.opcodes) {
-            blocks.push({name:arg, executions:this.opcodes[arg]});
-        }
-    }
 }
 
-function getTimeStamp() {
-    let date = new Date();
-    return date.getTime() - startTimestamp;
+function vmHandleEvents(vm) {
+    vm.runtime.on('PROJECT_START', () => {
+        console.log(`${getTimeStamp()}: run number: ${numberOfRun}`);
+        numberOfRun++;
+    });
+
+    vm.runtime.on('SAY', (target, type, text) => {
+        console.log(`${getTimeStamp()}: say: ${text}`);
+    });
+
+    vm.runtime.on('QUESTION', (question) => {
+        if (question != null) {
+            let x = keyInput.shift();
+            console.log(`${getTimeStamp()}: input: ${x}`);
+            vm.runtime.emit("ANSWER", x);
+        }
+    });
+
+    vm.runtime.on('PROJECT_RUN_STOP', () => {
+        Scratch.opcodes.end();
+        console.log(`${getTimeStamp()}: Ended run`);
+
+        vmData = JSON.parse(JSON.stringify(vm));
+
+        Scratch.ended.resolve();
+    });
 }
 
 function createProfiler() {
@@ -116,8 +137,6 @@ function createProfiler() {
 
     vm.runtime.enableProfiling();
     Scratch.profiler = vm.runtime.profiler;
-    console.log(Scratch.profiler);
-    vm.runtime.profiler = null;
 
     const stepId = Scratch.profiler.idByName('Runtime._step');
     const blockId = Scratch.profiler.idByName('blockFunction');
@@ -130,81 +149,17 @@ function createProfiler() {
             firstState = false;
         }
         if (id === blockId) {
-            console.log(`${getTimeStamp()}: ${arg}`);
+            //console.log(`${getTimeStamp()}: ${arg}`);
             Scratch.opcodes.update(arg);
             spritesLog.push({block:arg, sprites:JSON.parse(JSON.stringify(vm.runtime.targets))});
         }
     };
 }
 
-
-
-async function greenFlag(){
-    console.log("clickGreenFlag()");
-
-    const vm = Scratch.vm;
-    const START_DELAY = 100;
-
-    console.log(vm);
-
-    setTimeout(() => {
-        console.log("vm.greenFlag()");
-        vm.greenFlag();
-        //vm.runtime.profiler = Scratch.profiler;
-    }, START_DELAY);
-
-    /*setTimeout(() => {
-        // Timeout exceeded
-        console.log('timeout');
-        vm.stopAll();
-    }, START_DELAY + this.maxRecordedTime);*/
-
-    setTimeout(() => {
-
-        vm.runtime.on('PROJECT_START', () => {
-            let date = new Date();
-            let timestamp = date.getTime() - startTimestamp;
-            console.log(`${timestamp}: project start event: ${numberOfRun}`);
-        });
-
-        vm.runtime.on('SAY', (target, type, text) => {
-            let date = new Date();
-            let timestamp = date.getTime() - startTimestamp;
-            console.log(`${timestamp}: say: ${text}`);
-        });
-
-        vm.runtime.on('QUESTION', (question) => {
-            if (question != null) {
-                let date = new Date();
-                let timestamp = date.getTime() - startTimestamp;
-                let x = keyInput.shift();
-                console.log(`${timestamp}: input: ${x}`);
-                vm.runtime.emit("ANSWER", x);
-            }
-        });
-
-        vm.runtime.on('PROJECT_RUN_STOP', () => {
-            //clearTimeout(vm.runtime._steppingInterval);
-
-            //vm.runtime.disableProfiling();
-            //vm.runtime.profiler = null;
-            Scratch.opcodes.end();
-            let date = new Date();
-            let timestamp = date.getTime() - startTimestamp;
-            console.log(`${timestamp}: Ended run`);
-
-            vmData = JSON.parse(JSON.stringify(vm));
-
-            const div = document.createElement('div');
-            div.id=`ended_${numberOfRun}`;
-            numberOfRun++;
-            document.body.appendChild(div);
-
-        });
-
-    }, START_DELAY );
-
-
+function greenFlag() {
+    Scratch.vm.greenFlag();
+    Scratch.ended = new Future();
 }
+
 
 

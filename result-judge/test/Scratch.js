@@ -158,6 +158,7 @@ module.exports = class Scratch {
         this.keyInput = [];
         this.mouseInput = [];
         this.numberOfRun = 0;
+        this.chromeless = new Chromeless();
     }
 
     fill(data) {
@@ -198,22 +199,20 @@ module.exports = class Scratch {
     }
 
     async run() {
-        // run file in Scratch vm
-        this.chromeless = new Chromeless();
         await this._runFile(this._fileName, this.executionTime, this.keyInput, this.mouseInput);
-        //await chromeless.end();
-        return true;
+        await this._createProfiler();
     }
 
     async end() {
         await this.chromeless.end();
     }
 
-    async clickGreenFlag() {
-        await this._greenFlag();
+    async createProfiler() {
         await this._createProfiler();
-        const data = await this._waitForEnded(this.numberOfRun);
-        this.numberOfRun++;
+    }
+
+    async clickGreenFlag() {
+        const data = await this._greenFlag();
         this.fill(data);
         return true;
     }
@@ -226,8 +225,9 @@ module.exports = class Scratch {
     // Functions running in Chrome with Chromeless
     //
     async _runFile(fileName, executionTime, keyInput, mouseInput) {
-        await this.chromeless.goto(`file://${indexHTML}`)
-            .evaluate((executionTime, keyInput, mouseInput) => {
+        await this.chromeless.goto(`file://${indexHTML}`);
+
+        await this.chromeless.evaluate((executionTime, keyInput, mouseInput) => {
                 this.executionTime = executionTime;
                 this.keyInput = keyInput;
                 this.mouseInput = mouseInput;
@@ -236,13 +236,7 @@ module.exports = class Scratch {
         await this.chromeless.setFileInput('#file', testDir(fileName));
 
         return await this.chromeless.evaluate(() => {
-                return promise;
-            })
-            // the profiler.js handler for file input will add a #loaded element when it
-            // finishes.
-            //.wait('#loaded')
-            .evaluate(() => {
-                return true;
+                return Scratch.loaded.promise;
             })
     }
 
@@ -261,31 +255,25 @@ module.exports = class Scratch {
     }
 
     async _greenFlag() {
-        return this.chromeless.evaluate(() => {
+        await this.chromeless.evaluate(() => {
             greenFlag();
-        })
-    }
+        });
 
-    async vmGreenFlag() {
-        return this.chromeless.evaluate(() => {
-            console.log("vmGreenFlag");
-            Scratch.vm.greenFlag();
-            console.log("greenFlag");
-        })
-    }
+        await this.chromeless.evaluate(() => {
+            return Scratch.ended.promise;
+        });
 
-    async _waitForEnded(numberOfRun) {
-        return this.chromeless.wait(`#ended_${numberOfRun}`)
-            .evaluate(() => {
-                return {log: logData, blocks: blocks, spritesLog: spritesLog, vm: vmData};
-            });
+        return await this.chromeless.evaluate(() => {
+            return {log: logData, blocks: blocks, spritesLog: spritesLog, vm: vmData};
+        });
     }
 
     async _promiseTest() {
-        console.log("promiseTest");
         await this.chromeless.evaluate(() => {
             return new Promise((resolve, reject) => {
-
+                setTimeout(() => {
+                    resolve();
+                }, 2000)
             });
         });
 
