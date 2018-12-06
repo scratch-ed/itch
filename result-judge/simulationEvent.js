@@ -1,13 +1,7 @@
 
+
+
 module.exports = class SimulationEvent {
-
-    constructor(type) {
-
-    }
-
-};
-
-module.exports = class SimulationActionEvent {
 
     constructor(action, delay=0) {
 

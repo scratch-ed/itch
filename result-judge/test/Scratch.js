@@ -130,6 +130,10 @@ class Sprites {
         return spriteFunctions.getSpritesBeforeBlock(blockName, occurance, this.log);
     }
 
+    getCostume(spriteName) {
+        return spriteFunctions.getSpriteByName(spriteName, this.sprites).currentCostume;
+    }
+
     isVisibleAtStart(spriteName) {
         return this.isVisible(spriteName, this.getStartSprites());
     }
@@ -167,6 +171,7 @@ module.exports = class Scratch {
         this.allBlocks = new AllBlocks(data.blocks);
         //this.vm = new Vm(data.vm);
         this.sprites = new Sprites(data.spritesLog);
+        //console.log(this.sprites.sprites);
 
     }
 

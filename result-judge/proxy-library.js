@@ -5,7 +5,7 @@ function getTimeStamp(startTimestamp) {
 
 function makeProxiedRenderer(canvas, logData, startTimestamp) {
     var render = new ScratchRender(canvas);
-
+    console.log("renderer created");
     //penLine
     var penLineOld = render.penLine;
     var handler = {

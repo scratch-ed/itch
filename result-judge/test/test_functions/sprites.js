@@ -7,12 +7,24 @@ function getSpriteIdByName(spriteName, sprites) {
     return -1;
 }
 
+function getSpriteByName(spriteName, sprites) {
+    let i;
+    for (i = 0; i < sprites.length; i++) {
+        if (sprites[i].name === spriteName) return sprites[i];
+    }
+    return -1;
+}
+
 function isVisible(spriteId, sprites) {
     let i;
     for (i = 0; i < sprites.length; i++) {
         if (sprites[i].id === spriteId) return sprites[i].visible;
     }
     return false;
+}
+
+function getCostume(spriteName, sprites) {
+    let i;
 }
 
 function getSpritesAfterBlock(blockName, occurance, log) {
@@ -46,6 +58,7 @@ function getSpritesBeforeBlock(blockName, occurance, log) {
 
 module.exports = {
     getSpriteIdByName,
+    getSpriteByName,
     isVisible,
     getSpritesAfterBlock,
     getSpritesBeforeBlock

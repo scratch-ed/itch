@@ -148,7 +148,7 @@ function createProfiler() {
             firstState = false;
         }
         if (id === blockId) {
-            //console.log(`${getTimeStamp()}: ${arg}`);
+            console.log(`${getTimeStamp()}: ${arg}`);
             Scratch.opcodes.update(arg);
             spritesLog.push({block:arg, sprites:JSON.parse(JSON.stringify(vm.runtime.targets))});
         }
@@ -168,6 +168,36 @@ function greenFlag() {
     //start
     Scratch.vm.greenFlag();
     Scratch.ended = new Future();
+
+
+    setTimeout(() => {
+        console.log("start costume:", Scratch.vm.runtime.targets[1].currentCostume);
+        clickSprite(Scratch.vm.runtime.targets[1]);
+    },500);
+
+    setTimeout(() => {
+        console.log("na 1 klik op sprite:", Scratch.vm.runtime.targets[1].currentCostume);
+        clickSprite(Scratch.vm.runtime.targets[0]); //click on stage
+    },1000);
+
+    setTimeout(() => {
+        console.log("na 1 klik op stage:", Scratch.vm.runtime.targets[1].currentCostume);
+        clickSprite(Scratch.vm.runtime.targets[1]);
+    },1500);
+
+    setTimeout(() => {
+        console.log("na 1 klik op sprite:", Scratch.vm.runtime.targets[1].currentCostume);
+        clickSprite(Scratch.vm.runtime.targets[1]);
+    },2000);
+
+    setTimeout(() => {
+        console.log("na 1 klik op sprite:", Scratch.vm.runtime.targets[1].currentCostume);
+    },2500);
+
+}
+
+function clickSprite(sprite) {
+    Scratch.vm.runtime.startHats('event_whenthisspriteclicked', null, sprite);
 }
 
 

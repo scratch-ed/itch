@@ -19,6 +19,7 @@ describe('square', function() {
         this.timeout(maxExecutionTime); // Gives an error if the code execution exceeds the max execution time
         // scratch.maxDuration = 10000; // Set max duration on 10 seconds
         await scratch.run();
+        await scratch.clickGreenFlag();
     });
 
     describe('#findSquares', () => {
