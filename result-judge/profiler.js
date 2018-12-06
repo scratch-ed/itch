@@ -1,16 +1,16 @@
 const Scratch = window.Scratch = window.Scratch || {};
-var executionTime;
-var keyInput;
-var mouseInput;
+let executionTime;
+let keyInput;
+let mouseInput;
 let numberOfRun = 0;
 let startTimestamp;
+let timeStamp;
 
 var logData = {index:0, lines:[], color:null, points:[], responses:[]};
 var blocks = [];
 var vmData;
-var sprites;
 var spritesLog = [];
-
+let events = [];
 
 //todo: in library steken
 class Future {
@@ -21,7 +21,6 @@ class Future {
         });
     }
 }
-
 
 Scratch.loaded = new Future();
 
@@ -157,6 +156,16 @@ function createProfiler() {
 }
 
 function greenFlag() {
+    //reset logbook
+    /*logData = {lines:[], color:null, points:[], responses:[]};
+    blocks = [];
+    spritesLog = [];
+    events = [];*/
+
+    //observe start
+    //events.push(new SimulationEvent("observation", "start"));
+
+    //start
     Scratch.vm.greenFlag();
     Scratch.ended = new Future();
 }

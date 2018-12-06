@@ -214,11 +214,10 @@ module.exports = class Scratch {
     async clickGreenFlag() {
         const data = await this._greenFlag();
         this.fill(data);
-        return true;
     }
 
     async setInput () {
-        return await this._setInput(this.keyInput, this.mouseInput);
+        await this._setInput(this.keyInput, this.mouseInput);
     }
 
     //
@@ -240,12 +239,12 @@ module.exports = class Scratch {
             })
     }
 
-    async _setInput(keyInput, mouseInput) {
-        return this.chromeless.evaluate((keyInput, mouseInput) => {
+    async _setInput(newKeyInput, newMouseInput) {
+        return await this.chromeless.evaluate((newKeyInput, newMouseInput) => {
             console.log("Setting input");
-            this.keyInput = keyInput;
-            this.mouseInput = mouseInput;
-        }, keyInput, mouseInput)
+            keyInput = newKeyInput;
+            mouseInput = newMouseInput;
+            }, newKeyInput, newMouseInput);
     }
 
     async _createProfiler() {
@@ -255,27 +254,22 @@ module.exports = class Scratch {
     }
 
     async _greenFlag() {
+        let date = new Date();
+        let startTimestamp = date.getTime();
+
+        console.log("1", (new Date()).getTime() - startTimestamp);
         await this.chromeless.evaluate(() => {
             greenFlag();
         });
 
+        console.log("2", (new Date()).getTime() - startTimestamp);
         await this.chromeless.evaluate(() => {
             return Scratch.ended.promise;
         });
 
+        console.log("3", (new Date()).getTime() - startTimestamp);
         return await this.chromeless.evaluate(() => {
             return {log: logData, blocks: blocks, spritesLog: spritesLog, vm: vmData};
         });
-    }
-
-    async _promiseTest() {
-        await this.chromeless.evaluate(() => {
-            return new Promise((resolve, reject) => {
-                setTimeout(() => {
-                    resolve();
-                }, 2000)
-            });
-        });
-
     }
 };
