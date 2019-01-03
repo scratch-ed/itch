@@ -2,6 +2,7 @@ const Scratch = window.Scratch = window.Scratch || {};
 let executionTime;
 let keyInput;
 let mouseInput;
+let simulation;
 let numberOfRun = 0;
 let startTimestamp;
 let timeStamp;
@@ -125,7 +126,7 @@ function vmHandleEvents(vm) {
         Scratch.opcodes.end();
         console.log(`${getTimeStamp()}: Ended run`);
 
-        vmData = JSON.parse(JSON.stringify(vm));
+        //vmData = JSON.parse(JSON.stringify(vm));
 
         Scratch.ended.resolve();
     });
@@ -168,8 +169,10 @@ function greenFlag() {
     //start
     Scratch.vm.greenFlag();
     Scratch.ended = new Future();
+    console.log(simulation);
+    simulation.run();
 
-
+/*
     setTimeout(() => {
         console.log("start costume:", Scratch.vm.runtime.targets[1].currentCostume);
         clickSprite(Scratch.vm.runtime.targets[1]);
@@ -192,7 +195,7 @@ function greenFlag() {
 
     setTimeout(() => {
         console.log("na 1 klik op sprite:", Scratch.vm.runtime.targets[1].currentCostume);
-    },2500);
+    },2500);*/
 
 }
 

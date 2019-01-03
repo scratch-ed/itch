@@ -1,4 +1,5 @@
-var Scratch = require("./Scratch.js");
+const Simulation = require("../simulation");
+const Scratch = require("./Scratch.js");
 const expect = require('chai').expect;
 const scratch = new Scratch();
 
@@ -19,6 +20,22 @@ describe('mad hatter', function() {
     describe('testOnResult', function() {
 
         before(async function() {
+            //add click events
+            scratch.simulation = new Simulation();
+            const start = scratch.simulation.startEvent;
+
+            start
+                //.observeTargets('Hoofd', 'currentCostume')
+                .foreach(
+                ['Stage', 'Hoofd', 'Hoofd', 'Goblin', 'Hoofd', 'Hoofd', 'Stage', 'Hoofd', 'Hoofd', 'Goblin', 'Hoofd', 'Hoofd', 'Goblin'],
+                (index, target, anchor) => {
+                    return anchor
+                        .clickTarget(target, 1000)
+                        //.observeTargets('Hoofd', 'currentCostume', 250);
+                }
+            );
+
+            await scratch.setInput();
             await scratch.clickGreenFlag();
         });
 

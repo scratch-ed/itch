@@ -163,6 +163,7 @@ module.exports = class Scratch {
         this.mouseInput = [];
         this.numberOfRun = 0;
         this.chromeless = new Chromeless();
+        this.simulation = null;
     }
 
     fill(data) {
@@ -218,11 +219,12 @@ module.exports = class Scratch {
 
     async clickGreenFlag() {
         const data = await this._greenFlag();
+        //console.log(data.spritesLog[data.spritesLog.length - 1].sprites);
         this.fill(data);
     }
 
     async setInput () {
-        await this._setInput(this.keyInput, this.mouseInput);
+        await this._setInput(this.keyInput, this.mouseInput, this.simulation);
     }
 
     //
@@ -244,12 +246,13 @@ module.exports = class Scratch {
             })
     }
 
-    async _setInput(newKeyInput, newMouseInput) {
-        return await this.chromeless.evaluate((newKeyInput, newMouseInput) => {
-            console.log("Setting input");
+    async _setInput(newKeyInput, newMouseInput, newSimulation) {
+        return await this.chromeless.evaluate((newKeyInput, newMouseInput, newSimulation) => {
+            //console.log("Setting input");
             keyInput = newKeyInput;
             mouseInput = newMouseInput;
-            }, newKeyInput, newMouseInput);
+            simulation = newSimulation;
+            }, newKeyInput, newMouseInput, newSimulation);
     }
 
     async _createProfiler() {
@@ -262,19 +265,35 @@ module.exports = class Scratch {
         let date = new Date();
         let startTimestamp = date.getTime();
 
-        console.log("1", (new Date()).getTime() - startTimestamp);
+        await this.chromeless.wait(200);
+
+        //console.log("1", (new Date()).getTime() - startTimestamp);
         await this.chromeless.evaluate(() => {
             greenFlag();
         });
 
-        console.log("2", (new Date()).getTime() - startTimestamp);
+        //console.log("2", (new Date()).getTime() - startTimestamp);
         await this.chromeless.evaluate(() => {
             return Scratch.ended.promise;
         });
 
-        console.log("3", (new Date()).getTime() - startTimestamp);
         return await this.chromeless.evaluate(() => {
-            return {log: logData, blocks: blocks, spritesLog: spritesLog, vm: vmData};
+            return {log: logData, blocks: blocks, spritesLog: spritesLog, vm: {}};
         });
+
+        /*
+        console.log("3", (new Date()).getTime() - startTimestamp);
+        let x = await this.chromeless.evaluate((startTimestamp) => {
+            console.log("browser1", (new Date()).getTime() - startTimestamp);
+            return {log: {}, blocks: {}, spritesLog: spritesLog, vm: {}};
+//            return {log: logData, blocks: blocks, spritesLog: spritesLog, vm: {}};
+
+        }, startTimestamp);
+        console.log("4", (new Date()).getTime() - startTimestamp);
+        */
+
+        //return x;
+
+
     }
 };

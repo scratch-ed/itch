@@ -7810,7 +7810,10 @@ function () {
       /** @type {Buffer} */
 
       this.data = data;
-      if (generateId) this.assetId = md5(data);
+      if (generateId) this.assetId = md5(data); // Mark as clean only if set is being called without generateId
+      // If a new id is being generated, mark this asset as not clean
+
+      this.clean = !generateId;
     }
     /**
      * @returns {string} - This asset's data, decoded as text.

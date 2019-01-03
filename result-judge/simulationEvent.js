@@ -26,6 +26,8 @@ module.exports = class SimulationEvent {
         // NOTE: maybe we have to register the timer somewhere, to enable stopping the timers
         const timer = setTimeout(() => {
 
+            console.log("< ACTIE >");
+
             // execute action
             // TODO: may make more sense to pass the environment and the observations
             //       as arguments to the action
@@ -191,6 +193,5 @@ module.exports = class SimulationEvent {
 
     }
 
-}
+};
 
-module.exports = SimulationEvent;
