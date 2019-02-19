@@ -17,8 +17,7 @@ describe('Test: Mad hatter oefening', function() {
 
         before(async function() {
 
-            simulationChain = new ScratchSimulationEvent(() => {}, 0);
-
+            //create simulation event chain
             simulationChain
                 .foreach(
                     ['Stage', 'Hoofd', 'Hoofd', 'Goblin', 'Hoofd', 'Hoofd', 'Stage', 'Goblin', 'Hoofd', 'Goblin'],
@@ -32,6 +31,7 @@ describe('Test: Mad hatter oefening', function() {
                     Scratch.simulationEnd.resolve();
                 },0);
 
+            //run code
             await scratch.clickGreenFlag();
             console.log('before ended');
         });

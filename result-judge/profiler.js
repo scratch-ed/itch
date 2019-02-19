@@ -12,7 +12,7 @@ var blocks = [];
 var vmData;
 var spritesLog = [];
 let events = [];
-let simulationChain;
+let simulationChain = new ScratchSimulationEvent(() => {}, 0);
 
 
 //todo: in library steken
