@@ -55,11 +55,3 @@ function getSpritesBeforeBlock(blockName, occurance, log) {
     return -1; // no block with blockName found or less blocks found than given occurances.
 }
 
-
-module.exports = {
-    getSpriteIdByName,
-    getSpriteByName,
-    isVisible,
-    getSpritesAfterBlock,
-    getSpritesBeforeBlock
-};

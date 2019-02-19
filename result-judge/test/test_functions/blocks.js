@@ -19,9 +19,3 @@ function countExecutions(name, blocks) {
     }
     return 0;
 }
-
-module.exports = {
-    containsLoop,
-    containsBlock,
-    countExecutions
-};

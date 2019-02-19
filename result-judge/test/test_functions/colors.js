@@ -1,4 +1,4 @@
 
-exports.detectColor = function(logData) {
+function detectColor(logData) {
     return logData.color;
-};
+}

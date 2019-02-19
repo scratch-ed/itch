@@ -3,11 +3,12 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Scratch VM Benchmark</title>
+    <title>ScratchResult VM Benchmark</title>
     <link rel="stylesheet" href="profiler.css" type="text/css" media="screen">
+    <link rel="stylesheet" href="node_modules/mocha/mocha.css">
 </head>
 <body>
-<h2>Scratch VM</h2>
+<h2>ScratchResult VM</h2>
 
 <div class="run-form">
     <input type="file" id="file" value="">
@@ -16,6 +17,7 @@
 
 <canvas id="scratch-stage"></canvas><br />
 
+<div id="mocha"></div>
 
 <!-- Audio module -->
 <script src="lib/audio_engine.js">         </script>
@@ -36,5 +38,23 @@
 <script src="simulation.js"></script>
 <!-- Playground -->
 <script src="profiler.js"></script>
+
+
+<!-- Testing -->
+<script src="test/test_functions/lines.js"></script>
+<script src="test/test_functions/blocks.js"></script>
+<script src="test/test_functions/sprites.js"></script>
+<script src="test/test_functions/colors.js"></script>
+<script src="ScratchResult.js"></script>
+<script src="node_modules/mocha/mocha.js"></script>
+<script src="node_modules/chai/chai.js"></script>
+<script>mocha.setup('bdd')</script>
+
+<!-- Tests -->
+<script src="test/browser-mad-hatter-test.js"></script>
+
+<script>
+    mocha.run();
+</script>
 </body>
 </html>

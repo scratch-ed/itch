@@ -1,4 +1,4 @@
-var Scratch = require("./Scratch.js");
+var Scratch = require("../../ScratchResult.js");
 const expect = require('chai').expect;
 const scratch = new Scratch();
 

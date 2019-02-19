@@ -196,9 +196,3 @@ function findTriangles(lines) {
     return triangles;
 }
 
-
-module.exports = {
-    findSquares,
-    findTriangles,
-    mergeLines
-};

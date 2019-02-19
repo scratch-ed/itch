@@ -1,10 +1,10 @@
-var Scratch = require("./Scratch.js");
+var Scratch = require("../../ScratchResult.js");
 const expect = require('chai').expect;
 const scratch = new Scratch();
 
 const maxTestingTime = 8000;
 const executionTime = 2000;
-const fileName = 'square.sb3';
+const fileName = 'squareOefFout.sb3';
 
 scratch.loadFile(fileName);
 scratch.executionTime = executionTime;

@@ -7,7 +7,7 @@ First install the dependencies.
 npm install 
 ```
 
-Change the file name in the test file (eg. square-test.js) to the Scratch code you want to test, located in /scratch_code/
+Change the file name in the test file (eg. square-test.js) to the ScratchResult code you want to test, located in /scratch_code/
 ```code
 const fileName = 'square.sb3';
 ```
