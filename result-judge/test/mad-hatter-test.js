@@ -1,4 +1,3 @@
-const Simulation = require("../simulation");
 const Scratch = require("./Scratch.js");
 const expect = require('chai').expect;
 const scratch = new Scratch();
@@ -20,23 +19,23 @@ describe('mad hatter', function() {
     describe('testOnResult', function() {
 
         before(async function() {
-            //add click events
-            /*scratch.simulation = new Simulation();
-            const start = scratch.simulation.startEvent;
 
-            start
-                //.observeTargets('Hoofd', 'currentCostume')
-                .foreach(
-                ['Stage', 'Hoofd', 'Hoofd', 'Goblin', 'Hoofd', 'Hoofd', 'Stage', 'Hoofd', 'Hoofd', 'Goblin', 'Hoofd', 'Hoofd', 'Goblin'],
-                (index, target, anchor) => {
-                    return anchor
-                        .clickTarget(target, 1000)
-                        //.observeTargets('Hoofd', 'currentCostume', 250);
-                }
-            );
+            await scratch.chromeless.evaluate(() => {
+                simulationChain = new ScratchSimulationEvent(() => {}, 0);
+                simulationChain
+                    .foreach(
+                        ['Stage', 'Hoofd', 'Hoofd', 'Goblin', 'Hoofd', 'Hoofd', 'Stage', 'Goblin', 'Hoofd', 'Goblin'],
+                        (index, target, anchor) => {
+                            return anchor
+                                .clickTarget(target, 1000)
+                        }
+                    )
+                    .next(()=>{
+                        console.log("Finished simulation");
+                        Scratch.simulationEnd.resolve();
+                    },0);
+            });
 
-            console.log(scratch.simulation);
-*/
             await scratch.setInput();
             await scratch.clickGreenFlag();
         });

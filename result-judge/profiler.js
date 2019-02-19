@@ -12,7 +12,7 @@ var blocks = [];
 var vmData;
 var spritesLog = [];
 let events = [];
-
+let simulationChain;
 
 
 //todo: in library steken
@@ -170,24 +170,7 @@ function greenFlag() {
 
     Scratch.simulationEnd = new Future();
 
-    simulation = new Simulation();
-    const start = simulation.startEvent;
-
-    start
-    //.observeTargets('Hoofd', 'currentCostume')
-        .foreach(
-            ['Stage', 'Hoofd', 'Hoofd', 'Goblin', 'Hoofd', 'Hoofd', 'Stage', 'Goblin', 'Hoofd', 'Goblin'],
-            (index, target, anchor) => {
-                return anchor
-                    .clickTarget(target, 1000)
-                    //.observeTargets('Hoofd', 'currentCostume', 250);
-            }
-        )
-        .next(()=>{
-            console.log("Finished simulation");
-            console.log(spritesLog);
-            Scratch.simulationEnd.resolve();
-        },0);
+    simulation = new Simulation(simulationChain);
 
     console.log(simulation);
     simulation.run();

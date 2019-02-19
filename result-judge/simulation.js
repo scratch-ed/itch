@@ -2,8 +2,8 @@
 
 class Simulation {
 
-    constructor(Scratch) {
-        this.startEvent = new ScratchSimulationEvent(() => {}, 0);
+    constructor(simulationChain) {
+        this.startEvent = simulationChain;
     }
 
     run() {
