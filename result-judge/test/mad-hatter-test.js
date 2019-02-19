@@ -3,8 +3,8 @@ const Scratch = require("./Scratch.js");
 const expect = require('chai').expect;
 const scratch = new Scratch();
 
-const maxTestingTime = 8000;
-const executionTime = 4000;
+const maxTestingTime = 20000;
+const executionTime = 18000;
 const fileName = 'mad-hatter.sb3';
 
 scratch.loadFile(fileName);
@@ -41,9 +41,9 @@ describe('mad hatter', function() {
             await scratch.clickGreenFlag();
         });
 
-        describe('#findSquare', () => {
-            it(`costume should be nr 1 at finish`, async () => {
-                expect(scratch.sprites.getCostume('Sprite1')).to.equal(2);
+        describe('#checkCostume', () => {
+            it(`costume should be nr2 at finish`, async () => {
+                expect(scratch.sprites.getCostume('Hoofd')).to.equal(2);
             })
         });
 

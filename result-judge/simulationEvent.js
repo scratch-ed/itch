@@ -24,12 +24,6 @@ class SimulationEvent {
         // NOTE: maybe we have to register the timer somewhere, to enable stopping the timers
         const timer = setTimeout(() => {
 
-            console.log("< ACTIE >");
-
-            // execute action
-            // TODO: may make more sense to pass the environment and the observations
-            //       as arguments to the action
-            // TODO: may make also more sense to bind this of the action to the environment
             this._action(this.environment, this.logbook);
 
             // execute next events one after the other
@@ -199,7 +193,6 @@ class ScratchSimulationEvent extends SimulationEvent {
 
         return this.next(() => {
             console.log(`click ${target}`);
-            console.log(Scratch);
             // fetch the target
             let _target = Scratch.vm.runtime.getSpriteTargetByName(target);
 
@@ -207,9 +200,9 @@ class ScratchSimulationEvent extends SimulationEvent {
             // the target
             Scratch.vm.runtime.startHats('event_whenthisspriteclicked', null, _target);
 
-            // debug todo delete
-            let _hoofd = Scratch.vm.runtime.getSpriteTargetByName("Hoofd");
-            console.log("Current costume of Hoofd: ",_hoofd.currentCostume);
+            // debug
+            // let _hoofd = Scratch.vm.runtime.getSpriteTargetByName("Hoofd");
+            // console.log("Current costume of Hoofd: ",_hoofd.currentCostume);
 
         }, delay);
 

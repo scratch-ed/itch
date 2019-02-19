@@ -165,12 +165,10 @@ function greenFlag() {
     spritesLog = [];
     events = [];*/
 
-    //observe start
-    //events.push(new SimulationEvent("observation", "start"));
-
-    //start
     Scratch.vm.greenFlag();
     Scratch.ended = new Future();
+
+    Scratch.simulationEnd = new Future();
 
     simulation = new Simulation();
     const start = simulation.startEvent;
@@ -178,42 +176,21 @@ function greenFlag() {
     start
     //.observeTargets('Hoofd', 'currentCostume')
         .foreach(
-            ['Stage', 'Hoofd', 'Hoofd', 'Goblin', 'Hoofd', 'Hoofd', 'Stage', 'Hoofd', 'Hoofd', 'Goblin', 'Hoofd', 'Hoofd', 'Goblin'],
+            ['Stage', 'Hoofd', 'Hoofd', 'Goblin', 'Hoofd', 'Hoofd', 'Stage', 'Goblin', 'Hoofd', 'Goblin'],
             (index, target, anchor) => {
                 return anchor
                     .clickTarget(target, 1000)
                     //.observeTargets('Hoofd', 'currentCostume', 250);
             }
-        );
+        )
+        .next(()=>{
+            console.log("Finished simulation");
+            console.log(spritesLog);
+            Scratch.simulationEnd.resolve();
+        },0);
 
     console.log(simulation);
     simulation.run();
-
-
-/*
-    setTimeout(() => {
-        console.log("start costume:", Scratch.vm.runtime.targets[1].currentCostume);
-        clickSprite(Scratch.vm.runtime.targets[1]);
-    },500);
-
-    setTimeout(() => {
-        console.log("na 1 klik op sprite:", Scratch.vm.runtime.targets[1].currentCostume);
-        clickSprite(Scratch.vm.runtime.targets[0]); //click on stage
-    },1000);
-
-    setTimeout(() => {
-        console.log("na 1 klik op stage:", Scratch.vm.runtime.targets[1].currentCostume);
-        clickSprite(Scratch.vm.runtime.targets[1]);
-    },1500);
-
-    setTimeout(() => {
-        console.log("na 1 klik op sprite:", Scratch.vm.runtime.targets[1].currentCostume);
-        clickSprite(Scratch.vm.runtime.targets[1]);
-    },2000);
-
-    setTimeout(() => {
-        console.log("na 1 klik op sprite:", Scratch.vm.runtime.targets[1].currentCostume);
-    },2500);*/
 
 }
 

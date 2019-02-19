@@ -267,14 +267,16 @@ module.exports = class Scratch {
 
         await this.chromeless.wait(200);
 
-        //console.log("1", (new Date()).getTime() - startTimestamp);
         await this.chromeless.evaluate(() => {
             greenFlag();
         });
 
-        //console.log("2", (new Date()).getTime() - startTimestamp);
         await this.chromeless.evaluate(() => {
             return Scratch.ended.promise;
+        });
+
+        await this.chromeless.evaluate(() => {
+            return Scratch.simulationEnd.promise;
         });
 
         return await this.chromeless.evaluate(() => {
