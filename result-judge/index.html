@@ -7,16 +7,8 @@
     <link rel="stylesheet" href="profiler.css" type="text/css" media="screen">
 </head>
 <body>
-<h2>Scratch VM Benchmark</h2>
-<p class="description">
-    Welcome to the scratch-vm benchmark. This tool helps you profile a scratch
-    project. When you load the page, it:
-<ol class="description">
-    <li>loads the project and enables turbo mode
-    <li>profiles
-    <li>stops and reports
-</ol>
-</p>
+<h2>Scratch VM</h2>
+
 <div class="run-form">
     <input type="file" id="file" value="">
 </div>
@@ -39,6 +31,9 @@
 <script src="lib/scratch-vm.js">       </script>
 <!-- Proxied renderer -->
 <script src="proxy-library.js">            </script>
+<!-- Events -->
+<script src="simulationEvent.js"></script>
+<script src="simulation.js"></script>
 <!-- Playground -->
 <script src="profiler.js"></script>
 </body>

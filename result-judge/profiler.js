@@ -1,15 +1,18 @@
 const Scratch = window.Scratch = window.Scratch || {};
-var executionTime;
-var keyInput;
-var mouseInput;
+let executionTime;
+let keyInput;
+let mouseInput;
+let simulation;
 let numberOfRun = 0;
 let startTimestamp;
+let timeStamp;
 
 var logData = {index:0, lines:[], color:null, points:[], responses:[]};
 var blocks = [];
 var vmData;
-var sprites;
 var spritesLog = [];
+let events = [];
+let simulationChain;
 
 
 //todo: in library steken
@@ -21,7 +24,6 @@ class Future {
         });
     }
 }
-
 
 Scratch.loaded = new Future();
 
@@ -126,7 +128,7 @@ function vmHandleEvents(vm) {
         Scratch.opcodes.end();
         console.log(`${getTimeStamp()}: Ended run`);
 
-        vmData = JSON.parse(JSON.stringify(vm));
+        //vmData = JSON.parse(JSON.stringify(vm));
 
         Scratch.ended.resolve();
     });
@@ -149,7 +151,7 @@ function createProfiler() {
             firstState = false;
         }
         if (id === blockId) {
-            //console.log(`${getTimeStamp()}: ${arg}`);
+            console.log(`${getTimeStamp()}: ${arg}`);
             Scratch.opcodes.update(arg);
             spritesLog.push({block:arg, sprites:JSON.parse(JSON.stringify(vm.runtime.targets))});
         }
@@ -157,8 +159,26 @@ function createProfiler() {
 }
 
 function greenFlag() {
+    //reset logbook
+    /*logData = {lines:[], color:null, points:[], responses:[]};
+    blocks = [];
+    spritesLog = [];
+    events = [];*/
+
     Scratch.vm.greenFlag();
     Scratch.ended = new Future();
+
+    Scratch.simulationEnd = new Future();
+
+    simulation = new Simulation(simulationChain);
+
+    console.log(simulation);
+    simulation.run();
+
+}
+
+function clickSprite(sprite) {
+    Scratch.vm.runtime.startHats('event_whenthisspriteclicked', null, sprite);
 }
 
 

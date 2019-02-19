@@ -12,7 +12,10 @@ scratch.executionTime = executionTime;
 describe('AskNumbers', function() {
     this.timeout(maxTestingTime);
 
-    const input = ["120", "33", "5", "8", "10", "40"];
+    const input = ["1", "2", "10", "20", "100", "200", "1000", "2000", "10000", "20000"];
+
+    let date = new Date();
+    let startTimestamp = date.getTime();
 
     before(async function() {
         await scratch.run();
@@ -25,7 +28,9 @@ describe('AskNumbers', function() {
         describe('#calculatesSum', () => {
 
             beforeEach(async function() {
+                console.log("s", (new Date()).getTime() - startTimestamp);
                 await scratch.clickGreenFlag();
+                console.log("e", (new Date()).getTime() - startTimestamp);
             });
 
             for (let i = 0; i < input.length; i+=2) {

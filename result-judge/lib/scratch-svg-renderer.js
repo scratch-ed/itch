@@ -299,6 +299,601 @@ module.exports = "AAEAAAAVAQAABABQR0RFRgAeAA8AANxIAAAAHkdQT1PL/NPkAADcaAAAAipHU1
 
 /***/ }),
 
+/***/ "./node_modules/microee/index.js":
+/*!***************************************!*\
+  !*** ./node_modules/microee/index.js ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+function M() { this._events = {}; }
+M.prototype = {
+  on: function(ev, cb) {
+    this._events || (this._events = {});
+    var e = this._events;
+    (e[ev] || (e[ev] = [])).push(cb);
+    return this;
+  },
+  removeListener: function(ev, cb) {
+    var e = this._events[ev] || [], i;
+    for(i = e.length-1; i >= 0 && e[i]; i--){
+      if(e[i] === cb || e[i].cb === cb) { e.splice(i, 1); }
+    }
+  },
+  removeAllListeners: function(ev) {
+    if(!ev) { this._events = {}; }
+    else { this._events[ev] && (this._events[ev] = []); }
+  },
+  listeners: function(ev) {
+    return (this._events ? this._events[ev] || [] : []);
+  },
+  emit: function(ev) {
+    this._events || (this._events = {});
+    var args = Array.prototype.slice.call(arguments, 1), i, e = this._events[ev] || [];
+    for(i = e.length-1; i >= 0 && e[i]; i--){
+      e[i].apply(this, args);
+    }
+    return this;
+  },
+  when: function(ev, cb) {
+    return this.once(ev, cb, true);
+  },
+  once: function(ev, cb, when) {
+    if(!cb) return this;
+    function c() {
+      if(!when) this.removeListener(ev, c);
+      if(cb.apply(this, arguments) && when) this.removeListener(ev, c);
+    }
+    c.cb = cb;
+    this.on(ev, c);
+    return this;
+  }
+};
+M.mixin = function(dest) {
+  var o = M.prototype, k;
+  for (k in o) {
+    o.hasOwnProperty(k) && (dest.prototype[k] = o[k]);
+  }
+};
+module.exports = M;
+
+
+/***/ }),
+
+/***/ "./node_modules/minilog/lib/common/filter.js":
+/*!***************************************************!*\
+  !*** ./node_modules/minilog/lib/common/filter.js ***!
+  \***************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+// default filter
+var Transform = __webpack_require__(/*! ./transform.js */ "./node_modules/minilog/lib/common/transform.js");
+
+var levelMap = { debug: 1, info: 2, warn: 3, error: 4 };
+
+function Filter() {
+  this.enabled = true;
+  this.defaultResult = true;
+  this.clear();
+}
+
+Transform.mixin(Filter);
+
+// allow all matching, with level >= given level
+Filter.prototype.allow = function(name, level) {
+  this._white.push({ n: name, l: levelMap[level] });
+  return this;
+};
+
+// deny all matching, with level <= given level
+Filter.prototype.deny = function(name, level) {
+  this._black.push({ n: name, l: levelMap[level] });
+  return this;
+};
+
+Filter.prototype.clear = function() {
+  this._white = [];
+  this._black = [];
+  return this;
+};
+
+function test(rule, name) {
+  // use .test for RegExps
+  return (rule.n.test ? rule.n.test(name) : rule.n == name);
+};
+
+Filter.prototype.test = function(name, level) {
+  var i, len = Math.max(this._white.length, this._black.length);
+  for(i = 0; i < len; i++) {
+    if(this._white[i] && test(this._white[i], name) && levelMap[level] >= this._white[i].l) {
+      return true;
+    }
+    if(this._black[i] && test(this._black[i], name) && levelMap[level] <= this._black[i].l) {
+      return false;
+    }
+  }
+  return this.defaultResult;
+};
+
+Filter.prototype.write = function(name, level, args) {
+  if(!this.enabled || this.test(name, level)) {
+    return this.emit('item', name, level, args);
+  }
+};
+
+module.exports = Filter;
+
+
+/***/ }),
+
+/***/ "./node_modules/minilog/lib/common/minilog.js":
+/*!****************************************************!*\
+  !*** ./node_modules/minilog/lib/common/minilog.js ***!
+  \****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Transform = __webpack_require__(/*! ./transform.js */ "./node_modules/minilog/lib/common/transform.js"),
+    Filter = __webpack_require__(/*! ./filter.js */ "./node_modules/minilog/lib/common/filter.js");
+
+var log = new Transform(),
+    slice = Array.prototype.slice;
+
+exports = module.exports = function create(name) {
+  var o   = function() { log.write(name, undefined, slice.call(arguments)); return o; };
+  o.debug = function() { log.write(name, 'debug', slice.call(arguments)); return o; };
+  o.info  = function() { log.write(name, 'info',  slice.call(arguments)); return o; };
+  o.warn  = function() { log.write(name, 'warn',  slice.call(arguments)); return o; };
+  o.error = function() { log.write(name, 'error', slice.call(arguments)); return o; };
+  o.log   = o.debug; // for interface compliance with Node and browser consoles
+  o.suggest = exports.suggest;
+  o.format = log.format;
+  return o;
+};
+
+// filled in separately
+exports.defaultBackend = exports.defaultFormatter = null;
+
+exports.pipe = function(dest) {
+  return log.pipe(dest);
+};
+
+exports.end = exports.unpipe = exports.disable = function(from) {
+  return log.unpipe(from);
+};
+
+exports.Transform = Transform;
+exports.Filter = Filter;
+// this is the default filter that's applied when .enable() is called normally
+// you can bypass it completely and set up your own pipes
+exports.suggest = new Filter();
+
+exports.enable = function() {
+  if(exports.defaultFormatter) {
+    return log.pipe(exports.suggest) // filter
+              .pipe(exports.defaultFormatter) // formatter
+              .pipe(exports.defaultBackend); // backend
+  }
+  return log.pipe(exports.suggest) // filter
+            .pipe(exports.defaultBackend); // formatter
+};
+
+
+
+/***/ }),
+
+/***/ "./node_modules/minilog/lib/common/transform.js":
+/*!******************************************************!*\
+  !*** ./node_modules/minilog/lib/common/transform.js ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var microee = __webpack_require__(/*! microee */ "./node_modules/microee/index.js");
+
+// Implements a subset of Node's stream.Transform - in a cross-platform manner.
+function Transform() {}
+
+microee.mixin(Transform);
+
+// The write() signature is different from Node's
+// --> makes it much easier to work with objects in logs.
+// One of the lessons from v1 was that it's better to target
+// a good browser rather than the lowest common denominator
+// internally.
+// If you want to use external streams, pipe() to ./stringify.js first.
+Transform.prototype.write = function(name, level, args) {
+  this.emit('item', name, level, args);
+};
+
+Transform.prototype.end = function() {
+  this.emit('end');
+  this.removeAllListeners();
+};
+
+Transform.prototype.pipe = function(dest) {
+  var s = this;
+  // prevent double piping
+  s.emit('unpipe', dest);
+  // tell the dest that it's being piped to
+  dest.emit('pipe', s);
+
+  function onItem() {
+    dest.write.apply(dest, Array.prototype.slice.call(arguments));
+  }
+  function onEnd() { !dest._isStdio && dest.end(); }
+
+  s.on('item', onItem);
+  s.on('end', onEnd);
+
+  s.when('unpipe', function(from) {
+    var match = (from === dest) || typeof from == 'undefined';
+    if(match) {
+      s.removeListener('item', onItem);
+      s.removeListener('end', onEnd);
+      dest.emit('unpipe');
+    }
+    return match;
+  });
+
+  return dest;
+};
+
+Transform.prototype.unpipe = function(from) {
+  this.emit('unpipe', from);
+  return this;
+};
+
+Transform.prototype.format = function(dest) {
+  throw new Error([
+    'Warning: .format() is deprecated in Minilog v2! Use .pipe() instead. For example:',
+    'var Minilog = require(\'minilog\');',
+    'Minilog',
+    '  .pipe(Minilog.backends.console.formatClean)',
+    '  .pipe(Minilog.backends.console);'].join('\n'));
+};
+
+Transform.mixin = function(dest) {
+  var o = Transform.prototype, k;
+  for (k in o) {
+    o.hasOwnProperty(k) && (dest.prototype[k] = o[k]);
+  }
+};
+
+module.exports = Transform;
+
+
+/***/ }),
+
+/***/ "./node_modules/minilog/lib/web/array.js":
+/*!***********************************************!*\
+  !*** ./node_modules/minilog/lib/web/array.js ***!
+  \***********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Transform = __webpack_require__(/*! ../common/transform.js */ "./node_modules/minilog/lib/common/transform.js"),
+    cache = [ ];
+
+var logger = new Transform();
+
+logger.write = function(name, level, args) {
+  cache.push([ name, level, args ]);
+};
+
+// utility functions
+logger.get = function() { return cache; };
+logger.empty = function() { cache = []; };
+
+module.exports = logger;
+
+
+/***/ }),
+
+/***/ "./node_modules/minilog/lib/web/console.js":
+/*!*************************************************!*\
+  !*** ./node_modules/minilog/lib/web/console.js ***!
+  \*************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Transform = __webpack_require__(/*! ../common/transform.js */ "./node_modules/minilog/lib/common/transform.js");
+
+var newlines = /\n+$/,
+    logger = new Transform();
+
+logger.write = function(name, level, args) {
+  var i = args.length-1;
+  if (typeof console === 'undefined' || !console.log) {
+    return;
+  }
+  if(console.log.apply) {
+    return console.log.apply(console, [name, level].concat(args));
+  } else if(JSON && JSON.stringify) {
+    // console.log.apply is undefined in IE8 and IE9
+    // for IE8/9: make console.log at least a bit less awful
+    if(args[i] && typeof args[i] == 'string') {
+      args[i] = args[i].replace(newlines, '');
+    }
+    try {
+      for(i = 0; i < args.length; i++) {
+        args[i] = JSON.stringify(args[i]);
+      }
+    } catch(e) {}
+    console.log(args.join(' '));
+  }
+};
+
+logger.formatters = ['color', 'minilog'];
+logger.color = __webpack_require__(/*! ./formatters/color.js */ "./node_modules/minilog/lib/web/formatters/color.js");
+logger.minilog = __webpack_require__(/*! ./formatters/minilog.js */ "./node_modules/minilog/lib/web/formatters/minilog.js");
+
+module.exports = logger;
+
+
+/***/ }),
+
+/***/ "./node_modules/minilog/lib/web/formatters/color.js":
+/*!**********************************************************!*\
+  !*** ./node_modules/minilog/lib/web/formatters/color.js ***!
+  \**********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Transform = __webpack_require__(/*! ../../common/transform.js */ "./node_modules/minilog/lib/common/transform.js"),
+    color = __webpack_require__(/*! ./util.js */ "./node_modules/minilog/lib/web/formatters/util.js");
+
+var colors = { debug: ['cyan'], info: ['purple' ], warn: [ 'yellow', true ], error: [ 'red', true ] },
+    logger = new Transform();
+
+logger.write = function(name, level, args) {
+  var fn = console.log;
+  if(console[level] && console[level].apply) {
+    fn = console[level];
+    fn.apply(console, [ '%c'+name+' %c'+level, color('gray'), color.apply(color, colors[level])].concat(args));
+  }
+};
+
+// NOP, because piping the formatted logs can only cause trouble.
+logger.pipe = function() { };
+
+module.exports = logger;
+
+
+/***/ }),
+
+/***/ "./node_modules/minilog/lib/web/formatters/minilog.js":
+/*!************************************************************!*\
+  !*** ./node_modules/minilog/lib/web/formatters/minilog.js ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Transform = __webpack_require__(/*! ../../common/transform.js */ "./node_modules/minilog/lib/common/transform.js"),
+    color = __webpack_require__(/*! ./util.js */ "./node_modules/minilog/lib/web/formatters/util.js"),
+    colors = { debug: ['gray'], info: ['purple' ], warn: [ 'yellow', true ], error: [ 'red', true ] },
+    logger = new Transform();
+
+logger.write = function(name, level, args) {
+  var fn = console.log;
+  if(level != 'debug' && console[level]) {
+    fn = console[level];
+  }
+
+  var subset = [], i = 0;
+  if(level != 'info') {
+    for(; i < args.length; i++) {
+      if(typeof args[i] != 'string') break;
+    }
+    fn.apply(console, [ '%c'+name +' '+ args.slice(0, i).join(' '), color.apply(color, colors[level]) ].concat(args.slice(i)));
+  } else {
+    fn.apply(console, [ '%c'+name, color.apply(color, colors[level]) ].concat(args));
+  }
+};
+
+// NOP, because piping the formatted logs can only cause trouble.
+logger.pipe = function() { };
+
+module.exports = logger;
+
+
+/***/ }),
+
+/***/ "./node_modules/minilog/lib/web/formatters/util.js":
+/*!*********************************************************!*\
+  !*** ./node_modules/minilog/lib/web/formatters/util.js ***!
+  \*********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+var hex = {
+  black: '#000',
+  red: '#c23621',
+  green: '#25bc26',
+  yellow: '#bbbb00',
+  blue:  '#492ee1',
+  magenta: '#d338d3',
+  cyan: '#33bbc8',
+  gray: '#808080',
+  purple: '#708'
+};
+function color(fg, isInverse) {
+  if(isInverse) {
+    return 'color: #fff; background: '+hex[fg]+';';
+  } else {
+    return 'color: '+hex[fg]+';';
+  }
+}
+
+module.exports = color;
+
+
+/***/ }),
+
+/***/ "./node_modules/minilog/lib/web/index.js":
+/*!***********************************************!*\
+  !*** ./node_modules/minilog/lib/web/index.js ***!
+  \***********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Minilog = __webpack_require__(/*! ../common/minilog.js */ "./node_modules/minilog/lib/common/minilog.js");
+
+var oldEnable = Minilog.enable,
+    oldDisable = Minilog.disable,
+    isChrome = (typeof navigator != 'undefined' && /chrome/i.test(navigator.userAgent)),
+    console = __webpack_require__(/*! ./console.js */ "./node_modules/minilog/lib/web/console.js");
+
+// Use a more capable logging backend if on Chrome
+Minilog.defaultBackend = (isChrome ? console.minilog : console);
+
+// apply enable inputs from localStorage and from the URL
+if(typeof window != 'undefined') {
+  try {
+    Minilog.enable(JSON.parse(window.localStorage['minilogSettings']));
+  } catch(e) {}
+  if(window.location && window.location.search) {
+    var match = RegExp('[?&]minilog=([^&]*)').exec(window.location.search);
+    match && Minilog.enable(decodeURIComponent(match[1]));
+  }
+}
+
+// Make enable also add to localStorage
+Minilog.enable = function() {
+  oldEnable.call(Minilog, true);
+  try { window.localStorage['minilogSettings'] = JSON.stringify(true); } catch(e) {}
+  return this;
+};
+
+Minilog.disable = function() {
+  oldDisable.call(Minilog);
+  try { delete window.localStorage.minilogSettings; } catch(e) {}
+  return this;
+};
+
+exports = module.exports = Minilog;
+
+exports.backends = {
+  array: __webpack_require__(/*! ./array.js */ "./node_modules/minilog/lib/web/array.js"),
+  browser: Minilog.defaultBackend,
+  localStorage: __webpack_require__(/*! ./localstorage.js */ "./node_modules/minilog/lib/web/localstorage.js"),
+  jQuery: __webpack_require__(/*! ./jquery_simple.js */ "./node_modules/minilog/lib/web/jquery_simple.js")
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/minilog/lib/web/jquery_simple.js":
+/*!*******************************************************!*\
+  !*** ./node_modules/minilog/lib/web/jquery_simple.js ***!
+  \*******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Transform = __webpack_require__(/*! ../common/transform.js */ "./node_modules/minilog/lib/common/transform.js");
+
+var cid = new Date().valueOf().toString(36);
+
+function AjaxLogger(options) {
+  this.url = options.url || '';
+  this.cache = [];
+  this.timer = null;
+  this.interval = options.interval || 30*1000;
+  this.enabled = true;
+  this.jQuery = window.jQuery;
+  this.extras = {};
+}
+
+Transform.mixin(AjaxLogger);
+
+AjaxLogger.prototype.write = function(name, level, args) {
+  if(!this.timer) { this.init(); }
+  this.cache.push([name, level].concat(args));
+};
+
+AjaxLogger.prototype.init = function() {
+  if(!this.enabled || !this.jQuery) return;
+  var self = this;
+  this.timer = setTimeout(function() {
+    var i, logs = [], ajaxData, url = self.url;
+    if(self.cache.length == 0) return self.init();
+    // Test each log line and only log the ones that are valid (e.g. don't have circular references).
+    // Slight performance hit but benefit is we log all valid lines.
+    for(i = 0; i < self.cache.length; i++) {
+      try {
+        JSON.stringify(self.cache[i]);
+        logs.push(self.cache[i]);
+      } catch(e) { }
+    }
+    if(self.jQuery.isEmptyObject(self.extras)) {
+        ajaxData = JSON.stringify({ logs: logs });
+        url = self.url + '?client_id=' + cid;
+    } else {
+        ajaxData = JSON.stringify(self.jQuery.extend({logs: logs}, self.extras));
+    }
+
+    self.jQuery.ajax(url, {
+      type: 'POST',
+      cache: false,
+      processData: false,
+      data: ajaxData,
+      contentType: 'application/json',
+      timeout: 10000
+    }).success(function(data, status, jqxhr) {
+      if(data.interval) {
+        self.interval = Math.max(1000, data.interval);
+      }
+    }).error(function() {
+      self.interval = 30000;
+    }).always(function() {
+      self.init();
+    });
+    self.cache = [];
+  }, this.interval);
+};
+
+AjaxLogger.prototype.end = function() {};
+
+// wait until jQuery is defined. Useful if you don't control the load order.
+AjaxLogger.jQueryWait = function(onDone) {
+  if(typeof window !== 'undefined' && (window.jQuery || window.$)) {
+    return onDone(window.jQuery || window.$);
+  } else if (typeof window !== 'undefined') {
+    setTimeout(function() { AjaxLogger.jQueryWait(onDone); }, 200);
+  }
+};
+
+module.exports = AjaxLogger;
+
+
+/***/ }),
+
+/***/ "./node_modules/minilog/lib/web/localstorage.js":
+/*!******************************************************!*\
+  !*** ./node_modules/minilog/lib/web/localstorage.js ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Transform = __webpack_require__(/*! ../common/transform.js */ "./node_modules/minilog/lib/common/transform.js"),
+    cache = false;
+
+var logger = new Transform();
+
+logger.write = function(name, level, args) {
+  if(typeof window == 'undefined' || typeof JSON == 'undefined' || !JSON.stringify || !JSON.parse) return;
+  try {
+    if(!cache) { cache = (window.localStorage.minilog ? JSON.parse(window.localStorage.minilog) : []); }
+    cache.push([ new Date().toString(), name, level, args ]);
+    window.localStorage.minilog = JSON.stringify(cache);
+  } catch(e) {}
+};
+
+module.exports = logger;
+
+/***/ }),
+
 /***/ "./node_modules/scratch-render-fonts/src/index.js":
 /*!********************************************************!*\
   !*** ./node_modules/scratch-render-fonts/src/index.js ***!
@@ -344,6 +939,18 @@ if (!document.getElementById('scratch-font-styles')) {
 module.exports = {
     FONTS: FONTS
 };
+
+/***/ }),
+
+/***/ "./node_modules/transformation-matrix/build-umd/transformation-matrix.min.js":
+/*!***********************************************************************************!*\
+  !*** ./node_modules/transformation-matrix/build-umd/transformation-matrix.min.js ***!
+  \***********************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+!function(r,n){ true?module.exports=n():undefined}(window,function(){return function(r){var n={};function t(e){if(n[e])return n[e].exports;var o=n[e]={i:e,l:!1,exports:{}};return r[e].call(o.exports,o,o.exports,t),o.l=!0,o.exports}return t.m=r,t.c=n,t.d=function(r,n,e){t.o(r,n)||Object.defineProperty(r,n,{enumerable:!0,get:e})},t.r=function(r){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(r,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(r,"__esModule",{value:!0})},t.t=function(r,n){if(1&n&&(r=t(r)),8&n)return r;if(4&n&&"object"==typeof r&&r&&r.__esModule)return r;var e=Object.create(null);if(t.r(e),Object.defineProperty(e,"default",{enumerable:!0,value:r}),2&n&&"string"!=typeof r)for(var o in r)t.d(e,o,function(n){return r[n]}.bind(null,o));return e},t.n=function(r){var n=r&&r.__esModule?function(){return r.default}:function(){return r};return t.d(n,"a",n),n},t.o=function(r,n){return Object.prototype.hasOwnProperty.call(r,n)},t.p="",t(t.s=0)}([function(r,n,t){"use strict";function e(r,n){return Array.isArray(n)?[r.a*n[0]+r.c*n[1]+r.e,r.b*n[0]+r.d*n[1]+r.f]:{x:r.a*n.x+r.c*n.y+r.e,y:r.b*n.x+r.d*n.y+r.f}}function o(r,n){return n.map(function(n){return e(r,n)})}function u(r){return{a:parseFloat(r.a),b:parseFloat(r.b),c:parseFloat(r.c),d:parseFloat(r.d),e:parseFloat(r.e),f:parseFloat(r.f)}}t.r(n);var a=/^matrix\(\s*([0-9_+-.e]+)\s*,\s*([0-9_+-.e]+)\s*,\s*([0-9_+-.e]+)\s*,\s*([0-9_+-.e]+)\s*,\s*([0-9_+-.e]+)\s*,\s*([0-9_+-.e]+)\s*\)$/i;function i(r){var n=r.match(a);if(null===n||n.length<7)throw new Error("'"+r+"' is not a matrix");return{a:parseFloat(n[1]),b:parseFloat(n[2]),c:parseFloat(n[3]),d:parseFloat(n[4]),e:parseFloat(n[5]),f:parseFloat(n[6])}}function f(){return{a:1,c:0,e:0,b:0,d:1,f:0}}function c(r){var n=r.a,t=r.b,e=r.c,o=r.d,u=r.e,a=r.f,i=n*o-t*e;return{a:o/i,b:t/-i,c:e/-i,d:n/i,e:(o*u-e*a)/-i,f:(t*u-n*a)/i}}var d="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(r){return typeof r}:function(r){return r&&"function"==typeof Symbol&&r.constructor===Symbol&&r!==Symbol.prototype?"symbol":typeof r},s=function(r){return"number"==typeof r&&!isNaN(r)&&isFinite(r)},l=function(r){return null!=r&&"object"===(void 0===r?"undefined":d(r))};function p(r){return l(r)&&r.hasOwnProperty("a")&&s(r.a)&&r.hasOwnProperty("b")&&s(r.b)&&r.hasOwnProperty("c")&&s(r.c)&&r.hasOwnProperty("d")&&s(r.d)&&r.hasOwnProperty("e")&&s(r.e)&&r.hasOwnProperty("f")&&s(r.f)}function y(r){return void 0===r}function b(r){return{a:1,c:0,e:r,b:0,d:1,f:arguments.length>1&&void 0!==arguments[1]?arguments[1]:0}}function v(){for(var r=arguments.length,n=Array(r),t=0;t<r;t++)n[t]=arguments[t];var e=function(r,n){return{a:r.a*n.a+r.c*n.b,c:r.a*n.c+r.c*n.d,e:r.a*n.e+r.c*n.f+r.e,b:r.b*n.a+r.d*n.b,d:r.b*n.c+r.d*n.d,f:r.b*n.e+r.d*n.f+r.f}};switch((n=Array.isArray(n[0])?n[0]:n).length){case 0:throw new Error("no matrices provided");case 1:return n[0];case 2:return e(n[0],n[1]);default:var o=function(r){return Array.isArray(r)?r:Array.from(r)}(n),u=o[0],a=o[1],i=o.slice(2),f=e(u,a);return v.apply(void 0,[f].concat(function(r){if(Array.isArray(r)){for(var n=0,t=Array(r.length);n<r.length;n++)t[n]=r[n];return t}return Array.from(r)}(i)))}}function m(){return v.apply(void 0,arguments)}var h=Math.cos,x=Math.sin,g=Math.PI;function w(r,n,t){var e=h(r),o=x(r),u={a:e,c:-o,e:0,b:o,d:e,f:0};return y(n)||y(t)?u:v([b(n,t),u,b(-n,-t)])}function P(r){var n=arguments.length>1&&void 0!==arguments[1]?arguments[1]:void 0,t=arguments.length>2&&void 0!==arguments[2]?arguments[2]:void 0;return w(r*g/180,n,t)}function S(r){var n=arguments.length>1&&void 0!==arguments[1]?arguments[1]:void 0;return y(n)&&(n=r),{a:r,c:0,e:0,b:0,d:n,f:0}}function O(r,n){return{a:1,c:r,e:0,b:n,d:1,f:0}}var A=Math.tan;function F(r,n){return{a:1,c:A(r),e:0,b:A(n),d:1,f:0}}function M(r,n){return F(r*Math.PI/180,n*Math.PI/180)}function j(r){return T(r)}function _(r){return T(r)}function T(r){return"matrix("+r.a+","+r.b+","+r.c+","+r.d+","+r.e+","+r.f+")"}t.d(n,"applyToPoint",function(){return e}),t.d(n,"applyToPoints",function(){return o}),t.d(n,"fromObject",function(){return u}),t.d(n,"fromString",function(){return i}),t.d(n,"identity",function(){return f}),t.d(n,"inverse",function(){return c}),t.d(n,"isAffineMatrix",function(){return p}),t.d(n,"rotate",function(){return w}),t.d(n,"rotateDEG",function(){return P}),t.d(n,"scale",function(){return S}),t.d(n,"shear",function(){return O}),t.d(n,"skew",function(){return F}),t.d(n,"skewDEG",function(){return M}),t.d(n,"toCSS",function(){return j}),t.d(n,"toSVG",function(){return _}),t.d(n,"toString",function(){return T}),t.d(n,"transform",function(){return v}),t.d(n,"compose",function(){return m}),t.d(n,"translate",function(){return b})}])});
+//# sourceMappingURL=transformation-matrix.min.js.map
 
 /***/ }),
 
@@ -537,6 +1144,45 @@ var BitmapAdapter = function () {
 }();
 
 module.exports = BitmapAdapter;
+
+/***/ }),
+
+/***/ "./src/fixup-svg-string.js":
+/*!*********************************!*\
+  !*** ./src/fixup-svg-string.js ***!
+  \*********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Fixup svg string prior to parsing.
+ * @param {!string} svgString String of the svg to fix.
+ * @returns {!string} fixed svg that should be parseable.
+ */
+module.exports = function (svgString) {
+    // Add root svg namespace if it does not exist.
+    var svgAttrs = svgString.match(/<svg [^>]*>/);
+    if (svgAttrs && svgAttrs[0].indexOf('xmlns=') === -1) {
+        svgString = svgString.replace('<svg ', '<svg xmlns="http://www.w3.org/2000/svg" ');
+    }
+
+    // There are some SVGs from Illustrator that use undeclared entities.
+    // Just replace those entities with fake namespace references to prevent
+    // DOMParser from crashing
+    if (svgAttrs && svgAttrs[0].indexOf('&ns_') !== -1 && svgString.indexOf('<!DOCTYPE') === -1) {
+        svgString = svgString.replace(svgAttrs[0], svgAttrs[0].replace(/&ns_[^;]+;/g, 'http://ns.adobe.com/Extensibility/1.0/'));
+    }
+
+    // The <metadata> element is not needed for rendering and sometimes contains
+    // unparseable garbage from Illustrator :(
+    // Note: [\s\S] matches everything including newlines, which .* does not
+    svgString = svgString.replace(/<metadata>[\s\S]*<\/metadata>/, '');
+
+    return svgString;
+};
 
 /***/ }),
 
@@ -846,6 +1492,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var inlineSvgFonts = __webpack_require__(/*! ./font-inliner */ "./src/font-inliner.js");
 var SvgElement = __webpack_require__(/*! ./svg-element */ "./src/svg-element.js");
 var convertFonts = __webpack_require__(/*! ./font-converter */ "./src/font-converter.js");
+var fixupSvgString = __webpack_require__(/*! ./fixup-svg-string */ "./src/fixup-svg-string.js");
+var transformStrokeWidths = __webpack_require__(/*! ./transform-applier */ "./src/transform-applier.js");
 
 /**
  * Main quirks-mode SVG rendering code.
@@ -920,29 +1568,33 @@ var SvgRenderer = function () {
             // New svg string invalidates the cached image
             this._cachedImage = null;
 
-            // Add root svg namespace if it does not exist.
-            var svgAttrs = svgString.match(/<svg [^>]*>/);
-            if (svgAttrs && svgAttrs[0].indexOf('xmlns=') === -1) {
-                svgString = svgString.replace('<svg ', '<svg xmlns="http://www.w3.org/2000/svg" ');
-            }
-
             // Parse string into SVG XML.
             var parser = new DOMParser();
+            svgString = fixupSvgString(svgString);
             this._svgDom = parser.parseFromString(svgString, 'text/xml');
             if (this._svgDom.childNodes.length < 1 || this._svgDom.documentElement.localName !== 'svg') {
                 throw new Error('Document does not appear to be SVG.');
             }
             this._svgTag = this._svgDom.documentElement;
             if (fromVersion2) {
+                // Fix gradients. Scratch 2 exports no x2 when x2 = 0, but
+                // SVG default is that x2 is 1. This must be done before
+                // transformStrokeWidths since transformStrokeWidths affects
+                // gradients.
+                this._transformGradients();
+            }
+            transformStrokeWidths(this._svgTag, window);
+            if (fromVersion2) {
                 // Transform all text elements.
                 this._transformText();
-                // Fix gradients
-                this._transformGradients();
                 // Transform measurements.
                 this._transformMeasurements();
             } else if (!this._svgTag.getAttribute('viewBox')) {
                 // Renderer expects a view box.
                 this._transformMeasurements();
+            } else if (!this._svgTag.getAttribute('width') || !this._svgTag.getAttribute('height')) {
+                this._svgTag.setAttribute('width', this._svgTag.viewBox.baseVal.width);
+                this._svgTag.setAttribute('height', this._svgTag.viewBox.baseVal.height);
             }
             this._measurements = {
                 width: this._svgTag.viewBox.baseVal.width,
@@ -991,6 +1643,7 @@ var SvgRenderer = function () {
                     // Set text-before-edge alignment:
                     // Scratch renders all text like this.
                     textElement.setAttribute('alignment-baseline', 'text-before-edge');
+                    textElement.setAttribute('xml:space', 'preserve');
                     // If there's no font size provided, provide one.
                     if (!textElement.getAttribute('font-size')) {
                         textElement.setAttribute('font-size', '18');
@@ -1055,8 +1708,9 @@ var SvgRenderer = function () {
 
                                 var tspanNode = SvgElement.create('tspan');
                                 tspanNode.setAttribute('x', '0');
+                                tspanNode.setAttribute('style', 'white-space: pre');
                                 tspanNode.setAttribute('dy', spacing + 'em');
-                                tspanNode.textContent = line;
+                                tspanNode.textContent = line ? line : ' ';
                                 textElement.appendChild(tspanNode);
                             }
                         } catch (err) {
@@ -1341,6 +1995,641 @@ var SvgRenderer = function () {
 }();
 
 module.exports = SvgRenderer;
+
+/***/ }),
+
+/***/ "./src/transform-applier.js":
+/*!**********************************!*\
+  !*** ./src/transform-applier.js ***!
+  \**********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var Matrix = __webpack_require__(/*! transformation-matrix */ "./node_modules/transformation-matrix/build-umd/transformation-matrix.min.js");
+var SvgElement = __webpack_require__(/*! ./svg-element */ "./src/svg-element.js");
+var log = __webpack_require__(/*! ./util/log */ "./src/util/log.js");
+
+/**
+ * @fileOverview Apply transforms to match stroke width appearance in 2.0 and 3.0
+ */
+
+// Adapted from paper.js's Path.applyTransform
+var _parseTransform = function _parseTransform(domElement) {
+    var matrix = Matrix.identity();
+    var string = domElement.attributes && domElement.attributes.transform && domElement.attributes.transform.value;
+    if (!string) return matrix;
+    // https://www.w3.org/TR/SVG/types.html#DataTypeTransformList
+    // Parse SVG transform string. First we split at /)\s*/, to separate
+    // commands
+    var transforms = string.split(/\)\s*/g);
+    var _iteratorNormalCompletion = true;
+    var _didIteratorError = false;
+    var _iteratorError = undefined;
+
+    try {
+        for (var _iterator = transforms[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var transform = _step.value;
+
+            if (!transform) break;
+            // Command come before the '(', values after
+            var parts = transform.split(/\(\s*/);
+            var command = parts[0].trim();
+            var v = parts[1].split(/[\s,]+/g);
+            // Convert values to floats
+            for (var j = 0; j < v.length; j++) {
+                v[j] = parseFloat(v[j]);
+            }
+            switch (command) {
+                case 'matrix':
+                    matrix = Matrix.compose(matrix, { a: v[0], b: v[1], c: v[2], d: v[3], e: v[4], f: v[5] });
+                    break;
+                case 'rotate':
+                    matrix = Matrix.compose(matrix, Matrix.rotateDEG(v[0], v[1] || 0, v[2] || 0));
+                    break;
+                case 'translate':
+                    matrix = Matrix.compose(matrix, Matrix.translate(v[0], v[1] || 0));
+                    break;
+                case 'scale':
+                    matrix = Matrix.compose(matrix, Matrix.scale(v[0], v[1] || v[0]));
+                    break;
+                case 'skewX':
+                    matrix = Matrix.compose(matrix, Matrix.skewDEG(v[0], 0));
+                    break;
+                case 'skewY':
+                    matrix = Matrix.compose(matrix, Matrix.skewDEG(0, v[0]));
+                    break;
+                default:
+                    log.error('Couldn\'t parse: ' + command);
+            }
+        }
+    } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+    } finally {
+        try {
+            if (!_iteratorNormalCompletion && _iterator.return) {
+                _iterator.return();
+            }
+        } finally {
+            if (_didIteratorError) {
+                throw _iteratorError;
+            }
+        }
+    }
+
+    return matrix;
+};
+
+// Adapted from paper.js's Matrix.decompose
+// Given a matrix, return the x and y scale factors of the matrix
+var _getScaleFactor = function _getScaleFactor(matrix) {
+    var a = matrix.a;
+    var b = matrix.b;
+    var c = matrix.c;
+    var d = matrix.d;
+    var det = a * d - b * c;
+
+    if (a !== 0 || b !== 0) {
+        var r = Math.sqrt(a * a + b * b);
+        return { x: r, y: det / r };
+    }
+    if (c !== 0 || d !== 0) {
+        var s = Math.sqrt(c * c + d * d);
+        return { x: det / s, y: s };
+    }
+    // a = b = c = d = 0
+    return { x: 0, y: 0 };
+};
+
+// Returns null if matrix is not invertible. Otherwise returns given ellipse
+// transformed by transform, an object {radiusX, radiusY, rotation}.
+var _calculateTransformedEllipse = function _calculateTransformedEllipse(radiusX, radiusY, theta, transform) {
+    theta = -theta * Math.PI / 180;
+    var a = transform.a;
+    var b = -transform.c;
+    var c = -transform.b;
+    var d = transform.d;
+    // Since other parameters determine the translation of the ellipse in SVG, we do not need to worry
+    // about what e and f are.
+    var det = a * d - b * c;
+    // Non-invertible matrix
+    if (det === 0) return null;
+
+    // rotA, rotB, and rotC represent Ax^2 + Bxy + Cy^2 = 1 coefficients for a rotated ellipse formula
+    var sinT = Math.sin(theta);
+    var cosT = Math.cos(theta);
+    var sin2T = Math.sin(2 * theta);
+    var rotA = cosT * cosT / radiusX / radiusX + sinT * sinT / radiusY / radiusY;
+    var rotB = sin2T / radiusX / radiusX - sin2T / radiusY / radiusY;
+    var rotC = sinT * sinT / radiusX / radiusX + cosT * cosT / radiusY / radiusY;
+
+    // Calculate the ellipse formula of the transformed ellipse
+    // A, B, and C represent Ax^2 + Bxy + Cy^2 = 1 / det / det coefficients in a transformed ellipse formula
+    // scaled by inverse det squared (to preserve accuracy)
+    var A = rotA * d * d - rotB * d * c + rotC * c * c;
+    var B = -2 * rotA * b * d + rotB * a * d + rotB * b * c - 2 * rotC * a * c;
+    var C = rotA * b * b - rotB * a * b + rotC * a * a;
+
+    // Derive new radii and theta from the transformed ellipse formula
+    var newRadiusXOverDet = Math.sqrt(2) * Math.sqrt((A + C - Math.sqrt(A * A + B * B - 2 * A * C + C * C)) / (-B * B + 4 * A * C));
+    var newRadiusYOverDet = 1 / Math.sqrt(A + C - 1 / newRadiusXOverDet / newRadiusXOverDet);
+    var temp = (A - 1 / newRadiusXOverDet / newRadiusXOverDet) / (1 / newRadiusYOverDet / newRadiusYOverDet - 1 / newRadiusXOverDet / newRadiusXOverDet);
+    if (temp < 0 && Math.abs(temp) < 1e-8) temp = 0; // Fix floating point issue
+    temp = Math.sqrt(temp);
+    if (Math.abs(1 - temp) < 1e-8) temp = 1; // Fix floating point issue
+    // Solve for which of the two possible thetas is correct
+    var newTheta = Math.asin(temp);
+    temp = B / (1 / newRadiusXOverDet / newRadiusXOverDet - 1 / newRadiusYOverDet / newRadiusYOverDet);
+    var newTheta2 = -newTheta;
+    if (Math.abs(Math.sin(2 * newTheta2) - temp) < Math.abs(Math.sin(2 * newTheta) - temp)) {
+        newTheta = newTheta2;
+    }
+
+    return {
+        radiusX: newRadiusXOverDet * det,
+        radiusY: newRadiusYOverDet * det,
+        rotation: -newTheta * 180 / Math.PI
+    };
+};
+
+// Adapted from paper.js's PathItem.setPathData
+var _transformPath = function _transformPath(pathString, transform) {
+    if (!transform || Matrix.toString(transform) === Matrix.toString(Matrix.identity())) return pathString;
+    // First split the path data into parts of command-coordinates pairs
+    // Commands are any of these characters: mzlhvcsqta
+    var parts = pathString && pathString.match(/[mlhvcsqtaz][^mlhvcsqtaz]*/ig);
+    var coords = void 0;
+    var relative = false;
+    var previous = void 0;
+    var control = void 0;
+    var current = { x: 0, y: 0 };
+    var start = { x: 0, y: 0 };
+    var result = '';
+
+    var getCoord = function getCoord(index, coord) {
+        var val = +coords[index];
+        if (relative) {
+            val += current[coord];
+        }
+        return val;
+    };
+
+    var getPoint = function getPoint(index) {
+        return { x: getCoord(index, 'x'), y: getCoord(index + 1, 'y') };
+    };
+
+    var roundTo4Places = function roundTo4Places(num) {
+        return Number(num.toFixed(4));
+    };
+
+    // Returns the transformed point as a string
+    var getString = function getString(point) {
+        var transformed = Matrix.applyToPoint(transform, point);
+        return roundTo4Places(transformed.x) + ' ' + roundTo4Places(transformed.y) + ' ';
+    };
+
+    for (var i = 0, l = parts && parts.length; i < l; i++) {
+        var part = parts[i];
+        var command = part[0];
+        var lower = command.toLowerCase();
+        // Match all coordinate values
+        coords = part.match(/[+-]?(?:\d*\.\d+|\d+\.?)(?:[eE][+-]?\d+)?/g);
+        var length = coords && coords.length;
+        relative = command === lower;
+        // Fix issues with z in the middle of SVG path data, not followed by
+        // a m command, see paper.js#413:
+        if (previous === 'z' && !/[mz]/.test(lower)) {
+            result += 'M ' + current.x + ' ' + current.y + ' ';
+        }
+        switch (lower) {
+            case 'm': // Move to
+            case 'l':
+                // Line to
+                {
+                    var move = lower === 'm';
+                    for (var j = 0; j < length; j += 2) {
+                        result += move ? 'M ' : 'L ';
+                        current = getPoint(j);
+                        result += getString(current);
+                        if (move) {
+                            start = current;
+                            move = false;
+                        }
+                    }
+                    control = current;
+                    break;
+                }
+            case 'h': // Horizontal line
+            case 'v':
+                // Vertical line
+                {
+                    var coord = lower === 'h' ? 'x' : 'y';
+                    current = { x: current.x, y: current.y }; // Clone as we're going to modify it.
+                    for (var _j = 0; _j < length; _j++) {
+                        current[coord] = getCoord(_j, coord);
+                        result += 'L ' + getString(current);
+                    }
+                    control = current;
+                    break;
+                }
+            case 'c':
+                // Cubic Bezier curve
+                for (var _j2 = 0; _j2 < length; _j2 += 6) {
+                    var handle1 = getPoint(_j2);
+                    control = getPoint(_j2 + 2);
+                    current = getPoint(_j2 + 4);
+                    result += 'C ' + getString(handle1) + getString(control) + getString(current);
+                }
+                break;
+            case 's':
+                // Smooth cubic Bezier curve
+                for (var _j3 = 0; _j3 < length; _j3 += 4) {
+                    var _handle = /[cs]/.test(previous) ? { x: current.x * 2 - control.x, y: current.y * 2 - control.y } : current;
+                    control = getPoint(_j3);
+                    current = getPoint(_j3 + 2);
+
+                    result += 'C ' + getString(_handle) + getString(control) + getString(current);
+                    previous = lower;
+                }
+                break;
+            case 'q':
+                // Quadratic Bezier curve
+                for (var _j4 = 0; _j4 < length; _j4 += 4) {
+                    control = getPoint(_j4);
+                    current = getPoint(_j4 + 2);
+                    result += 'Q ' + getString(control) + getString(current);
+                }
+                break;
+            case 't':
+                // Smooth quadratic Bezier curve
+                for (var _j5 = 0; _j5 < length; _j5 += 2) {
+                    control = /[qt]/.test(previous) ? { x: current.x * 2 - control.x, y: current.y * 2 - control.y } : current;
+                    current = getPoint(_j5);
+
+                    result += 'Q ' + getString(control) + getString(current);
+                    previous = lower;
+                }
+                break;
+            case 'a':
+                // Elliptical arc curve
+                for (var _j6 = 0; _j6 < length; _j6 += 7) {
+                    current = getPoint(_j6 + 5);
+                    var rx = +coords[_j6];
+                    var ry = +coords[_j6 + 1];
+                    var rotation = +coords[_j6 + 2];
+                    var largeArcFlag = +coords[_j6 + 3];
+                    var clockwiseFlag = +coords[_j6 + 4];
+                    var newEllipse = _calculateTransformedEllipse(rx, ry, rotation, transform);
+                    var matrixScale = _getScaleFactor(transform);
+                    if (newEllipse) {
+                        if (matrixScale.x > 0 && matrixScale.y < 0 || matrixScale.x < 0 && matrixScale.y > 0) {
+                            clockwiseFlag = clockwiseFlag ^ 1;
+                        }
+                        result += 'A ' + roundTo4Places(Math.abs(newEllipse.radiusX)) + ' ' + (roundTo4Places(Math.abs(newEllipse.radiusY)) + ' ') + (roundTo4Places(newEllipse.rotation) + ' ' + largeArcFlag + ' ') + (clockwiseFlag + ' ' + getString(current));
+                    } else {
+                        result += 'L ' + getString(current);
+                    }
+                }
+                break;
+            case 'z':
+                // Close path
+                result += 'Z ';
+                // Correctly handle relative m commands, see paper.js#1101:
+                current = start;
+                break;
+        }
+        previous = lower;
+    }
+    return result;
+};
+
+var GRAPHICS_ELEMENTS = ['circle', 'ellipse', 'image', 'line', 'path', 'polygon', 'polyline', 'rect', 'text', 'use'];
+var CONTAINER_ELEMENTS = ['a', 'defs', 'g', 'marker', 'glyph', 'missing-glyph', 'pattern', 'svg', 'switch', 'symbol'];
+var _isContainerElement = function _isContainerElement(element) {
+    return element.tagName && CONTAINER_ELEMENTS.includes(element.tagName.toLowerCase());
+};
+var _isGraphicsElement = function _isGraphicsElement(element) {
+    return element.tagName && GRAPHICS_ELEMENTS.includes(element.tagName.toLowerCase());
+};
+var _isPathWithTransformAndStroke = function _isPathWithTransformAndStroke(element, strokeWidth) {
+    if (!element.attributes) return false;
+    strokeWidth = element.attributes['stroke-width'] ? Number(element.attributes['stroke-width'].value) : Number(strokeWidth);
+    return strokeWidth && element.tagName && element.tagName.toLowerCase() === 'path' && element.attributes.d && element.attributes.d.value;
+};
+var _quadraticMean = function _quadraticMean(a, b) {
+    return Math.sqrt((a * a + b * b) / 2);
+};
+
+var _createGradient = function _createGradient(gradientId, svgTag, bbox, matrix) {
+    // Adapted from Paper.js's SvgImport.getValue
+    var getValue = function getValue(node, name, isString, allowNull, allowPercent, defaultValue) {
+        // Interpret value as number. Never return NaN, but 0 instead.
+        // If the value is a sequence of numbers, parseFloat will
+        // return the first occurring number, which is enough for now.
+        var value = SvgElement.get(node, name);
+        var res = void 0;
+        if (value === null) {
+            if (defaultValue) {
+                res = defaultValue;
+                if (/%\s*$/.test(res)) {
+                    value = defaultValue;
+                    res = parseFloat(value);
+                }
+            } else if (allowNull) {
+                res = null;
+            } else if (isString) {
+                res = '';
+            } else {
+                res = 0;
+            }
+        } else if (isString) {
+            res = value;
+        } else {
+            res = parseFloat(value);
+        }
+        // Support for dimensions in percentage of the root size. If root-size
+        // is not set (e.g. during <defs>), just scale the percentage value to
+        // 0..1, as required by gradients with gradientUnits="objectBoundingBox"
+        if (/%\s*$/.test(value)) {
+            var size = allowPercent ? 1 : bbox[/x|^width/.test(name) ? 'width' : 'height'];
+            return res / 100 * size;
+        }
+        return res;
+    };
+    var getPoint = function getPoint(node, x, y, allowNull, allowPercent, defaultX, defaultY) {
+        x = getValue(node, x || 'x', false, allowNull, allowPercent, defaultX);
+        y = getValue(node, y || 'y', false, allowNull, allowPercent, defaultY);
+        return allowNull && (x === null || y === null) ? null : { x: x, y: y };
+    };
+
+    var defs = svgTag.getElementsByTagName('defs');
+    if (defs.length === 0) {
+        defs = SvgElement.create('defs');
+        svgTag.appendChild(defs);
+    } else {
+        defs = defs[0];
+    }
+
+    // Clone the old gradient. We'll make a new one, since the gradient might be reused elsewhere
+    // with different transform matrix
+    var oldGradient = svgTag.getElementById(gradientId);
+    if (!oldGradient) return;
+
+    var radial = oldGradient.tagName.toLowerCase() === 'radialgradient';
+    var newGradient = svgTag.getElementById(gradientId).cloneNode(true /* deep */);
+
+    // Give the new gradient a new ID
+    var matrixString = Matrix.toString(matrix);
+    matrixString = matrixString.substring(8, matrixString.length - 1);
+    var newGradientId = gradientId + '-' + matrixString;
+    newGradient.setAttribute('id', newGradientId);
+
+    var scaleToBounds = getValue(newGradient, 'gradientUnits', true) !== 'userSpaceOnUse';
+    var origin = void 0;
+    var destination = void 0;
+    var radius = void 0;
+    var focal = void 0;
+    if (radial) {
+        origin = getPoint(newGradient, 'cx', 'cy', false, scaleToBounds, '50%', '50%');
+        radius = getValue(newGradient, 'r', false, false, scaleToBounds, '50%');
+        focal = getPoint(newGradient, 'fx', 'fy', true, scaleToBounds);
+    } else {
+        origin = getPoint(newGradient, 'x1', 'y1', false, scaleToBounds);
+        destination = getPoint(newGradient, 'x2', 'y2', false, scaleToBounds, '1');
+        if (origin.x === destination.x && origin.y === destination.y) {
+            // If it's degenerate, use the color of the last stop, as described by
+            // https://www.w3.org/TR/SVG/pservers.html#LinearGradientNotes
+            var stops = newGradient.getElementsByTagName('stop');
+            if (!stops.length || !stops[stops.length - 1].attributes || !stops[stops.length - 1].attributes['stop-color']) {
+                return null;
+            }
+            return stops[stops.length - 1].attributes['stop-color'].value;
+        }
+    }
+
+    // Transform points
+    // Emulate SVG's gradientUnits="objectBoundingBox"
+    if (scaleToBounds) {
+        var boundsMatrix = Matrix.compose(Matrix.translate(bbox.x, bbox.y), Matrix.scale(bbox.width, bbox.height));
+        origin = Matrix.applyToPoint(boundsMatrix, origin);
+        if (destination) destination = Matrix.applyToPoint(boundsMatrix, destination);
+        if (radius) {
+            radius = _quadraticMean(bbox.width, bbox.height) * radius;
+        }
+        if (focal) focal = Matrix.applyToPoint(boundsMatrix, focal);
+    }
+
+    if (radial) {
+        origin = Matrix.applyToPoint(matrix, origin);
+        var matrixScale = _getScaleFactor(matrix);
+        radius = _quadraticMean(matrixScale.x, matrixScale.y) * radius;
+        if (focal) focal = Matrix.applyToPoint(matrix, focal);
+    } else {
+        var dot = function dot(a, b) {
+            return a.x * b.x + a.y * b.y;
+        };
+        var multiply = function multiply(coefficient, v) {
+            return { x: coefficient * v.x, y: coefficient * v.y };
+        };
+        var add = function add(a, b) {
+            return { x: a.x + b.x, y: a.y + b.y };
+        };
+        var subtract = function subtract(a, b) {
+            return { x: a.x - b.x, y: a.y - b.y };
+        };
+
+        // The line through origin and gradientPerpendicular is the line at which the gradient starts
+        var gradientPerpendicular = Math.abs(origin.x - destination.x) < 1e-8 ? add(origin, { x: 1, y: (origin.x - destination.x) / (destination.y - origin.y) }) : add(origin, { x: (destination.y - origin.y) / (origin.x - destination.x), y: 1 });
+
+        // Transform points
+        gradientPerpendicular = Matrix.applyToPoint(matrix, gradientPerpendicular);
+        origin = Matrix.applyToPoint(matrix, origin);
+        destination = Matrix.applyToPoint(matrix, destination);
+
+        // Calculate the direction that the gradient has changed to
+        var originToPerpendicular = subtract(gradientPerpendicular, origin);
+        var originToDestination = subtract(destination, origin);
+        var gradientDirection = Math.abs(originToPerpendicular.x) < 1e-8 ? { x: 1, y: -originToPerpendicular.x / originToPerpendicular.y } : { x: -originToPerpendicular.y / originToPerpendicular.x, y: 1 };
+
+        // Set the destination so that the gradient moves in the correct direction, by projecting the destination vector
+        // onto the gradient direction vector
+        var projectionCoeff = dot(originToDestination, gradientDirection) / dot(gradientDirection, gradientDirection);
+        var projection = multiply(projectionCoeff, gradientDirection);
+        destination = { x: origin.x + projection.x, y: origin.y + projection.y };
+    }
+
+    // Put values back into svg
+    if (radial) {
+        newGradient.setAttribute('cx', Number(origin.x.toFixed(4)));
+        newGradient.setAttribute('cy', Number(origin.y.toFixed(4)));
+        newGradient.setAttribute('r', Number(radius.toFixed(4)));
+        if (focal) {
+            newGradient.setAttribute('fx', Number(focal.x.toFixed(4)));
+            newGradient.setAttribute('fy', Number(focal.y.toFixed(4)));
+        }
+    } else {
+        newGradient.setAttribute('x1', Number(origin.x.toFixed(4)));
+        newGradient.setAttribute('y1', Number(origin.y.toFixed(4)));
+        newGradient.setAttribute('x2', Number(destination.x.toFixed(4)));
+        newGradient.setAttribute('y2', Number(destination.y.toFixed(4)));
+    }
+    newGradient.setAttribute('gradientUnits', 'userSpaceOnUse');
+    defs.appendChild(newGradient);
+
+    return 'url(#' + newGradientId + ')';
+};
+
+// Adapted from paper.js's SvgImport.getDefinition
+var _parseUrl = function _parseUrl(value, windowRef) {
+    // When url() comes from a style property, '#'' seems to be missing on
+    // WebKit. We also get variations of quotes or no quotes, single or
+    // double, so handle it all with one regular expression:
+    var match = value && value.match(/\((?:["'#]*)([^"')]+)/);
+    var name = match && match[1];
+    var res = name && windowRef ?
+    // This is required by Firefox, which can produce absolute
+    // urls for local gradients, see paperjs#1001:
+    name.replace(windowRef.location.href.split('#')[0] + '#', '') : name;
+    return res;
+};
+
+/**
+ * Scratch 2.0 displays stroke widths in a "normalized" way, that is,
+ * if a shape with a stroke width has a transform applied, it will be
+ * rendered with a stroke that is the same width all the way around,
+ * instead of stretched looking.
+ *
+ * The vector paint editor also prefers to normalize the stroke width,
+ * rather than keep track of transforms at the group level, as this
+ * simplifies editing (e.g. stroke width 3 always means the same thickness)
+ *
+ * This function performs that normalization process, pushing transforms
+ * on groups down to the leaf level and averaging out the stroke width
+ * around the shapes. Note that this doens't just change stroke widths, it
+ * changes path data and attributes throughout the SVG.
+ *
+ * @param {SVGElement} svgTag The SVG dom object
+ * @param {Window} windowRef The window to use. Need to pass in for
+ *     tests to work, as they get angry at even the mention of window.
+ * @param {object} bboxForTesting The bounds to use. Need to pass in for
+ *     tests only, because getBBox doesn't work in Node. This should
+ *     be the bounds of the svgTag without including stroke width or transforms.
+ * @return {void}
+ */
+var transformStrokeWidths = function transformStrokeWidths(svgTag, windowRef, bboxForTesting) {
+    var inherited = Matrix.identity();
+    var applyTransforms = function applyTransforms(element, matrix, strokeWidth, fill) {
+        if (_isContainerElement(element)) {
+            // Push fills and stroke width down to leaves
+            if (element.attributes['stroke-width']) {
+                strokeWidth = element.attributes['stroke-width'].value;
+            }
+            if (element.attributes && element.attributes.fill) {
+                fill = element.attributes.fill.value;
+            }
+
+            // If any child nodes don't take attributes, leave the attributes
+            // at the parent level.
+            for (var i = 0; i < element.childNodes.length; i++) {
+                applyTransforms(element.childNodes[i], Matrix.compose(matrix, _parseTransform(element)), strokeWidth, fill);
+            }
+            element.removeAttribute('transform');
+            element.removeAttribute('stroke-width');
+            element.removeAttribute('fill');
+        } else if (_isPathWithTransformAndStroke(element, strokeWidth)) {
+            if (element.attributes['stroke-width']) {
+                strokeWidth = element.attributes['stroke-width'].value;
+            }
+            if (element.attributes.fill) {
+                fill = element.attributes.fill.value;
+            }
+            matrix = Matrix.compose(matrix, _parseTransform(element));
+            if (Matrix.toString(matrix) === Matrix.toString(Matrix.identity())) {
+                element.removeAttribute('transform');
+                element.setAttribute('stroke-width', strokeWidth);
+                element.setAttribute('fill', fill);
+                return;
+            }
+
+            // Transform gradient
+            var gradientId = _parseUrl(fill, windowRef);
+            if (gradientId) {
+                var doc = windowRef.document;
+                // Need path bounds to transform gradient
+                var svgSpot = doc.createElement('span');
+                var bbox = void 0;
+                if (bboxForTesting) {
+                    bbox = bboxForTesting;
+                } else {
+                    try {
+                        doc.body.appendChild(svgSpot);
+                        var svg = SvgElement.set(windowRef.document.createElementNS(SvgElement.svg, 'svg'));
+                        var path = SvgElement.set(windowRef.document.createElementNS(SvgElement.svg, 'path'));
+                        path.setAttribute('d', element.attributes.d.value);
+                        svg.appendChild(path);
+                        svgSpot.appendChild(svg);
+                        // Take the bounding box.
+                        bbox = svg.getBBox();
+                    } finally {
+                        // Always destroy the element, even if, for example, getBBox throws.
+                        doc.body.removeChild(svgSpot);
+                    }
+                }
+
+                var newRef = _createGradient(gradientId, svgTag, bbox, matrix);
+                if (newRef) fill = newRef;
+            }
+
+            // Transform path data
+            element.setAttribute('d', _transformPath(element.attributes.d.value, matrix));
+            element.removeAttribute('transform');
+
+            // Transform stroke width
+            var matrixScale = _getScaleFactor(matrix);
+            element.setAttribute('stroke-width', _quadraticMean(matrixScale.x, matrixScale.y) * strokeWidth);
+            element.setAttribute('fill', fill);
+        } else if (_isGraphicsElement(element)) {
+            // Push stroke width and fill down to leaves
+            if (strokeWidth && !element.attributes['stroke-width']) {
+                element.setAttribute('stroke-width', strokeWidth);
+            }
+            if (fill && !element.attributes.fill) {
+                element.setAttribute('fill', fill);
+            }
+
+            // Push transform down to leaves
+            matrix = Matrix.compose(matrix, _parseTransform(element));
+            if (Matrix.toString(matrix) === Matrix.toString(Matrix.identity())) {
+                element.removeAttribute('transform');
+            } else {
+                element.setAttribute('transform', Matrix.toString(matrix));
+            }
+        }
+    };
+    applyTransforms(svgTag, inherited, 1 /* default SVG stroke width */);
+};
+
+module.exports = transformStrokeWidths;
+
+/***/ }),
+
+/***/ "./src/util/log.js":
+/*!*************************!*\
+  !*** ./src/util/log.js ***!
+  \*************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var minilog = __webpack_require__(/*! minilog */ "./node_modules/minilog/lib/web/index.js");
+minilog.enable();
+
+module.exports = minilog('scratch-svg-render');
 
 /***/ })
 
