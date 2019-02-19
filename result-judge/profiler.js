@@ -13,6 +13,8 @@ var vmData;
 var spritesLog = [];
 let events = [];
 
+
+
 //todo: in library steken
 class Future {
     constructor() {
@@ -169,8 +171,24 @@ function greenFlag() {
     //start
     Scratch.vm.greenFlag();
     Scratch.ended = new Future();
+
+    simulation = new Simulation();
+    const start = simulation.startEvent;
+
+    start
+    //.observeTargets('Hoofd', 'currentCostume')
+        .foreach(
+            ['Stage', 'Hoofd', 'Hoofd', 'Goblin', 'Hoofd', 'Hoofd', 'Stage', 'Hoofd', 'Hoofd', 'Goblin', 'Hoofd', 'Hoofd', 'Goblin'],
+            (index, target, anchor) => {
+                return anchor
+                    .clickTarget(target, 1000)
+                    //.observeTargets('Hoofd', 'currentCostume', 250);
+            }
+        );
+
     console.log(simulation);
     simulation.run();
+
 
 /*
     setTimeout(() => {

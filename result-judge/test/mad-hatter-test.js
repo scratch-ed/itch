@@ -21,7 +21,7 @@ describe('mad hatter', function() {
 
         before(async function() {
             //add click events
-            scratch.simulation = new Simulation();
+            /*scratch.simulation = new Simulation();
             const start = scratch.simulation.startEvent;
 
             start
@@ -35,6 +35,8 @@ describe('mad hatter', function() {
                 }
             );
 
+            console.log(scratch.simulation);
+*/
             await scratch.setInput();
             await scratch.clickGreenFlag();
         });

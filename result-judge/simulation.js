@@ -1,9 +1,8 @@
 
-const ScratchSimulationEvent = require("./scratchSimulationEvent");
 
-module.exports = class Simulation {
+class Simulation {
 
-    constructor() {
+    constructor(Scratch) {
         this.startEvent = new ScratchSimulationEvent(() => {}, 0);
     }
 
@@ -11,4 +10,4 @@ module.exports = class Simulation {
         this.startEvent.launch();
     }
 
-};
+}
