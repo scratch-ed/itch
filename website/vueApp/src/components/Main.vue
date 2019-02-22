@@ -10,6 +10,7 @@
   </div>
 </template>
 <script>
+
 import Scratch from './Scratch'
 import Tests from './Tests'
 import Result from './Result'

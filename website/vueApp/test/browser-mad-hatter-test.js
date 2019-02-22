@@ -1,4 +1,7 @@
-mocha.setup('bdd')
+const mocha = require('mocha');
+const chai = require('chai');
+
+//mocha.setup('bdd');
 
 const scratch = new ScratchResult();
 let expect = chai.expect;
@@ -56,3 +59,7 @@ describe('Test: Mad hatter oefening', function() {
     });
 
 });
+
+export function run() {
+  mocha.run();
+}
