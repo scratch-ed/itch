@@ -130,7 +130,7 @@ class Sprites {
 
 }
 
-export class ScratchResult {
+export class ScratchJudge {
 
   constructor() {
     this.numberOfRun = 0;
@@ -195,6 +195,6 @@ export class ScratchResult {
   }
 }
 
-export function getResult() {
-  return new ScratchResult();
+export function getScratch() {
+  return new ScratchJudge();
 }

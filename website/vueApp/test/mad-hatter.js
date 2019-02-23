@@ -1,7 +1,10 @@
 
+/**
+  DO NOT EDIT THIS CODE
+*/
 let scratch;
 let result;
-//run with scratch environment
+
 export async function run(_scratch) {
   scratch = _scratch;
   await prepare();
@@ -9,6 +12,16 @@ export async function run(_scratch) {
   await evaluate();
   return result;
 }
+
+async function execute() {
+  return scratch.clickGreenFlag();
+}
+
+/**
+ * EDIT THIS CODE
+ * prepare() :the code that needs to be executed before greenFlag() is called, this can be empty.
+ * evaluate() :tests the result of the evaluation. See the API for which tests are available.
+ */
 
 async function prepare() {
 
@@ -26,10 +39,6 @@ async function prepare() {
     },0);
 
   return scratch.setSimulation();
-}
-
-async function execute() {
-  return scratch.clickGreenFlag();
 }
 
 async function evaluate() {

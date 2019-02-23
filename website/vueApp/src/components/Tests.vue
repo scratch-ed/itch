@@ -25,7 +25,7 @@
     },
     methods: {
       async startTest() {
-        let scratch = this.$judge.getResult();
+        let scratch = this.$judge.getScratch();
         console.log(scratch);
         this.result = await madHatter.run(scratch);
         console.log(this.result);
