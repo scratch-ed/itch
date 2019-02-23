@@ -5,11 +5,12 @@
         <button v-on:click="startTest()">Start test: {{test}}</button>
       </li>
     </ul>
+    <p>{{ result }}</p>
   </div>
 </template>
 
 <script>
-  //import * as madHatterTest from '../../test/browser-mad-hatter-test'
+  import * as madHatter from '../../test/mad-hatter'
 
   export default {
     name: 'Tests',
@@ -18,14 +19,16 @@
         tests: [
           'Mad hatter test',
           'Vierkant test'
-        ]
+        ],
+        result: "..."
       }
     },
     methods: {
-      startTest() {
-        let result = this.$judge.getResult();
-        result.madHatter();
-        //madHatterTest.run();
+      async startTest() {
+        let scratch = this.$judge.getResult();
+        console.log(scratch);
+        this.result = await madHatter.run(scratch);
+        console.log(this.result);
       }
     }
   }

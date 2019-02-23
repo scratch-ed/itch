@@ -136,7 +136,7 @@ function vmHandleEvents(vm) {
   });
 
   vm.runtime.on('PROJECT_RUN_STOP', () => {
-    Scratch.opcodes.end();
+    //Scratch.opcodes.end();
     console.log(`${getTimeStamp()}: Ended run`);
 
     //vmData = JSON.parse(JSON.stringify(vm));

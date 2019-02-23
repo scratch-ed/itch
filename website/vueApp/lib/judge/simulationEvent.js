@@ -30,7 +30,8 @@ class SimulationEvent {
         event.launch();
       }
 
-    }, this._delay)
+    }, this._delay);
+
   }
 
   set environment(env) {

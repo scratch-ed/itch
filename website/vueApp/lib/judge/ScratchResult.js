@@ -136,9 +136,11 @@ export class ScratchResult {
     this.numberOfRun = 0;
     this.simulation = new ScratchSimulationEvent(() => {
     }, 0);
+    this.hasSimulation = false;
   }
 
   fill(data) {
+    console.log(data);
     this.log = data.log;
     this.playground = new Playground(data.log);
     this.allBlocks = new AllBlocks(data.blocks);
@@ -172,33 +174,13 @@ export class ScratchResult {
     this._mouseInput = value;
   }
 
-  loadFile(fileName) {
-    this._fileName = fileName;
-  }
-
-  async madHatter() {
-    simulationChain
-      .foreach(
-        ['Stage', 'Hoofd', 'Hoofd', 'Goblin', 'Hoofd', 'Hoofd', 'Stage', 'Goblin', 'Hoofd', 'Goblin'],
-        (index, target, anchor) => {
-          return anchor
-            .clickTarget(target, 300)
-        }
-      )
-      .next(()=>{
-        console.log("Finished simulation");
-        Scratch.simulationEnd.resolve();
-      },0);
-    await this.clickGreenFlag();
-    console.log("ended");
-  }
-
-  async load() {
-    await Scratch.loaded.promise;
-    createProfiler();
+  async setSimulation() {
+    simulationChain = this.simulation;
+    this.hasSimulation = true;
   }
 
   async clickGreenFlag() {
+    createProfiler();
     const data = await this._greenFlag();
     this.fill(data);
   }
@@ -206,7 +188,9 @@ export class ScratchResult {
   async _greenFlag() {
     greenFlag();
     await Scratch.ended.promise;
-    await Scratch.simulationEnd.promise;
+    if (this.hasSimulation) {
+      await Scratch.simulationEnd.promise;
+    }
     return {log: logData, blocks: blocks, spritesLog: spritesLog, vm: {}};
   }
 }
