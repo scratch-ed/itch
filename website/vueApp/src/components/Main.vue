@@ -2,25 +2,31 @@
   <div class="main">
     <h1>Scratch 3.0 Judge</h1>
     <hr/>
-    <scratch></scratch>
+    <scratch v-on:scratch-loaded="onShow()"></scratch>
     <hr/>
-    <tests></tests>
-    <hr/>
-    <result></result>
+    <tests v-if="showTests"></tests>
   </div>
 </template>
 <script>
 
 import Scratch from './Scratch'
 import Tests from './Tests'
-import Result from './Result'
 
 export default {
   name: 'Main',
   components: {
     Scratch,
-    Tests,
-    Result
+    Tests
+  },
+  data() {
+    return {
+      showTests: false
+    }
+  },
+  methods: {
+    onShow() {
+      this.showTests = true;
+    }
   }
 }
 </script>

@@ -1,9 +1,12 @@
-function getTimeStamp(startTimestamp) {
+
+let startTimestamp = 0;
+
+function getTimeStamp() {
   let date = new Date();
   return date.getTime() - startTimestamp;
 }
 
-function makeProxiedRenderer(canvas, logData, startTimestamp) {
+function makeProxiedRenderer(canvas, logData) {
   var render = new ScratchRender(canvas);
   console.log("renderer created");
   //penLine

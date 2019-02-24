@@ -2,15 +2,18 @@
 /**
   DO NOT EDIT THIS CODE
 */
+import {Tests} from './tests.js';
+
 let scratch;
-let result;
+let tests = new Tests();
 
 export async function run(_scratch) {
   scratch = _scratch;
-  await prepare();
+  prepare();
   await execute();
-  await evaluate();
-  return result;
+  evaluate();
+  scratch.resetSimulation();
+  return tests;
 }
 
 async function execute() {
@@ -23,7 +26,7 @@ async function execute() {
  * evaluate() :tests the result of the evaluation. See the API for which tests are available.
  */
 
-async function prepare() {
+function prepare() {
 
   scratch.simulation
     .foreach(
@@ -41,11 +44,13 @@ async function prepare() {
   return scratch.setSimulation();
 }
 
-async function evaluate() {
-  if(scratch.sprites.getCostume('Hoofd') === 2) {
-    result = "Correct";
-  }
-  else {
-    result = "Fout";
-  }
+function evaluate() {
+  tests.add(
+    scratch.sprites.getCostume('Hoofd') === 2,
+    "Correct: na 5 keer klikken is het hoofd van de goblin blauw",
+    `Fout: het hoofd moest blauw zijn (kostuum nr 2) maar was kostuum nr ${scratch.sprites.getCostume('Hoofd')}`);
+  tests.add(
+    scratch.allBlocks.containsBlock('looks_nextcostume'),
+    "Correct: het blok 'volgend kostuum' wordt gebruikt",
+    "Fout: het blok 'volgend kostuum' werd niet gebruikt");
 }

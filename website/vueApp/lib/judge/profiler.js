@@ -9,21 +9,16 @@ const Scratch = window.Scratch = window.Scratch || {};
 let executionTime;
 let keyInput;
 let mouseInput;
-let simulation;
 let numberOfRun = 0;
-let startTimestamp;
-let timeStamp;
 
-var logData = {index: 0, lines: [], color: null, points: [], responses: []};
-var blocks = [];
-var vmData;
-var spritesLog = [];
-let events = [];
+let logData = {index: 0, lines: [], color: null, points: [], responses: []};
+let blocks = [];
+let vmData;
+let spritesLog = [];
 let simulationChain = new ScratchSimulationEvent(() => {
 }, 0);
 
 
-//todo: in library steken
 class Future {
   constructor() {
     this.promise = new Promise((resolve, reject) => {
@@ -44,13 +39,12 @@ export function loadFile(e, canvas) {
   reader.readAsArrayBuffer(thisFileInput.files[0]);
 }
 
-function getTimeStamp() {
-  let date = new Date();
-  return date.getTime() - startTimestamp;
-}
-
 class Opcodes {
   constructor() {
+    this.opcodes = {};
+  }
+
+  clear() {
     this.opcodes = {};
   }
 
@@ -82,11 +76,6 @@ function init(file, canvas) {
 
   console.log(vm);
 
-  //Start timer
-  let date = new Date();
-  startTimestamp = date.getTime();
-  console.log("start timestamp:", startTimestamp); //TODO replace this with init event
-
   // Storage
   const storage = new ScratchStorage();
   /* global ScratchStorage */
@@ -94,7 +83,7 @@ function init(file, canvas) {
 
   // Instantiate the renderer and connect it to the VM.
   // const canvas = document.getElementById('scratch-stage');
-  const renderer = new makeProxiedRenderer(canvas, logData, startTimestamp);
+  const renderer = new makeProxiedRenderer(canvas, logData);
   Scratch.renderer = renderer;
   vm.attachRenderer(renderer);
 
@@ -136,11 +125,8 @@ function vmHandleEvents(vm) {
   });
 
   vm.runtime.on('PROJECT_RUN_STOP', () => {
-    //Scratch.opcodes.end();
+    Scratch.opcodes.end();
     console.log(`${getTimeStamp()}: Ended run`);
-
-    //vmData = JSON.parse(JSON.stringify(vm));
-
     Scratch.ended.resolve();
   });
 }
@@ -158,39 +144,27 @@ function createProfiler() {
   let firstState = true;
   Scratch.profiler.onFrame = ({id, selfTime, totalTime, arg}) => {
     if (firstState) {
-      spritesLog.push({block: 'START', sprites: JSON.parse(JSON.stringify(vm.runtime.targets))});
+      spritesLog.push({time:getTimeStamp(), block: 'START', sprites: JSON.parse(JSON.stringify(vm.runtime.targets))});
       firstState = false;
     }
     if (id === blockId) {
-      console.log(`${getTimeStamp()}: ${arg}`);
       Scratch.opcodes.update(arg);
-      spritesLog.push({block: arg, sprites: JSON.parse(JSON.stringify(vm.runtime.targets))});
+      spritesLog.push({time:getTimeStamp(), block: arg, sprites: JSON.parse(JSON.stringify(vm.runtime.targets))});
     }
   };
 }
 
 function greenFlag() {
-  //reset logbook
-  /*logData = {lines:[], color:null, points:[], responses:[]};
-  blocks = [];
-  spritesLog = [];
-  events = [];*/
+
+  //Start timer
+  let date = new Date();
+  startTimestamp = date.getTime();
+  console.log("start timestamp:", startTimestamp);
 
   Scratch.vm.greenFlag();
   Scratch.ended = new Future();
 
   Scratch.simulationEnd = new Future();
-
-  simulation = new Simulation(simulationChain);
-
-  console.log(simulation);
-  simulation.run();
+  new Simulation(simulationChain).run();
 
 }
-
-function clickSprite(sprite) {
-  Scratch.vm.runtime.startHats('event_whenthisspriteclicked', null, sprite);
-}
-
-
-

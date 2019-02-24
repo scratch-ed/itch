@@ -116,10 +116,10 @@ function mergeLines(lines) {
 function pointsAreSquare(points) {
     // only square if there are four unique points
     if (points.length === 4) {
-        p1 = points[0];
-        p2 = points[1];
-        p3 = points[2];
-        p4 = points[3];
+        let p1 = points[0];
+        let p2 = points[1];
+        let p3 = points[2];
+        let p4 = points[3];
 
         const d2 = distSq(p1, p2); //distance squared from p1 to p2
         const d3 = distSq(p1, p3); //distance squared from p1 to p3

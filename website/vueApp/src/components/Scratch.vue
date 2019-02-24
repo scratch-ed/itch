@@ -13,6 +13,7 @@
     methods: {
       processFile(event) {
         this.$judge.loadFile(event, document.getElementById("scratch-stage"));
+        this.$emit('scratch-loaded');
       }
     }
   }
