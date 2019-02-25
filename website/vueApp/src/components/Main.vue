@@ -1,8 +1,11 @@
 <template>
   <div class="main">
-    <h1>Scratch 3.0 Judge</h1>
-    <hr/>
     <b-container>
+      <b-row>
+        <h1>Scratch 3.0 Judge</h1>
+        <hr/>
+      </b-row>
+
       <b-row>
         <b-col>
           <scratch v-on:scratch-loaded="onShow()"></scratch>
@@ -10,10 +13,13 @@
         <b-col>
           <log :testsEnded="testsEnded" :scratch="scratch"></log>
         </b-col>
+        <hr/>
+      </b-row>
+
+      <b-row>
+        <tests :scratch="scratch" v-if="showTests" @test-ended="onEndedTests"></tests>
       </b-row>
     </b-container>
-    <hr/>
-    <tests :scratch="scratch" v-if="showTests" @test-ended="onEndedTests"></tests>
   </div>
 </template>
 

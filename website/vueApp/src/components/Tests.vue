@@ -7,7 +7,7 @@
     </ul>
     <h3>Test results:</h3>
     <div class="results">
-      <div v-if="results.length > 0">{{ numberOfCorrectTests }}/{{ results.length }} tests correct.</div>
+      <div v-if="results.length > 0">{{ numberOfCorrectTests }}/{{ results.length }} tests correct ({{ (numberOfCorrectTests / results.length) * 100}}%).</div>
       <ol>
         <li v-for="result in results" :key="result.id" v-bind:class="[result.correct ? 'correctClass' : 'wrongClass']">
           <div>{{ result.msg }}</div>
@@ -55,7 +55,7 @@
   .correctClass {
     position: relative;
     display: block;
-    padding: .4em .4em .4em 2em;
+    padding: .4em 2em .4em 2em;
     margin: .5em 0;
     background: #93C775;
     color: #000;
@@ -65,7 +65,7 @@
   .wrongClass {
     position: relative;
     display: block;
-    padding: .4em .4em .4em 2em;
+    padding: .4em 2em .4em 2em;
     margin: .5em 0;
     background: #FF3333;
     color: #000;

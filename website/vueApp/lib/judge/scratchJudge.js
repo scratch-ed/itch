@@ -198,6 +198,11 @@ export class ScratchJudge {
     this.fill(data);
   }
 
+  resetSimulation() {
+    simulationChain = new ScratchSimulationEvent(() => {
+    }, 0);
+  }
+
   async _greenFlag() {
     greenFlag();
     await Scratch.ended.promise;
@@ -207,18 +212,7 @@ export class ScratchJudge {
     return {log: logData, blocks: blocks, spritesLog: spritesLog, vm: {}};
   }
 
-  resetLog() {
-    blocks = [];
-    Scratch.opcodes.clear();
 
-    logData = {index: 0, lines: [], color: null, points: [], responses: []};
-    spritesLog = [];
-  }
-
-  resetSimulation() {
-    simulationChain = new ScratchSimulationEvent(() => {
-    }, 0);
-  }
 }
 
 export function getScratch() {

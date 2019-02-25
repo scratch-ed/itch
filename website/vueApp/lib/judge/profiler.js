@@ -30,7 +30,20 @@ class Future {
 
 Scratch.loaded = new Future();
 
+function reset() {
+  numberOfRun = 0;
+
+  blocks = [];
+
+  logData = {index: 0, lines: [], color: null, points: [], responses: []};
+  spritesLog = [];
+
+  simulationChain = new ScratchSimulationEvent(() => {
+  }, 0);
+}
+
 export function loadFile(e, canvas) {
+  reset();
   const reader = new FileReader();
   const thisFileInput = e.target;
   reader.onload = () => {
@@ -41,10 +54,6 @@ export function loadFile(e, canvas) {
 
 class Opcodes {
   constructor() {
-    this.opcodes = {};
-  }
-
-  clear() {
     this.opcodes = {};
   }
 
@@ -59,6 +68,7 @@ class Opcodes {
     for (let arg in this.opcodes) {
       blocks.push({name: arg, executions: this.opcodes[arg]});
     }
+    this.opcodes = {};
   }
 }
 
