@@ -8,6 +8,7 @@ let tests = new Tests();
 
 export async function run(_scratch) {
   scratch = _scratch;
+  tests = new Tests();
   prepare();
   await execute();
   evaluate();

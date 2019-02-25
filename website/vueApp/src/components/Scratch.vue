@@ -11,7 +11,10 @@
       />
       <div class="mt-3">Selected file: {{ file ? file.name : '' }}</div>
     </div>
-    <canvas id="scratch-stage"></canvas>
+    <div v-for="(stage,key) in stages">
+      <canvas :id="stage" v-if="key === index || key === index - 1"></canvas>
+    </div>
+
   </div>
 </template>
 
@@ -20,13 +23,19 @@
     name: 'Scratch',
     data() {
       return {
-        file: null
+        file: null,
+        stages: ['stage0'],
+        index: 0,
+        first: true
       }
     },
     methods: {
       processFile(event) {
-        this.$judge.loadFile(event, document.getElementById("scratch-stage"));
+        this.$judge.loadFile(event, document.getElementById(this.stages[this.index]));
         this.$emit('scratch-loaded');
+        this.index++;
+        this.stages.push('stage'+this.index);
+
       }
     }
   }
