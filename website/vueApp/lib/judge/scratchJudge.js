@@ -73,6 +73,21 @@ class Sprites {
     this.log = spritesLog;
   }
 
+  print() {
+    let res = [];
+    for (let e in this.log) {
+      let event = this.log[e];
+      let spriteList = [];
+      let sprites = event.sprites;
+      for (let s in sprites) {
+        let sprite = sprites[s];
+        spriteList.push({name: sprite.name, x: sprite.x, y: sprite.y, costumeNr: sprite.currentCostume, costumeName: sprite.costume.name, visible: sprite.visible});
+      }
+      res.push({time: event.time, block: event.block, sprites: spriteList});
+    }
+    return res;
+  }
+
   listSprites() {
     return this.data;
   }
@@ -106,7 +121,7 @@ class Sprites {
   }
 
   getCostume(spriteName) {
-    return getSpriteByName(spriteName, this.sprites).currentCostume;
+    return getSpriteByName(spriteName, this.sprites).costume.name;
   }
 
   isVisibleAtStart(spriteName) {
@@ -146,8 +161,6 @@ export class ScratchJudge {
     this.allBlocks = new AllBlocks(data.blocks);
     //this.vm = new Vm(data.vm);
     this.sprites = new Sprites(data.spritesLog);
-    //console.log(this.sprites.sprites);
-
   }
 
   get executionTime() {

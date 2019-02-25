@@ -30,7 +30,7 @@ function prepare() {
 
   scratch.simulation
     .foreach(
-      ['Stage', 'Hoofd', 'Hoofd', 'Goblin', 'Hoofd', 'Hoofd', 'Stage', 'Goblin', 'Hoofd', 'Goblin'],
+      ['Hoofd', 'Hoofd', 'Hoofd', 'Hoofd', 'Hoofd'],
       (index, target, anchor) => {
         return anchor
           .clickTarget(target, 300)
@@ -39,16 +39,16 @@ function prepare() {
     .next(() => {
       console.log("Finished simulation");
       Scratch.simulationEnd.resolve();
-    },0);
+    },200);
 
   return scratch.setSimulation();
 }
 
 function evaluate() {
   tests.add(
-    scratch.sprites.getCostume('Hoofd') === 2,
-    "Correct: na 5 keer klikken is het hoofd van de goblin blauw",
-    `Fout: het hoofd moest blauw zijn (kostuum nr 2) maar was kostuum nr ${scratch.sprites.getCostume('Hoofd')}`);
+    scratch.sprites.getCostume('Hoofd') === 'rood',
+    "Correct: na 5 keer klikken is het hoofd van de goblin rood",
+    `Fout: het hoofd moest rood zijn maar was ${scratch.sprites.getCostume('Hoofd')}`);
   tests.add(
     scratch.allBlocks.containsBlock('looks_nextcostume'),
     "Correct: het blok 'volgend kostuum' wordt gebruikt",

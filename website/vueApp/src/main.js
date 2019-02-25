@@ -3,11 +3,16 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import BootstrapVue from 'bootstrap-vue'
 
 import * as judge from '../lib/judge.min.js'
 Object.defineProperty(Vue.prototype, '$judge', { value: judge });
 
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
+
 Vue.config.productionTip = false;
+Vue.use(BootstrapVue);
 
 /* eslint-disable no-new */
 new Vue({
@@ -15,4 +20,4 @@ new Vue({
   router,
   components: { App },
   template: '<App/>'
-})
+});

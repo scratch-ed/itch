@@ -6,12 +6,14 @@
       </li>
     </ul>
     <h3>Test results:</h3>
-    <div v-if="results.length > 0">{{ numberOfCorrectTests }}/{{ results.length }} tests correct.</div>
-    <ul>
-      <li v-for="result in results" :key="result.id">
-        <div v-bind:class="[result.correct ? 'correctClass' : 'wrongClass']">{{ result.msg }}</div>
-      </li>
-    </ul>
+    <div class="results">
+      <div v-if="results.length > 0">{{ numberOfCorrectTests }}/{{ results.length }} tests correct.</div>
+      <ol>
+        <li v-for="result in results" :key="result.id">
+          <div v-bind:class="[result.correct ? 'correctClass' : 'wrongClass']">{{ result.msg }}</div>
+        </li>
+      </ol>
+    </div>
   </div>
 </template>
 
@@ -29,8 +31,8 @@
     data() {
       return {
         tests: [
-          {key: 0, txt:'Mad hatter test'},
-          {key: 1, txt:'Vierkant test'}
+          {key: 0, txt: 'Mad hatter test'},
+          {key: 1, txt: 'Vierkant test'}
         ],
         results: [],
         numberOfCorrectTests: 0
@@ -42,18 +44,32 @@
         let t = await tests[key].run(scratch);
         this.results = t.tests;
         this.numberOfCorrectTests = t.numberOfCorrectTests;
+        this.$emit('test-ended', scratch.sprites.print());
       }
     }
   }
 </script>
 
 <style lang="css">
-  .correctClass {
-    background-color: green;
+
+  .correctClass li {
+    position: relative;
+    display: block;
+    padding: .4em .4em .4em 2em;
+    margin: .5em 0;
+    background: #93C775;
+    color: #000;
+    border-radius: 10em;
   }
 
-  .wrongClass {
-    background-color: red;
+  .wrongClass li {
+    position: relative;
+    display: block;
+    padding: .4em .4em .4em 2em;
+    margin: .5em 0;
+    background: red;
+    color: #000;
+    border-radius: 10em;
   }
 
 </style>
