@@ -9,8 +9,8 @@
     <div class="results">
       <div v-if="results.length > 0">{{ numberOfCorrectTests }}/{{ results.length }} tests correct.</div>
       <ol>
-        <li v-for="result in results" :key="result.id">
-          <div v-bind:class="[result.correct ? 'correctClass' : 'wrongClass']">{{ result.msg }}</div>
+        <li v-for="result in results" :key="result.id" v-bind:class="[result.correct ? 'correctClass' : 'wrongClass']">
+          <div>{{ result.msg }}</div>
         </li>
       </ol>
     </div>
@@ -50,9 +50,9 @@
   }
 </script>
 
-<style lang="css">
+<style>
 
-  .correctClass li {
+  .correctClass {
     position: relative;
     display: block;
     padding: .4em .4em .4em 2em;
@@ -62,12 +62,12 @@
     border-radius: 10em;
   }
 
-  .wrongClass li {
+  .wrongClass {
     position: relative;
     display: block;
     padding: .4em .4em .4em 2em;
     margin: .5em 0;
-    background: red;
+    background: #FF3333;
     color: #000;
     border-radius: 10em;
   }
