@@ -201,6 +201,9 @@ export class ScratchJudge {
   resetSimulation() {
     simulationChain = new ScratchSimulationEvent(() => {
     }, 0);
+    this.hasSimulation = false;
+    this.simulation = new ScratchSimulationEvent(() => {
+    }, 0);
   }
 
   async _greenFlag() {
@@ -208,6 +211,7 @@ export class ScratchJudge {
     await Scratch.ended.promise;
     if (this.hasSimulation) {
       await Scratch.simulationEnd.promise;
+      this.resetSimulation();
     }
     return {log: logData, blocks: blocks, spritesLog: spritesLog, vm: {}};
   }

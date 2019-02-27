@@ -13,7 +13,6 @@ export async function run(_scratch) {
   prepare();
   await execute();
   evaluate();
-  scratch.resetSimulation();
   return tests;
 }
 
@@ -37,10 +36,7 @@ function prepare() {
           .clickTarget(target, 300)
       }
     )
-    .next(() => {
-      console.log("Finished simulation");
-      Scratch.simulationEnd.resolve();
-    },200);
+    .end()
 
   return scratch.setSimulation();
 }

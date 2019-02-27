@@ -19,20 +19,23 @@ class ScratchSimulationEvent extends SimulationEvent {
 
   }
 
-  stopSimulation(delay = 0) {
-
+  pressKey(key, delay = 0) {
     return this.next(() => {
+      console.log(`press ${key}`);
+      let data = {key: key, isDown: true};
+      this.environment.vm.runtime.ioDevices.keyboard.postData(data);
+    }, delay);
+  }
 
-      console.log('stop Scratch');
-
+  end() {
+    return this.next(() => {
+      console.log("Finished simulation");
+      Scratch.ended.resolve();
+      Scratch.simulationEnd.resolve();
       // stop all Scratch processes
       Scratch.vm.stopAll();
-
-      // ???
       process.nextTick(process.exit);
-
-    }, delay);
-
+    }, 200);
   }
 
   evaluate(action, delay = 0) {
