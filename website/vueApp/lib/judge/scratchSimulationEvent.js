@@ -23,7 +23,7 @@ class ScratchSimulationEvent extends SimulationEvent {
     return this.next(() => {
       console.log(`press ${key}`);
       let data = {key: key, isDown: true};
-      this.environment.vm.runtime.ioDevices.keyboard.postData(data);
+      Scratch.vm.runtime.ioDevices.keyboard.postData(data);
     }, delay);
   }
 
@@ -34,7 +34,6 @@ class ScratchSimulationEvent extends SimulationEvent {
       Scratch.simulationEnd.resolve();
       // stop all Scratch processes
       Scratch.vm.stopAll();
-      process.nextTick(process.exit);
     }, 200);
   }
 

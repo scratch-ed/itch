@@ -81,7 +81,7 @@ class Sprites {
       let sprites = event.sprites;
       for (let s in sprites) {
         let sprite = sprites[s];
-        spriteList.push({name: sprite.name, x: sprite.x, y: sprite.y, costumeNr: sprite.currentCostume, costumeName: sprite.costume.name, visible: sprite.visible});
+        spriteList.push({name: sprite.name, x: Math.round(sprite.x * 100) / 100, y: Math.round(sprite.y * 100) / 100, costumeNr: sprite.currentCostume, costumeName: sprite.costume.name, visible: sprite.visible});
       }
       res.push({time: event.time, block: event.block, sprites: spriteList});
     }

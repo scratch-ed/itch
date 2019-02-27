@@ -81,7 +81,7 @@ function init(file, canvas) {
   const vm = new VirtualMachine();
   Scratch.vm = vm;
 
-  vm.setTurboMode(true);
+  //vm.setTurboMode(true);
   vm.loadProject(file);
 
   console.log(vm);

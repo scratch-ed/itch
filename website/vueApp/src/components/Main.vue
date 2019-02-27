@@ -11,13 +11,13 @@
           <scratch v-on:scratch-loaded="onShow()"></scratch>
         </b-col>
         <b-col>
-          <log :testsEnded="testsEnded" :scratch="scratch"></log>
+          <tests :scratch="scratch" v-if="showTests" @test-ended="onEndedTests"></tests>
         </b-col>
         <hr/>
       </b-row>
 
       <b-row>
-        <tests :scratch="scratch" v-if="showTests" @test-ended="onEndedTests"></tests>
+        <log :testsEnded="testsEnded" :scratch="scratch"></log>
       </b-row>
     </b-container>
   </div>

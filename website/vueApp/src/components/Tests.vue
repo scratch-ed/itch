@@ -1,15 +1,17 @@
 <template>
   <div class="tests">
-    <ul>
-      <li v-for="test in tests" :key="test.key">
-        <button v-on:click="startTest(test.key)">Start test: {{test.txt}}</button>
-      </li>
-    </ul>
-    <h3>Test results:</h3>
+    <b-list-group>
+      <b-list-group-item v-for="(value, key) in tests" :key="key" button v-on:click="startTest(key)">
+        Start test: {{value}}
+      </b-list-group-item>
+    </b-list-group>
     <div class="results">
-      <div v-if="results.length > 0">{{ numberOfCorrectTests }}/{{ results.length }} tests correct ({{ (numberOfCorrectTests / results.length) * 100}}%).</div>
+      <div v-if="results.length > 0">{{ numberOfCorrectTests }}/{{ results.length }} tests correct ({{
+        (numberOfCorrectTests / results.length) * 100}}%).
+      </div>
       <ol>
-        <li v-for="result in results" :key="result.id" v-bind:class="[result.correct ? 'correctClass' : 'wrongClass']">
+        <li v-for="result in results" :key="result.id"
+            v-bind:class="[result.correct ? 'correctClass' : 'wrongClass']">
           <div>{{ result.msg }}</div>
         </li>
       </ol>
@@ -20,19 +22,24 @@
 <script>
   import * as madHatter from '../../test/mad-hatter'
   import * as vierkant from '../../test/vierkant'
-
+  import * as moveUntilSpace from '../../test/moveUntilSpace'
+  import * as costumeOnSpace from '../../test/costumeOnSpace'
   const tests = [
     madHatter,
-    vierkant
+    vierkant,
+    moveUntilSpace,
+    costumeOnSpace
   ];
-
   export default {
     name: 'Tests',
+    props: ['scratchJudge'],
     data() {
       return {
         tests: [
-          {key: 0, txt: 'Mad hatter test'},
-          {key: 1, txt: 'Vierkant test'}
+          'Mad hatter test',
+          'Vierkant test',
+          'Move until space test',
+          'Costume change test'
         ],
         results: [],
         numberOfCorrectTests: 0
