@@ -41,7 +41,7 @@ function prepare() {
 
 function evaluate() {
   tests.add(
-    scratch.allBlocks.containsBlock('looks_nextcostume'),
+    scratch.blocks.containsBlock('looks_nextcostume'),
     "Correct: het blok 'volgend kostuum' wordt gebruikt",
     "Fout: het blok 'volgend kostuum' werd niet gebruikt");
 }

@@ -12,7 +12,7 @@ let mouseInput;
 let numberOfRun = 0;
 
 let logData = {index: 0, lines: [], color: null, points: [], responses: []};
-let blocks = [];
+let blockLog = {};
 let vmData;
 let spritesLog = [];
 let simulationChain = new ScratchSimulationEvent(() => {
@@ -32,12 +32,9 @@ Scratch.loaded = new Future();
 
 function reset() {
   numberOfRun = 0;
-
-  blocks = [];
-
+  blockLog = [];
   logData = {index: 0, lines: [], color: null, points: [], responses: []};
   spritesLog = [];
-
   simulationChain = new ScratchSimulationEvent(() => {
   }, 0);
 }
@@ -62,12 +59,10 @@ class Opcodes {
       this.opcodes[arg] = 0;
     }
     this.opcodes[arg]++;
+    blockLog = this.opcodes;
   }
 
   end() {
-    for (let arg in this.opcodes) {
-      blocks.push({name: arg, executions: this.opcodes[arg]});
-    }
     this.opcodes = {};
   }
 }
@@ -137,7 +132,7 @@ function vmHandleEvents(vm) {
   vm.runtime.on('PROJECT_RUN_STOP', () => {
     Scratch.opcodes.end();
     console.log(`${getTimeStamp()}: Ended run`);
-    Scratch.ended.resolve();
+    Scratch.executionEnd.resolve();
   });
 }
 
@@ -147,7 +142,7 @@ function createProfiler() {
   vm.runtime.enableProfiling();
   Scratch.profiler = vm.runtime.profiler;
 
-  const stepId = Scratch.profiler.idByName('Runtime._step');
+  //const stepId = Scratch.profiler.idByName('Runtime._step');
   const blockId = Scratch.profiler.idByName('blockFunction');
 
   Scratch.opcodes = new Opcodes();
@@ -171,7 +166,7 @@ function greenFlag() {
   startTimestamp = date.getTime();
   console.log("start timestamp:", startTimestamp);
 
-  Scratch.ended = new Future();
+  Scratch.executionEnd = new Future();
   Scratch.vm.greenFlag();
 
   Scratch.simulationEnd = new Future();

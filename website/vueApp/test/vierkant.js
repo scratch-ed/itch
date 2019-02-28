@@ -35,15 +35,15 @@ function evaluate() {
     "Correct: Er is exact 1 vierkant getekend",
     `Fout: Er werden ${scratch.playground.squares.length} vierkant(en) getekend`);
   tests.add(
-    scratch.allBlocks.containsLoop(),
+    scratch.blocks.containsLoop(),
     "Correct: Er wordt een herhalingslus gebruikt",
     "Fout: Er wordt geen herhalingslus gebruikt");
   tests.add(
-    scratch.allBlocks.numberOfExecutions('control_repeat') > 2,
+    scratch.blocks.numberOfExecutions('control_repeat') > 2,
     "Correct: De code in de herhalingslus wordt minstens 2 keer herhaald",
-    `Fout: De code in de herhalingslus wordt ${scratch.allBlocks.numberOfExecutions('control_repeat')} keer herhaald`);
+    `Fout: De code in de herhalingslus wordt ${scratch.blocks.numberOfExecutions('control_repeat')} keer herhaald`);
   tests.add(
-    scratch.allBlocks.containsBlock('pen_penDown'),
+    scratch.blocks.containsBlock('pen_penDown'),
     "Correct: Er wordt een pen_down blok gebruikt",
     "Fout: Er wordt geen pen_down blok gebruikt");
 }

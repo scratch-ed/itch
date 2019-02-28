@@ -30,10 +30,12 @@ class ScratchSimulationEvent extends SimulationEvent {
 
     return this.next(() => {
       console.log("Finished simulation");
-      Scratch.ended.resolve();
-      Scratch.simulationEnd.resolve();
       // stop all Scratch processes
       Scratch.vm.stopAll();
+
+      Scratch.executionEnd.resolve();
+      Scratch.simulationEnd.resolve();
+
     }, delay);
 
   }

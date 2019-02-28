@@ -47,7 +47,7 @@ function evaluate() {
     "Correct: na 5 keer klikken is het hoofd van de goblin rood",
     `Fout: het hoofd moest rood zijn maar was ${scratch.sprites.getCostume('Hoofd')}`);
   tests.add(
-    scratch.allBlocks.containsBlock('looks_nextcostume'),
+    scratch.blocks.containsBlock('looks_nextcostume'),
     "Correct: het blok 'volgend kostuum' wordt gebruikt",
     "Fout: het blok 'volgend kostuum' werd niet gebruikt");
 }

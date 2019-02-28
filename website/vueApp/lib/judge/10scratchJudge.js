@@ -39,14 +39,6 @@ class AllBlocks {
     this.blocks = blocks;
   }
 
-  get blocks() {
-    return this._blocks;
-  }
-
-  set blocks(value) {
-    this._blocks = value;
-  }
-
   containsLoop() {
     return containsLoop(this.blocks);
   }
@@ -152,6 +144,11 @@ export class ScratchJudge {
     this.simulation = new ScratchSimulationEvent(() => {
     }, 0);
     this.hasSimulation = false;
+
+    this.log = {};
+    this.blocks = {};
+    this.playground = {};
+    this.sprites = {};
   }
 
   fill(data) {
@@ -159,7 +156,6 @@ export class ScratchJudge {
     this.log = data.log;
     this.playground = new Playground(data.log);
     this.blocks = new AllBlocks(data.blocks);
-    //this.vm = new Vm(data.vm);
     this.sprites = new Sprites(data.spritesLog);
   }
 
@@ -192,12 +188,6 @@ export class ScratchJudge {
     this.hasSimulation = true;
   }
 
-  async clickGreenFlag() {
-    createProfiler();
-    const data = await this._greenFlag();
-    this.fill(data);
-  }
-
   resetSimulation() {
     simulationChain = new ScratchSimulationEvent(() => {
     }, 0);
@@ -206,16 +196,16 @@ export class ScratchJudge {
     }, 0);
   }
 
-  async _greenFlag() {
+  async clickGreenFlag() {
+    createProfiler();
     greenFlag();
-    await Scratch.ended.promise;
+    await Scratch.executionEnd.promise;
     if (this.hasSimulation) {
       await Scratch.simulationEnd.promise;
       this.resetSimulation();
     }
-    return {log: logData, blocks: blocks, spritesLog: spritesLog, vm: {}};
+    this.fill({log: logData, blocks: blockLog, spritesLog: spritesLog, vm: {}});
   }
-
 
 }
 
