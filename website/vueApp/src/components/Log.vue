@@ -1,6 +1,6 @@
 <template>
   <div class="log" v-if="testsEnded">
-    <button v-on:click="onToggle(showLog)">{{ showBtnName }}</button>
+    <b-button variant="info" v-on:click="onToggle(showLog)">{{ showBtnName }}</b-button>
     <div v-if="showLog">
       <b-container>
         <b-row>
