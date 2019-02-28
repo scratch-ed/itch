@@ -187,7 +187,7 @@ export class ScratchJudge {
     this._mouseInput = value;
   }
 
-  async setSimulation() {
+  setSimulation() {
     simulationChain = this.simulation;
     this.hasSimulation = true;
   }

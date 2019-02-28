@@ -2,7 +2,7 @@
 /**
   DO NOT EDIT THIS CODE
 */
-import {Tests} from './tests.js';
+import {Tests} from './lib/tests.js';
 
 let scratch;
 let tests = new Tests();
@@ -30,15 +30,15 @@ function prepare() {
 
   scratch.simulation
     .foreach(
-      ['Hoofd', 'Hoofd', 'Hoofd', 'Hoofd', 'Hoofd'],
+      ['Hoofd', 'Stage', 'Stage', 'Hoofd', 'Hoofd', 'Hoofd', 'Hoofd'],
       (index, target, anchor) => {
         return anchor
           .clickTarget(target, 300)
       }
     )
-    .end()
+    .end();
 
-  return scratch.setSimulation();
+  scratch.setSimulation();
 }
 
 function evaluate() {

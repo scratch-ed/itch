@@ -1,7 +1,7 @@
 /**
  DO NOT EDIT THIS CODE
  */
-import {Tests} from './tests.js';
+import {Tests} from './lib/tests.js';
 
 let scratch;
 let tests = new Tests();

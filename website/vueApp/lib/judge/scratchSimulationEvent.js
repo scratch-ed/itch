@@ -9,32 +9,33 @@ class ScratchSimulationEvent extends SimulationEvent {
 
       // simulate mouse click by explicitly triggering click event on
       // the target
-      Scratch.vm.runtime.startHats('event_whenthisspriteclicked', null, _target);
-
-      // debug
-      // let _hoofd = Scratch.vm.runtime.getSpriteTargetByName("Hoofd");
-      // console.log("Current costume of Hoofd: ",_hoofd.currentCostume);
-
+      if(target !== 'Stage'){
+        Scratch.vm.runtime.startHats('event_whenthisspriteclicked', null, _target);
+      }
     }, delay);
 
   }
 
   pressKey(key, delay = 0) {
+
     return this.next(() => {
       console.log(`press ${key}`);
       let data = {key: key, isDown: true};
       Scratch.vm.runtime.ioDevices.keyboard.postData(data);
     }, delay);
-  }
 
-  end() {
+  }
+git a
+  end(delay = 200) {
+
     return this.next(() => {
       console.log("Finished simulation");
       Scratch.ended.resolve();
       Scratch.simulationEnd.resolve();
       // stop all Scratch processes
       Scratch.vm.stopAll();
-    }, 200);
+    }, delay);
+
   }
 
   evaluate(action, delay = 0) {

@@ -2,7 +2,7 @@
 /**
  DO NOT EDIT THIS CODE
  */
-import {Tests} from './tests.js';
+import {Tests} from './lib/tests.js';
 
 let scratch;
 let tests = new Tests();
@@ -30,15 +30,13 @@ async function execute() {
 
 function prepare() {
 
-  console.log(scratch);
-
   scratch.simulation
     .pressKey(' ',1000)
     .pressKey(' ',500)
     .pressKey(' ',1000)
     .end();
 
-  return scratch.setSimulation();
+  scratch.setSimulation();
 }
 
 function evaluate() {

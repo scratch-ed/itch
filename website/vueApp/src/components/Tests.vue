@@ -24,12 +24,16 @@
   import * as vierkant from '../../test/vierkant'
   import * as moveUntilSpace from '../../test/moveUntilSpace'
   import * as costumeOnSpace from '../../test/costumeOnSpace'
+  import * as papegaai from '../../test/papegaai'
+
   const tests = [
     madHatter,
     vierkant,
     moveUntilSpace,
-    costumeOnSpace
+    costumeOnSpace,
+    papegaai
   ];
+
   export default {
     name: 'Tests',
     props: ['scratchJudge'],
@@ -39,7 +43,8 @@
           'Mad hatter test',
           'Vierkant test',
           'Move until space test',
-          'Costume change test'
+          'Costume change test',
+          'Papegaai test'
         ],
         results: [],
         numberOfCorrectTests: 0

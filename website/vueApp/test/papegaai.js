@@ -31,8 +31,8 @@ async function execute() {
 function prepare() {
 
   scratch.simulation
-    .pressKey(' ',3000)
-    .end();
+    .clickTarget('Papegaai')
+    .end(8000);
 
   scratch.setSimulation();
 }
