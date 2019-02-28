@@ -30,7 +30,7 @@ function prepare() {
 
   scratch.simulation
     .foreach(
-      ['Hoofd', 'Stage', 'Stage', 'Hoofd', 'Hoofd', 'Hoofd', 'Hoofd'],
+      ['Hoofd', 'Stage', 'Goblin', 'Hoofd', 'Hoofd', 'Hoofd', 'Hoofd'],
       (index, target, anchor) => {
         return anchor
           .clickTarget(target, 300)
