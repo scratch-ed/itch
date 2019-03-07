@@ -1,2 +1,11 @@
 navigating to url:  /home/nils/Thesis/scratch4d-judge/judge-scratch/scratch/scratch-test-environment.html
 sourcefile /home/nils/Thesis/scratch4d-judge/judge-scratch/source/sourceFile.sb3
+{ tests:
+   [ { id: 0,
+       correct: true,
+       msg: 'Correct: na 5 keer klikken is het hoofd van de goblin rood' },
+     { id: 1,
+       correct: true,
+       msg: "Correct: het blok 'volgend kostuum' wordt gebruikt" } ],
+  id: 2,
+  numberOfCorrectTests: 2 }

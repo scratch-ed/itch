@@ -99,13 +99,11 @@ class Judge {
         console.log("sourcefile", sourceFile);
         await chromeless.setFileInput('#file', sourceFile);
 
-        await chromeless.evaluate(() => {
-            return Scratch.loadedEnd.promise;
+        let output = await chromeless.evaluate(() => {
+            return runTests();
         });
 
-        let output = await chromeless.evaluate(() => {
-            runTests();
-        });
+        await chromeless.end();
 
         console.log(output);
     }

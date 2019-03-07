@@ -1,6 +1,5 @@
 
-
-export class Tests {
+class Tests {
   constructor() {
     this.tests = [];
     this.id = 0;

@@ -219,9 +219,15 @@ class ScratchJudge {
 const scratch = new ScratchJudge();
 
 async function runTests() {
-    tests = new Tests();
+    //wait until Scratch project is fully loaded.
+    await Scratch.loadedEnd.promise;
+    //Execute the prepare function from the evaluation file to create events
     prepare();
+    //Execute the scratch project
     await scratch.clickGreenFlag();
-    evaluate();
+    //Create new test object
+    let tests = new Tests();
+    evaluate(tests);
+    console.log(tests);
     return tests;
 }
