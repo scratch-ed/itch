@@ -11,8 +11,8 @@ const sourceFile = path.resolve(__dirname, 'source/sourceFile.sb3');
 // display utilities
 //const utils = require("./utils.js");
 
-// chromeless
-const { Chromeless } = require('chromeless');
+// puppeteer
+const puppeteer = require('puppeteer');
 
 // Dodona types
 const {Message, Submission, Tab, Context, TestCase, Test} = require("./dodona.js");
@@ -91,19 +91,30 @@ class Judge {
 
     async run() {
 
-        const chromeless = new Chromeless();
+        const browser = await puppeteer.launch({headless: false});
+        const page = await browser.newPage();
+        page.on('console', msg => {
+            let text = msg.text();
+            let sub = text.substr(0, 6);
+            if (sub === 'dodona') {
+                console.log(text.substr(7));
+            } else {
+                console.debug('PAGE LOG:', text);
+            }
+        });
 
-        console.log("navigating to url: ", url);
-        await chromeless.goto(`file://${url}`);
+        await page.goto(`file://${url}`);
 
-        console.log("sourcefile", sourceFile);
-        await chromeless.setFileInput('#file', sourceFile);
+        const fileHandle = await page.$('#file');
+        await fileHandle.uploadFile(sourceFile);
 
-        let output = await chromeless.evaluate(() => {
+        await page.waitFor(100);
+
+        let output = await page.evaluate(() => {
             return runTests();
         });
 
-        await chromeless.end();
+        //await browser.close();
 
         console.log(output);
     }

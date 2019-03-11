@@ -1,16 +1,16 @@
 class ScratchSimulationEvent extends SimulationEvent {
 
-  clickTarget(target, delay = 0) {
+  clickSprite(spriteName, delay = 0) {
 
     return this.next(() => {
-      console.log(`click ${target}`);
+      console.log(`click ${spriteName}`);
       // fetch the target
-      let _target = Scratch.vm.runtime.getSpriteTargetByName(target);
+      let _sprite = Scratch.vm.runtime.getSpriteTargetByName(spriteName);
 
       // simulate mouse click by explicitly triggering click event on
       // the target
-      if(target !== 'Stage'){
-        Scratch.vm.runtime.startHats('event_whenthisspriteclicked', null, _target);
+      if(spriteName !== 'Stage'){
+        Scratch.vm.runtime.startHats('event_whenthisspriteclicked', null, _sprite);
       }
     }, delay);
 
@@ -24,6 +24,26 @@ class ScratchSimulationEvent extends SimulationEvent {
       Scratch.vm.runtime.ioDevices.keyboard.postData(data);
     }, delay);
 
+  }
+
+  testCostume(spriteName, correctCostumeName, delay = 50) {
+      return this.next(() => {
+          let _sprite = Scratch.vm.runtime.getSpriteTargetByName(spriteName);
+          if (_sprite) {
+              let costumeNr = _sprite.currentCostume;
+              let costumeName = _sprite.sprite.costumes_[costumeNr].name;
+
+              if (costumeName === correctCostumeName) {
+                  console.log('dodona', `Correct: de sprite heeft het kostuum: ${costumeName}`);
+              } else {
+                  console.log('dodona', `Fout: de sprite heeft het kostuum: ${costumeName}, maar moest het kostuum: ${correctCostumeName} hebben.`);
+              }
+          }
+          else {
+            console.log('error: no sprite found');
+          }
+
+      }, delay);
   }
 
   end(delay = 200) {

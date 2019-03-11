@@ -1,2 +1,2 @@
 #!/bin/bash
-./run < runconfig.json > out 2>&1
+./run < runconfig.json

@@ -1,11 +1,8 @@
 navigating to url:  /home/nils/Thesis/scratch4d-judge/judge-scratch/scratch/scratch-test-environment.html
 sourcefile /home/nils/Thesis/scratch4d-judge/judge-scratch/source/sourceFile.sb3
-{ tests:
-   [ { id: 0,
-       correct: true,
-       msg: 'Correct: na 5 keer klikken is het hoofd van de goblin rood' },
-     { id: 1,
-       correct: true,
-       msg: "Correct: het blok 'volgend kostuum' wordt gebruikt" } ],
-  id: 2,
-  numberOfCorrectTests: 2 }
+fileHandle:  Promise { <pending> }
+(node:16949) UnhandledPromiseRejectionWarning: TypeError: fileHandle.uploadFile is not a function
+    at Judge.run (/home/nils/Thesis/scratch4d-judge/judge-scratch/judge.js:104:26)
+    at processTicksAndRejections (internal/process/next_tick.js:81:5)
+(node:16949) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). (rejection id: 1)
+(node:16949) [DEP0018] DeprecationWarning: Unhandled promise rejections are deprecated. In the future, promise rejections that are not handled will terminate the Node.js process with a non-zero exit code.
