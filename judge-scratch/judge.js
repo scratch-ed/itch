@@ -97,13 +97,57 @@ class Judge {
             let text = msg.text();
             let sub = text.substr(0, 6);
             if (sub === 'dodona') {
-                console.log(text.substr(7));
+                //console.log(text.substr(7));
             } else {
-                console.debug('PAGE LOG:', text);
+                //console.debug('PAGE LOG:', text);
             }
         });
 
         await page.goto(`file://${url}`);
+
+        await page.exposeFunction('appendMessage', (message) => {
+            let out = {command: "append-message", message: message};
+            console.log(JSON.stringify(out));
+        });
+        await page.exposeFunction('annotate', (row, column, text) => {
+            let out = {command: "annotate", row: row, column: column, text: text};
+            console.log(JSON.stringify(out));
+        });
+        await page.exposeFunction('startTab', (title) => {
+            let out = {command: "start-tab", title: title};
+            console.log(JSON.stringify(out));
+        });
+        await page.exposeFunction('startContext', () => {
+            let out = {command: "start-context"};
+            console.log(JSON.stringify(out));
+        });
+        await page.exposeFunction('startTestcase', (description) => {
+            let out = {command: "start-testcase", description: description};
+            console.log(JSON.stringify(out));
+        });
+        await page.exposeFunction('startTest', (expected) => {
+            let out = {command: "start-test", expected: expected};
+            console.log(JSON.stringify(out));
+        });
+        await page.exposeFunction('closeTest', (generated, status) => {
+            let out = {command: "close-test", generated: generated, status: status};
+            console.log(JSON.stringify(out));
+        });
+        await page.exposeFunction('closeTestcase', () => {
+            let out = {command: "start-testcase"};
+            console.log(JSON.stringify(out));
+        });
+        await page.exposeFunction('closeContext', () => {
+            let out = {command: "close-context"};
+            console.log(JSON.stringify(out));
+        });
+        await page.exposeFunction('closeTab', () => {
+            let out = {command: "close-tab"};
+            console.log(JSON.stringify(out));
+        });
+
+        // START JUDGE
+        console.log(JSON.stringify({command: "start-judgement"}));
 
         const fileHandle = await page.$('#file');
         await fileHandle.uploadFile(sourceFile);
@@ -116,7 +160,8 @@ class Judge {
 
         //await browser.close();
 
-        console.log(output);
+        // END JUDGE
+        console.log(JSON.stringify({command: "close-judgement"}))
     }
 }
 

@@ -28,20 +28,31 @@ class ScratchSimulationEvent extends SimulationEvent {
 
     testCostume(spriteName, correctCostumeName, delay = 50) {
         return this.next(() => {
+
+            window.startTestcase('juiste kostuum');
+            window.startTest(correctCostumeName);
+            window.appendMessage(`Het kostuum van sprite ${spriteName} moet ${correctCostumeName} zijn.`);
+
+            let status;
+            let costumeName = "";
+
             let _sprite = Scratch.vm.runtime.getSpriteTargetByName(spriteName);
             if (_sprite) {
                 let costumeNr = _sprite.currentCostume;
-                let costumeName = _sprite.sprite.costumes_[costumeNr].name;
+                costumeName = _sprite.sprite.costumes_[costumeNr].name;
 
                 if (costumeName === correctCostumeName) {
-                    console.log('dodona', `Correct: de sprite heeft het kostuum: ${costumeName}`);
+                    status = {enum: 'correct', human: 'Correct'};
                 } else {
-                    console.log('dodona', `Fout: de sprite heeft het kostuum: ${costumeName}, maar moest het kostuum: ${correctCostumeName} hebben.`);
+                    status = {enum: 'wrong', human: 'Fout'};
                 }
             }
             else {
-                console.log('error: no sprite found');
+                status = {enum: 'runtime error', human: `Geen kostuum gevonden met als naam: ${spriteName} in testCostume`}
             }
+
+            window.closeTest(costumeName, status);
+            window.closeTestcase();
 
         }, delay);
     }

@@ -2,6 +2,8 @@
 
 function prepare() {
 
+    window.startTab('Resultaat');
+
     scratch.simulation
         .clickSprite('Hoofd', 300)
         .testCostume('Hoofd', 'blauw')
@@ -20,16 +22,36 @@ function prepare() {
     scratch.setSimulation();
 }
 
-function evaluate(tests) {
+function evaluate() {
+    let status;
 
-    console.log('dodona', 'some dodona format test here');
+    // Test kostuum na uitvoering
+    window.startTestcase('juiste kostuum');
+    window.startTest('blauw');
+    window.appendMessage("Na 5 keer klikken op het hoofd van de goblin is het hoofd blauw");
 
-    tests.add(
-        scratch.sprites.getCostume('Hoofd') === 'blauw',
-        "Correct: na 5 keer klikken is het hoofd van de goblin rood",
-        `Fout: het hoofd moest rood zijn maar was ${scratch.sprites.getCostume('Hoofd')}`);
-    tests.add(
-        scratch.blocks.containsBlock('looks_nextcostume'),
-        "Correct: het blok 'volgend kostuum' wordt gebruikt",
-        "Fout: het blok 'volgend kostuum' werd niet gebruikt");
+    if (scratch.sprites.getCostume('Hoofd') === 'blauw') {
+        status = {enum: 'correct', human: 'Correct'};
+    } else {
+        status = {enum: 'wrong', human: 'Fout'};
+    }
+    window.closeTest(scratch.sprites.getCostume('Hoofd'), status);
+    window.closeTestcase();
+
+
+    window.closeTab();
+    window.startTab('Code');
+    window.startContext();
+
+    window.startTestcase('Juiste blokken gebruikt');
+    window.startTest('true');
+    window.appendMessage("Het blok 'volgend kostuum' wordt gebruikt");
+
+    if (scratch.blocks.containsBlock('looks_nextcostume')) {
+        status = {enum: 'correct', human: 'Correct'};
+    } else {
+        status = {enum: 'wrong', human: 'Fout'};
+    }
+    window.closeTest(scratch.blocks.containsBlock('looks_nextcostume'), status);
+    window.closeTestcase();
 }
