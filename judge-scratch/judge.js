@@ -3,25 +3,18 @@
 
 const path = require('path');
 const url = path.resolve(__dirname, 'scratch/scratch-test-environment.html');
+
 const sourceFile = path.resolve(__dirname, 'source/sourceFile.sb3');
+const testFile = path.resolve(__dirname, 'tests/test.js');
 
-// sandboxing
-//const vm = require("vm");
-
-// display utilities
-//const utils = require("./utils.js");
+const DEBUG = false;
 
 // puppeteer
 const puppeteer = require('puppeteer');
 
-// Dodona types
+// Dodona types for formatting
 const {Message, Submission, Tab, Context, TestCase, Test} = require("./dodona.js");
 
-//
-// new message types
-// TODO: these types should get native Dodona-support to avoid HTML with
-//       Bootstrap dependencies in feedback JSON
-//
 
 // display message as a banner (crossing the entire width of the feedback table)
 // NOTE: banner gets color coded based on the status (success, danger, ...)
@@ -84,24 +77,24 @@ class Judge {
         // extract options
         this.time_limit = options.time_limit || 10000;
 
-        // create new submission
-        // this.feedback = new Submission();
+        this.test_file = testFile;
 
     }
 
     async run() {
 
-        const browser = await puppeteer.launch({headless: false});
+        let browser;
+        if (DEBUG) {
+            browser = await puppeteer.launch({headless: false});
+        } else {
+            browser = await puppeteer.launch();
+        }
+
         const page = await browser.newPage();
-        page.on('console', msg => {
-            let text = msg.text();
-            let sub = text.substr(0, 6);
-            if (sub === 'dodona') {
-                //console.log(text.substr(7));
-            } else {
-                //console.debug('PAGE LOG:', text);
-            }
-        });
+
+        if (DEBUG) {
+            page.on('console', msg => console.debug('PAGE LOG:', msg.text()));
+        }
 
         await page.goto(`file://${url}`);
 
@@ -145,6 +138,8 @@ class Judge {
             let out = {command: "close-tab"};
             console.log(JSON.stringify(out));
         });
+
+        await page.addScriptTag({url: testFile});
 
         // START JUDGE
         console.log(JSON.stringify({command: "start-judgement"}));
