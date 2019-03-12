@@ -223,14 +223,11 @@ async function runTests() {
     await Scratch.loadedEnd.promise;
     //Execute the prepare function from the evaluation file to create events
     prepare();
-    window.startContext();
     //Execute the scratch project
     await scratch.clickGreenFlag();
-    //Create new test object
     window.closeContext();
+    //Create new test context for tests after the execution
     window.startContext();
     evaluate();
-    window.closeContext();
-    window.closeTab();
     return true;
 }

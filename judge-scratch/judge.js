@@ -126,15 +126,15 @@ class Judge {
             console.log(JSON.stringify(out));
         });
         await page.exposeFunction('startTest', (expected) => {
-            let out = {command: "start-test", expected: expected};
+            let out = {command: "start-test", expected: expected.toString()};
             console.log(JSON.stringify(out));
         });
         await page.exposeFunction('closeTest', (generated, status) => {
-            let out = {command: "close-test", generated: generated, status: status};
+            let out = {command: "close-test", generated: generated.toString(), status: status};
             console.log(JSON.stringify(out));
         });
         await page.exposeFunction('closeTestcase', () => {
-            let out = {command: "start-testcase"};
+            let out = {command: "close-testcase"};
             console.log(JSON.stringify(out));
         });
         await page.exposeFunction('closeContext', () => {
@@ -158,7 +158,7 @@ class Judge {
             return runTests();
         });
 
-        //await browser.close();
+        await browser.close();
 
         // END JUDGE
         console.log(JSON.stringify({command: "close-judgement"}))

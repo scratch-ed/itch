@@ -2,7 +2,7 @@
 
 function prepare() {
 
-    window.startTab('Resultaat');
+    startTab('Resultaat');
 
     scratch.simulation
         .clickSprite('Hoofd', 300)
@@ -23,35 +23,13 @@ function prepare() {
 }
 
 function evaluate() {
-    let status;
 
-    // Test kostuum na uitvoering
-    window.startTestcase('juiste kostuum');
-    window.startTest('blauw');
-    window.appendMessage("Na 5 keer klikken op het hoofd van de goblin is het hoofd blauw");
+    addTest('Kleur van kostuum', 'blauw', scratch.sprites.getCostume('Hoofd'), 'Na 4 keer klikken op het hoofd van de goblin is het hoofd blauw');
+    closeTab();
 
-    if (scratch.sprites.getCostume('Hoofd') === 'blauw') {
-        status = {enum: 'correct', human: 'Correct'};
-    } else {
-        status = {enum: 'wrong', human: 'Fout'};
-    }
-    window.closeTest(scratch.sprites.getCostume('Hoofd'), status);
-    window.closeTestcase();
+    startTab('Code');
+    addTest('Juiste blokken gebruikt', true, scratch.blocks.containsBlock('looks_nextcostume'), 'Het blok volgend_kostuum wordt gebruikt');
+    closeTab();
 
 
-    window.closeTab();
-    window.startTab('Code');
-    window.startContext();
-
-    window.startTestcase('Juiste blokken gebruikt');
-    window.startTest('true');
-    window.appendMessage("Het blok 'volgend kostuum' wordt gebruikt");
-
-    if (scratch.blocks.containsBlock('looks_nextcostume')) {
-        status = {enum: 'correct', human: 'Correct'};
-    } else {
-        status = {enum: 'wrong', human: 'Fout'};
-    }
-    window.closeTest(scratch.blocks.containsBlock('looks_nextcostume'), status);
-    window.closeTestcase();
 }

@@ -1,18 +1,28 @@
-
-class Tests {
-  constructor() {
-    this.tests = [];
-    this.id = 0;
-    this.numberOfCorrectTests = 0;
-  }
-
-  add(isCorrect, msgIfCorrect, msgIfWrong) {
-    if (isCorrect) {
-      this.tests.push({id:this.id, correct: true, msg: msgIfCorrect});
-      this.numberOfCorrectTests++;
+function addTest(testName, expected, generated, message) {
+    let status;
+    window.startTestcase(testName);
+    window.startTest(expected);
+    window.appendMessage(message);
+    if (generated) {
+        if (generated === expected) {
+            status = {enum: 'correct', human: 'Correct'};
+        } else {
+            status = {enum: 'wrong', human: 'Fout'};
+        }
     } else {
-      this.tests.push({id:this.id, correct: false, msg: msgIfWrong});
+        status = {enum: 'runtime error', human: 'Error: resultaat is undefined'};
     }
-    this.id++;
-  }
+
+    window.closeTest(generated, status);
+    window.closeTestcase();
+}
+
+function startTab(tabName) {
+    window.startTab(tabName);
+    window.startContext();
+}
+
+function closeTab() {
+    window.closeContext();
+    window.closeTab();
 }
