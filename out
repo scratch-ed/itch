@@ -1,0 +1,48 @@
+{"command":"start-judgement"}
+{"command":"start-tab","title":"Resultaat"}
+{"command":"start-testcase","description":"juiste kostuum"}
+{"command":"start-test","expected":"blauw"}
+{"command":"append-message","message":"Het kostuum van sprite Hoofd moet blauw zijn."}
+{"command":"close-test","generated":"blauw","status":{"enum":"correct","human":"Correct"}}
+{"command":"close-testcase"}
+{"command":"start-testcase","description":"juiste kostuum"}
+{"command":"start-test","expected":"blauw"}
+{"command":"append-message","message":"Het kostuum van sprite Hoofd moet blauw zijn."}
+{"command":"close-test","generated":"blauw","status":{"enum":"correct","human":"Correct"}}
+{"command":"close-testcase"}
+{"command":"start-testcase","description":"juiste kostuum"}
+{"command":"start-test","expected":"rood"}
+{"command":"append-message","message":"Het kostuum van sprite Hoofd moet rood zijn."}
+{"command":"close-test","generated":"rood","status":{"enum":"correct","human":"Correct"}}
+{"command":"close-testcase"}
+{"command":"start-testcase","description":"juiste kostuum"}
+{"command":"start-test","expected":"rood"}
+{"command":"append-message","message":"Het kostuum van sprite Hoofd moet rood zijn."}
+{"command":"close-test","generated":"rood","status":{"enum":"correct","human":"Correct"}}
+{"command":"close-testcase"}
+{"command":"start-testcase","description":"juiste kostuum"}
+{"command":"start-test","expected":"geel"}
+{"command":"append-message","message":"Het kostuum van sprite Hoofd moet geel zijn."}
+{"command":"close-test","generated":"geel","status":{"enum":"correct","human":"Correct"}}
+{"command":"close-testcase"}
+{"command":"start-testcase","description":"juiste kostuum"}
+{"command":"start-test","expected":"blauw"}
+{"command":"append-message","message":"Het kostuum van sprite Hoofd moet blauw zijn."}
+{"command":"close-test","generated":"blauw","status":{"enum":"correct","human":"Correct"}}
+{"command":"close-testcase"}
+{"command":"close-context"}
+{"command":"start-context"}
+{"command":"start-testcase","description":"Kleur van kostuum"}
+{"command":"start-test","expected":"blauw"}
+{"command":"append-message","message":"Na 4 keer klikken op het hoofd van de goblin is het hoofd blauw"}
+{"command":"close-test","generated":"blauw","status":{"enum":"correct","human":"Correct"}}
+{"command":"close-testcase"}
+{"command":"close-tab"}
+{"command":"start-tab","title":"Code"}
+{"command":"start-testcase","description":"Juiste blokken gebruikt"}
+{"command":"start-test","expected":"true"}
+{"command":"append-message","message":"Het blok volgend_kostuum wordt gebruikt"}
+{"command":"close-test","generated":"true","status":{"enum":"correct","human":"Correct"}}
+{"command":"close-testcase"}
+{"command":"close-tab"}
+{"command":"close-judgement"}

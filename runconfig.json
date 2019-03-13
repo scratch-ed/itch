@@ -1,0 +1,8 @@
+{
+  "resources" : "todo",
+  "source" : "todo",
+  "time_limit" :10,
+  "memory_limit" : 5000000,
+  "natural_language" : "nl",
+  "programming_language" : "Scratch"
+}
