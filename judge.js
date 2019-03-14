@@ -4,8 +4,8 @@
 const path = require('path');
 const url = path.resolve(__dirname, 'scratch/scratch-test-environment.html');
 
-const sourceFile = path.resolve(__dirname, 'source/sourceFile.sb2');
-//const testFile = path.resolve(__dirname, 'tests/test.js');
+const sourceFile = path.resolve(__dirname, 'source/sourceFile.sb3');
+const testFile = path.resolve(__dirname, 'tests/test.js');
 
 const DEBUG = false;
 
@@ -133,7 +133,7 @@ class Judge {
             toDodona({command: "close-tab"});
         });
 
-        await page.addScriptTag({url: this.test_file});
+        await page.addScriptTag({url: testFile});
 
         // START JUDGE
         toDodona({command: "start-judgement"});

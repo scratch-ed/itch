@@ -122,7 +122,7 @@ class Sprites {
     getCostume(spriteName) {
         let sprite = getSpriteByName(spriteName, this.sprites);
         if (sprite) {
-            return getSpriteByName(spriteName, this.sprites).costume.name;
+            return sprite.costume.name;
         } else {
             return `Error: Er bestaat geen sprite met naam: ${spriteName}`
         }
