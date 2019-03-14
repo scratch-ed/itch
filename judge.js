@@ -85,9 +85,9 @@ class Judge {
 
         let browser;
         if (DEBUG) {
-            browser = await puppeteer.launch({headless: false});
+            browser = await puppeteer.launch({headless: false, args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']});
         } else {
-            browser = await puppeteer.launch();
+            browser = await puppeteer.launch({args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']});
         }
 
         const page = await browser.newPage();
