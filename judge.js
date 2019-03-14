@@ -60,6 +60,10 @@ function errorMessage(description, options) {
 
 }
 
+function toDodona(output) {
+    process.stdout.write(JSON.stringify(output));
+}
+
 //
 // Judge
 //
@@ -99,50 +103,40 @@ class Judge {
         await page.goto(`file://${url}`);
 
         await page.exposeFunction('appendMessage', (message) => {
-            let out = {command: "append-message", message: message};
-            console.log(JSON.stringify(out));
+            toDodona({command: "append-message", message: message});
         });
         await page.exposeFunction('annotate', (row, column, text) => {
-            let out = {command: "annotate", row: row, column: column, text: text};
-            console.log(JSON.stringify(out));
+            toDodona({command: "annotate", row: row, column: column, text: text});
         });
         await page.exposeFunction('startTab', (title) => {
-            let out = {command: "start-tab", title: title};
-            console.log(JSON.stringify(out));
+            toDodona({command: "start-tab", title: title});
         });
         await page.exposeFunction('startContext', () => {
-            let out = {command: "start-context"};
-            console.log(JSON.stringify(out));
+            toDodona({command: "start-context"});
         });
         await page.exposeFunction('startTestcase', (description) => {
-            let out = {command: "start-testcase", description: description};
-            console.log(JSON.stringify(out));
+            toDodona({command: "start-testcase", description: description});
         });
         await page.exposeFunction('startTest', (expected) => {
-            let out = {command: "start-test", expected: expected.toString()};
-            console.log(JSON.stringify(out));
+            toDodona({command: "start-test", expected: expected.toString()});
         });
         await page.exposeFunction('closeTest', (generated, status) => {
-            let out = {command: "close-test", generated: generated.toString(), status: status};
-            console.log(JSON.stringify(out));
+            toDodona({command: "close-test", generated: generated.toString(), status: status});
         });
         await page.exposeFunction('closeTestcase', () => {
-            let out = {command: "close-testcase"};
-            console.log(JSON.stringify(out));
+            toDodona({command: "close-testcase"});
         });
         await page.exposeFunction('closeContext', () => {
-            let out = {command: "close-context"};
-            console.log(JSON.stringify(out));
+            toDodona({command: "close-context"});
         });
         await page.exposeFunction('closeTab', () => {
-            let out = {command: "close-tab"};
-            console.log(JSON.stringify(out));
+            toDodona({command: "close-tab"});
         });
 
         await page.addScriptTag({url: testFile});
 
         // START JUDGE
-        console.log(JSON.stringify({command: "start-judgement"}));
+        toDodona({command: "start-judgement"});
 
         const fileHandle = await page.$('#file');
         await fileHandle.uploadFile(sourceFile);
@@ -156,7 +150,7 @@ class Judge {
         await browser.close();
 
         // END JUDGE
-        console.log(JSON.stringify({command: "close-judgement"}))
+        toDodona({command: "close-judgement"});
     }
 }
 
