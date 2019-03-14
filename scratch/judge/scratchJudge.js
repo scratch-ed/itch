@@ -120,7 +120,12 @@ class Sprites {
     }
 
     getCostume(spriteName) {
-        return getSpriteByName(spriteName, this.sprites).costume.name;
+        let sprite = getSpriteByName(spriteName, this.sprites);
+        if (sprite) {
+            return getSpriteByName(spriteName, this.sprites).costume.name;
+        } else {
+            return `Error: Er bestaat geen sprite met naam: ${spriteName}`
+        }
     }
 
     isVisibleAtStart(spriteName) {

@@ -4,7 +4,7 @@
 const path = require('path');
 const url = path.resolve(__dirname, 'scratch/scratch-test-environment.html');
 
-const sourceFile = path.resolve(__dirname, 'source/sourceFile.sb3');
+const sourceFile = path.resolve(__dirname, 'source/sourceFile.sb2');
 //const testFile = path.resolve(__dirname, 'tests/test.js');
 
 const DEBUG = false;
