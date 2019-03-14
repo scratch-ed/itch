@@ -2,7 +2,7 @@
 
 function prepare() {
 
-    startTab('Resultaat');
+    addTab('Resultaat');
 
     scratch.simulation
         .clickSprite('Hoofd', 300)
@@ -25,11 +25,11 @@ function prepare() {
 function evaluate() {
 
     addTest('Kleur van kostuum', 'blauw', scratch.sprites.getCostume('Hoofd'), 'Na 4 keer klikken op het hoofd van de goblin is het hoofd blauw');
-    closeTab();
+    endTab();
 
-    startTab('Code');
+    addTab('Code');
     addTest('Juiste blokken gebruikt', true, scratch.blocks.containsBlock('looks_nextcostume'), 'Het blok volgend_kostuum wordt gebruikt');
-    closeTab();
+    endTab();
 
 
 }

@@ -17,12 +17,12 @@ function addTest(testName, expected, generated, message) {
     window.closeTestcase();
 }
 
-function startTab(tabName) {
+function addTab(tabName) {
     window.startTab(tabName);
     window.startContext();
 }
 
-function closeTab() {
+function endTab() {
     window.closeContext();
     window.closeTab();
 }
