@@ -1,5 +1,5 @@
 {
-  "resources" : "todo",
+  "resources" : "/home/nils/Thesis/scratch4d-judge/tests",
   "source" : "todo",
   "time_limit" :10,
   "memory_limit" : 5000000,
