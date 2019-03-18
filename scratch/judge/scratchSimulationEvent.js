@@ -4,6 +4,9 @@ class ScratchSimulationEvent extends SimulationEvent {
 
         return this.next(() => {
             console.log(`click ${spriteName}`);
+
+            dodona.startTestCase(`Klik op sprite: ${spriteName}`);
+
             // fetch the target
             let _sprite = Scratch.vm.runtime.getSpriteTargetByName(spriteName);
 
@@ -20,8 +23,12 @@ class ScratchSimulationEvent extends SimulationEvent {
 
         return this.next(() => {
             console.log(`press ${key}`);
+
+            dodona.startTestCase(`Druk op toets: ${key}`);
+
             let data = {key: key, isDown: true};
             Scratch.vm.runtime.ioDevices.keyboard.postData(data);
+
         }, delay);
 
     }
@@ -29,9 +36,7 @@ class ScratchSimulationEvent extends SimulationEvent {
     testCostume(spriteName, correctCostumeName, delay = 50) {
         return this.next(() => {
 
-            window.startTestcase('juiste kostuum');
-            window.startTest(correctCostumeName);
-            window.appendMessage(`Het kostuum van sprite ${spriteName} moet ${correctCostumeName} zijn.`);
+            dodona.startTest(correctCostumeName);
 
             let status;
             let costumeName = "";
@@ -41,6 +46,8 @@ class ScratchSimulationEvent extends SimulationEvent {
                 let costumeNr = _sprite.currentCostume;
                 costumeName = _sprite.sprite.costumes_[costumeNr].name;
 
+                dodona.addMessage(`Sprite: "${spriteName}", Kostuum: "${costumeName}"`);
+
                 if (costumeName === correctCostumeName) {
                     status = {enum: 'correct', human: 'Correct'};
                 } else {
@@ -48,29 +55,41 @@ class ScratchSimulationEvent extends SimulationEvent {
                 }
             }
             else {
-                status = {enum: 'runtime error', human: `Geen kostuum gevonden met als naam: ${spriteName} in testCostume`}
+                status = {enum: 'runtime error', human: `Geen kostuum gevonden met als naam: ${spriteName}`};
             }
 
-            window.closeTest(costumeName, status);
-            window.closeTestcase();
+            dodona.closeTest(costumeName, status);
 
         }, delay);
     }
 
     testXCoordinate(spriteName, correctX, delay = 50) {
         return this.next(() => {
+
+            dodona.startTest(correctX);
+
+            let status;
+            let x = -1;
+
             let _sprite = Scratch.vm.runtime.getSpriteTargetByName(spriteName);
             if (_sprite) {
-                let x = _sprite.x;
+                x = _sprite.x;
+
+                dodona.addMessage(`Sprite: "${spriteName}", x-coordinaat: "${x}"`);
+
                 if (Math.abs(x - correctX) < 0.01) {
-                    console.log('dodona', `Correct: de sprite heeft x-coordinaat: ${correctX}`);
+                    status = {enum: 'correct', human: 'Correct'};
                 } else {
-                    console.log('dodona', `Fout: de sprite heeft x-coordinaat: ${x}, maar moest x-coordinaat: ${correctX} hebben.`);
+                    status = {enum: 'wrong', human: 'Fout'};
                 }
             }
             else {
-                console.log('error: no sprite found');
+                status = {enum: 'runtime error', human: `Geen kostuum gevonden met als naam: ${spriteName}`};
             }
+
+            dodona.closeTest(x, status);
+
+
         }, delay);
     }
 
@@ -99,7 +118,8 @@ class ScratchSimulationEvent extends SimulationEvent {
                 if (isEqual(d1, correctCoordinates)) {
                     console.log('dodona', `Correct: de sprite heeft coordinaten: (${d1.x}, ${d1.y}`);
                 } else {
-                    console.log('dodona', `Fout: de sprite heeft coordinaten: (${d1.x}, ${d1.y}, maar moest coordinaten: (${correctCoordinates.x}, ${correctCoordinates.y}) hebben.`);                }
+                    console.log('dodona', `Fout: de sprite heeft coordinaten: (${d1.x}, ${d1.y}, maar moest coordinaten: (${correctCoordinates.x}, ${correctCoordinates.y}) hebben.`);
+                }
             }
             else {
                 console.log('error: no sprite found');

@@ -228,11 +228,20 @@ async function runTests() {
     await Scratch.loadedEnd.promise;
     //Execute the prepare function from the evaluation file to create events
     prepare();
+
+    dodona.startTestTab('Resultaat');
+
     //Execute the scratch project
+    dodona.startTestContext();
     await scratch.clickGreenFlag();
-    window.closeContext();
+    dodona.closeTestContext();
+
     //Create new test context for tests after the execution
-    window.startContext();
+    dodona.startTestContext();
     evaluate();
+    dodona.closeTestContext();
+
+    dodona.closeTestTab();
+
     return true;
 }

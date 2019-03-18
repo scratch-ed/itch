@@ -1,8 +1,8 @@
 function addTest(testName, expected, generated, message) {
     let status;
-    window.startTestcase(testName);
-    window.startTest(expected);
-    window.appendMessage(message);
+    dodona.startTestCase(testName);
+    dodona.startTest(expected);
+    dodona.addMessage(message);
     if (generated) {
         if (generated === expected) {
             status = {enum: 'correct', human: 'Correct'};
@@ -13,16 +13,7 @@ function addTest(testName, expected, generated, message) {
         status = {enum: 'runtime error', human: 'Error: resultaat is undefined'};
     }
 
-    window.closeTest(generated, status);
-    window.closeTestcase();
+    dodona.closeTest(generated, status);
+    dodona.closeTestCase();
 }
 
-function addTab(tabName) {
-    window.startTab(tabName);
-    window.startContext();
-}
-
-function endTab() {
-    window.closeContext();
-    window.closeTab();
-}
