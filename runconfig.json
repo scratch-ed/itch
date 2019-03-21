@@ -1,6 +1,6 @@
 {
   "resources" : "/home/nils/Thesis/scratch4d-judge/tests",
-  "source" : "todo",
+  "source" : "/home/nils/Thesis/scratch4d-judge/source/sourceFile.sb3",
   "time_limit" :10,
   "memory_limit" : 5000000,
   "natural_language" : "nl",
