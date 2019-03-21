@@ -7,7 +7,7 @@ const url = path.resolve(__dirname, 'scratch/scratch-test-environment.html');
 const sourceFile = path.resolve(__dirname, 'source/sourceFile.sb3');
 const testFile = path.resolve(__dirname, 'tests/test.js');
 
-const DEBUG = true;
+const DEBUG = false;
 
 // puppeteer
 const puppeteer = require('puppeteer');
