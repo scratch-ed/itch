@@ -133,7 +133,7 @@ class Judge {
             toDodona({command: "close-tab"});
         });
 
-        await page.addScriptTag({url: path.resolve(this.test_file)});
+        await page.addScriptTag({url: this.test_file});
 
         // START JUDGE
         toDodona({command: "start-judgement"});
