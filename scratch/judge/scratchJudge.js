@@ -153,8 +153,9 @@ class ScratchJudge {
 
     constructor() {
         this.numberOfRun = 0;
-        this.simulation = new ScratchSimulationEvent(() => {
-        }, 0);
+        this.simulation = new ScratchSimulationEvent((resolve, reject) => {
+            resolve();
+        }, 0).start();
         this.hasSimulation = false;
 
         this.log = {};
@@ -201,10 +202,12 @@ class ScratchJudge {
     }
 
     resetSimulation() {
-        simulationChain = new ScratchSimulationEvent(() => {
+        simulationChain = new ScratchSimulationEvent((resolve, reject) => {
+            resolve();
         }, 0);
         this.hasSimulation = false;
-        this.simulation = new ScratchSimulationEvent(() => {
+        this.simulation = new ScratchSimulationEvent((resolve, reject) => {
+            resolve();
         }, 0);
     }
 
@@ -222,6 +225,7 @@ class ScratchJudge {
 }
 
 const scratch = new ScratchJudge();
+let actionTimeout = 5000;
 
 async function runTests() {
     //wait until Scratch project is fully loaded.

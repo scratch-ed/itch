@@ -2,6 +2,8 @@
 
 function prepare() {
 
+    actionTimeout = 3000;
+
     scratch.simulation
         .clickSprite('Hoofd')
         .testCostume('Hoofd', 'blauw')
@@ -24,7 +26,6 @@ function prepare() {
 function evaluate() {
 
     addTest('Kleur van kostuum', 'blauw', scratch.sprites.getCostume('Hoofd'), 'Na 4 keer klikken op het hoofd van de goblin is het hoofd blauw');
-
 
     addTest('Juiste blokken gebruikt', true, scratch.blocks.containsBlock('looks_nextcostume'), 'Het blok volgend_kostuum wordt gebruikt');
 

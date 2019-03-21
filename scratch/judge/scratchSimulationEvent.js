@@ -1,8 +1,18 @@
 class ScratchSimulationEvent extends SimulationEvent {
 
+    start() {
+        return this.next((resolve, reject) => {
+            // Give sprites 500 ms to load
+            setTimeout(() => {
+                resolve();
+            }, 500)
+        })
+    }
+
     clickSprite(spriteName, delay = 0) {
 
-        return this.next(() => {
+        return this.next((resolve, reject) => {
+            let startTime = Date.now();
             console.log(`click ${spriteName}`);
 
             dodona.startTestCase(`Klik op sprite: ${spriteName}`);
@@ -10,12 +20,48 @@ class ScratchSimulationEvent extends SimulationEvent {
             // fetch the target
             let _sprite = Scratch.vm.runtime.getSpriteTargetByName(spriteName);
 
+            // save sprites state before click
+            let oldVm = JSON.parse(JSON.stringify(Scratch.vm.runtime.targets));
+
             // simulate mouse click by explicitly triggering click event on
             // the target
+            let list;
             if (spriteName !== 'Stage') {
-                Scratch.vm.runtime.startHats('event_whenthisspriteclicked', null, _sprite);
+                list = Scratch.vm.runtime.startHats('event_whenthisspriteclicked', null, _sprite);
+            } else {
+                resolve();
+                return;
             }
-        }, delay);
+
+            let promiseList = [];
+            for (let i = 0; i < list.length; i++) {
+                promiseList.push(ensureFinished(list[i].topBlock, actionTimeout))
+            }
+
+            let promise = Promise.all(promiseList);
+
+            promise.then(() => {
+
+                let extraWaitTime = 0;
+                let timeSpend = Date.now() - startTime;
+                if (delay > timeSpend) {
+                    extraWaitTime = delay - timeSpend;
+                }
+
+                setTimeout(() => {
+
+                    console.log(`finished click on ${spriteName}`);
+                    // save sprites state after click
+                    let newVm  = JSON.parse(JSON.stringify(Scratch.vm.runtime.targets));
+                    eventLog.push({event: 'click', before: oldVm, after: newVm});
+                    console.log(eventLog);
+                    resolve();
+
+                }, extraWaitTime);
+
+            });
+
+        });
 
     }
 
@@ -29,12 +75,12 @@ class ScratchSimulationEvent extends SimulationEvent {
             let data = {key: key, isDown: true};
             Scratch.vm.runtime.ioDevices.keyboard.postData(data);
 
-        }, delay);
+        });
 
     }
 
-    testCostume(spriteName, correctCostumeName, delay = 50) {
-        return this.next(() => {
+    testCostume(spriteName, correctCostumeName, delay = 0) {
+        return this.next((resolve, reject) => {
 
             dodona.startTest(correctCostumeName);
 
@@ -60,10 +106,12 @@ class ScratchSimulationEvent extends SimulationEvent {
 
             dodona.closeTest(costumeName, status);
 
+            resolve();
+
         }, delay);
     }
 
-    testXCoordinate(spriteName, correctX, delay = 50) {
+    testXCoordinate(spriteName, correctX, delay = 0) {
         return this.next(() => {
 
             dodona.startTest(correctX);
@@ -93,7 +141,7 @@ class ScratchSimulationEvent extends SimulationEvent {
         }, delay);
     }
 
-    testYCoordinate(spriteName, correctY, delay = 50) {
+    testYCoordinate(spriteName, correctY, delay = 0) {
         return this.next(() => {
             let _sprite = Scratch.vm.runtime.getSpriteTargetByName(spriteName);
             if (_sprite) {
@@ -110,7 +158,7 @@ class ScratchSimulationEvent extends SimulationEvent {
         }, delay);
     }
 
-    testCoordinates(spriteName, correctCoordinates, delay = 50) {
+    testCoordinates(spriteName, correctCoordinates, delay = 0) {
         return this.next(() => {
             let _sprite = Scratch.vm.runtime.getSpriteTargetByName(spriteName);
             if (_sprite) {

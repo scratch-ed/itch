@@ -2,8 +2,7 @@
 let startTimestamp = 0;
 
 function getTimeStamp() {
-  let date = new Date();
-  return date.getTime() - startTimestamp;
+  return Date.now() - startTimestamp;
 }
 
 function makeProxiedRenderer(canvas, logData) {

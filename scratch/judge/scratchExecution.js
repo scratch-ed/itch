@@ -8,8 +8,10 @@ let numberOfRun = 0;
 let logData = {index: 0, lines: [], color: null, points: [], responses: []};
 let blockLog = {};
 let spritesLog = [];
-let simulationChain = new ScratchSimulationEvent(() => {
+let simulationChain = new ScratchSimulationEvent((resolve, reject) => {
+    resolve();
 }, 0);
+let eventLog = [];
 
 
 class Future {
@@ -28,7 +30,8 @@ function reset() {
     blockLog = [];
     logData = {index: 0, lines: [], color: null, points: [], responses: []};
     spritesLog = [];
-    simulationChain = new ScratchSimulationEvent(() => {
+    simulationChain = new ScratchSimulationEvent((resolve, reject) => {
+        resolve();
     }, 0);
 }
 
@@ -163,8 +166,7 @@ function createProfiler() {
 function greenFlag() {
 
     //Start timer
-    let date = new Date();
-    startTimestamp = date.getTime();
+    startTimestamp = Date.now();
     console.log("start timestamp:", startTimestamp);
 
     Scratch.executionEnd = new Future();

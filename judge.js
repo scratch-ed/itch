@@ -7,7 +7,7 @@ const url = path.resolve(__dirname, 'scratch/scratch-test-environment.html');
 const sourceFile = path.resolve(__dirname, 'source/sourceFile.sb3');
 const testFile = path.resolve(__dirname, 'tests/test.js');
 
-const DEBUG = false;
+const DEBUG = true;
 
 // puppeteer
 const puppeteer = require('puppeteer');
@@ -141,13 +141,15 @@ class Judge {
         const fileHandle = await page.$('#file');
         await fileHandle.uploadFile(sourceFile);
 
-        await page.waitFor(100);
+        await page.waitFor(50);
 
         let output = await page.evaluate(() => {
             return runTests();
         });
 
-        await browser.close();
+        if (!DEBUG) {
+            await browser.close();
+        }
 
         // END JUDGE
         toDodona({command: "close-judgement"});
