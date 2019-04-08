@@ -5,7 +5,7 @@ function getTimeStamp() {
   return Date.now() - startTimestamp;
 }
 
-function makeProxiedRenderer(canvas, logData) {
+function makeProxiedRenderer(canvas, log) {
   var render = new ScratchRender(canvas);
   console.log("renderer created");
   //penLine
@@ -16,8 +16,8 @@ function makeProxiedRenderer(canvas, logData) {
       var p1 = {x: argumentsList[2], y: argumentsList[3]};
       var p2 = {x: argumentsList[4], y: argumentsList[5]};
       var line = {start: p1, end: p2};
-      logData.lines.push(line);
-      logData.color = argumentsList[1].color4f;
+      log.pen.lines.push(line);
+      log.pen.color = argumentsList[1].color4f;
       return target.apply(thisArg, argumentsList);
     }
   };
@@ -28,8 +28,8 @@ function makeProxiedRenderer(canvas, logData) {
   handler = {
     apply: function (target, thisArg, argumentsList) {
       console.log(`${getTimeStamp(startTimestamp)}: Called penPoint with arguments: ${argumentsList}`);
-      logData.color = argumentsList[1].color4f;
-      logData.points.push({x: argumentsList[2], y: argumentsList[3]});
+      log.pen.color = argumentsList[1].color4f;
+      log.pen.points.push({x: argumentsList[2], y: argumentsList[3]});
       return target.apply(thisArg, argumentsList);
     }
   };
@@ -40,7 +40,7 @@ function makeProxiedRenderer(canvas, logData) {
   handler = {
     apply: function (target, thisArg, argumentsList) {
       console.log(`${getTimeStamp(startTimestamp)}: Called penClear`);
-      logData.lines = [];
+      log.pen.lines = [];
       return target.apply(thisArg, argumentsList);
     }
   };
@@ -52,7 +52,7 @@ function makeProxiedRenderer(canvas, logData) {
   handler = {
     apply: function (target, thisArg, argumentsList) {
       console.log(`${getTimeStamp(startTimestamp)}: Called createTextSkin with arguments: ${argumentsList}`);
-      logData.responses.push(argumentsList[1]);
+      log.pen.responses.push(argumentsList[1]);
       return target.apply(thisArg, argumentsList);
     }
   };
@@ -61,10 +61,8 @@ function makeProxiedRenderer(canvas, logData) {
   var updateTextSkinOld = render.updateTextSkin;
   handler = {
     apply: function (target, thisArg, argumentsList) {
-      let date = new Date();
-      let timestamp = date.getTime() - startTimestamp;
-      console.log(`${timestamp}: Called updateTextSkin with arguments: ${argumentsList}`);
-      logData.responses.push(argumentsList[2]);
+      console.log(`${getTimeStamp(startTimestamp)}: Called updateTextSkin with arguments: ${argumentsList}`);
+      log.pen.responses.push(argumentsList[2]);
       return target.apply(thisArg, argumentsList);
     }
   };

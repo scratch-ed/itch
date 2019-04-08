@@ -5,14 +5,6 @@ class Playground {
         this.ask = log.responses;
     }
 
-    get lines() {
-        return this._lines;
-    }
-
-    set lines(value) {
-        this._lines = value;
-    }
-
     get responses() {
         return this._responses;
     }
@@ -35,8 +27,8 @@ class Playground {
 }
 
 class AllBlocks {
-    constructor(blocks) {
-        this.blocks = blocks;
+    constructor(log) {
+        this.blocks = log.blocks;
     }
 
     containsLoop() {
@@ -60,39 +52,9 @@ class Vm {
 }
 
 class Sprites {
-    constructor(spritesLog) {
-        this.sprites = spritesLog[spritesLog.length - 1].sprites; //sprites in the final states
-        this.log = spritesLog;
-    }
-
-    print() {
-        let res = [];
-        for (let e in this.log) {
-            let event = this.log[e];
-            let spriteList = [];
-            let sprites = event.sprites;
-            for (let s in sprites) {
-                let sprite = sprites[s];
-                spriteList.push({
-                    name: sprite.name,
-                    x: Math.round(sprite.x * 100) / 100,
-                    y: Math.round(sprite.y * 100) / 100,
-                    costumeNr: sprite.currentCostume,
-                    costumeName: sprite.costume.name,
-                    visible: sprite.visible
-                });
-            }
-            res.push({time: event.time, block: event.block, sprites: spriteList});
-        }
-        return res;
-    }
-
-    listSprites() {
-        return this.data;
-    }
-
-    getSpriteIdByName(spriteName) {
-        return getSpriteIdByName(spriteName, this.sprites);
+    constructor() {
+        //list of sprites in final frame
+        this.sprites = log.currentFrame.sprites;
     }
 
     containsLoop(spriteId) {
@@ -100,7 +62,7 @@ class Sprites {
     }
 
     getStartSprites() {
-        return this.log[0].sprites;
+        return log.frames[0].sprites;
     }
 
     getSpritesAfterFirstBlockOccurance(blockName) {
@@ -120,11 +82,24 @@ class Sprites {
     }
 
     getCostume(spriteName) {
+
         let sprite = getSpriteByName(spriteName, this.sprites);
         if (sprite) {
-            return sprite.costume.name;
+            return sprite.costume;
         } else {
             return `Error: Er bestaat geen sprite met naam: ${spriteName}`
+        }
+    }
+
+    stayedInBounds(spriteName) {
+        for (let i in this.log) {
+            let s = this.log[i];
+            for (let j in s) {
+                let sprite = s[j];
+                if (sprite.name === spriteName) {
+
+                }
+            }
         }
     }
 
@@ -152,74 +127,39 @@ class Sprites {
 class ScratchJudge {
 
     constructor() {
-        this.numberOfRun = 0;
-        this.simulation = new ScratchSimulationEvent((resolve, reject) => {
-            resolve();
-        }, 0).start();
+        this.events = new ScratchSimulationEvent().start();
         this.hasSimulation = false;
-
+        //this.capture = [];
         this.log = {};
         this.blocks = {};
         this.playground = {};
         this.sprites = {};
     }
 
-    fill(data) {
-        console.log(data);
-        this.log = data.log;
-        this.playground = new Playground(data.log);
-        this.blocks = new AllBlocks(data.blocks);
-        this.sprites = new Sprites(data.spritesLog);
+    fill() {
+        console.log(log);
+        this.playground = new Playground(log.pen);
+        this.blocks = new AllBlocks(log);
+        this.sprites = new Sprites(log);
     }
 
-    get executionTime() {
-        return this._executionTime;
+    captureData(...args) {
+        //toCapture = args;
     }
 
-    set executionTime(value) {
-        this._executionTime = value;
-    }
-
-    get keyInput() {
-        return this._keyInput;
-    }
-
-    set keyInput(value) {
-        this._keyInput = value;
-    }
-
-    get mouseInput() {
-        return this._mouseInput;
-    }
-
-    set mouseInput(value) {
-        this._mouseInput = value;
-    }
-
-    setSimulation() {
-        simulationChain = this.simulation;
+    start() {
+        simulationChain = this.events;
         this.hasSimulation = true;
     }
 
-    resetSimulation() {
-        simulationChain = new ScratchSimulationEvent((resolve, reject) => {
-            resolve();
-        }, 0);
-        this.hasSimulation = false;
-        this.simulation = new ScratchSimulationEvent((resolve, reject) => {
-            resolve();
-        }, 0);
-    }
-
-    async clickGreenFlag() {
+    async startEvents() {
         createProfiler();
-        greenFlag();
+        start();
         await Scratch.executionEnd.promise;
         if (this.hasSimulation) {
             await Scratch.simulationEnd.promise;
-            this.resetSimulation();
         }
-        this.fill({log: logData, blocks: blockLog, spritesLog: spritesLog, vm: {}});
+        this.fill();
     }
 
 }
@@ -237,7 +177,7 @@ async function runTests() {
 
     //Execute the scratch project
     dodona.startTestContext();
-    await scratch.clickGreenFlag();
+    await scratch.startEvents();
     dodona.closeTestContext();
 
     //Create new test context for tests after the execution

@@ -1,17 +1,19 @@
+// Create global Scratch variable
 const Scratch = window.Scratch = window.Scratch || {};
 
-let executionTime;
+// Create global input variables
 let keyInput;
 let mouseInput;
+
+// Create global logging variables
 let numberOfRun = 0;
 
-let logData = {index: 0, lines: [], color: null, points: [], responses: []};
-let blockLog = {};
-let spritesLog = [];
+let log = new Log();
+
+// Create event chain to simulate user input.
 let simulationChain = new ScratchSimulationEvent((resolve, reject) => {
     resolve();
 }, 0);
-let eventLog = [];
 
 
 class Future {
@@ -23,20 +25,11 @@ class Future {
     }
 }
 
+// Start of promise that gets resolved when the Scratch file has finished loading.
 Scratch.loadedEnd = new Future();
 
-function reset() {
-    numberOfRun = 0;
-    blockLog = [];
-    logData = {index: 0, lines: [], color: null, points: [], responses: []};
-    spritesLog = [];
-    simulationChain = new ScratchSimulationEvent((resolve, reject) => {
-        resolve();
-    }, 0);
-}
 
 document.getElementById('file').addEventListener('change', e => {
-    reset();
     const reader = new FileReader();
     const thisFileInput = e.target;
     reader.onload = () => {
@@ -45,34 +38,14 @@ document.getElementById('file').addEventListener('change', e => {
     reader.readAsArrayBuffer(thisFileInput.files[0]);
 });
 
-class Opcodes {
-    constructor() {
-        this.opcodes = {};
-    }
-
-    update(arg) {
-        if (!this.opcodes[arg]) {
-            this.opcodes[arg] = 0;
-        }
-        this.opcodes[arg]++;
-        blockLog = this.opcodes;
-    }
-
-    end() {
-        this.opcodes = {};
-    }
-}
 
 /**
  * Init vm
  */
 function init(file) {
-    // Lots of global variables to make debugging easier
     // Instantiate the VM.
     const vm = new VirtualMachine();
     Scratch.vm = vm;
-
-    console.log("vm", vm);
 
     vm.setTurboMode(true);
     vm.loadProject(file);
@@ -84,7 +57,7 @@ function init(file) {
 
     // Instantiate the renderer and connect it to the VM.
     const canvas = document.getElementById('scratch-stage');
-    const renderer = new makeProxiedRenderer(canvas, logData);
+    const renderer = new makeProxiedRenderer(canvas, log);
     Scratch.renderer = renderer;
     vm.attachRenderer(renderer);
 
@@ -94,6 +67,41 @@ function init(file) {
     /* global ScratchSVGRenderer */
     vm.attachV2SVGAdapter(new ScratchSVGRenderer.SVGRenderer());
     vm.attachV2BitmapAdapter(new ScratchSVGRenderer.BitmapAdapter());
+
+
+    // Wrapper for step
+
+    const oldStep = Scratch.vm.runtime._step;
+
+    function newStep() {
+        console.log(this.profiler);
+        let r = oldStep.apply(this);
+        Scratch.vm.runtime.emit('DONE_THREADS_UPDATE', Scratch.vm.runtime._lastStepDoneThreads);
+        return r;
+    }
+    //Scratch.vm.runtime._step = newStep();
+
+
+    // Wrapper for greenFlag: we want greenFlag to return the threads started by runtime.greenFlag()
+
+    const oldGreenFlag = Scratch.vm.greenFlag;
+
+    function newGreenFlag() {
+        return this.runtime.greenFlag();
+    }
+    //Scratch.vm.greenFlag = newGreenFlag();
+
+    // Wrapper for runtime.greenFlag: we want greenFlag to return the threads started by runtime.startHats()
+    const oldRuntimeGreenFlag = Scratch.vm.runtime.greenFlag;
+
+    function newRuntimeGreenFlag() {
+        oldRuntimeGreenFlag();
+        //todo find way to return threads
+    }
+    //Scratch.vm.runtime.greenFlag = newRuntimeGreenFlag();
+
+    // Maybe emit threads after each StartHats function and catch them here?
+
 
 
     // VM event handlers
@@ -126,11 +134,17 @@ function vmHandleEvents(vm) {
     });
 
     vm.runtime.on('PROJECT_RUN_STOP', () => {
-        Scratch.opcodes.end();
         console.log(`${getTimeStamp()}: Ended run`);
         Scratch.executionEnd.resolve();
     });
+
+    vm.runtime.on('DONE_THREADS_UPDATE', (threads) => {
+        for (let index in threads) {
+            console.log(threads[index].topBlock);
+        }
+    });
 }
+
 
 function createProfiler() {
     const vm = Scratch.vm;
@@ -138,40 +152,27 @@ function createProfiler() {
     vm.runtime.enableProfiling();
     Scratch.profiler = vm.runtime.profiler;
 
-    //const stepId = Scratch.profiler.idByName('Runtime._step');
     const blockId = Scratch.profiler.idByName('blockFunction');
 
-    Scratch.opcodes = new Opcodes();
     let firstState = true;
     Scratch.profiler.onFrame = ({id, selfTime, totalTime, arg}) => {
         if (firstState) {
-            spritesLog.push({
-                time: getTimeStamp(),
-                block: 'START',
-                sprites: JSON.parse(JSON.stringify(vm.runtime.targets))
-            });
+            log.addFrame('START');
             firstState = false;
         }
         if (id === blockId) {
-            Scratch.opcodes.update(arg);
-            spritesLog.push({
-                time: getTimeStamp(),
-                block: arg,
-                sprites: JSON.parse(JSON.stringify(vm.runtime.targets))
-            });
+            log.addFrame(arg);
         }
     };
 }
 
-function greenFlag() {
+function start() {
 
     //Start timer
     startTimestamp = Date.now();
     console.log("start timestamp:", startTimestamp);
 
     Scratch.executionEnd = new Future();
-    Scratch.vm.greenFlag();
-
     Scratch.simulationEnd = new Future();
     simulationChain.launch();
 }

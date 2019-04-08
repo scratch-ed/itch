@@ -13,7 +13,7 @@ class ScratchSimulationEvent extends SimulationEvent {
 
         return this.next((resolve, reject) => {
             let startTime = Date.now();
-            console.log(`click ${spriteName}`);
+            console.log(`${getTimeStamp()}: click ${spriteName}`);
 
             dodona.startTestCase(`Klik op sprite: ${spriteName}`);
 
@@ -21,7 +21,7 @@ class ScratchSimulationEvent extends SimulationEvent {
             let _sprite = Scratch.vm.runtime.getSpriteTargetByName(spriteName);
 
             // save sprites state before click
-            let oldVm = JSON.parse(JSON.stringify(Scratch.vm.runtime.targets));
+            let oldFrame = new Frame('click', log.pen);
 
             // simulate mouse click by explicitly triggering click event on
             // the target
@@ -52,17 +52,67 @@ class ScratchSimulationEvent extends SimulationEvent {
 
                     console.log(`finished click on ${spriteName}`);
                     // save sprites state after click
-                    let newVm  = JSON.parse(JSON.stringify(Scratch.vm.runtime.targets));
-                    eventLog.push({event: 'click', before: oldVm, after: newVm});
-                    console.log(eventLog);
+                    let newFrame = new Frame('click', log.pen);
+                    log.addEvent({event: 'click', before: oldFrame, after: newFrame});
                     resolve();
 
                 }, extraWaitTime);
+
+            }, (reason) => {
+                console.log(`${getTimeStamp()}: ${reason} after ${Date.now() - startTime} ms`);
+                Scratch.vm.stopAll();
+                Scratch.executionEnd.resolve();
+                Scratch.simulationEnd.resolve();
 
             });
 
         });
 
+    }
+
+    greenFlag(delay = 0) {
+        return this.next((resolve, reject) => {
+            let startTime = Date.now();
+
+            let oldFrame = new Frame('greenFlag', log.pen);
+
+            let list = Scratch.vm.greenFlag();
+
+
+
+            let promiseList = [];
+            for (let i = 0; i < list.length; i++) {
+                promiseList.push(ensureFinished(list[i].topBlock, actionTimeout))
+            }
+
+            let promise = Promise.all(promiseList);
+
+            promise.then(() => {
+
+                let extraWaitTime = 0;
+                let timeSpend = Date.now() - startTime;
+                if (delay > timeSpend) {
+                    extraWaitTime = delay - timeSpend;
+                }
+
+                setTimeout(() => {
+
+                    console.log(`finished greenFlag()`);
+                    // save sprites state after click
+                    let newFrame = new Frame('greenFlag', log.pen);
+                    log.addEvent({event: 'greenFlag', before: oldFrame, after: newFrame});
+                    resolve();
+
+                }, extraWaitTime);
+
+            }, (reason) => {
+                console.log(`${getTimeStamp()}: ${reason} after ${Date.now() - startTime} ms`);
+                Scratch.vm.stopAll();
+                Scratch.executionEnd.resolve();
+                Scratch.simulationEnd.resolve();
+
+            });
+        });
     }
 
     pressKey(key, delay = 0) {
@@ -77,6 +127,19 @@ class ScratchSimulationEvent extends SimulationEvent {
 
         });
 
+    }
+
+    isTouchingSprite(spriteName1, spriteName2) {
+        let sprite1 = Scratch.vm.runtime.getSpriteTargetByName(spriteName1);
+        let sprite2 = Scratch.vm.runtime.getSpriteTargetByName(spriteName2);
+
+        let touching = sprite1.isTouchingSprite(sprite2);
+    }
+
+    isTouchingEdge(spriteName) {
+        let sprite1 = Scratch.vm.runtime.getSpriteTargetByName(spriteName);
+
+        let touching = sprite1.isTouchingEdge();
     }
 
     testCostume(spriteName, correctCostumeName, delay = 0) {

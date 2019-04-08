@@ -1,42 +1,44 @@
 class SimulationEvent {
 
-    constructor(action, delay = 0) {
+    constructor(action, delay) {
 
+        this.delay = delay || 0;
+
+        let f = function(resolve, reject) {
+            setTimeout(() => {
+                resolve();
+            }, this.delay);
+        };
         // action that needs to be executed
-        this._action = action;
+        this.action = action || f;
 
         // delay before action is executed
-        this._delay = delay;
+
 
         // events to be executed after this event has been executed
-        this._nextEvents = [];
+        this.nextEvents = [];
 
     }
 
     async launch() {
 
-        // delayed execution of action
-        setTimeout(() => {
+        let executeAction = new Promise((resolve, reject) => {
+            this.action(resolve, reject);
+        });
 
-            let executeAction = new Promise((resolve, reject) => {
-                this._action(resolve, reject);
-            });
-
-            executeAction.then(() => {
-                // execute next events one after the other
-                for (let event of this._nextEvents) {
-                    event.launch();
-                }
-            });
-
-        }, this._delay);
+        executeAction.then(() => {
+            // execute next events one after the other
+            for (let event of this.nextEvents) {
+                event.launch();
+            }
+        });
 
     }
 
     nextEvent(event) {
 
         // add next event to the list of events
-        this._nextEvents.push(event);
+        this.nextEvents.push(event);
 
         // return the next event (for chaining purposes)
         return event;

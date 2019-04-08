@@ -2,7 +2,7 @@
 
 function prepare() {
 
-    scratch.simulation
+    scratch.events
         .foreach(
             ['Hoofd', 'Stage', 'Goblin', 'Hoofd', 'Hoofd', 'Hoofd', 'Hoofd'],
             (index, target, anchor) => {
