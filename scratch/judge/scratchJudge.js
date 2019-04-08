@@ -5,14 +5,6 @@ class Playground {
         this.ask = log.responses;
     }
 
-    get lines() {
-        return this._lines;
-    }
-
-    set lines(value) {
-        this._lines = value;
-    }
-
     get responses() {
         return this._responses;
     }
@@ -136,7 +128,7 @@ class ScratchJudge {
 
     constructor() {
         this.numberOfRun = 0;
-        this.simulation = new ScratchSimulationEvent((resolve, reject) => {
+        this.events = new ScratchSimulationEvent((resolve, reject) => {
             resolve();
         }, 0).start();
         this.hasSimulation = false;
@@ -147,10 +139,9 @@ class ScratchJudge {
         this.sprites = {};
     }
 
-    fill(data) {
-        console.log(data);
-        this.log = data.log;
-        this.playground = new Playground(data.log);
+    fill() {
+        console.log(log);
+        this.playground = new Playground(log.pen);
         this.blocks = new AllBlocks(log);
         this.sprites = new Sprites(log);
     }
@@ -184,7 +175,7 @@ class ScratchJudge {
     }
 
     start() {
-        simulationChain = this.simulation;
+        simulationChain = this.events;
         this.hasSimulation = true;
     }
 
@@ -193,7 +184,7 @@ class ScratchJudge {
             resolve();
         }, 0);
         this.hasSimulation = false;
-        this.simulation = new ScratchSimulationEvent((resolve, reject) => {
+        this.events = new ScratchSimulationEvent((resolve, reject) => {
             resolve();
         }, 0);
     }
@@ -206,7 +197,7 @@ class ScratchJudge {
             await Scratch.simulationEnd.promise;
             this.resetSimulation();
         }
-        this.fill({log: logData, spritesLog: log, vm: {}});
+        this.fill();
     }
 
 }

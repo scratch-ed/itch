@@ -1,8 +1,7 @@
 
 class Frame {
 
-    constructor(type, block) {
-        this.type = type;
+    constructor(block) {
         this.time = getTimeStamp();
         this.block = block;
         this.sprites = [];
@@ -27,11 +26,20 @@ class Frame {
             // block properties to log
             sprite['blocks'] = target.blocks._blocks;
 
-            console.log(sprite);
             this.sprites.push(sprite);
         }
     }
 
+}
+
+class Pen {
+    constructor () {
+        this.index = 0;
+        this.lines = [];
+        this.color = null;
+        this.points = [];
+        this.responses = [];
+    }
 }
 
 
@@ -39,13 +47,18 @@ class Log {
 
     constructor() {
         this.frames = [];
-        this.blocks = [];
         this.lastFrame = null;
-        this.currentFrame = null;
+        this.currentFrame = null
+
+        this.pen = new Pen();
+        this.penEvents = [];
+
+        this.blocks = {};
+
     }
 
-    addFrame(type, block) {
-        let frame = new Frame(type, block);
+    addFrame(block) {
+        let frame = new Frame(block);
         this.lastFrame = this.currentFrame;
         this.currentFrame = frame;
         this.frames.push(frame);
@@ -54,6 +67,8 @@ class Log {
             this.blocks[block] = 0;
         }
         this.blocks[block]++;
+
+        this.penEvents.push(this.pen);
     }
 
     reset() {

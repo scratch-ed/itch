@@ -9,7 +9,6 @@ let mouseInput;
 let numberOfRun = 0;
 
 let log = new Log();
-let penLog = {index: 0, lines: [], color: null, points: [], responses: []};
 
 // Create event chain to simulate user input.
 let simulationChain = new ScratchSimulationEvent((resolve, reject) => {
@@ -44,12 +43,9 @@ document.getElementById('file').addEventListener('change', e => {
  * Init vm
  */
 function init(file) {
-    // Lots of global variables to make debugging easier
     // Instantiate the VM.
     const vm = new VirtualMachine();
     Scratch.vm = vm;
-
-    console.log("vm", vm);
 
     vm.setTurboMode(true);
     vm.loadProject(file);
@@ -61,7 +57,7 @@ function init(file) {
 
     // Instantiate the renderer and connect it to the VM.
     const canvas = document.getElementById('scratch-stage');
-    const renderer = new makeProxiedRenderer(canvas, logData);
+    const renderer = new makeProxiedRenderer(canvas, log);
     Scratch.renderer = renderer;
     vm.attachRenderer(renderer);
 
@@ -141,11 +137,11 @@ function createProfiler() {
     let firstState = true;
     Scratch.profiler.onFrame = ({id, selfTime, totalTime, arg}) => {
         if (firstState) {
-            log.addFrame('onFrame', 'START');
+            log.addFrame('START');
             firstState = false;
         }
         if (id === blockId) {
-            log.addFrame('onFrame', arg);
+            log.addFrame(arg);
         }
     };
 }
@@ -157,7 +153,7 @@ function greenFlag() {
     console.log("start timestamp:", startTimestamp);
 
     Scratch.executionEnd = new Future();
-    Scratch.vm.greenFlag();
+    //Scratch.vm.greenFlag();
 
     Scratch.simulationEnd = new Future();
     simulationChain.launch();

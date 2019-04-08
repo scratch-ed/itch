@@ -52,7 +52,7 @@ class ScratchSimulationEvent extends SimulationEvent {
 
                     console.log(`finished click on ${spriteName}`);
                     // save sprites state after click
-                    let newVm  = JSON.parse(JSON.stringify(Scratch.vm.runtime.targets));
+                    let newVm = JSON.parse(JSON.stringify(Scratch.vm.runtime.targets));
                     eventLog.push({event: 'click', before: oldVm, after: newVm});
                     console.log(eventLog);
                     resolve();
@@ -69,6 +69,17 @@ class ScratchSimulationEvent extends SimulationEvent {
 
         });
 
+    }
+
+    greenFlag(delay = 0) {
+        return this.next((resolve, reject) => {
+
+            Scratch.vm.greenFlag();
+
+            setTimeout(() => {
+                resolve();
+            }, delay);
+        });
     }
 
     pressKey(key, delay = 0) {

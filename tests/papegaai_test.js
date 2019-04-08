@@ -2,12 +2,13 @@
 
 function prepare() {
 
-    actionTimeout = 3000;
+    actionTimeout = 5000;
 
     //scratch.captureData('x', 'y', 'direction');
 
-    scratch.simulation
-        .clickSprite('Papegaai')
+    scratch.events
+        .greenFlag(2000)
+        .clickSprite('Papegaai', 3000)
         .end();
 
     scratch.start();

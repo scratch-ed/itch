@@ -4,7 +4,7 @@ function prepare() {
 
     actionTimeout = 3000;
 
-    scratch.simulation
+    scratch.events
         .clickSprite('Hoofd')
         .testCostume('Hoofd', 'blauw')
         .clickSprite('Stage')

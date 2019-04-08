@@ -7,33 +7,17 @@
  */
 
 function prepare() {
-    scratch.simulation
+    scratch.events
+        .greenFlag()
         .end();
 
-    scratch.setSimulation();
+    scratch.start();
 }
 
-function evaluate(tests) {
+function evaluate() {
 
+    console.log(scratch.playground);
 
-    console.log('dodona@Correct: er is exact 1 vierkant getekend!');
+    addTest('squares', 1, scratch.playground.squares.length, 'vierkant test');
 
-
-
-    tests.add(
-        scratch.playground.squares.length === 1,
-        "Correct: Er is exact 1 vierkant getekend",
-        `Fout: Er werden ${scratch.playground.squares.length} vierkant(en) getekend`);
-    tests.add(
-        scratch.blocks.containsLoop(),
-        "Correct: Er wordt een herhalingslus gebruikt",
-        "Fout: Er wordt geen herhalingslus gebruikt");
-    tests.add(
-        scratch.blocks.numberOfExecutions('control_repeat') > 2,
-        "Correct: De code in de herhalingslus wordt minstens 2 keer herhaald",
-        `Fout: De code in de herhalingslus wordt ${scratch.blocks.numberOfExecutions('control_repeat')} keer herhaald`);
-    tests.add(
-        scratch.blocks.containsBlock('pen_penDown'),
-        "Correct: Er wordt een pen_down blok gebruikt",
-        "Fout: Er wordt geen pen_down blok gebruikt");
 }
