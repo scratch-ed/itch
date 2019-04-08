@@ -127,10 +127,7 @@ class Sprites {
 class ScratchJudge {
 
     constructor() {
-        this.numberOfRun = 0;
-        this.events = new ScratchSimulationEvent((resolve, reject) => {
-            resolve();
-        }, 0).start();
+        this.events = new ScratchSimulationEvent().start();
         this.hasSimulation = false;
         //this.capture = [];
         this.log = {};
@@ -146,30 +143,6 @@ class ScratchJudge {
         this.sprites = new Sprites(log);
     }
 
-    get executionTime() {
-        return this._executionTime;
-    }
-
-    set executionTime(value) {
-        this._executionTime = value;
-    }
-
-    get keyInput() {
-        return this._keyInput;
-    }
-
-    set keyInput(value) {
-        this._keyInput = value;
-    }
-
-    get mouseInput() {
-        return this._mouseInput;
-    }
-
-    set mouseInput(value) {
-        this._mouseInput = value;
-    }
-
     captureData(...args) {
         //toCapture = args;
     }
@@ -179,23 +152,12 @@ class ScratchJudge {
         this.hasSimulation = true;
     }
 
-    resetSimulation() {
-        simulationChain = new ScratchSimulationEvent((resolve, reject) => {
-            resolve();
-        }, 0);
-        this.hasSimulation = false;
-        this.events = new ScratchSimulationEvent((resolve, reject) => {
-            resolve();
-        }, 0);
-    }
-
-    async clickGreenFlag() {
+    async startEvents() {
         createProfiler();
-        greenFlag();
+        start();
         await Scratch.executionEnd.promise;
         if (this.hasSimulation) {
             await Scratch.simulationEnd.promise;
-            this.resetSimulation();
         }
         this.fill();
     }
@@ -215,7 +177,7 @@ async function runTests() {
 
     //Execute the scratch project
     dodona.startTestContext();
-    await scratch.clickGreenFlag();
+    await scratch.startEvents();
     dodona.closeTestContext();
 
     //Create new test context for tests after the execution

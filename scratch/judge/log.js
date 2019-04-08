@@ -1,10 +1,11 @@
 
 class Frame {
 
-    constructor(block) {
+    constructor(block, pen) {
         this.time = getTimeStamp();
         this.block = block;
         this.sprites = [];
+        this.pen = JSON.parse(JSON.stringify(pen));
 
         let targets = Scratch.vm.runtime.targets;
 
@@ -48,27 +49,31 @@ class Log {
     constructor() {
         this.frames = [];
         this.lastFrame = null;
-        this.currentFrame = null
+        this.currentFrame = null;
 
         this.pen = new Pen();
-        this.penEvents = [];
 
         this.blocks = {};
+
+        this.events = [];
 
     }
 
     addFrame(block) {
-        let frame = new Frame(block);
+        let frame = new Frame(block, this.pen);
         this.lastFrame = this.currentFrame;
         this.currentFrame = frame;
+
         this.frames.push(frame);
 
         if (!this.blocks[block]) {
             this.blocks[block] = 0;
         }
         this.blocks[block]++;
+    }
 
-        this.penEvents.push(this.pen);
+    addEvent(event) {
+        this.events.push(event);
     }
 
     reset() {

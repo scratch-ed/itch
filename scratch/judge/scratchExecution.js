@@ -79,9 +79,29 @@ function init(file) {
         Scratch.vm.runtime.emit('DONE_THREADS_UPDATE', Scratch.vm.runtime._lastStepDoneThreads);
         return r;
     }
-
-
     //Scratch.vm.runtime._step = newStep();
+
+
+    // Wrapper for greenFlag: we want greenFlag to return the threads started by runtime.greenFlag()
+
+    const oldGreenFlag = Scratch.vm.greenFlag;
+
+    function newGreenFlag() {
+        return this.runtime.greenFlag();
+    }
+    //Scratch.vm.greenFlag = newGreenFlag();
+
+    // Wrapper for runtime.greenFlag: we want greenFlag to return the threads started by runtime.startHats()
+    const oldRuntimeGreenFlag = Scratch.vm.runtime.greenFlag;
+
+    function newRuntimeGreenFlag() {
+        oldRuntimeGreenFlag();
+        //todo find way to return threads
+    }
+    //Scratch.vm.runtime.greenFlag = newRuntimeGreenFlag();
+
+    // Maybe emit threads after each StartHats function and catch them here?
+
 
 
     // VM event handlers
@@ -146,15 +166,13 @@ function createProfiler() {
     };
 }
 
-function greenFlag() {
+function start() {
 
     //Start timer
     startTimestamp = Date.now();
     console.log("start timestamp:", startTimestamp);
 
     Scratch.executionEnd = new Future();
-    //Scratch.vm.greenFlag();
-
     Scratch.simulationEnd = new Future();
     simulationChain.launch();
 }

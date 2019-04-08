@@ -7,8 +7,13 @@
  */
 
 function prepare() {
+
+    actionTimeout = 10000;
+
     scratch.events
-        .greenFlag()
+        .greenFlag(1000)
+        .greenFlag(1000)
+        .greenFlag(1000)
         .end();
 
     scratch.start();
