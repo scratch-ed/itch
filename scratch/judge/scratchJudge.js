@@ -35,8 +35,8 @@ class Playground {
 }
 
 class AllBlocks {
-    constructor(blocks) {
-        this.blocks = blocks;
+    constructor(log) {
+        this.blocks = log.blocks;
     }
 
     containsLoop() {
@@ -60,39 +60,9 @@ class Vm {
 }
 
 class Sprites {
-    constructor(spritesLog) {
-        this.sprites = spritesLog[spritesLog.length - 1].sprites; //sprites in the final states
-        this.log = spritesLog;
-    }
-
-    print() {
-        let res = [];
-        for (let e in this.log) {
-            let event = this.log[e];
-            let spriteList = [];
-            let sprites = event.sprites;
-            for (let s in sprites) {
-                let sprite = sprites[s];
-                spriteList.push({
-                    name: sprite.name,
-                    x: Math.round(sprite.x * 100) / 100,
-                    y: Math.round(sprite.y * 100) / 100,
-                    costumeNr: sprite.currentCostume,
-                    costumeName: sprite.costume.name,
-                    visible: sprite.visible
-                });
-            }
-            res.push({time: event.time, block: event.block, sprites: spriteList});
-        }
-        return res;
-    }
-
-    listSprites() {
-        return this.data;
-    }
-
-    getSpriteIdByName(spriteName) {
-        return getSpriteIdByName(spriteName, this.sprites);
+    constructor() {
+        //list of sprites in final frame
+        this.sprites = log.currentFrame.sprites;
     }
 
     containsLoop(spriteId) {
@@ -100,7 +70,7 @@ class Sprites {
     }
 
     getStartSprites() {
-        return this.log[0].sprites;
+        return log.frames[0].sprites;
     }
 
     getSpritesAfterFirstBlockOccurance(blockName) {
@@ -120,11 +90,24 @@ class Sprites {
     }
 
     getCostume(spriteName) {
+
         let sprite = getSpriteByName(spriteName, this.sprites);
         if (sprite) {
-            return sprite.costume.name;
+            return sprite.costume;
         } else {
             return `Error: Er bestaat geen sprite met naam: ${spriteName}`
+        }
+    }
+
+    stayedInBounds(spriteName) {
+        for (let i in this.log) {
+            let s = this.log[i];
+            for (let j in s) {
+                let sprite = s[j];
+                if (sprite.name === spriteName) {
+
+                }
+            }
         }
     }
 
@@ -157,7 +140,7 @@ class ScratchJudge {
             resolve();
         }, 0).start();
         this.hasSimulation = false;
-
+        //this.capture = [];
         this.log = {};
         this.blocks = {};
         this.playground = {};
@@ -168,8 +151,8 @@ class ScratchJudge {
         console.log(data);
         this.log = data.log;
         this.playground = new Playground(data.log);
-        this.blocks = new AllBlocks(data.blocks);
-        this.sprites = new Sprites(data.spritesLog);
+        this.blocks = new AllBlocks(log);
+        this.sprites = new Sprites(log);
     }
 
     get executionTime() {
@@ -196,7 +179,11 @@ class ScratchJudge {
         this._mouseInput = value;
     }
 
-    setSimulation() {
+    captureData(...args) {
+        //toCapture = args;
+    }
+
+    start() {
         simulationChain = this.simulation;
         this.hasSimulation = true;
     }
@@ -219,7 +206,7 @@ class ScratchJudge {
             await Scratch.simulationEnd.promise;
             this.resetSimulation();
         }
-        this.fill({log: logData, blocks: blockLog, spritesLog: spritesLog, vm: {}});
+        this.fill({log: logData, spritesLog: log, vm: {}});
     }
 
 }

@@ -4,10 +4,15 @@
 const path = require('path');
 const url = path.resolve(__dirname, 'scratch/scratch-test-environment.html');
 
+/*
 const sourceFileTest = path.resolve(__dirname, 'source/sourceFile.sb3');
 const testFile = path.resolve(__dirname, 'tests/test.js');
+*/
 
-const DEBUG = false;
+const sourceFileTest = path.resolve(__dirname, 'scratch_code/papegaai.sb3');
+const testFile = path.resolve(__dirname, 'tests/papegaai_test.js');
+
+const DEBUG = true;
 
 // puppeteer
 const puppeteer = require('puppeteer');

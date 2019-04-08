@@ -20,7 +20,7 @@ function prepare() {
         .testCostume('Hoofd', 'blauw')
         .end();
 
-    scratch.setSimulation();
+    scratch.start();
 }
 
 function evaluate() {
@@ -28,6 +28,5 @@ function evaluate() {
     addTest('Kleur van kostuum', 'blauw', scratch.sprites.getCostume('Hoofd'), 'Na 4 keer klikken op het hoofd van de goblin is het hoofd blauw');
 
     addTest('Juiste blokken gebruikt', true, scratch.blocks.containsBlock('looks_nextcostume'), 'Het blok volgend_kostuum wordt gebruikt');
-
 
 }

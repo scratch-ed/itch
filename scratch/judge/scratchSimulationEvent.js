@@ -59,6 +59,12 @@ class ScratchSimulationEvent extends SimulationEvent {
 
                 }, extraWaitTime);
 
+            }, (reason) => {
+                console.log(reason);
+                Scratch.vm.stopAll();
+                Scratch.executionEnd.resolve();
+                Scratch.simulationEnd.resolve();
+
             });
 
         });
@@ -77,6 +83,19 @@ class ScratchSimulationEvent extends SimulationEvent {
 
         });
 
+    }
+
+    isTouchingSprite(spriteName1, spriteName2) {
+        let sprite1 = Scratch.vm.runtime.getSpriteTargetByName(spriteName1);
+        let sprite2 = Scratch.vm.runtime.getSpriteTargetByName(spriteName2);
+
+        let touching = sprite1.isTouchingSprite(sprite2);
+    }
+
+    isTouchingEdge(spriteName) {
+        let sprite1 = Scratch.vm.runtime.getSpriteTargetByName(spriteName);
+
+        let touching = sprite1.isTouchingEdge();
     }
 
     testCostume(spriteName, correctCostumeName, delay = 0) {
