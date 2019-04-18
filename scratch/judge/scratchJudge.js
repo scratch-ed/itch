@@ -1,16 +1,8 @@
 class Playground {
     constructor(log) {
-        this.lines = log.lines;
-        this.say = log.responses;
-        this.ask = log.responses;
-    }
-
-    get responses() {
-        return this._responses;
-    }
-
-    set responses(value) {
-        this._responses = value;
+        this.lines = log.renderer.lines;
+        this.say = log.renderer.responses;
+        this.ask = log.renderer.responses;
     }
 
     get squares() {
@@ -44,17 +36,9 @@ class AllBlocks {
     }
 }
 
-class Vm {
-    constructor(vm) {
-        //console.log(data);
-        this.vm = vm;
-    }
-}
-
 class Sprites {
     constructor() {
-        //list of sprites in final frame
-        this.sprites = log.currentFrame.sprites;
+
     }
 
     containsLoop(spriteId) {
@@ -65,43 +49,102 @@ class Sprites {
         return log.frames[0].sprites;
     }
 
-    getSpritesAfterFirstBlockOccurance(blockName) {
-        return getSpritesAfterBlock(blockName, 1, this.log);
-    }
-
-    getSpritesBeforeFirstBlockOccurance(blockName) {
-        return getSpritesBeforeBlock(blockName, 1, this.log);
-    }
-
-    getSpritesAfterBlock(blockName, occurance) {
-        return getSpritesAfterBlock(blockName, occurance, this.log);
-    }
-
-    getSpritesBeforeBlock(blockName, occurance) {
-        return getSpritesBeforeBlock(blockName, occurance, this.log);
-    }
 
     getCostume(spriteName) {
 
-        let sprite = getSpriteByName(spriteName, this.sprites);
-        if (sprite) {
+        let sprite = getSpriteByName(spriteName, log.currentFrame);
+        if (sprite != null) {
             return sprite.costume;
         } else {
             return `Error: Er bestaat geen sprite met naam: ${spriteName}`
         }
     }
 
-    stayedInBounds(spriteName) {
-        for (let i in this.log) {
-            let s = this.log[i];
-            for (let j in s) {
-                let sprite = s[j];
-                if (sprite.name === spriteName) {
+    getMaxX(spriteName) {
 
+        let max = 0;
+        for (let index = 0; index < log.frames.length; index++) {
+            let frame = log.frames[index];
+            let sprite = getSpriteByName(spriteName, frame);
+            if (sprite != null) {
+                if (sprite.x > max) {
+                    max = sprite.x;
                 }
             }
         }
+        return max;
+
     }
+
+    getMinX(spriteName) {
+
+        let min = 0;
+        for (let index = 0; index < log.frames.length; index++) {
+            let frame = log.frames[index];
+            let sprite = getSpriteByName(spriteName, frame);
+            if (sprite != null) {
+                if (sprite.x < min) {
+                    min = sprite.x;
+                }
+            }
+        }
+        return min;
+
+    }
+
+    getMaxY(spriteName) {
+
+        let max = 0;
+        for (let index = 0; index < log.frames.length; index++) {
+            let frame = log.frames[index];
+            let sprite = getSpriteByName(spriteName, frame);
+            if (sprite != null) {
+                if (sprite.y > max) {
+                    max = sprite.y;
+                }
+            }
+        }
+        return max;
+
+    }
+
+    getMinY(spriteName) {
+
+        let min = 0;
+        for (let index = 0; index < log.frames.length; index++) {
+            let frame = log.frames[index];
+            let sprite = getSpriteByName(spriteName, frame);
+            if (sprite != null) {
+                if (sprite.y < min) {
+                    min = sprite.y;
+                }
+            }
+        }
+        return min;
+
+    }
+
+    inBounds(spriteName) {
+
+        let WIDTH = 480;
+        let HEIGHT = 360;
+
+        let sprite = getSpriteByName(spriteName, log.currentFrame);
+        let spritesizeXRadius = Math.floor(sprite.costumeSize[0] * (sprite.size / 100) / 2);
+        let spritesizeYRadius = Math.floor(sprite.costumeSize[1] * (sprite.size / 100) / 2);
+
+        console.log(spritesizeYRadius);
+
+        let maxX = this.getMaxX(spriteName);
+        let minX = this.getMinX(spriteName);
+        let maxY = this.getMaxY(spriteName);
+        let minY = this.getMinY(spriteName);
+
+        return (maxX < (WIDTH / 2) - spritesizeXRadius) && (minX > (-WIDTH / 2) + spritesizeXRadius) && (maxY < (HEIGHT / 2) - spritesizeYRadius) && (minY > (-HEIGHT / 2) + spritesizeYRadius);
+
+    }
+
+
 
     isVisibleAtStart(spriteName) {
         return this.isVisible(spriteName, this.getStartSprites());
@@ -128,8 +171,6 @@ class ScratchJudge {
 
     constructor() {
         this.events = new ScratchSimulationEvent().start();
-        this.hasSimulation = false;
-        //this.capture = [];
         this.log = {};
         this.blocks = {};
         this.playground = {};
@@ -138,27 +179,21 @@ class ScratchJudge {
 
     fill() {
         console.log(log);
-        this.playground = new Playground(log.pen);
+        this.log = log;
+        this.playground = new Playground(log);
         this.blocks = new AllBlocks(log);
         this.sprites = new Sprites(log);
     }
 
-    captureData(...args) {
-        //toCapture = args;
-    }
-
     start() {
         simulationChain = this.events;
-        this.hasSimulation = true;
     }
 
     async startEvents() {
         createProfiler();
         start();
         await Scratch.executionEnd.promise;
-        if (this.hasSimulation) {
-            await Scratch.simulationEnd.promise;
-        }
+        await Scratch.simulationEnd.promise;
         this.fill();
     }
 

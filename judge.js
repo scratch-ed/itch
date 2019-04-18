@@ -9,8 +9,8 @@ const sourceFileTest = path.resolve(__dirname, 'source/sourceFile.sb3');
 const testFile = path.resolve(__dirname, 'tests/test.js');
 */
 
-const sourceFileTest = path.resolve(__dirname, 'scratch_code/square.sb3');
-const testFile = path.resolve(__dirname, 'tests/vierkant.js');
+const sourceFileTest = path.resolve(__dirname, 'scratch_code/mad-hatter.sb3');
+const testFile = path.resolve(__dirname, 'tests/madhatter.js');
 
 const DEBUG = true;
 
@@ -94,7 +94,7 @@ class Judge {
 
         let browser;
         if (DEBUG) {
-            browser = await puppeteer.launch({headless: false, args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']});
+            browser = await puppeteer.launch({headless: false, devtools: true, args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']});
         } else {
             browser = await puppeteer.launch({args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']});
         }
@@ -140,6 +140,8 @@ class Judge {
 
         await page.addScriptTag({url: testFile});
 
+
+
         // START JUDGE
         toDodona({command: "start-judgement"});
 
@@ -147,6 +149,12 @@ class Judge {
         await fileHandle.uploadFile(sourceFileTest);
 
         await page.waitFor(50);
+
+        if (DEBUG) {
+            await page.evaluate(() => {
+                debugger;
+            });
+        }
 
         let output = await page.evaluate(() => {
             return runTests();

@@ -9,9 +9,16 @@ class ScratchSimulationEvent extends SimulationEvent {
         })
     }
 
-    clickSprite(spriteName, delay = 0) {
+    clickSprite(data = {}) {
 
         return this.next((resolve, reject) => {
+
+            let spriteName = data.spriteName;
+            let delay = data.delay || 0;
+            let timeout = data.timeout || actionTimeout;
+            let sync = data.sync;
+            if (sync === undefined) sync = true;
+
             let startTime = Date.now();
             console.log(`${getTimeStamp()}: click ${spriteName}`);
 
@@ -33,9 +40,14 @@ class ScratchSimulationEvent extends SimulationEvent {
                 return;
             }
 
+            //if not sync, don't wait until the threads handling the event finished executing
+            if (!sync) {
+                resolve();
+            }
+
             let promiseList = [];
             for (let i = 0; i < list.length; i++) {
-                promiseList.push(ensureFinished(list[i].topBlock, actionTimeout))
+                promiseList.push(ensureFinished(list[i].topBlock, timeout))
             }
 
             let promise = Promise.all(promiseList);
@@ -53,16 +65,17 @@ class ScratchSimulationEvent extends SimulationEvent {
                     console.log(`finished click on ${spriteName}`);
                     // save sprites state after click
                     let newFrame = new Frame('click', log.pen);
-                    log.addEvent({event: 'click', before: oldFrame, after: newFrame});
+                    log.addEvent('click', {before: oldFrame, after: newFrame}); // event klasse met name of type, time
                     resolve();
 
                 }, extraWaitTime);
 
             }, (reason) => {
                 console.log(`${getTimeStamp()}: ${reason} after ${Date.now() - startTime} ms`);
+                let newFrame = new Frame('click', log.pen);
+                log.addEvent({event: 'click', before: oldFrame, after: newFrame});
                 Scratch.vm.stopAll();
-                Scratch.executionEnd.resolve();
-                Scratch.simulationEnd.resolve();
+                resolve();
 
             });
 
@@ -70,19 +83,28 @@ class ScratchSimulationEvent extends SimulationEvent {
 
     }
 
-    greenFlag(delay = 0) {
+    greenFlag(data = {}) {
         return this.next((resolve, reject) => {
+
+            let delay = data.delay || 0;
+            let timeout = data.timeout || actionTimeout;
+            let sync = data.sync;
+            if (sync === undefined) sync = true;
+
             let startTime = Date.now();
 
             let oldFrame = new Frame('greenFlag', log.pen);
 
             let list = Scratch.vm.greenFlag();
 
-
+            //if not sync, don't wait until the threads handling the event finished executing
+            if (!sync) {
+                resolve();
+            }
 
             let promiseList = [];
             for (let i = 0; i < list.length; i++) {
-                promiseList.push(ensureFinished(list[i].topBlock, actionTimeout))
+                promiseList.push(ensureFinished(list[i].topBlock, timeout))
             }
 
             let promise = Promise.all(promiseList);
@@ -108,9 +130,6 @@ class ScratchSimulationEvent extends SimulationEvent {
             }, (reason) => {
                 console.log(`${getTimeStamp()}: ${reason} after ${Date.now() - startTime} ms`);
                 Scratch.vm.stopAll();
-                Scratch.executionEnd.resolve();
-                Scratch.simulationEnd.resolve();
-
             });
         });
     }

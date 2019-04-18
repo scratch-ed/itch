@@ -2,6 +2,7 @@ class SimulationEvent {
 
     constructor(action, delay) {
 
+        // delay after action is executed
         this.delay = delay || 0;
 
         let f = function(resolve, reject) {
@@ -11,9 +12,6 @@ class SimulationEvent {
         };
         // action that needs to be executed
         this.action = action || f;
-
-        // delay before action is executed
-
 
         // events to be executed after this event has been executed
         this.nextEvents = [];
@@ -157,14 +155,27 @@ class SimulationEvent {
 
     }
 
+    clearLog() {
+
+        log.reset();
+        return this.next((resolve, reject) => {
+            resolve();
+        });
+
+    }
+
     // utility functions for predefined actions
 
     wait(delay) {
 
-        // register an event that does noting else but waiting (and return that event)
         return this.next((resolve, reject) => {
-            resolve();
-        }, delay);
+
+            console.log(`waiting for ${delay}`);
+
+            setTimeout(() => {
+                resolve();
+            }, delay)
+        })
 
     }
 
