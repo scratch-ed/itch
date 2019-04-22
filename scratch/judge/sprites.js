@@ -7,12 +7,12 @@ function getSpriteIdByName(spriteName, sprites) {
     return -1;
 }
 
-function getSpriteByName(spriteName, sprites) {
+function getSpriteByName(spriteName, frame) {
     let i;
-    for (i = 0; i < sprites.length; i++) {
-        if (sprites[i].name === spriteName) return sprites[i];
+    for (i = 0; i < frame.sprites.length; i++) {
+        if (frame.sprites[i].name === spriteName) return frame.sprites[i];
     }
-    return -1;
+    return null;
 }
 
 function isVisible(spriteId, sprites) {

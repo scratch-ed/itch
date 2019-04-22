@@ -9,11 +9,10 @@ let mouseInput;
 let numberOfRun = 0;
 
 let log = new Log();
+let activeActions = [];
 
 // Create event chain to simulate user input.
-let simulationChain = new ScratchSimulationEvent((resolve, reject) => {
-    resolve();
-}, 0);
+let simulationChain = new ScratchSimulationEvent();
 
 
 class Future {
@@ -47,7 +46,7 @@ function init(file) {
     const vm = new VirtualMachine();
     Scratch.vm = vm;
 
-    vm.setTurboMode(true);
+    vm.setTurboMode(false);
     vm.loadProject(file);
 
     // Storage
@@ -71,15 +70,17 @@ function init(file) {
 
     // Wrapper for step
 
-    const oldStep = Scratch.vm.runtime._step;
+    const oldStep = Scratch.vm.runtime._step.bind(Scratch.vm.runtime);
 
     function newStep() {
-        console.log(this.profiler);
-        let r = oldStep.apply(this);
-        Scratch.vm.runtime.emit('DONE_THREADS_UPDATE', Scratch.vm.runtime._lastStepDoneThreads);
+        let r = oldStep();
+        if (Scratch.vm.runtime._lastStepDoneThreads.length > 0) {
+            Scratch.vm.runtime.emit('DONE_THREADS_UPDATE', Scratch.vm.runtime._lastStepDoneThreads);
+        }
         return r;
     }
-    //Scratch.vm.runtime._step = newStep();
+
+    Scratch.vm.runtime._step = newStep;
 
 
     // Wrapper for greenFlag: we want greenFlag to return the threads started by runtime.greenFlag()
@@ -139,8 +140,12 @@ function vmHandleEvents(vm) {
     });
 
     vm.runtime.on('DONE_THREADS_UPDATE', (threads) => {
-        for (let index in threads) {
-            console.log(threads[index].topBlock);
+        for (thread of threads) {
+            for (action of activeActions) {
+                if (action.active) {
+                    action.update(thread.topBlock);
+                }
+            }
         }
     });
 }
@@ -167,12 +172,9 @@ function createProfiler() {
 }
 
 function start() {
-
     //Start timer
     startTimestamp = Date.now();
     console.log("start timestamp:", startTimestamp);
-
-    Scratch.executionEnd = new Future();
     Scratch.simulationEnd = new Future();
     simulationChain.launch();
 }

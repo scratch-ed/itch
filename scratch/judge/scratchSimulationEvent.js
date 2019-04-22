@@ -9,9 +9,16 @@ class ScratchSimulationEvent extends SimulationEvent {
         })
     }
 
-    clickSprite(spriteName, delay = 0) {
+    clickSprite(data = {}) {
 
         return this.next((resolve, reject) => {
+
+            let spriteName = data.spriteName || 'Stage';
+            let delay = data.delay || 0;
+            let timeout = data.timeout || actionTimeout;
+            let sync = data.sync;
+            if (sync === undefined) sync = true;
+
             let startTime = Date.now();
             console.log(`${getTimeStamp()}: click ${spriteName}`);
 
@@ -33,14 +40,29 @@ class ScratchSimulationEvent extends SimulationEvent {
                 return;
             }
 
-            let promiseList = [];
-            for (let i = 0; i < list.length; i++) {
-                promiseList.push(ensureFinished(list[i].topBlock, actionTimeout))
+            //if not sync, don't wait until the threads handling the event finished executing
+            if (!sync) {
+                resolve('async resolve');
             }
 
-            let promise = Promise.all(promiseList);
+            let topBlocks = [];
+            for (let thread of list) {
+                topBlocks.push(thread.topBlock);
+            }
 
-            promise.then(() => {
+            let action = new Action(topBlocks);
+            activeActions.push(action);
+
+            setTimeout(() => {
+                if (!sync) {
+                    console.log(`Timeout after ${timeout} ms`)
+                    Scratch.vm.stopAll();
+                    Scratch.simulationEnd.resolve();
+                }
+                reject();
+            }, timeout);
+
+            action.actionEnded.promise.then(() => {
 
                 let extraWaitTime = 0;
                 let timeSpend = Date.now() - startTime;
@@ -53,41 +75,47 @@ class ScratchSimulationEvent extends SimulationEvent {
                     console.log(`finished click on ${spriteName}`);
                     // save sprites state after click
                     let newFrame = new Frame('click', log.pen);
-                    log.addEvent({event: 'click', before: oldFrame, after: newFrame});
-                    resolve();
+                    log.addEvent('click', {before: oldFrame, after: newFrame}); // event klasse met name of type, time
+                    resolve('finished action resolve');
 
                 }, extraWaitTime);
-
-            }, (reason) => {
-                console.log(`${getTimeStamp()}: ${reason} after ${Date.now() - startTime} ms`);
-                Scratch.vm.stopAll();
-                Scratch.executionEnd.resolve();
-                Scratch.simulationEnd.resolve();
-
             });
-
         });
 
     }
 
-    greenFlag(delay = 0) {
+    greenFlag(data = {}) {
         return this.next((resolve, reject) => {
+
+            let delay = data.delay || 0;
+            let timeout = data.timeout || actionTimeout;
+            let sync = data.sync;
+            if (sync === undefined) sync = true;
+
             let startTime = Date.now();
 
             let oldFrame = new Frame('greenFlag', log.pen);
 
-            let list = Scratch.vm.greenFlag();
+            Scratch.executionEnd = new Future();
+            Scratch.vm.greenFlag();
 
-
-
-            let promiseList = [];
-            for (let i = 0; i < list.length; i++) {
-                promiseList.push(ensureFinished(list[i].topBlock, actionTimeout))
+            //if not sync, don't wait until the threads handling the event finished executing
+            if (!sync) {
+                resolve('async resolve');
             }
 
-            let promise = Promise.all(promiseList);
+            console.log('timeout =', timeout);
 
-            promise.then(() => {
+            setTimeout(() => {
+                if (!sync) {
+                    console.log(`Timeout after ${timeout} ms`)
+                    Scratch.vm.stopAll();
+                    Scratch.simulationEnd.resolve();
+                }
+                reject();
+            }, timeout);
+
+            Scratch.executionEnd.promise.then(() => {
 
                 let extraWaitTime = 0;
                 let timeSpend = Date.now() - startTime;
@@ -101,16 +129,9 @@ class ScratchSimulationEvent extends SimulationEvent {
                     // save sprites state after click
                     let newFrame = new Frame('greenFlag', log.pen);
                     log.addEvent({event: 'greenFlag', before: oldFrame, after: newFrame});
-                    resolve();
+                    resolve('finished action resolve');
 
                 }, extraWaitTime);
-
-            }, (reason) => {
-                console.log(`${getTimeStamp()}: ${reason} after ${Date.now() - startTime} ms`);
-                Scratch.vm.stopAll();
-                Scratch.executionEnd.resolve();
-                Scratch.simulationEnd.resolve();
-
             });
         });
     }

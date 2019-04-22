@@ -2,18 +2,16 @@ class SimulationEvent {
 
     constructor(action, delay) {
 
+        // delay after action is executed
         this.delay = delay || 0;
 
         let f = function(resolve, reject) {
             setTimeout(() => {
-                resolve();
+                resolve('Start event resolved');
             }, this.delay);
         };
         // action that needs to be executed
         this.action = action || f;
-
-        // delay before action is executed
-
 
         // events to be executed after this event has been executed
         this.nextEvents = [];
@@ -26,11 +24,17 @@ class SimulationEvent {
             this.action(resolve, reject);
         });
 
-        executeAction.then(() => {
+        executeAction.then((value) => {
+            // console.log('promise resolved', value);
+
             // execute next events one after the other
             for (let event of this.nextEvents) {
                 event.launch();
             }
+        }, () => {
+            console.log('Test ended: time limit exceeded');
+            Scratch.vm.stopAll();
+            Scratch.simulationEnd.resolve();
         });
 
     }
@@ -157,14 +161,27 @@ class SimulationEvent {
 
     }
 
+    clearLog() {
+
+        log.reset();
+        return this.next((resolve, reject) => {
+            resolve();
+        });
+
+    }
+
     // utility functions for predefined actions
 
     wait(delay) {
 
-        // register an event that does noting else but waiting (and return that event)
         return this.next((resolve, reject) => {
-            resolve();
-        }, delay);
+
+            console.log(`waiting for ${delay}`);
+
+            setTimeout(() => {
+                resolve('wait resolved');
+            }, delay)
+        })
 
     }
 
