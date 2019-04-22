@@ -41,6 +41,22 @@ class Sprites {
 
     }
 
+    getVariableValue(variableName, spriteName = 'Stage') {
+        for (let sprite of log.currentFrame.sprites) {
+            if (sprite.name === spriteName) {
+                if (sprite.variables !== undefined) {
+                    for (let property in sprite.variables) {
+                        if (sprite.variables.hasOwnProperty(property)) {
+                            if (sprite.variables[property].name === variableName) {
+                                return sprite.variables[property].value;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     containsLoop(spriteId) {
         return containsLoop(spriteId, this.sprites);
     }
@@ -143,7 +159,6 @@ class Sprites {
         return (maxX < (WIDTH / 2) - spritesizeXRadius) && (minX > (-WIDTH / 2) + spritesizeXRadius) && (maxY < (HEIGHT / 2) - spritesizeYRadius) && (minY > (-HEIGHT / 2) + spritesizeYRadius);
 
     }
-
 
 
     isVisibleAtStart(spriteName) {

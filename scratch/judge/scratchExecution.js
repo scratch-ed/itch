@@ -9,6 +9,7 @@ let mouseInput;
 let numberOfRun = 0;
 
 let log = new Log();
+let activeActions = [];
 
 // Create event chain to simulate user input.
 let simulationChain = new ScratchSimulationEvent();
@@ -45,7 +46,7 @@ function init(file) {
     const vm = new VirtualMachine();
     Scratch.vm = vm;
 
-    vm.setTurboMode(true);
+    vm.setTurboMode(false);
     vm.loadProject(file);
 
     // Storage
@@ -139,7 +140,13 @@ function vmHandleEvents(vm) {
     });
 
     vm.runtime.on('DONE_THREADS_UPDATE', (threads) => {
-        console.log(threads);
+        for (thread of threads) {
+            for (action of activeActions) {
+                if (action.active) {
+                    action.update(thread.topBlock);
+                }
+            }
+        }
     });
 }
 

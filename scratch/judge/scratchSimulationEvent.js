@@ -13,7 +13,7 @@ class ScratchSimulationEvent extends SimulationEvent {
 
         return this.next((resolve, reject) => {
 
-            let spriteName = data.spriteName;
+            let spriteName = data.spriteName || 'Stage';
             let delay = data.delay || 0;
             let timeout = data.timeout || actionTimeout;
             let sync = data.sync;
@@ -45,12 +45,15 @@ class ScratchSimulationEvent extends SimulationEvent {
                 resolve();
             }
 
-            let promiseList = [];
-            for (let i = 0; i < list.length; i++) {
-                promiseList.push(ensureFinished(list[i].topBlock, timeout))
+            let topBlocks = [];
+            for (let thread of list) {
+                topBlocks.push(thread.topBlock);
             }
 
-            let promise = Promise.all(promiseList);
+            let action = new Action(topBlocks);
+            activeActions.push(action);
+
+            let promise = promiseTimeout(action.actionEnded.promise, timeout);
 
             promise.then(() => {
 
@@ -75,8 +78,7 @@ class ScratchSimulationEvent extends SimulationEvent {
                 let newFrame = new Frame('click', log.pen);
                 log.addEvent({event: 'click', before: oldFrame, after: newFrame});
                 Scratch.vm.stopAll();
-                resolve();
-
+                reject('timeout');
             });
 
         });
@@ -102,12 +104,15 @@ class ScratchSimulationEvent extends SimulationEvent {
                 resolve();
             }
 
-            let promiseList = [];
-            for (let i = 0; i < list.length; i++) {
-                promiseList.push(ensureFinished(list[i].topBlock, timeout))
+            let topBlocks = [];
+            for (let thread of list) {
+                topBlocks.push(thread.topBlock);
             }
 
-            let promise = Promise.all(promiseList);
+            let action = new Action(topBlocks);
+            activeActions.push(action);
+
+            let promise = promiseTimeout(action.actionEnded, timeout);
 
             promise.then(() => {
 
@@ -130,6 +135,7 @@ class ScratchSimulationEvent extends SimulationEvent {
             }, (reason) => {
                 console.log(`${getTimeStamp()}: ${reason} after ${Date.now() - startTime} ms`);
                 Scratch.vm.stopAll();
+                resolve();
             });
         });
     }

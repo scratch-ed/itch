@@ -7,7 +7,7 @@ function prepare() {
             ['Hoofd', 'Stage', 'Goblin', 'Hoofd', 'Hoofd', 'Hoofd', 'Hoofd'],
             (index, target, anchor) => {
                 return anchor
-                    .clickSprite({spriteName: target, delay: 300, sync: false})
+                    .clickSprite({spriteName: target, delay: 300, sync: true})
                     .wait(500)
             }
         )

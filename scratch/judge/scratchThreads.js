@@ -1,17 +1,40 @@
 
+function promiseTimeout(promise, ms){
 
-function ensureFinished(topBlock, timeout) {
-    const start = Date.now();
-    return new Promise(waitForThread);
+    // Create a promise that rejects in <ms> milliseconds
+    let timeout = new Promise((resolve, reject) => {
+        setTimeout(() => {
+            reject('Timed out in '+ ms + 'ms.')
+        }, ms)
+    });
 
-    function waitForThread(resolve, reject) {
-        if (!Scratch.vm.runtime.threads.find(function (obj) { return obj.topBlock === topBlock; })){
-            //console.log('RESOLVED FOR '+topBlock+' !!!');
-            resolve();
+    // Returns a race between our timeout and the passed in promise
+    return Promise.race([
+        promise,
+        timeout
+    ])
+}
+
+class Action {
+    constructor(topBlocks){
+        this.startTime = getTimeStamp();
+        this.topBlocks = topBlocks;
+        this.actionEnded = new Promise();
+        this.active = true;
+    }
+
+    update(topBlock) {
+        let newTopBlocks = [];
+        for (let topB in this.topBlocks) {
+            if (topB !== topBlock) {
+                newTopBlocks.push(topB);
+            }
         }
-        else if (timeout && (Date.now() - start) >= timeout)
-            reject("timeout");
-        else
-            setTimeout(waitForThread.bind(this, resolve, reject), 30);
+        if (newTopBlocks.length === 0) {
+            // resolven
+            this.actionEnded.resolve();
+            this.active = false;
+        }
+        this.topBlocks = newTopBlocks;
     }
 }

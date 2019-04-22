@@ -21,6 +21,8 @@ class Frame {
                 sprite[variable] = target[variable];
             });
 
+            sprite['variables'] = JSON.parse(JSON.stringify(target['variables']));
+
             // sprite properties to log
             sprite['costume'] = target.sprite.costumes_[target['currentCostume']].name;
             sprite['costumeSize'] = target.sprite.costumes_[target['currentCostume']].size;
@@ -30,6 +32,7 @@ class Frame {
 
             this.sprites.push(sprite);
         }
+
     }
 
 }
