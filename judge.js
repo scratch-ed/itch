@@ -9,7 +9,7 @@ const sourceFileTest = path.resolve(__dirname, 'source/sourceFile.sb3');
 const testFile = path.resolve(__dirname, 'tests/test.js');
 */
 
-const sourceFileTest = path.resolve(__dirname, 'scratch_code/ballon.sb3');
+const sourceFileTest = path.resolve(__dirname, 'scratch_code/balloon_game.sb3');
 const testFile = path.resolve(__dirname, 'tests/balloon.js');
 
 const DEBUG = true;

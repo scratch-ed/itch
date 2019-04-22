@@ -11,9 +11,10 @@ function prepare() {
     actionTimeout = 10000;
 
     scratch.events
-        .greenFlag({sync: false})
+        .greenFlag({sync: false, timeout: 2000})
         .wait(1000)
-        .clickSprite({spriteName: 'Balloon', sync: true})
+        .clickSprite({spriteName: 'Balloon', sync: true, timeout: 1000})
+        .wait(1200)
         .clickSprite({spriteName: 'Balloon', sync: true})
         .clickSprite({spriteName: 'Balloon', sync: true})
         .clickSprite({spriteName: 'Balloon', sync: true})

@@ -7,7 +7,7 @@ class SimulationEvent {
 
         let f = function(resolve, reject) {
             setTimeout(() => {
-                resolve();
+                resolve('Start event resolved');
             }, this.delay);
         };
         // action that needs to be executed
@@ -24,11 +24,17 @@ class SimulationEvent {
             this.action(resolve, reject);
         });
 
-        executeAction.then(() => {
+        executeAction.then((value) => {
+            // console.log('promise resolved', value);
+
             // execute next events one after the other
             for (let event of this.nextEvents) {
                 event.launch();
             }
+        }, () => {
+            console.log('Test ended: time limit exceeded');
+            Scratch.vm.stopAll();
+            Scratch.simulationEnd.resolve();
         });
 
     }
@@ -173,7 +179,7 @@ class SimulationEvent {
             console.log(`waiting for ${delay}`);
 
             setTimeout(() => {
-                resolve();
+                resolve('wait resolved');
             }, delay)
         })
 

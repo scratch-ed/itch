@@ -172,12 +172,9 @@ function createProfiler() {
 }
 
 function start() {
-
     //Start timer
     startTimestamp = Date.now();
     console.log("start timestamp:", startTimestamp);
-
-    Scratch.executionEnd = new Future();
     Scratch.simulationEnd = new Future();
     simulationChain.launch();
 }

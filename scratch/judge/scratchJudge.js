@@ -207,7 +207,6 @@ class ScratchJudge {
     async startEvents() {
         createProfiler();
         start();
-        await Scratch.executionEnd.promise;
         await Scratch.simulationEnd.promise;
         this.fill();
     }
@@ -236,6 +235,6 @@ async function runTests() {
     dodona.closeTestContext();
 
     dodona.closeTestTab();
-
+    console.log('--- END OF EVALUATION ---');
     return true;
 }
