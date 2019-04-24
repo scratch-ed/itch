@@ -179,17 +179,69 @@ class Sprites {
         return getBlocks(spriteId, this.sprites);
     }
 
+    getCostumes(spriteName) {
+        let costumes = {};
+        let costumeIds = new Set();
+        for (let frame of log.frames) {
+            let sprite = getSpriteByName(spriteName, frame);
+            if (sprite != null) {
+                if (!costumeIds.has(sprite.currentCostume)) {
+                    costumeIds.add(sprite.currentCostume);
+                    costumes[sprite.currentCostume] = sprite.costume;
+                }
+            }
+        }
+        return costumes;
+    }
 
+    getNumberOfCostumes(spriteName) {
+        let costumes = this.getCostumes(spriteName);
+        return Object.keys(costumes).length;
+    }
+
+}
+
+class Events {
+    constructor(log) {
+        this.events = log.events;
+    }
+
+    getEventsByType(type) {
+        let result = [];
+        for (let event of log.events) {
+            if (event.type === type) {
+                result.push(event);
+            }
+        }
+        return result;
+    }
+
+    getSpriteBeforeEvent(event, spriteName) {
+        for (let sprite of event.data.before.sprites) {
+            if (sprite.name === spriteName) {
+                return sprite;
+            }
+        }
+    }
+
+    getSpriteAfterEvent(event, spriteName) {
+        for (let sprite of event.data.after.sprites) {
+            if (sprite.name === spriteName) {
+                return sprite;
+            }
+        }
+    }
 }
 
 class ScratchJudge {
 
     constructor() {
-        this.events = new ScratchSimulationEvent().start();
+        this.eventScheduling = new ScratchSimulationEvent().start();
         this.log = {};
         this.blocks = {};
         this.playground = {};
         this.sprites = {};
+        this.events = {};
     }
 
     fill() {
@@ -198,10 +250,11 @@ class ScratchJudge {
         this.playground = new Playground(log);
         this.blocks = new AllBlocks(log);
         this.sprites = new Sprites(log);
+        this.events = new Events(log);
     }
 
     start() {
-        simulationChain = this.events;
+        simulationChain = this.eventScheduling;
     }
 
     async startEvents() {

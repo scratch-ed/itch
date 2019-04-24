@@ -25,6 +25,11 @@ class Action {
         this.topBlocks = topBlocks;
         this.actionEnded = new Future();
         this.active = true;
+
+        // if the list with topBlocks is empty, no threads have started
+        if (topBlocks === undefined || topBlocks.length === 0) {
+            this.actionEnded.resolve();
+        }
     }
 
     update(topBlock) {

@@ -36,6 +36,7 @@ class ScratchSimulationEvent extends SimulationEvent {
             if (spriteName !== 'Stage') {
                 list = Scratch.vm.runtime.startHats('event_whenthisspriteclicked', null, _sprite);
             } else {
+                log.addEvent('click', {target: spriteName, before: oldFrame, after: oldFrame});
                 resolve();
                 return;
             }
@@ -75,7 +76,7 @@ class ScratchSimulationEvent extends SimulationEvent {
                     console.log(`finished click on ${spriteName}`);
                     // save sprites state after click
                     let newFrame = new Frame('click', log.pen);
-                    log.addEvent('click', {before: oldFrame, after: newFrame}); // event klasse met name of type, time
+                    log.addEvent('click', {target: spriteName, before: oldFrame, after: newFrame});
                     resolve('finished action resolve');
 
                 }, extraWaitTime);
@@ -128,7 +129,7 @@ class ScratchSimulationEvent extends SimulationEvent {
                     console.log(`finished greenFlag()`);
                     // save sprites state after click
                     let newFrame = new Frame('greenFlag', log.pen);
-                    log.addEvent({event: 'greenFlag', before: oldFrame, after: newFrame});
+                    log.addEvent('greenFlag', {before: oldFrame, after: newFrame});
                     resolve('finished action resolve');
 
                 }, extraWaitTime);
