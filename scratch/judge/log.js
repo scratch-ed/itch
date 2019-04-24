@@ -29,7 +29,6 @@ class Frame {
             sprite['isTouchingEdge'] = target.isTouchingEdge();
             sprite['bounds'] = target.getBounds();
 
-            debugger;
             let touchings = {};
             for (let touchingTarget of targets) {
                 if (touchingTarget.id !== target.id) {

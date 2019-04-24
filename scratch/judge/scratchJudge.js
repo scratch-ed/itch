@@ -142,23 +142,15 @@ class Sprites {
 
     inBounds(spriteName) {
 
-        let WIDTH = 480;
-        let HEIGHT = 360;
-
-        let sprite = getSpriteByName(spriteName, log.currentFrame);
-        let spritesizeXRadius = Math.floor(sprite.costumeSize[0] * (sprite.size / 100) / 2);
-        let spritesizeYRadius = Math.floor(sprite.costumeSize[1] * (sprite.size / 100) / 2);
-
-        console.log(spritesizeXRadius);
-
-        let maxX = this.getMaxX(spriteName);
-        let minX = this.getMinX(spriteName);
-        let maxY = this.getMaxY(spriteName);
-        let minY = this.getMinY(spriteName);
-
-        console.log('must be smaller than', (WIDTH / 2) - spritesizeXRadius);
-
-        return (maxX < (WIDTH / 2) - spritesizeXRadius) && (minX > (-WIDTH / 2) + spritesizeXRadius) && (maxY < (HEIGHT / 2) - spritesizeYRadius) && (minY > (-HEIGHT / 2) + spritesizeYRadius);
+        for (let frame of log.frames) {
+            let sprite = getSpriteByName(spriteName, frame);
+            if (sprite != null) {
+                if (sprite.isTouchingEdge) {
+                    return false;
+                }
+            }
+        }
+        return true;
 
     }
 

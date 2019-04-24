@@ -23,6 +23,8 @@ function evaluate() {
     console.log('max x is ', scratch.sprites.getMaxX('Papegaai'));
     console.log('min x is ', scratch.sprites.getMinX('Papegaai'));
 
+    console.log(scratch.sprites.inBounds('Papegaai'));
+
     addTest('Grenzen', true, scratch.sprites.inBounds('Papegaai'), 'Papegaai bleef binnen de grenzen van het venster');
 
 
