@@ -83,26 +83,19 @@ function init(file) {
     Scratch.vm.runtime._step = newStep;
 
 
-    // Wrapper for greenFlag: we want greenFlag to return the threads started by runtime.greenFlag()
+    // Wrapper for touch detection
 
-    const oldGreenFlag = Scratch.vm.greenFlag;
+    //const oldIsTouchingEdge = Scratch.vm.isTouchingEdge.bind(Scratch.vm);
 
-    function newGreenFlag() {
-        return this.runtime.greenFlag();
+    function newIsTouchingEdge() {
+        let r = oldIsTouchingEdge();
+        if (r) {
+            Scratch.vm.runtime.emit('TOUCHING_EDGE');
+        }
+        return r;
     }
-    //Scratch.vm.greenFlag = newGreenFlag();
 
-    // Wrapper for runtime.greenFlag: we want greenFlag to return the threads started by runtime.startHats()
-    const oldRuntimeGreenFlag = Scratch.vm.runtime.greenFlag;
-
-    function newRuntimeGreenFlag() {
-        oldRuntimeGreenFlag();
-        //todo find way to return threads
-    }
-    //Scratch.vm.runtime.greenFlag = newRuntimeGreenFlag();
-
-    // Maybe emit threads after each StartHats function and catch them here?
-
+   // Scratch.vm.isTouchingEdge = newIsTouchingEdge;
 
 
     // VM event handlers
@@ -147,6 +140,10 @@ function vmHandleEvents(vm) {
                 }
             }
         }
+    });
+
+    vm.runtime.on('TOUCHING_EDGE', () => {
+       log.addEvent('touch', {target: 'edge'});
     });
 }
 

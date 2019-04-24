@@ -7,7 +7,6 @@ class Frame {
         this.sprites = [];
 
         let targets = Scratch.vm.runtime.targets;
-        //console.log(targets);
 
         for (let target of targets) {
             //console.log('is touching edge?', target.isTouchingEdge());
@@ -26,6 +25,18 @@ class Frame {
             // sprite properties to log
             sprite['costume'] = target.sprite.costumes_[target['currentCostume']].name;
             sprite['costumeSize'] = target.sprite.costumes_[target['currentCostume']].size;
+
+            sprite['isTouchingEdge'] = target.isTouchingEdge();
+            sprite['bounds'] = target.getBounds();
+
+            debugger;
+            let touchings = {};
+            for (let touchingTarget of targets) {
+                if (touchingTarget.id !== target.id) {
+                    touchings[touchingTarget.sprite.name] = target.isTouchingSprite(touchingTarget);
+                }
+            }
+            sprite['isTouchingSprite'] = touchings;
 
             // block properties to log
             sprite['blocks'] = target.blocks._blocks;
