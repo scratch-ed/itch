@@ -29,10 +29,11 @@ class Frame {
             sprite['isTouchingEdge'] = target.isTouchingEdge();
             sprite['bounds'] = target.getBounds();
 
-            let touchings = {};
+            let touchings = [];
             for (let touchingTarget of targets) {
                 if (touchingTarget.id !== target.id) {
-                    touchings[touchingTarget.sprite.name] = target.isTouchingSprite(touchingTarget);
+                    let x = {name: touchingTarget.sprite.name, value: target.isTouchingSprite(touchingTarget.sprite.name)};
+                    touchings.push(x);
                 }
             }
             sprite['isTouchingSprite'] = touchings;
@@ -71,7 +72,6 @@ class Log {
 
     constructor() {
         this.frames = [];
-        this.lastFrame = null; // methods voor previous en current frame uit frames (getter)
         this.currentFrame = null;
 
         //lijst van events

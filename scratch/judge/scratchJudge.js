@@ -16,6 +16,10 @@ class Playground {
     get mergedLines() {
         return mergeLines(this.lines);
     }
+
+    getLineLength(line) {
+        return dist(line);
+    }
 }
 
 class AllBlocks {
@@ -191,6 +195,68 @@ class Sprites {
     getNumberOfCostumes(spriteName) {
         let costumes = this.getCostumes(spriteName);
         return Object.keys(costumes).length;
+    }
+
+    getDirections(spriteName) {
+        let directions = [];
+        let oldDirection = 0;
+        for (let frame of log.frames) {
+            let sprite = getSpriteByName(spriteName, frame);
+            if (sprite != null) {
+                if (oldDirection !== sprite.direction) {
+                    directions.push(sprite.direction);
+                    oldDirection = sprite.direction;
+                }
+            }
+        }
+        return directions;
+    }
+
+    isHorizontal(spriteName) {
+        let directions = this.getDirections(spriteName);
+        for (let direction of directions) {
+            if (direction !== 90 && direction !== -90) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    bouncesHorizontal(spriteName) {
+        let directions = this.getDirections(spriteName);
+        let oldDirection = directions[0];
+        for (let i = 1; i < directions.length; i++) {
+            if (directions[i] !== (-oldDirection)) {
+                return false;
+            }
+            oldDirection = directions[i];
+        }
+        return true;
+    }
+
+    getCostumeChanges(spriteName) {
+        let costumes = [];
+        let oldCostume = '';
+        for (let frame of log.frames) {
+            let sprite = getSpriteByName(spriteName, frame);
+            if (sprite != null) {
+                if (oldCostume !== sprite.costume) {
+                    costumes.push(sprite.costume);
+                    oldCostume = sprite.costume;
+                }
+            }
+        }
+        return costumes;
+    }
+
+    isTouchingSprite(spriteName, targetName, frame) {
+        let sprite = getSpriteByName(spriteName, frame);
+        for (let target of sprite.isTouchingSprite) {
+            if (target.name === targetName) {
+                return target.value;
+            }
+        }
+        return false;
     }
 
 }

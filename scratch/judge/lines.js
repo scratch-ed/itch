@@ -2,11 +2,13 @@
 const threshold = 0.01;
 
 
-//NON EXPORTED (HELPER) FUNCTIONS
-
 //Calculates the squared distance between two points
 function distSq(p1, p2) {
     return (p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y) * (p1.y - p2.y);
+}
+
+function dist(line) {
+    return Math.sqrt(distSq(line.start, line.end));
 }
 
 //Checks if two numbers d1 and d2 are almost equal. (The difference has to be smaller than a certain threshold)
