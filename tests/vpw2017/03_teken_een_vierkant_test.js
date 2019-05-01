@@ -20,13 +20,13 @@ function prepare() {
 function evaluate() {
 
     // Er mag maximum 1 vierkant getekend worden
-    addTest('Aantal vierkanten', 1, scratch.playground.squares.length, 'Er werd precies 1 vierkant getekend');
+    addTest('Aantal vierkanten', 1 === log.getSquares().length, 'Er werd precies 1 vierkant getekend');
 
     // Elke zijde heeft lengte 200
-    let lines = scratch.playground.mergedLines;
+    let lines = log.getMergedLines();
     for (let line of lines) {
         console.log(scratch.playground.getLineLength(line));
-        addTest('Zijde heeft lengte 200', 200, scratch.playground.getLineLength(line), 'Elke zijde heeft lengte 200')
+        addTest('Zijde heeft lengte 200', 200 === scratch.playground.getLineLength(line), 'Elke zijde heeft lengte 200')
     }
 
 
@@ -36,6 +36,6 @@ function evaluate() {
     // De code in de lus wordt minstens 2 keer herhaald
     addTest('Correcte lus', true, scratch.blocks.numberOfExecutions('control_repeat') > 2, 'De code in de lus werd minstens 2 keer herhaald');
 
-    // Er werkt gebruik gemaakt van de pen
-    addTest('De pen werkt gebruikt', true, scratch.blocks.containsBlock('pen_penDown'), 'Het blok pen_Down werkt gebruikt in de code');
+    // Er werd gebruik gemaakt van de pen
+    addTest('De pen werd gebruikt', true, scratch.blocks.containsBlock('pen_penDown'), 'Het blok pen_Down werkt gebruikt in de code');
 }

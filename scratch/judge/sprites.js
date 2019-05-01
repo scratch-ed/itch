@@ -1,30 +1,10 @@
 
-function getSpriteIdByName(spriteName, sprites) {
-    let i;
-    for (i = 0; i < sprites.length; i++) {
-        if (sprites[i].name === spriteName) return sprites[i].id;
-    }
-    return -1;
-}
-
 function getSpriteByName(spriteName, frame) {
     let i;
     for (i = 0; i < frame.sprites.length; i++) {
         if (frame.sprites[i].name === spriteName) return frame.sprites[i];
     }
     return null;
-}
-
-function isVisible(spriteId, sprites) {
-    let i;
-    for (i = 0; i < sprites.length; i++) {
-        if (sprites[i].id === spriteId) return sprites[i].visible;
-    }
-    return false;
-}
-
-function getCostume(spriteName, sprites) {
-    let i;
 }
 
 function getSpritesAfterBlock(blockName, occurance, log) {

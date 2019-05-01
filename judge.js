@@ -9,8 +9,8 @@ const sourceFileTest = path.resolve(__dirname, 'source/sourceFile.sb3');
 const testFile = path.resolve(__dirname, 'tests/test.js');
 */
 
-const sourceFileTest = path.resolve(__dirname, 'scratch_code/vpw2017/06_voetballende_kat.sb3');
-const testFile = path.resolve(__dirname, 'tests/vpw2017/06_voetballende_kat_test.js');
+const sourceFileTest = path.resolve(__dirname, 'scratch_code/vpw2017/01_mad_hatter.sb2');
+const testFile = path.resolve(__dirname, 'tests/vpw2017/01_mad_hatter_test.js');
 
 const DEBUG = true;
 
