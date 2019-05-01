@@ -9,10 +9,15 @@ const sourceFileTest = path.resolve(__dirname, 'source/sourceFile.sb3');
 const testFile = path.resolve(__dirname, 'tests/test.js');
 */
 
-const sourceFileTest = path.resolve(__dirname, 'scratch_code/vpw2017/01_mad_hatter.sb2');
+const sourceFileTest = path.resolve(__dirname, 'scratch_code/vpw2017/01_mad_hatter.sb3');
+const sourceFileTemplate = path.resolve(__dirname, 'scratch_code/vpw2017/01_mad_hatter_template.sb3');
 const testFile = path.resolve(__dirname, 'tests/vpw2017/01_mad_hatter_test.js');
 
 const DEBUG = true;
+
+// unzipping
+const fs = require("fs");
+const yauzl = require("yauzl");
 
 // puppeteer
 const puppeteer = require('puppeteer');
@@ -140,7 +145,50 @@ class Judge {
 
         await page.addScriptTag({url: testFile});
 
+        let templateJSON = "";
+        yauzl.open(sourceFileTemplate, {lazyEntries: true}, function(err, zipfile) {
+            if (err) throw err;
+            zipfile.readEntry();
+            zipfile.on("entry", function(entry) {
+                if (entry.fileName === 'project.json') {
+                    console.log(entry);
+                    zipfile.openReadStream(entry, function (err, readStream) {
+                        if (err) throw err;
+                        readStream.on("data", function(data) {
+                            templateJSON += data;
+                        });
+                        readStream.on("end", function() {
+                            //continue
+                        });
+                    });
+                } else {
+                    zipfile.readEntry();
+                }
+            });
+        });
 
+        let testJSON = "";
+        yauzl.open(sourceFileTest, {lazyEntries: true}, function(err, zipfile) {
+            if (err) throw err;
+            zipfile.readEntry();
+            zipfile.on("entry", function(entry) {
+                if (entry.fileName === 'project.json') {
+                    console.log(entry);
+                    zipfile.openReadStream(entry, function (err, readStream) {
+                        if (err) throw err;
+                        let json = "";
+                        readStream.on("data", function(data) {
+                            testJSON += data;
+                        });
+                        readStream.on("end", function() {
+                            //continue
+                        });
+                    });
+                } else {
+                    zipfile.readEntry();
+                }
+            });
+        });
 
         // START JUDGE
         toDodona({command: "start-judgement"});
@@ -156,9 +204,9 @@ class Judge {
             });
         }
 
-        let output = await page.evaluate(() => {
-            return runTests();
-        });
+        let output = await page.evaluate((templateJSON, testJSON) => {
+            return runTests(templateJSON, testJSON);
+        }, templateJSON, testJSON);
 
         if (!DEBUG) {
             await browser.close();

@@ -1,6 +1,5 @@
 process.stdin.on("data", function(data) {
 
-    const fs = require("fs");
     const path = require("path");
     const { Judge } = require("./judge.js");
 

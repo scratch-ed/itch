@@ -1,6 +1,7 @@
 // Check if the student modified the start sprites
-function check() {
-    //todo
+function check(templateJSON, testJSON) {
+    console.log(JSON.parse(templateJSON));
+    console.log(JSON.parse(testJSON));
     return false;
 }
 
@@ -21,6 +22,7 @@ function prepare() {
 
 function evaluate() {
 
+    let log = scratch.log;
 
     let numberOfCostumes = log.getNumberOfCostumes('Hat');
 
@@ -49,6 +51,6 @@ function evaluate() {
     }
 
     // Het gebruik van het blok 'looks_costume' is aan te raden.
-    addTest('Juiste blok gebruikt', true, scratch.blocks.containsBlock('looks_nextcostume'), 'Gebruik het blok looks_nextcostume om gemakkelijk naar het volgende kostuum te gaan.');
+    addTest('Juiste blok gebruikt', true, log.blocks.containsBlock('looks_nextcostume'), 'Gebruik het blok looks_nextcostume om gemakkelijk naar het volgende kostuum te gaan.');
 
 }

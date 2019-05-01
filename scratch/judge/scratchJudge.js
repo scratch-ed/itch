@@ -32,12 +32,12 @@ class ScratchJudge {
 const scratch = new ScratchJudge();
 let actionTimeout = 5000;
 
-async function runTests() {
+async function runTests(templateJSON, testJSON) {
     //wait until Scratch project is fully loaded.
     await Scratch.loadedEnd.promise;
 
     // Check if the given sprites are not modified by the student
-    let modified = check();
+    let modified = check(templateJSON, testJSON);
     if (modified) {
         console.log('--- END OF EVALUATION ---');
         dodona.addMessage('Student modified given start sprites');

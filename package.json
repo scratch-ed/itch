@@ -8,6 +8,7 @@
     "test": "tests"
   },
   "dependencies": {
+    "jszip": "^3.2.1",
     "puppeteer": "^1.13.0"
   },
   "devDependencies": {},
