@@ -133,8 +133,13 @@ class Judge {
         await page.exposeFunction('closeTest', (generated, status) => {
             toDodona({command: "close-test", generated: generated.toString(), status: status});
         });
-        await page.exposeFunction('closeTestcase', () => {
-            toDodona({command: "close-testcase"});
+        await page.exposeFunction('closeTestcase', (s) => {
+            let status = s || undefined;
+            if (status !== undefined) {
+                toDodona({command: "close-testcase", status: status});
+            } else {
+                toDodona({command: "close-testcase"});
+            }
         });
         await page.exposeFunction('closeContext', () => {
             toDodona({command: "close-context"});

@@ -1,5 +1,4 @@
 
-
 class ScratchJudge {
 
     constructor() {
@@ -21,12 +20,6 @@ class ScratchJudge {
         await Scratch.simulationEnd.promise;
         this.fill();
     }
-
-    checkModifications() {
-        // check if the start exercise file was modified
-
-    }
-
 }
 
 const scratch = new ScratchJudge();
@@ -37,7 +30,7 @@ async function runTests(templateJSON, testJSON) {
     await Scratch.loadedEnd.promise;
 
     // Check if the given sprites are not modified by the student
-    let modified = check(templateJSON, testJSON);
+    let modified = check(JSON.parse(templateJSON), JSON.parse(testJSON));
     if (modified) {
         console.log('--- END OF EVALUATION ---');
         dodona.addMessage('Student modified given start sprites');

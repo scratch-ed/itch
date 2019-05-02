@@ -196,7 +196,11 @@ class Log {
         return this.frames.list[this.frames.length];
     }
 
-    // Function needed for evaluation
+
+
+
+
+    // Functions needed for evaluation
 
     // Sprite related
     getCostumes(spriteName, frames = this.frames.list) {
@@ -310,7 +314,6 @@ class Log {
             }
         }
         return true;
-
     }
 
 
