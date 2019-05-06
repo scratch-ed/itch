@@ -38,9 +38,7 @@ class ScratchSimulationEvent extends SimulationEvent {
             if (spriteName !== 'Stage') {
                 list = Scratch.vm.runtime.startHats('event_whenthisspriteclicked', null, _sprite);
             } else {
-                event.nextFrame = new Frame('click');
-                resolve();
-                return;
+                list = Scratch.vm.runtime.startHats('event_whenstageclicked', null, _sprite);
             }
 
             //if not sync, don't wait until the threads handling the event finished executing
@@ -99,13 +97,20 @@ class ScratchSimulationEvent extends SimulationEvent {
             let oldFrame = new Frame('greenFlag');
             log.addEvent('greenFlag', true, {before: oldFrame});
 
-            Scratch.executionEnd = new Future();
-            Scratch.vm.greenFlag();
+            let list = Scratch.vm.runtime.startHats('event_whenflagclicked', null, _sprite);
 
             //if not sync, don't wait until the threads handling the event finished executing
             if (!sync) {
                 resolve('async resolve');
             }
+
+            let topBlocks = [];
+            for (let thread of list) {
+                topBlocks.push(thread.topBlock);
+            }
+
+            let action = new Action(topBlocks);
+            activeActions.push(action);
 
             setTimeout(() => {
                 if (!sync) {
@@ -116,7 +121,7 @@ class ScratchSimulationEvent extends SimulationEvent {
                 reject();
             }, timeout);
 
-            Scratch.executionEnd.promise.then(() => {
+            action.actionEnded.promise.then(() => {
 
                 let extraWaitTime = 0;
                 let timeSpend = Date.now() - startTime;
@@ -155,27 +160,38 @@ class ScratchSimulationEvent extends SimulationEvent {
             // save sprites state before click
             let oldFrame = new Frame('key');
             log.addEvent('key', true, {key: key, before: oldFrame});
-            Scratch.executionEnd = new Future();
 
             let keyData = {key: key, isDown: true};
-            Scratch.vm.runtime.ioDevices.keyboard.postData(keyData);
+            var scratchKey = Scratch.vm.runtime.ioDevices.keyboard._keyStringToScratchKey(data.key);
+
+            if (scratchKey = '') {
+                console.log('Geen herkende key meegegeven')
+                reject();
+            }
+
+            let list = Scratch.vm.runtime.startHats('event_whenkeypressed', {
+                KEY_OPTION: scratchKey
+            });
+
+            let list2 = cratch.vm.runtime.startHats('event_whenkeypressed', {
+                KEY_OPTION: 'any'
+            });
 
             //if not sync, don't wait until the threads handling the event finished executing
             if (!sync) {
                 resolve('async resolve');
             }
 
-            /*
             let topBlocks = [];
             for (let thread of list) {
+                topBlocks.push(thread.topBlock);
+            }
+            for (let thread of list2) {
                 topBlocks.push(thread.topBlock);
             }
 
             let action = new Action(topBlocks);
             activeActions.push(action);
-            */
-
-
 
             setTimeout(() => {
                 if (!sync) {
@@ -186,7 +202,7 @@ class ScratchSimulationEvent extends SimulationEvent {
                 reject();
             }, timeout);
 
-            Scratch.executionEnd.promise.then(() => {
+            action.actionEnded.promise.then(() => {
 
                 let extraWaitTime = 0;
                 let timeSpend = Date.now() - startTime;
