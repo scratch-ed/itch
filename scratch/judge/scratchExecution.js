@@ -83,21 +83,6 @@ function init(file) {
     Scratch.vm.runtime._step = newStep;
 
 
-    // Wrapper for touch detection
-
-    //const oldIsTouchingEdge = Scratch.vm.isTouchingEdge.bind(Scratch.vm);
-
-    function newIsTouchingEdge() {
-        let r = oldIsTouchingEdge();
-        if (r) {
-            Scratch.vm.runtime.emit('TOUCHING_EDGE');
-        }
-        return r;
-    }
-
-   // Scratch.vm.isTouchingEdge = newIsTouchingEdge;
-
-
     // VM event handlers
     vmHandleEvents(vm);
 
