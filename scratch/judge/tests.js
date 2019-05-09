@@ -47,3 +47,8 @@ function addMessage(message) {
     dodona.addMessage(message);
 }
 
+function addError(message) {
+    //todo return message in error format for dodona if possible.
+    dodona.addMessage(message);
+}
+
