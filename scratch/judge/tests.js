@@ -30,18 +30,11 @@ function addTest(testName, expected, generated, message, correct = null) {
 
 function addCase(caseName, correct, message = 'Verkeerd') {
     dodona.startTestCase(caseName);
-    let status;
-    if (correct) {
-        status = {enum: 'correct', human: 'Correct'};
-    }
     if (!correct) {
         dodona.addMessage(message);
-        status = {enum: 'wrong', human: 'Fout'};
     }
-    //console.log(JSON.stringify(status), correct);
-    dodona.closeTestCase(status);
+    dodona.closeTestCase(correct);
 }
-
 
 function addMessage(message) {
     dodona.addMessage(message);
@@ -49,6 +42,6 @@ function addMessage(message) {
 
 function addError(message) {
     //todo return message in error format for dodona if possible.
-    dodona.addMessage(message);
+    dodona.addError(message);
 }
 

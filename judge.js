@@ -9,69 +9,23 @@ const sourceFileTest = path.resolve(__dirname, 'source/sourceFile.sb3');
 const testFile = path.resolve(__dirname, 'tests/test.js');
 */
 
-const sourceFileTest = path.resolve(__dirname, 'scratch_code/vpw2017/02_papegaai.sb3');
-const sourceFileTemplate = path.resolve(__dirname, 'scratch_code/vpw2017/02_papegaai.sb3');
-const testFile = path.resolve(__dirname, 'tests/vpw2017/02_papegaai_test.js');
+const sourceFileTest = path.resolve(__dirname, 'scratch_code/vpw2017/03_teken_een_vierkant.sb3');
+const sourceFileTemplate = path.resolve(__dirname, 'scratch_code/vpw2017/03_teken_een_vierkant.sb3');
+const testFile = path.resolve(__dirname, 'tests/vpw2017/03_teken_een_vierkant_test.js');
 
 const DEBUG = true;
+let acceptsOutput = true;
 
 // unzipping
-const fs = require("fs");
 const yauzl = require("yauzl");
 
 // puppeteer
 const puppeteer = require('puppeteer');
 
-// Dodona types for formatting
-const {Message, Submission, Tab, Context, TestCase, Test} = require("./dodona.js");
-
-
-// display message as a banner (crossing the entire width of the feedback table)
-// NOTE: banner gets color coded based on the status (success, danger, ...)
-function bannerMessage(description, status="success", options) {
-
-    // options parameter is optional
-    options = options || {};
-
-    return new Message(Object.assign(
-        options,
-        {
-            // TODO: description requires HTML encoding
-            description: `<span class="label label-${status}" style="display:block;text-align:left;">${description}</span>`,
-            format: "html"
-        }
-    ));
-
-}
-
-// display message with a label and a description
-// NOTE: label gets color coded based on the status (success, danger, ...)
-function labeledMessage(label, description, status="success", options) {
-
-    // options parameter is optional
-    options = options || {};
-
-    return new Message(Object.assign(
-        options,
-        {
-            // TODO: label and description require HTML encoding
-            description: `<span class="label label-${status}">${label}</span>&nbsp;${description}`,
-            format: "html"
-        }
-    ));
-
-}
-
-// display message with a exception (possibly including stack trace)
-function errorMessage(description, options) {
-
-    //todo
-    console.log(description);
-
-}
-
 function toDodona(output) {
-    process.stdout.write(JSON.stringify(output));
+    if (acceptsOutput) {
+        process.stdout.write(JSON.stringify(output));
+    }
 }
 
 //
@@ -133,10 +87,10 @@ class Judge {
         await page.exposeFunction('closeTest', (generated, status) => {
             toDodona({command: "close-test", generated: generated.toString(), status: status});
         });
-        await page.exposeFunction('closeTestcase', (s) => {
-            let status = s || undefined;
-            if (status !== undefined) {
-                toDodona({command: "close-testcase", status: status});
+        await page.exposeFunction('closeTestcase', (a) => {
+            let accepted = a || undefined;
+            if (accepted !== undefined) {
+                toDodona({command: "close-testcase", accepted: accepted.toString()});
             } else {
                 toDodona({command: "close-testcase"});
             }
@@ -146,6 +100,10 @@ class Judge {
         });
         await page.exposeFunction('closeTab', () => {
             toDodona({command: "close-tab"});
+        });
+        await page.exposeFunction('closeJudge', () => {
+            toDodona({command: "close-judgement"});
+            acceptsOutput = false;
         });
 
         await page.addScriptTag({url: testFile});

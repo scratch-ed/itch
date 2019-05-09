@@ -94,10 +94,11 @@ class ScratchSimulationEvent extends SimulationEvent {
 
             let startTime = Date.now();
 
-            let oldFrame = new Frame('greenFlag');
-            log.addEvent('greenFlag', true, {before: oldFrame});
+            let event = new Event('greenFlag');
+            event.previousFrame = new Frame('greenFlag');
+            log.addEvent(event);
 
-            let list = Scratch.vm.runtime.startHats('event_whenflagclicked', null, _sprite);
+            let list = Scratch.vm.runtime.startHats('event_whenflagclicked');
 
             //if not sync, don't wait until the threads handling the event finished executing
             if (!sync) {
@@ -130,13 +131,9 @@ class ScratchSimulationEvent extends SimulationEvent {
                 }
 
                 setTimeout(() => {
-
                     console.log(`finished greenFlag()`);
-                    // save sprites state after green flag
-                    let newFrame = new Frame('greenFlag');
-                    log.addEvent('greenFlag', false, {before: oldFrame, after: newFrame});
+                    event.nextFrame = new Frame('click');
                     resolve('finished action resolve');
-
                 }, extraWaitTime);
             });
         });
@@ -158,8 +155,9 @@ class ScratchSimulationEvent extends SimulationEvent {
             dodona.startTestCase(`Druk op toets: ${key}`);
 
             // save sprites state before click
-            let oldFrame = new Frame('key');
-            log.addEvent('key', true, {key: key, before: oldFrame});
+            let event = new Event('key', {key: key, before: oldFrame});
+            event.previousFrame = new Frame('key');
+            log.addEvent(event);
 
             let keyData = {key: key, isDown: true};
             var scratchKey = Scratch.vm.runtime.ioDevices.keyboard._keyStringToScratchKey(data.key);
@@ -214,8 +212,7 @@ class ScratchSimulationEvent extends SimulationEvent {
 
                     console.log(`finished keyPress on ${key}`);
                     // save sprites state after click
-                    let newFrame = new Frame('key');
-                    log.addEvent('key', false, {key: key, before: oldFrame, after: newFrame});
+                    event.nextFrame = new Frame('key');
                     resolve('finished action resolve');
 
                 }, extraWaitTime);
@@ -235,6 +232,7 @@ class ScratchSimulationEvent extends SimulationEvent {
     end() {
         return this.next((resolve, reject) => {
             console.log("Finished simulation");
+            console.log(log.events.list);
             for (let event of log.events.list) {
                 if (event.nextFrame == null) {
                     event.nextFrame = new Frame('end');

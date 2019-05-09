@@ -53,8 +53,8 @@ class Dodona {
         this.hasOpenCase = true;
     }
 
-    closeTestCase() {
-        window.closeTestcase();
+    closeTestCase(s = undefined) {
+        window.closeTestcase(s);
         this.hasOpenCase = false;
     }
 
@@ -69,6 +69,23 @@ class Dodona {
     closeTest(generated, status) {
         window.closeTest(generated, status);
         this.hasOpenTest = false;
+    }
+
+    addError(error) {
+        this.addMessage(error);
+        if (this.hasOpenTest) {
+            this.closeTest(null, {enum: 'wrong', human: 'Fout'});
+        }
+        if (this.hasOpenCase) {
+            this.closeTestCase()
+        }
+        if (this.hasOpenContext) {
+            this.closeTestContext();
+        }
+        if (this.hasOpenTab) {
+            this.closeTestTab();
+        }
+        window.closeJudge();
     }
 
 }

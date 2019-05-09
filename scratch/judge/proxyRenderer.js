@@ -16,7 +16,9 @@ function makeProxiedRenderer(canvas, log) {
             let p2 = {x: argumentsList[4], y: argumentsList[5]};
             let line = {start: p1, end: p2};
             log.renderer.lines.push(line);
-            log.addEvent('renderer', {name: 'penLine', line: line, color: argumentsList[1].color4f});
+            let event = new Event('renderer', {name: 'penLine', line: line, color: argumentsList[1].color4f});
+            event.previousFrame = new Frame('penLine');
+            log.addEvent(event);
 
             return target.apply(thisArg, argumentsList);
         }
@@ -30,7 +32,9 @@ function makeProxiedRenderer(canvas, log) {
 
             let point = {x: argumentsList[2], y: argumentsList[3]}
             log.renderer.points.push(point);
-            log.addEvent('renderer', {name: 'penPoint', point: point, color: argumentsList[1].color4f});
+            let event = new Event('renderer', {name: 'penPoint', point: point, color: argumentsList[1].color4f});
+            event.previousFrame = new Frame('penPoint');
+            log.addEvent(event);
 
             return target.apply(thisArg, argumentsList);
         }
@@ -44,7 +48,9 @@ function makeProxiedRenderer(canvas, log) {
 
             log.renderer.lines = [];
             log.renderer.points = [];
-            log.addEvent('renderer', {name: 'penClear'});
+            let event = new Event('renderer', {name: 'penClear'});
+            event.previousFrame = new Frame('penClear');
+            log.addEvent(event);
 
             return target.apply(thisArg, argumentsList);
         }
@@ -58,7 +64,9 @@ function makeProxiedRenderer(canvas, log) {
         apply: function (target, thisArg, argumentsList) {
 
             log.renderer.responses.push(argumentsList[1]);
-            log.addEvent('renderer', {name: 'createTextSkin', text: argumentsList[1]});
+            let event = new Event('renderer', {name: 'createTextSkin', text: argumentsList[1]});
+            event.previousFrame = new Frame('createTextSkin');
+            log.addEvent(event);
 
             return target.apply(thisArg, argumentsList);
         }
@@ -70,7 +78,9 @@ function makeProxiedRenderer(canvas, log) {
         apply: function (target, thisArg, argumentsList) {
 
             log.renderer.responses.push(argumentsList[2]);
-            log.addEvent('renderer', {name: 'updateTextSkin', text: argumentsList[2]});
+            let event = new Event('renderer', {name: 'updateTextSkin', text: argumentsList[2]});
+            event.previousFrame = new Frame('updateTextSkin');
+            log.addEvent(event);
 
             return target.apply(thisArg, argumentsList);
         }

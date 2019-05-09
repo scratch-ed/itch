@@ -1,10 +1,6 @@
-/**
- * EDIT THIS CODE
- * prepare() :give certain events that happen before testing (greenFlag call, clicks, keypresses, etc)
- * evaluate() :tests the result of the evaluation. See the API for which tests are available.
- *
- * scratch is the handle for the scratch judge.
- */
+function check(templateJSON, testJSON) {
+    return false;
+}
 
 function prepare() {
 
@@ -20,22 +16,22 @@ function prepare() {
 function evaluate() {
 
     // Er mag maximum 1 vierkant getekend worden
-    addTest('Aantal vierkanten', 1 === log.getSquares().length, 'Er werd precies 1 vierkant getekend');
+    addTest('Aantal vierkanten', 1, log.getSquares().length, 'Er werd meer of minder dan exact 1 vierkant getekend');
 
     // Elke zijde heeft lengte 200
     let lines = log.getMergedLines();
     for (let line of lines) {
-        console.log(scratch.playground.getLineLength(line));
-        addTest('Zijde heeft lengte 200', 200 === scratch.playground.getLineLength(line), 'Elke zijde heeft lengte 200')
+        console.log(log.getLineLength(line));
+        addCase('Zijde heeft lengte 200', 200 === log.getLineLength(line), 'Elke zijde heeft lengte 200')
     }
 
 
     // Gebruik best een lus om het vierkant te tekenen
-    addTest('Gebruik van een lus', true, scratch.blocks.containsBlock('control_repeat'), 'Er werd een herhalingslus gebruikt');
+    addCase('Gebruik van een lus', log.blocks.containsBlock('control_repeat'), 'Er werd geen herhalingslus gebruikt');
 
     // De code in de lus wordt minstens 2 keer herhaald
-    addTest('Correcte lus', true, scratch.blocks.numberOfExecutions('control_repeat') > 2, 'De code in de lus werd minstens 2 keer herhaald');
+    addCase('Correcte gebruik van de lus', log.blocks.numberOfExecutions('control_repeat') > 2, 'De code in de lus werd minder dan 2 keer herhaald');
 
     // Er werd gebruik gemaakt van de pen
-    addTest('De pen werd gebruikt', true, scratch.blocks.containsBlock('pen_penDown'), 'Het blok pen_Down werkt gebruikt in de code');
+    addCase('De pen werd gebruikt', log.blocks.containsBlock('pen_penDown'), 'Het blok pen_down werd niet gebruikt in de code');
 }
