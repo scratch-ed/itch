@@ -75,7 +75,7 @@ class ScratchSimulationEvent extends SimulationEvent {
 
                     console.log(`finished click on ${spriteName}`);
                     // save sprites state after click
-                    event.nextFrame = new Frame('click');
+                    event.nextFrame = new Frame('clickEnd');
                     resolve('finished action resolve');
 
                 }, extraWaitTime);
@@ -132,7 +132,7 @@ class ScratchSimulationEvent extends SimulationEvent {
 
                 setTimeout(() => {
                     console.log(`finished greenFlag()`);
-                    event.nextFrame = new Frame('click');
+                    event.nextFrame = new Frame('greenFlagEnd');
                     resolve('finished action resolve');
                 }, extraWaitTime);
             });
@@ -212,7 +212,7 @@ class ScratchSimulationEvent extends SimulationEvent {
 
                     console.log(`finished keyPress on ${key}`);
                     // save sprites state after click
-                    event.nextFrame = new Frame('key');
+                    event.nextFrame = new Frame('keyEnd');
                     resolve('finished action resolve');
 
                 }, extraWaitTime);
@@ -234,7 +234,7 @@ class ScratchSimulationEvent extends SimulationEvent {
             console.log("Finished simulation");
             for (let event of log.events.list) {
                 if (event.nextFrame == null) {
-                    event.nextFrame = new Frame('end');
+                    event.nextFrame = new Frame('programEnd');
                 }
             }
             resolve();

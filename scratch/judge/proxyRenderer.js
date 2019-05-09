@@ -18,6 +18,7 @@ function makeProxiedRenderer(canvas, log) {
             log.renderer.lines.push(line);
             let event = new Event('renderer', {name: 'penLine', line: line, color: argumentsList[1].color4f});
             event.previousFrame = new Frame('penLine');
+            event.nextFrame = new Frame('penLineEnd');
             log.addEvent(event);
 
             return target.apply(thisArg, argumentsList);
@@ -34,6 +35,7 @@ function makeProxiedRenderer(canvas, log) {
             log.renderer.points.push(point);
             let event = new Event('renderer', {name: 'penPoint', point: point, color: argumentsList[1].color4f});
             event.previousFrame = new Frame('penPoint');
+            event.nextFrame = new Frame('penPointEnd');
             log.addEvent(event);
 
             return target.apply(thisArg, argumentsList);
@@ -50,6 +52,7 @@ function makeProxiedRenderer(canvas, log) {
             log.renderer.points = [];
             let event = new Event('renderer', {name: 'penClear'});
             event.previousFrame = new Frame('penClear');
+            event.nextFrame = new Frame('penClearEnd');
             log.addEvent(event);
 
             return target.apply(thisArg, argumentsList);
@@ -62,13 +65,15 @@ function makeProxiedRenderer(canvas, log) {
     let createTextSkinOld = render.createTextSkin;
     handler = {
         apply: function (target, thisArg, argumentsList) {
+            let skinId = target.apply(thisArg, argumentsList);
 
             log.renderer.responses.push(argumentsList[1]);
-            let event = new Event('renderer', {name: 'createTextSkin', text: argumentsList[1]});
+            let event = new Event('renderer', {id: skinId, name: 'createTextSkin', text: argumentsList[1]});
             event.previousFrame = new Frame('createTextSkin');
+            event.nextFrame = new Frame('createTextSkinEnd');
             log.addEvent(event);
 
-            return target.apply(thisArg, argumentsList);
+            return skinId;
         }
     };
     render.createTextSkin = new Proxy(createTextSkinOld, handler);
@@ -80,12 +85,27 @@ function makeProxiedRenderer(canvas, log) {
             log.renderer.responses.push(argumentsList[2]);
             let event = new Event('renderer', {name: 'updateTextSkin', text: argumentsList[2]});
             event.previousFrame = new Frame('updateTextSkin');
+            event.nextFrame = new Frame('updateTextSkinEnd');
             log.addEvent(event);
 
             return target.apply(thisArg, argumentsList);
         }
     };
     render.updateTextSkin = new Proxy(updateTextSkinOld, handler);
+
+    let destroySkinOld = render.destroySkin;
+    handler = {
+        apply: function (target, thisArg, argumentsList) {
+            let skinId = argumentsList[0];
+            let event = new Event('renderer', {name: 'destroySkin', id: skinId});
+            event.previousFrame = new Frame('destroySkin');
+            event.nextFrame = new Frame('destroySkinEnd');
+            log.addEvent(event);
+
+            return target.apply(thisArg, argumentsList);
+        }
+    };
+    render.destroySkin = new Proxy(destroySkinOld, handler);
 
     return render;
 }

@@ -431,5 +431,47 @@ class Log {
         return this.renderer.responses;
     }
 
+    getCreateSkinEvents() {
+        let rendererEvents = this.events.filter({type: 'renderer'});
+        let createTextSkinEvents = [];
+        for (let event of rendererEvents) {
+            if (event.data.name === 'createTextSkin') {
+                createTextSkinEvents.push(event);
+            }
+        }
+        return createTextSkinEvents;
+    }
+
+    getDestroySkinEvents() {
+        let rendererEvents = this.events.filter({type: 'renderer'});
+        let destroySkinEvents = [];
+        for (let event of rendererEvents) {
+            if (event.data.name === 'destroySkin') {
+                destroySkinEvents.push(event);
+            }
+        }
+        return destroySkinEvents;
+    }
+
+    getSkinDuration(text) {
+        let createTextSkinEvents = this.getCreateSkinEvents();
+        let destroyTextSkinEvents = this.getDestroySkinEvents();
+
+        let time = 0;
+        let id = -1;
+        for (let e of createTextSkinEvents) {
+            if (e.data.text === text) {
+                time = e.time;
+                id = e.data.id;
+            }
+        }
+        for (let e of destroyTextSkinEvents) {
+            if (e.data.id === id) {
+                return (e.time - time);
+            }
+        }
+        return null;
+    }
+
 
 }

@@ -104,6 +104,7 @@ function vmHandleEvents(vm) {
 
         let event = new Event('say', {text: text, target: target, type: type});
         event.previousFrame = new Frame('say');
+        event.nextFrame = new Frame('sayEnd');
         log.addEvent(event);
     });
 
@@ -114,6 +115,7 @@ function vmHandleEvents(vm) {
 
             let event = new Event('answer', {question: question, text: x});
             event.previousFrame = new Frame('answer');
+            event.nextFrame = new Frame('answerEnd');
             log.addEvent(event);
 
             vm.runtime.emit("ANSWER", x);
@@ -122,7 +124,6 @@ function vmHandleEvents(vm) {
 
     vm.runtime.on('PROJECT_RUN_STOP', () => {
         console.log(`${getTimeStamp()}: Ended run`);
-        Scratch.executionEnd.resolve();
     });
 
     vm.runtime.on('DONE_THREADS_UPDATE', (threads) => {
@@ -165,7 +166,6 @@ function start() {
     //Start timer
     startTimestamp = Date.now();
     console.log("start timestamp:", startTimestamp);
-    Scratch.executionEnd = new Future();
     Scratch.simulationEnd = new Future();
     simulationChain.launch();
 }
