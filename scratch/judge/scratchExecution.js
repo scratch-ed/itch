@@ -141,12 +141,12 @@ function createProfiler() {
 
     const blockId = Scratch.profiler.idByName('blockFunction');
 
-    let firstState = true;
+    //let firstState = true;
     Scratch.profiler.onFrame = ({id, selfTime, totalTime, arg}) => {
-        if (firstState) {
+        /*if (firstState) {
             log.addFrame('START');
             firstState = false;
-        }
+        }*/
         if (id === blockId) {
             log.addFrame(arg);
         }

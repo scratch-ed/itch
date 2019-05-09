@@ -34,7 +34,7 @@ function prepare() {
 
     scratch.eventScheduling
         .foreach(
-            ['Hat', 'Stage', 'Nori', 'Hat', 'Hat', 'Hat', 'Hat', 'Stage', 'Nori', 'Hat', 'Hat', 'Hat', 'Hat'],
+            ['Hat', 'Stage', 'Nori', 'Hat', 'Hat', 'Hat', 'Hat', 'Stage', 'Nori', 'Nori', 'Hat', 'Hat', 'Hat'],
             (index, target, anchor) => {
                 return anchor
                     .clickSprite({spriteName: target, sync: true})

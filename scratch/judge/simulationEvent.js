@@ -24,17 +24,15 @@ class SimulationEvent {
             this.action(resolve, reject);
         });
 
-        executeAction.then((value) => {
-            // console.log('promise resolved', value);
-
-            // execute next events one after the other
+        executeAction.then(() => {
             for (let event of this.nextEvents) {
                 event.launch();
             }
-        }, () => {
+        }, (reason) => {
+            console.log(reason);
             console.log('Test ended: time limit exceeded');
             Scratch.vm.stopAll();
-            Scratch.simulationEnd.resolve();
+            addError('Time limit exceeded!');
         });
 
     }

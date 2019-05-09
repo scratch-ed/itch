@@ -1,9 +1,20 @@
+function check(templateJSON, testJSON) {
+    return false;
+}
+
 function prepare() {
 
-    actionTimeout = 5000;
+    actionTimeout = 800000;
 
     scratch.eventScheduling
         .wait(1000)
+        .test('De papegaai heeft nog niet bewogen', 'De papegaai mag niet bewegen voor er op geklikt wordt', (log) => {
+            let minX = log.getMinX('Papegaai');
+            let maxX = log.getMaxX('Papegaai');
+            let minY = log.getMinY('Papegaai');
+            let maxY = log.getMaxY('Papegaai');
+            return (minX === maxX && minY === maxY);
+        })
         .clickSprite({spriteName: 'Papegaai', sync: false}) // De eerste klik laat de papegaai starten met bewegen.
         .wait(500)
         .clickSprite({spriteName: 'Papegaai', sync: false}) // Deze klik doet helemaal niets.
@@ -17,11 +28,11 @@ function evaluate() {
 
     // De papegaai beweegt niet voor de eerste klik.
     let click = log.events.filter({type:'click'})[0];
-    let stillframes = log.frames.filter({before: click.time});
-    let minX = scratch.sprites.getMinX('Papegaai', stillframes);
-    let maxX = scratch.sprites.getMaxX('Papegaai', stillframes);
-    let minY = scratch.sprites.getMinY('Papegaai', stillframes);
-    let maxY = scratch.sprites.getMaxY('Papegaai', stillframes);
+    let stillFrames = log.frames.filter({before: click.time});
+    let minX = log.getMinX('Papegaai', stillFrames);
+    let maxX = log.getMaxX('Papegaai', stillFrames);
+    let minY = log.getMinY('Papegaai', stillFrames);
+    let maxY = log.getMaxY('Papegaai', stillFrames);
     addCase('Papegaai voor eerste klik', (minX === maxX && minY === maxY), 'De papegaai mag niet bewegen voor de eerste klik');
 
     let isTouchingEdge = false;
@@ -47,9 +58,8 @@ function evaluate() {
 
     // De papegaai verandert van kostuum
     let costumeChanges = log.getCostumeChanges('Papegaai');
-    addCase('Papegaai klappert met vleugels', costumeChanges.length > 30, 'De Papegaai wisselt constant tussen de kostuums VleugelsOmhoog en VleugelsOmlaag');
+    addCase('Papegaai klappert met vleugels', costumeChanges.length > 30, `De Papegaai moet constant wisselen tussen de kostuums 'VleugelsOmhoog' en 'VleugelsOmlaag'`);
 
     // Het is beter om het blok 'looks_nextcostume' te gebruiken.
-    addCase('Juiste blokken gebruikt', log.containsBlock('looks_nextcostume'), 'Het blok volgend_kostuum wordt gebruikt');
-
+    addCase('Juiste blokken gebruikt', log.blocks.containsBlock('looks_nextcostume'), 'Het blok volgend_kostuum werd niet gebruikt');
 }

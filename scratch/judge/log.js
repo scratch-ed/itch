@@ -105,13 +105,13 @@ class Event {
 
 class Events {
     constructor () {
-        this.events = [];
+        this.list = [];
         this.length = 0;
         this.lastTime = 0;
     }
 
     push(event) {
-        this.events.push(event);
+        this.list.push(event);
         this.length++;
         this.lastTime = event.time;
     }
@@ -122,7 +122,7 @@ class Events {
         let after = arg['after'] || 0;
 
         let filtered = [];
-        for (let event of this.events) {
+        for (let event of this.list) {
             if (type === 'all' || event.type === type) {
                 if (event.time >= after && event.time <= before) {
                     filtered.push(event);

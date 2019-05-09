@@ -132,7 +132,7 @@ class ScratchSimulationEvent extends SimulationEvent {
                 setTimeout(() => {
 
                     console.log(`finished greenFlag()`);
-                    // save sprites state after click
+                    // save sprites state after green flag
                     let newFrame = new Frame('greenFlag');
                     log.addEvent('greenFlag', false, {before: oldFrame, after: newFrame});
                     resolve('finished action resolve');
@@ -224,140 +224,28 @@ class ScratchSimulationEvent extends SimulationEvent {
 
     }
 
-    isTouchingSprite(spriteName1, spriteName2) {
-        let sprite1 = Scratch.vm.runtime.getSpriteTargetByName(spriteName1);
-        let sprite2 = Scratch.vm.runtime.getSpriteTargetByName(spriteName2);
-
-        let touching = sprite1.isTouchingSprite(sprite2);
-    }
-
-    isTouchingEdge(spriteName) {
-        let sprite1 = Scratch.vm.runtime.getSpriteTargetByName(spriteName);
-
-        let touching = sprite1.isTouchingEdge();
-    }
-
-    testCostume(spriteName, correctCostumeName, delay = 0) {
+    test(testName, messageIfWrong, fun) {
         return this.next((resolve, reject) => {
-
-            dodona.startTest(correctCostumeName);
-
-            let status;
-            let costumeName = "";
-
-            let _sprite = Scratch.vm.runtime.getSpriteTargetByName(spriteName);
-            if (_sprite) {
-                let costumeNr = _sprite.currentCostume;
-                costumeName = _sprite.sprite.costumes_[costumeNr].name;
-
-                dodona.addMessage(`Sprite: "${spriteName}", Kostuum: "${costumeName}"`);
-
-                if (costumeName === correctCostumeName) {
-                    status = {enum: 'correct', human: 'Correct'};
-                } else {
-                    status = {enum: 'wrong', human: 'Fout'};
-                }
-            }
-            else {
-                status = {enum: 'runtime error', human: `Geen kostuum gevonden met als naam: ${spriteName}`};
-            }
-
-            dodona.closeTest(costumeName, status);
-
+            let correct = fun(log);
+            addCase(testName, correct, messageIfWrong);
             resolve();
-
-        }, delay);
+        });
     }
 
-    testXCoordinate(spriteName, correctX, delay = 0) {
-        return this.next(() => {
-
-            dodona.startTest(correctX);
-
-            let status;
-            let x = -1;
-
-            let _sprite = Scratch.vm.runtime.getSpriteTargetByName(spriteName);
-            if (_sprite) {
-                x = _sprite.x;
-
-                dodona.addMessage(`Sprite: "${spriteName}", x-coordinaat: "${x}"`);
-
-                if (Math.abs(x - correctX) < 0.01) {
-                    status = {enum: 'correct', human: 'Correct'};
-                } else {
-                    status = {enum: 'wrong', human: 'Fout'};
-                }
-            }
-            else {
-                status = {enum: 'runtime error', human: `Geen kostuum gevonden met als naam: ${spriteName}`};
-            }
-
-            dodona.closeTest(x, status);
-
-
-        }, delay);
-    }
-
-    testYCoordinate(spriteName, correctY, delay = 0) {
-        return this.next(() => {
-            let _sprite = Scratch.vm.runtime.getSpriteTargetByName(spriteName);
-            if (_sprite) {
-                let y = _sprite.y;
-                if (Math.abs(y - correctY) < 0.01) {
-                    console.log('dodona', `Correct: de sprite heeft x-coordinaat: ${correctY}`);
-                } else {
-                    console.log('dodona', `Fout: de sprite heeft x-coordinaat: ${y}, maar moest x-coordinaat: ${correctY} hebben.`);
-                }
-            }
-            else {
-                console.log('error: no sprite found');
-            }
-        }, delay);
-    }
-
-    testCoordinates(spriteName, correctCoordinates, delay = 0) {
-        return this.next(() => {
-            let _sprite = Scratch.vm.runtime.getSpriteTargetByName(spriteName);
-            if (_sprite) {
-                let d1 = {x: _sprite.x, y: _sprite.y};
-                if (isEqual(d1, correctCoordinates)) {
-                    console.log('dodona', `Correct: de sprite heeft coordinaten: (${d1.x}, ${d1.y}`);
-                } else {
-                    console.log('dodona', `Fout: de sprite heeft coordinaten: (${d1.x}, ${d1.y}, maar moest coordinaten: (${correctCoordinates.x}, ${correctCoordinates.y}) hebben.`);
-                }
-            }
-            else {
-                console.log('error: no sprite found');
-            }
-        }, delay);
-    }
-
-    end(delay = 200) {
-
-        return this.next(() => {
+    end() {
+        return this.next((resolve, reject) => {
             console.log("Finished simulation");
-            // stop all Scratch processes
-            Scratch.vm.stopAll();
-
-            Scratch.executionEnd.resolve();
-            Scratch.simulationEnd.resolve();
-
-            for (let event in log.events) {
+            for (let event of log.events.list) {
                 if (event.nextFrame == null) {
                     event.nextFrame = new Frame('end');
                 }
             }
+            resolve();
 
-        }, delay);
-
-    }
-
-    evaluate(action, delay = 0) {
-
-        // this is just an alias for next (rethink passing environment and observations to action)
-        return this.next(action, delay);
+            // stop all Scratch processes
+            Scratch.vm.stopAll();
+            Scratch.simulationEnd.resolve();
+        });
 
     }
-
 }

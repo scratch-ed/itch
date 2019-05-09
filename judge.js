@@ -9,9 +9,9 @@ const sourceFileTest = path.resolve(__dirname, 'source/sourceFile.sb3');
 const testFile = path.resolve(__dirname, 'tests/test.js');
 */
 
-const sourceFileTest = path.resolve(__dirname, 'scratch_code/vpw2017/01_mad_hatter.sb3');
-const sourceFileTemplate = path.resolve(__dirname, 'scratch_code/vpw2017/01_mad_hatter_template.sb3');
-const testFile = path.resolve(__dirname, 'tests/vpw2017/01_mad_hatter_test.js');
+const sourceFileTest = path.resolve(__dirname, 'scratch_code/vpw2017/02_papegaai.sb3');
+const sourceFileTemplate = path.resolve(__dirname, 'scratch_code/vpw2017/02_papegaai.sb3');
+const testFile = path.resolve(__dirname, 'tests/vpw2017/02_papegaai_test.js');
 
 const DEBUG = true;
 
@@ -156,7 +156,6 @@ class Judge {
             zipfile.readEntry();
             zipfile.on("entry", function(entry) {
                 if (entry.fileName === 'project.json') {
-                    console.log(entry);
                     zipfile.openReadStream(entry, function (err, readStream) {
                         if (err) throw err;
                         readStream.on("data", function(data) {
@@ -178,7 +177,6 @@ class Judge {
             zipfile.readEntry();
             zipfile.on("entry", function(entry) {
                 if (entry.fileName === 'project.json') {
-                    console.log(entry);
                     zipfile.openReadStream(entry, function (err, readStream) {
                         if (err) throw err;
                         let json = "";
