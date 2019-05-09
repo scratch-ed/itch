@@ -84,7 +84,7 @@ class Frames {
 
 class Event {
 
-    constructor(type, data) {
+    constructor(type, data = {}) {
         this.time = getTimeStamp();
         this.type = type;
         this.data = data;

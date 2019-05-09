@@ -5,7 +5,7 @@ class ScratchSimulationEvent extends SimulationEvent {
             // Give sprites 500 ms to load
             setTimeout(() => {
                 resolve();
-            }, 500)
+            }, 300)
         })
     }
 

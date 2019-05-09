@@ -13,7 +13,7 @@ class ScratchJudge {
 
     start() {
         simulationChain = this.eventScheduling;
-        answers = this.answers;
+        answers = [...this.answers];
     }
 
     async startEvents() {
