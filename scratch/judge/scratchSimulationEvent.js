@@ -171,7 +171,7 @@ class ScratchSimulationEvent extends SimulationEvent {
                 KEY_OPTION: scratchKey
             });
 
-            let list2 = cratch.vm.runtime.startHats('event_whenkeypressed', {
+            let list2 = Scratch.vm.runtime.startHats('event_whenkeypressed', {
                 KEY_OPTION: 'any'
             });
 
@@ -232,7 +232,6 @@ class ScratchSimulationEvent extends SimulationEvent {
     end() {
         return this.next((resolve, reject) => {
             console.log("Finished simulation");
-            console.log(log.events.list);
             for (let event of log.events.list) {
                 if (event.nextFrame == null) {
                     event.nextFrame = new Frame('end');

@@ -2,8 +2,7 @@
 const Scratch = window.Scratch = window.Scratch || {};
 
 // Create global input variables
-let keyInput;
-let mouseInput;
+let answers;
 
 // Create global logging variables
 let numberOfRun = 0;
@@ -102,12 +101,21 @@ function vmHandleEvents(vm) {
 
     vm.runtime.on('SAY', (target, type, text) => {
         console.log(`${getTimeStamp()}: say: ${text}`);
+
+        let event = new Event('say', {text: text, target: target, type: type});
+        event.previousFrame = new Frame('say');
+        log.addEvent(event);
     });
 
     vm.runtime.on('QUESTION', (question) => {
         if (question != null) {
-            let x = keyInput.shift();
+            let x = answers.shift();
             console.log(`${getTimeStamp()}: input: ${x}`);
+
+            let event = new Event('answer', {question: question, text: x});
+            event.previousFrame = new Frame('answer');
+            log.addEvent(event);
+
             vm.runtime.emit("ANSWER", x);
         }
     });

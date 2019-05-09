@@ -4,6 +4,7 @@ class ScratchJudge {
     constructor() {
         this.eventScheduling = new ScratchSimulationEvent().start();
         this.log = {};
+        this.answers = [];
     }
 
     fill() {
@@ -12,6 +13,7 @@ class ScratchJudge {
 
     start() {
         simulationChain = this.eventScheduling;
+        answers = this.answers;
     }
 
     async startEvents() {
@@ -34,10 +36,10 @@ async function runTests(templateJSON, testJSON) {
         dodona.addMessage('Student modified given start sprites');
         return true;
     }
-    
+
     //Execute the prepare function from the evaluation file to create events
     prepare();
-    
+
     //wait until Scratch project is fully loaded to start first event.
     await Scratch.loadedEnd.promise;
 
