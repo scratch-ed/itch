@@ -12,9 +12,9 @@ function duringExecution() {
             return (minX === maxX && minY === maxY);
         })
         .clickSprite({spriteName: 'Heks'}) // De eerste klik laat heks starten met bewegen.
-        .wait(1100)
-        .wait(1000)
-        .wait(1000)
+        .wait(1100) // wacht iets langer dan een seconde voor de volgende positie
+        .wait(1000) // wacht een seconde voor de volgende positie
+        .wait(1000) // wacht een seconde voor de volgende positie
         .end();
 
     scratch.start();
@@ -22,17 +22,7 @@ function duringExecution() {
 
 function afterExecution() {
 
-    let places = [];
-    let lastX = 0;
-    let lastY = 0;
-    for (let frame in log.frames.list) {
-        let sprite = frame.getSprite('Heks');
-        if (lastX !== sprite.x || lastY !== sprite.y) {
-            lastX = sprite.x;
-            lastY = sprite.y;
-            places.push({x: lastX, y: lastY});
-        }
-    }
+    let places = getHeksPlaces(log.frames.list);
     //Test of de heks minstens 1-malig verplaatst is na een klik
     addCase('De heks heeft bewogen', places.length > 1, 'Na een klik moet de heks van positie veranderen');
 
@@ -54,4 +44,27 @@ function afterExecution() {
     addCase('na 1 seconde', (heks1.x !== heks2.x || heks1.y !== heks2.y), 'De heks is na 1 seconde nog niet veranderd van positie');
     addCase('na 2 secondes', (heks2.x !== heks3.x || heks2.y !== heks3.y), 'De heks is na nog 1 seconde nog niet veranderd van positie');
 
+    // er mag maar maximum 1 keer van positie veranderd worden elke seconde:
+    let place1 = getHeksPlaces(frames1);
+    let place2 = getHeksPlaces(frames2);
+    let place3 = getHeksPlaces(frames3);
+
+    addCase('tijdens een seconde', place1.length === 1, 'De heks mag maar eenmalig veranderen van positie elke seconde');
+    addCase('tijdens een seconde', place2.length === 1, 'De heks mag maar eenmalig veranderen van positie elke seconde');
+    addCase('tijdens een seconde', place3.length === 1, 'De heks mag maar eenmalig veranderen van positie elke seconde');
+}
+
+function getHeksPlaces(frames) {
+    let places = [];
+    let lastX = 0;
+    let lastY = 0;
+    for (let frame of frames) {
+        let sprite = frame.getSprite('Heks');
+        if (lastX !== sprite.x || lastY !== sprite.y) {
+            lastX = sprite.x;
+            lastY = sprite.y;
+            places.push({x: lastX, y: lastY});
+        }
+    }
+    return places;
 }
