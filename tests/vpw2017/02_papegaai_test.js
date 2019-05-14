@@ -1,5 +1,11 @@
 function beforeExecution(templateJSON, testJSON) {
+    if (hasAddedSprites(templateJSON, testJSON)) {
+        addError('Er zijn sprites toegevoegd aan het startproject!');
+    }
 
+    if (hasRemovedSprites(templateJSON, testJSON)) {
+        addError('Er zijn sprites verwijderd uit het startproject!');
+    }
 }
 
 function duringExecution() {

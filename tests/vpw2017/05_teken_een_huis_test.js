@@ -1,12 +1,4 @@
-/**
- * EDIT THIS CODE
- * prepare() :give certain events that happen before testing (greenFlag call, clicks, keypresses, etc)
- * evaluate() :tests the result of the evaluation. See the API for which tests are available.
- *
- * scratch is the handle for the scratch judge.
- */
-
-function prepare() {
+function duringExecution() {
 
     actionTimeout = 2000;
 
@@ -17,21 +9,21 @@ function prepare() {
     scratch.start();
 }
 
-function evaluate() {
+function afterExecution() {
 
     // Er moet maximum 1 vierkant getekend worden
-    addTest('Aantal vierkanten', 1, scratch.playground.squares.length, 'Er werd minimum 1 vierkant getekend', scratch.playground.squares.length >= 1);
+    addCase('Aantal vierkanten', scratch.playground.squares.length >= 1, `Er moet minimum 1 vierkant getekend worden`);
 
     // Er moet maximum 1 driehoek getekend worden
-    addTest('Aantal driehoeken', 1, scratch.playground.triangles.length, 'Er werd minimum 1 driehoek getekend', scratch.playground.squares.length >= 1);
+    addCase('Aantal driehoeken', scratch.playground.triangles.length >= 1, 'Er moet minimum 1 driehoek getekend worden');
 
     // Gebruik best een lus om het vierkant te tekenen
-    addTest('Gebruik van een lus', true, scratch.blocks.containsBlock('control_repeat'), 'Er werd een herhalingslus gebruikt');
+    addCase('Gebruik van een lus', scratch.blocks.containsBlock('control_repeat'), 'Er werd geen herhalingslus gebruikt');
 
     // De code in de lus wordt minstens 2 keer herhaald
-    addTest('Correcte lus', true, scratch.blocks.numberOfExecutions('control_repeat') > 2, 'De code in de lus werd minstens 2 keer herhaald');
+    addCase('Correcte lus', scratch.blocks.numberOfExecutions('control_repeat') > 2, 'De code in de lus moet minstens 2 keer herhaald worden');
 
     // Er werkt gebruik gemaakt van de pen
-    addTest('De pen werkt gebruikt', true, scratch.blocks.containsBlock('pen_penDown'), 'Het blok pen_Down werkt gebruikt in de code');
+    addCase('De pen werkt gebruikt', scratch.blocks.containsBlock('pen_penDown'), 'Het blok pen_Down werd niet gebruikt in de code');
 
 }

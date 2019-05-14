@@ -53,6 +53,15 @@ class Frame {
         return null;
     }
 
+    isTouching(sprite1, sprite2) {
+        for (let sprite of this.getSprite(sprite1)) {
+            if (sprite.isTouchingSprite === sprite2) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
 
 class Frames {

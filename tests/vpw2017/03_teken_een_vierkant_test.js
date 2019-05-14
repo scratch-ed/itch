@@ -1,8 +1,4 @@
-function check(templateJSON, testJSON) {
-    return false;
-}
-
-function prepare() {
+function duringExecution() {
 
     actionTimeout = 2000;
 
@@ -13,7 +9,7 @@ function prepare() {
     scratch.start();
 }
 
-function evaluate() {
+function afterExecution() {
 
     // Er mag maximum 1 vierkant getekend worden
     addTest('Aantal vierkanten', 1, log.getSquares().length, 'Er werd meer of minder dan exact 1 vierkant getekend');
@@ -24,7 +20,6 @@ function evaluate() {
         console.log(log.getLineLength(line));
         addCase('Zijde heeft lengte 200', 200 === log.getLineLength(line), 'Elke zijde heeft lengte 200')
     }
-
 
     // Gebruik best een lus om het vierkant te tekenen
     addCase('Gebruik van een lus', log.blocks.containsBlock('control_repeat'), 'Er werd geen herhalingslus gebruikt');
