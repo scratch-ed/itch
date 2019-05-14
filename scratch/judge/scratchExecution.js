@@ -111,6 +111,8 @@ function vmHandleEvents(vm) {
     vm.runtime.on('QUESTION', (question) => {
         if (question != null) {
             let x = answers.shift();
+            addError('Er werd een vraag gesteld waarop geen antwoord voorzien is.');
+            
             console.log(`${getTimeStamp()}: input: ${x}`);
 
             let event = new Event('answer', {question: question, text: x});

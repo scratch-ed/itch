@@ -1,36 +1,29 @@
 // Controleer op welke manier de leerling het startproject heeft aangepast
-function check(templateJSON, testJSON) {
+function beforeExecution(templateJSON, testJSON) {
 
     if (hasAddedSprites(templateJSON, testJSON)) {
         addError('Er zijn sprites toegevoegd aan het startproject!');
-        return true;
     }
 
     if (hasRemovedSprites(templateJSON, testJSON)) {
         addError('Er zijn sprites verwijderd uit het startproject!');
-        return true;
     }
 
     for (let target of testJSON.targets) {
         if (hasChangedCostumes(templateJSON, testJSON, target.name)) {
             addError(`De kostuums van de sprite met naam ${target.name} zijn gewijzigd!`);
-            return true;
         }
 
         //Controleer of er geen code-blokken toegevoegd zijn aan Nori (indien vermeld in de opgave)
         if (target.name === 'Nori') {
             if (!objectIsEmpty(target.blocks)){
                 addError(`De code blokken werden toegevoegd aan Nori en niet aan de hoed!`);
-                return true;
             }
         }
     }
-
-    //Alle checks zijn succesvol
-    return false;
 }
 
-function prepare() {
+function duringExecution() {
 
     scratch.eventScheduling
         .foreach(
@@ -45,7 +38,7 @@ function prepare() {
     scratch.start();
 }
 
-function evaluate() {
+function afterExecution() {
 
     let numberOfCostumes = log.getNumberOfCostumes('Hat');
 

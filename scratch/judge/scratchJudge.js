@@ -29,30 +29,29 @@ let actionTimeout = 5000;
 
 async function runTests(templateJSON, testJSON) {
 
+    dodona.startTestTab('Testen voor de uitvoer');
     // Check if the given sprites are not modified by the student
-    let modified = check(JSON.parse(templateJSON), JSON.parse(testJSON));
-    if (modified) {
-        console.log('--- END OF EVALUATION ---');
-        dodona.addMessage('Student modified given start sprites');
-        return true;
-    }
+    beforeExecution();
+    dodona.closeTestTab();
 
-    //Execute the prepare function from the evaluation file to create events
-    prepare();
+    dodona.startTestTab('Testen op de uitvoer');
 
-    //wait until Scratch project is fully loaded to start first event.
+    //Schedule events and tests executed during execution
+    duringExecution();
+
+    //wait until Scratch project is fully loaded to start first event
     await Scratch.loadedEnd.promise;
 
-    dodona.startTestTab('Resultaat');
-
-    //Execute the scratch project
+    //Create a new context for tests during the execution
     dodona.startTestContext();
+    //Execute the scratch project
     await scratch.startEvents();
     dodona.closeTestContext();
 
-    //Create new test context for tests after the execution
+    //Create a new context for tests after the execution
     dodona.startTestContext();
-    evaluate();
+    //Execute the tests after the Scratch project finished running
+    afterExecution();
     dodona.closeTestContext();
 
     dodona.closeTestTab();

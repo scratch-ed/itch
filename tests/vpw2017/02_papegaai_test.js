@@ -1,8 +1,8 @@
-function check(templateJSON, testJSON) {
-    return false;
+function beforeExecution(templateJSON, testJSON) {
+
 }
 
-function prepare() {
+function duringExecution() {
 
     actionTimeout = 800000;
 
@@ -24,7 +24,7 @@ function prepare() {
     scratch.start();
 }
 
-function evaluate() {
+function afterExecution() {
 
     // De papegaai beweegt niet voor de eerste klik.
     let click = log.events.filter({type:'click'})[0];
