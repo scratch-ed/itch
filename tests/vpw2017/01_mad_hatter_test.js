@@ -25,7 +25,17 @@ function beforeExecution(templateJSON, testJSON) {
 
 function duringExecution() {
 
+    let firstHat = null;
+
     scratch.eventScheduling
+        .log((log) => {
+            firstHat = log.sprites.getSprite('Hat');
+        })
+        .clickSprite({spriteName: 'Hat', sync: true})
+        .test('Na 1 klik op de hoed', 'De hoed moet veranderen wanneer er op geklikt wordt', (log) => {
+            let secondHat = log.sprites.getSprite('Hat');
+            return firstHat.currentCostume !== secondHat.currentCostume;
+        })
         .foreach(
             ['Hat', 'Stage', 'Nori', 'Hat', 'Hat', 'Hat', 'Hat', 'Stage', 'Nori', 'Nori', 'Hat', 'Hat', 'Hat'],
             (index, target, anchor) => {

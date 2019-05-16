@@ -9,9 +9,9 @@ const sourceFileTest = path.resolve(__dirname, 'source/sourceFile.sb3');
 const testFile = path.resolve(__dirname, 'tests/test.js');
 */
 
-const sourceFileTest = path.resolve(__dirname, 'scratch_code/vpw2017/08_op_bezoek_bij_devin.sb3');
-const sourceFileTemplate = path.resolve(__dirname, 'scratch_code/vpw2017/08_op_bezoek_bij_devin.sb3');
-const testFile = path.resolve(__dirname, 'tests/vpw2017/08_op_bezoek_bij_devin_test.js');
+const sourceFileTest = path.resolve(__dirname, 'scratch_code/vpw2017/01_mad_hatter.sb3');
+const sourceFileTemplate = path.resolve(__dirname, 'scratch_code/vpw2017/01_mad_hatter.sb3');
+const testFile = path.resolve(__dirname, 'tests/vpw2017/01_mad_hatter_test.js');
 
 const DEBUG = true;
 let acceptsOutput = true;
@@ -87,8 +87,7 @@ class Judge {
         await page.exposeFunction('closeTest', (generated, status) => {
             toDodona({command: "close-test", generated: generated.toString(), status: status});
         });
-        await page.exposeFunction('closeTestcase', (a) => {
-            let accepted = a || undefined;
+        await page.exposeFunction('closeTestcase', (accepted = undefined) => {
             if (accepted !== undefined) {
                 toDodona({command: "close-testcase", accepted: accepted.toString()});
             } else {
@@ -161,7 +160,7 @@ class Judge {
 
         if (DEBUG) {
             await page.evaluate(() => {
-                debugger;
+                //debugger;
             });
         }
 

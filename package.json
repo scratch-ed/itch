@@ -8,6 +8,8 @@
     "test": "tests"
   },
   "dependencies": {
+    "esdoc": "^1.1.0",
+    "esdoc-standard-plugin": "^1.0.0",
     "jszip": "^3.2.1",
     "puppeteer": "^1.13.0"
   },

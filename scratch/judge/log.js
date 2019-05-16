@@ -1,6 +1,16 @@
 
+/**
+ * Frame describes one captured moment during execution. It saves a snapshot of the current state of the sprites.
+ * @example
+ * let frame = new Frame('looks_nextcostume');
+ */
 class Frame {
 
+    /**
+     * When a new frame is created, information from the current state of the targets is saved. Some properties, like if the target is touching another target,
+     * are calculated before being saved.
+     * @param {string} block The executed code-block of the Scratch Project that triggered the save of a Frame in the log.
+     */
     constructor(block) {
         this.time = getTimeStamp();
         this.block = block;
@@ -44,6 +54,11 @@ class Frame {
 
     }
 
+    /**
+     * Returns a sprite object with a given name.
+     * @param {string} spriteName The name of the sprite that has to be returned. Returns null if no such sprite exists.
+     * @returns {Object} sprite The sprite object with the matching name.
+     */
     getSprite(spriteName) {
         for (let sprite of this.sprites) {
             if (sprite.name === spriteName) {
@@ -53,9 +68,15 @@ class Frame {
         return null;
     }
 
-    isTouching(sprite1, sprite2) {
-        for (let sprite of this.getSprite(sprite1)) {
-            if (sprite.isTouchingSprite === sprite2) {
+    /**
+     * Tests if two sprites are touching at the moment the frame was captured.
+     * @param {string} spriteName1 The name of the first sprite.
+     * @param {string} spriteName2 The name of the second sprite.
+     * @returns {boolean} true if the sprites are touching, false if they are not.
+     */
+    isTouching(spriteName1, spriteName2) {
+        for (let sprite of this.getSprite(spriteName1)) {
+            if (sprite.isTouchingSprite === spriteName2) {
                 return true;
             }
         }
@@ -64,6 +85,9 @@ class Frame {
 
 }
 
+/**
+ * Frames is a collection of frames, where it is possible to filter frames with certain arguments.
+ */
 class Frames {
     constructor() {
         this.length = 0;
@@ -71,12 +95,23 @@ class Frames {
         this.lastTime = 0;
     }
 
+    /**
+     * Add a new frame to frames.
+     * @param {Object} frame The frame to be added to the collection of frames.
+     */
     push(frame) {
         this.list.push(frame);
         this.length++;
         this.lastTime = frame.time;
     }
 
+    /**
+     * Add a new frame to frames.
+     * @param {Object} arg An object with two timestamps.
+     * @param {number} arg.after A starting timestamp.
+     * @param {number} arg.before An ending timestamp.
+     * @returns {Frame[]} filtered The list of frames between the two given timestamps.
+     */
     filter(arg) {
         let before = arg['before'] || this.lastTime;
         let after = arg['after'] || 0;
@@ -202,11 +237,8 @@ class Log {
 
     // return final state of sprites
     get sprites() {
-        return this.frames.list[this.frames.length];
+        return this.frames.list[this.frames.length - 1];
     }
-
-
-
 
 
     // Functions needed for evaluation

@@ -6,7 +6,7 @@ function prepare() {
 
     actionTimeout = 6000;
 
-    scratch.answers = [];
+    scratch.answers = ['Louise', 'Pieter'];
 
     scratch.eventScheduling
         .greenFlag({sync: true})

@@ -47,13 +47,13 @@ class Dodona {
             this.startTestContext()
         }
         if (this.hasOpenCase) {
-            this.closeTestCase();
+            this.closeTestCase(true);
         }
         window.startTestcase(description);
         this.hasOpenCase = true;
     }
 
-    closeTestCase(s = undefined) {
+    closeTestCase(s) {
         window.closeTestcase(s);
         this.hasOpenCase = false;
     }

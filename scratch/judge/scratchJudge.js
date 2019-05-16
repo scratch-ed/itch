@@ -31,7 +31,7 @@ async function runTests(templateJSON, testJSON) {
 
     dodona.startTestTab('Testen voor de uitvoer');
     // Check if the given sprites are not modified by the student
-    beforeExecution();
+    beforeExecution(JSON.parse(templateJSON), JSON.parse(testJSON));
     dodona.closeTestTab();
 
     dodona.startTestTab('Testen op de uitvoer');
