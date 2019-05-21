@@ -1,6 +1,8 @@
 function beforeExecution(templateJSON, testJSON) {
     // Controleer of het ingediende project van de leerling een sprite heeft met als naam 'Heks'
-    addCase('De sprite Heks is niet hernoemd', containsSprite(testJSON, 'Heks'), 'De sprite met als naam Heks werd niet teruggevonden in het project')
+    if(!containsSprite(testJSON, 'Heks')){
+        addError('De sprite met als naam Heks werd niet teruggevonden in het project');
+    }
 }
 
 function duringExecution() {
