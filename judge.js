@@ -9,9 +9,9 @@ const sourceFileTest = path.resolve(__dirname, 'source/sourceFile.sb3');
 const testFile = path.resolve(__dirname, 'tests/test.js');
 */
 
-const sourceFileTest = path.resolve(__dirname, 'scratch_code/vpw2017/01_mad_hatter.sb3');
-const sourceFileTemplate = path.resolve(__dirname, 'scratch_code/vpw2017/01_mad_hatter.sb3');
-const testFile = path.resolve(__dirname, 'tests/vpw2017/01_mad_hatter_test.js');
+const sourceFileTest = path.resolve(__dirname, 'scratch_code/vpw2017/07_heksenjacht.sb3');
+const sourceFileTemplate = path.resolve(__dirname, 'scratch_code/vpw2017/07_heksenjacht.sb3');
+const testFile = path.resolve(__dirname, 'tests/vpw2017/07_heksenjacht_test.js');
 
 const DEBUG = true;
 let acceptsOutput = true;
@@ -88,7 +88,7 @@ class Judge {
             toDodona({command: "close-test", generated: generated.toString(), status: status});
         });
         await page.exposeFunction('closeTestcase', (accepted = undefined) => {
-            if (accepted !== undefined) {
+            if (accepted !== null && accepted !== undefined) {
                 toDodona({command: "close-testcase", accepted: accepted.toString()});
             } else {
                 toDodona({command: "close-testcase"});

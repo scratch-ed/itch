@@ -1,6 +1,6 @@
 function duringExecution() {
 
-    actionTimeout = 5000;
+    actionTimeout = 7000;
 
     scratch.eventScheduling
         .wait(500)
@@ -9,12 +9,14 @@ function duringExecution() {
             let maxX = log.getMaxX('Heks');
             let minY = log.getMinY('Heks');
             let maxY = log.getMaxY('Heks');
-            return (minX === maxX && minY === maxY);
+            return !(minX === maxX && minY === maxY);
         })
-        .clickSprite({spriteName: 'Heks'}) // De eerste klik laat heks starten met bewegen.
-        .wait(1100) // wacht iets langer dan een seconde voor de volgende positie
-        .wait(1000) // wacht een seconde voor de volgende positie
-        .wait(1000) // wacht een seconde voor de volgende positie
+        .clickSprite({spriteName: 'Heks', sync: false}) // De eerste klik laat heks starten met bewegen.
+        .range(0, 4000, 50, (index, anchor) => { // Manueel elke 50 ms, 4000 ms lang, de sprites loggen.
+            return anchor
+                .wait(50)
+                .log()
+        })
         .end();
 
     scratch.start();
@@ -31,8 +33,9 @@ function afterExecution() {
 
     let clickTime = log.events.filter({type: 'click'})[0].time;
 
-    //1 seconde na clickTime moet de positie van de heks veranderd zijn
+    console.log(log.frames.list);
 
+    //1 seconde na clickTime moet de positie van de heks veranderd zijn
     let frames1 = log.frames.filter({after: clickTime + 200, before: clickTime + 800});
     let frames2 = log.frames.filter({after: clickTime + 1200, before: clickTime + 1800});
     let frames3 = log.frames.filter({after: clickTime + 2200, before: clickTime + 2800});

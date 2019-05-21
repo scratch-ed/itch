@@ -229,7 +229,7 @@ class ScratchSimulationEvent extends SimulationEvent {
         });
     }
 
-    log(fun) {
+    log(fun = (log) => {}) {
         return this.next((resolve, reject) => {
             log.addFrame('manual_logging');
             fun(log);

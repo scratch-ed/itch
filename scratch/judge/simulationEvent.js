@@ -129,13 +129,9 @@ class SimulationEvent {
 
         let anchor = this,        // start from event on which method is called
             index = 0,            // keep track of number of repetitions
-            next = start,         // next event should be generated at start time
-            delay = start;        // first delay equals start time
+            next = start;         // next event should be generated at start time
 
         while (next < stop) {
-
-            // wait before generating next events
-            anchor = anchor.wait(delay);
 
             // call event generator on the current event
             let nextAnchor = eventGenerator.call(anchor, index, anchor);
@@ -150,8 +146,7 @@ class SimulationEvent {
 
             // launch next event
             index += 1;
-            delay = step;
-            next += delay;
+            next += step;
 
         }
 

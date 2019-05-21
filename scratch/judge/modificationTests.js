@@ -85,3 +85,12 @@ function objectIsEmpty(obj) {
     }
     return true;
 }
+
+function containsSprite(testJSON, spriteName) {
+    for (let target of testJSON.targets) {
+        if (target.name === spriteName) {
+            return true;
+        }
+    }
+    return false;
+}

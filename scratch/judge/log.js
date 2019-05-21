@@ -116,7 +116,7 @@ class Frames {
         let before = arg['before'] || this.lastTime;
         let after = arg['after'] || 0;
         let filtered = [];
-        for (let frame in this.list) {
+        for (let frame of this.list) {
             if (frame.time >= after && frame.time <= before) {
                 filtered.push(frame);
             }
