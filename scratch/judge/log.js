@@ -288,7 +288,7 @@ class Log {
 
         let max = 0;
         for (let frame of frames) {
-            let sprite = getSpriteByName(spriteName, frame);
+            let sprite = frame.getSprite(spriteName);
             if (sprite != null) {
                 if (sprite.x > max) {
                     max = sprite.x;
@@ -303,7 +303,7 @@ class Log {
 
         let min = 0;
         for (let frame of frames) {
-            let sprite = getSpriteByName(spriteName, frame);
+            let sprite = frame.getSprite(spriteName);
             if (sprite != null) {
                 if (sprite.x < min) {
                     min = sprite.x;
@@ -318,7 +318,7 @@ class Log {
 
         let max = 0;
         for (let frame of frames) {
-            let sprite = getSpriteByName(spriteName, frame);
+            let sprite = frame.getSprite(spriteName);
             if (sprite != null) {
                 if (sprite.y > max) {
                     max = sprite.y;
@@ -333,7 +333,7 @@ class Log {
 
         let min = 0;
         for (let frame of frames) {
-            let sprite = getSpriteByName(spriteName, frame);
+            let sprite = frame.getSprite(spriteName);
             if (sprite != null) {
                 if (sprite.y < min) {
                     min = sprite.y;
@@ -347,7 +347,7 @@ class Log {
     inBounds(spriteName, frames = this.frames.list) {
 
         for (let frame of frames) {
-            let sprite = getSpriteByName(spriteName, frame);
+            let sprite = frame.getSprite(spriteName);
             if (sprite != null) {
                 if (sprite.isTouchingEdge) {
                     return false;
@@ -357,12 +357,11 @@ class Log {
         return true;
     }
 
-
-    getDirections(spriteName, frames = this.frames.list) {
+    getDirectionChanges(spriteName, frames = this.frames.list) {
         let directions = [];
         let oldDirection = 0;
         for (let frame of frames) {
-            let sprite = getSpriteByName(spriteName, frame);
+            let sprite = frame.getSprite(spriteName);
             if (sprite != null) {
                 if (oldDirection !== sprite.direction) {
                     directions.push(sprite.direction);
@@ -373,33 +372,11 @@ class Log {
         return directions;
     }
 
-    isHorizontal(spriteName) {
-        let directions = this.getDirections(spriteName);
-        for (let direction of directions) {
-            if (direction !== 90 && direction !== -90) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    bouncesHorizontal(spriteName) {
-        let directions = this.getDirections(spriteName);
-        let oldDirection = directions[0];
-        for (let i = 1; i < directions.length; i++) {
-            if (directions[i] !== (-oldDirection)) {
-                return false;
-            }
-            oldDirection = directions[i];
-        }
-        return true;
-    }
-
     getCostumeChanges(spriteName, frames = this.frames.list) {
         let costumes = [];
         let oldCostume = '';
         for (let frame of frames) {
-            let sprite = getSpriteByName(spriteName, frame);
+            let sprite = frame.getSprite(spriteName);
             if (sprite != null) {
                 if (oldCostume !== sprite.costume) {
                     costumes.push(sprite.costume);
@@ -411,7 +388,7 @@ class Log {
     }
 
     isTouchingSprite(spriteName, targetName, frame) {
-        let sprite = getSpriteByName(spriteName, frame);
+        let sprite = frame.getSprite(spriteName);
         for (let target of sprite.isTouchingSprite) {
             if (target.name === targetName) {
                 return target.value;
@@ -423,8 +400,8 @@ class Log {
     getDistancesToSprite(spriteName, targetName, frames = this.frames.list) {
         let distances = [];
         for (let frame of frames) {
-            let sprite = getSpriteByName(spriteName, frame);
-            let target = getSpriteByName(targetName, frame);
+            let sprite = frame.getSprite(spriteName);
+            let target = frame.getSprite(targetName);
             if (sprite != null && target != null) {
                 distances.push(Math.sqrt(distSq(sprite, target)));
             }

@@ -18,9 +18,7 @@ function duringExecution() {
             return (minX === maxX && minY === maxY);
         })
         .clickSprite({spriteName: 'Papegaai', sync: false}) // De eerste klik laat de papegaai starten met bewegen.
-        .wait(500)
-        .clickSprite({spriteName: 'Papegaai', sync: false}) // Deze klik doet helemaal niets.
-        .wait(2000)
+        .wait(3000)
         .end();
 
     scratch.start();
@@ -28,40 +26,50 @@ function duringExecution() {
 
 function afterExecution() {
 
-    // De papegaai beweegt niet voor de eerste klik.
-    let click = log.events.filter({type:'click'})[0];
-    let stillFrames = log.frames.filter({before: click.time});
-    let minX = log.getMinX('Papegaai', stillFrames);
-    let maxX = log.getMaxX('Papegaai', stillFrames);
-    let minY = log.getMinY('Papegaai', stillFrames);
-    let maxY = log.getMaxY('Papegaai', stillFrames);
-    addCase('Papegaai voor eerste klik', (minX === maxX && minY === maxY), 'De papegaai mag niet bewegen voor de eerste klik');
+    // Test of de papegaai nooit verticaal beweegt:
+    addCase('De papegaai beweegt niet verticaal', log.getMaxY('Papegaai') === log.getMinY('Papegaai'), 'De y-coordinaat van de Papegaai blijft niet constant');
 
-    let isTouchingEdge = false;
-    for (let frame of log.frames.list) {
-        if(frame.getSprite('Papegaai').isTouchingEdge) {
-            isTouchingEdge = true;
+    // De papegaai moet minstens twee keer van richting veranderen enkel dit moet gebeuren als de papegaai zich bij rand van het speelveld bevindt.
+
+    // We beschouwen enkel de frames na de klik
+    let klikEvent = log.events.filter({type: 'click'})[0];
+    let frames = log.frames.filter({after: klikEvent.time});
+
+    let papegaaiBegin = frames[0].getSprite('Papegaai');
+    let directions = []; // We slaan de richting van de papegaai op bij elke verandering van richting.
+    let oldDirection = papegaaiBegin.direction;
+    let previousFrame = frames[0];
+
+    for (let frame of frames) {
+        let sprite = frame.getSprite('Papegaai');
+        if (sprite != null) {
+            if (oldDirection !== sprite.direction) {
+                directions.push(sprite.direction);
+                oldDirection = sprite.direction;
+                // De richting van de sprite is veranderd
+
+                // Test of de papegaai de rand raakt
+                let papegaai = previousFrame.getSprite('Papegaai');
+                let raaktRand = (papegaai.x + papegaai.bounds.width / 2 > 230) || (papegaai.x - papegaai.bounds.width / 2 < -230);
+                addCase('De papegaai raakt de rand bij het veranderen van richting', raaktRand, 'De papegaai is veranderd van richting zonder de rand te raken van het speelveld');
+                // Test of de papegaai altijd van links naar rechts en omgekeerd beweegt
+                let vliegtHorizontaal = (papegaai.direction === 90 || papegaai.direction === -90);
+                addCase('De papegaai vliegt horizontaal', vliegtHorizontaal, 'De richting van de papegaai is niet 90 of -90, de papegaai vliegt niet horizontaal.');
+
+            }
         }
+        previousFrame = frame;
     }
 
-    // De papegaai moet minstens beide muren geraakt hebben
-    let directions = log.getDirections('Papegaai');
-    addCase('De papegaai ', directions.length > 2, `De papegaai moet minstens beide randen een keer geraakt hebben, maar heeft maar ${directions.length} randen geraakt`);
+    addCase('De papegaai veranderde van richting', directions.length > 2, `De papegaai moet minstens twee veranderen van richting, maar is maar ${directions.length} keer veranderd`);
 
-    // De papegaai vliegt horizontaal (directions 90 en -90)
-    addCase('De papegaai vliegt horizontaal', log.isHorizontal('Papegaai'), 'De papegaai vliegt van links naar rechts en omgekeerd.');
-
-    // De papegaai verandert van richting van 90 naar -90 en van -90 naar 90.
-    addCase('De richting van de papegaai', log.bouncesHorizontal('Papegaai'), 'De Papegaai draait 180 graden bij het botsen op een muur');
-
-    // De y-coordinaat van de papegaai blijft constant
-    let x = log.getMaxY('Papegaai') === log.getMinY('Papegaai');
-    addCase('De y-coordinaat is constant', x, 'De y-coordinaat van de Papegaai blijft constant');
-
-    // De papegaai verandert van kostuum
+    // De papegaai verandert van kostuum tijdens het vliegen
     let costumeChanges = log.getCostumeChanges('Papegaai');
     addCase('Papegaai klappert met vleugels', costumeChanges.length > 30, `De Papegaai moet constant wisselen tussen de kostuums 'VleugelsOmhoog' en 'VleugelsOmlaag'`);
 
-    // Het is beter om het blok 'looks_nextcostume' te gebruiken.
-    addCase('Juiste blokken gebruikt', log.blocks.containsBlock('looks_nextcostume'), 'Het blok volgend_kostuum werd niet gebruikt');
+    // Gebruik best een lus om elke seconde de heks te verplaatsen
+    addCase('Gebruik van een lus', log.blocks.containsBlock('control_repeat'), 'Er werd geen herhalingslus gebruikt');
+
+    // De code in de lus wordt minstens 2 keer herhaald
+    addCase('Correcte gebruik van de lus', log.blocks.numberOfExecutions('control_repeat') > 2, 'De code in de lus werd minder dan 2 keer herhaald');
 }
