@@ -29,7 +29,7 @@ function afterExecution() {
     // Test of de papegaai nooit verticaal beweegt:
     addCase('De papegaai beweegt niet verticaal', log.getMaxY('Papegaai') === log.getMinY('Papegaai'), 'De y-coordinaat van de Papegaai blijft niet constant');
 
-    // De papegaai moet minstens twee keer van richting veranderen enkel dit moet gebeuren als de papegaai zich bij rand van het speelveld bevindt.
+    // De papegaai moet (horizontaal) van richting veranderen, maar enkel als de papegaai zich bij rand van het speelveld bevindt.
 
     // We beschouwen enkel de frames na de klik
     let klikEvent = log.events.filter({type: 'click'})[0];
