@@ -34,8 +34,6 @@ function afterExecution() {
     // We beschouwen enkel de frames na de klik
     let klikEvent = log.events.filter({type: 'click'})[0];
     let frames = log.frames.filter({after: klikEvent.time});
-
-    let papegaaiBegin = frames[0].getSprite('Papegaai');
     let directions = []; // We slaan de richting van de papegaai op bij elke verandering van richting.
     let oldDirection = papegaaiBegin.direction;
     let previousFrame = frames[0];
@@ -47,7 +45,6 @@ function afterExecution() {
                 directions.push(sprite.direction);
                 oldDirection = sprite.direction;
                 // De richting van de sprite is veranderd
-
                 // Test of de papegaai de rand raakt
                 let papegaai = previousFrame.getSprite('Papegaai');
                 let raaktRand = (papegaai.x + papegaai.bounds.width / 2 > 230) || (papegaai.x - papegaai.bounds.width / 2 < -230);
@@ -55,7 +52,6 @@ function afterExecution() {
                 // Test of de papegaai altijd van links naar rechts en omgekeerd beweegt
                 let vliegtHorizontaal = (papegaai.direction === 90 || papegaai.direction === -90);
                 addCase('De papegaai vliegt horizontaal', vliegtHorizontaal, 'De richting van de papegaai is niet 90 of -90, de papegaai vliegt niet horizontaal.');
-
             }
         }
         previousFrame = frame;
