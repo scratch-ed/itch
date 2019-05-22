@@ -67,7 +67,7 @@ function afterExecution() {
     let costumeChanges = log.getCostumeChanges('Papegaai');
     addCase('Papegaai klappert met vleugels', costumeChanges.length > 30, `De Papegaai moet constant wisselen tussen de kostuums 'VleugelsOmhoog' en 'VleugelsOmlaag'`);
 
-    // Gebruik best een lus om elke seconde de heks te verplaatsen
+    // Gebruik best een lus de papegaai te bewegen en van kostuum te veranderen.
     addCase('Gebruik van een lus', log.blocks.containsBlock('control_repeat'), 'Er werd geen herhalingslus gebruikt');
 
     // De code in de lus wordt minstens 2 keer herhaald
