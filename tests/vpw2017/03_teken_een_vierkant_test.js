@@ -3,7 +3,7 @@ function duringExecution() {
     actionTimeout = 2000;
 
     scratch.eventScheduling
-        .greenFlag({sync: true})
+        .greenFlag()
         .end();
 
     scratch.start();
