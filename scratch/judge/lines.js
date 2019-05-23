@@ -135,6 +135,23 @@ function pointsAreSquare(points) {
     return false;
 }
 
+function findSquareLength(points) {
+    let l = 0;
+    for (let i = 0; i < 4; i++) {
+        let p = points[i];
+        for (let j = 0; j < 4; j++) {
+            if (i !== j) {
+                let q = points[j];
+                let d = distSq(p, q);
+                if (d < l || l === 0) {
+                    l = d;
+                }
+            }
+        }
+    }
+    return Math.sqrt(l);
+}
+
 function findSquares(lines) {
     let squares = [];
     if (lines.length < 4) return false; //no square without at least 4 sides
@@ -159,8 +176,9 @@ function findSquares(lines) {
 
                     //from the 8 points, there should be 4 pairs of equal points
                     points = removeDuplicates(points);
+                    let square = {points: points, length: findSquareLength(points)};
 
-                    if (pointsAreSquare(points)) squares.push(points);
+                    if (pointsAreSquare(points)) squares.push(square);
                 }
             }
         }
@@ -169,7 +187,7 @@ function findSquares(lines) {
 }
 
 function pointsAreTriangle(points) {
-    // only square if there are four unique points
+    // given points are not equal
     return points.length === 3;
 }
 
