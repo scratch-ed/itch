@@ -1,7 +1,5 @@
 function duringExecution() {
-
-    actionTimeout = 2000;
-
+    
     scratch.eventScheduling
         .greenFlag()
         .end();
