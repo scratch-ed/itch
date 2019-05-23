@@ -9,9 +9,9 @@ const sourceFileTest = path.resolve(__dirname, 'source/sourceFile.sb3');
 const testFile = path.resolve(__dirname, 'tests/test.js');
 */
 
-const sourceFileTest = path.resolve(__dirname, 'scratch_code/vpw2017/02_papegaai.sb3');
-const sourceFileTemplate = path.resolve(__dirname, 'scratch_code/vpw2017/02_papegaai.sb3');
-const testFile = path.resolve(__dirname, 'tests/vpw2017/02_papegaai_test.js');
+const sourceFileTest = path.resolve(__dirname, 'scratch_code/vpw2017/03_teken_een_vierkant.sb3');
+const sourceFileTemplate = path.resolve(__dirname, 'scratch_code/vpw2017/03_teken_een_vierkant.sb3');
+const testFile = path.resolve(__dirname, 'tests/vpw2017/03_teken_een_vierkant_test.js');
 
 const DEBUG = true;
 let acceptsOutput = true;
