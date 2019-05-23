@@ -1,9 +1,7 @@
 function duringExecution() {
 
-    actionTimeout = 5000;
-
     scratch.eventScheduling
-        .pressKey({key: ' ', sync: true})
+        .pressKey({key: ' '})
         .end();
 
     scratch.start();
@@ -12,8 +10,7 @@ function duringExecution() {
 function afterExecution() {
 
     // De kat raakt de voetbal in de laatste frame
-    let touches = log.sprites.isTouchingSprite('Kat', 'Voetbal');
-    addTest('Raakt de voetbal', true, touches, 'Op het einde van de uitvoer moet de kat de voetbal raken');
+    addCase('De kat raakt de voetbal', log.sprites.isTouching('Kat', 'Voetbal'), 'Op het einde van de uitvoer raakt de kat de voetbal niet');
 
     // De afstand van de kat naar de bal verkleint over tijd
     let distances = log.getDistancesToSprite('Kat', 'Voetbal');
@@ -25,6 +22,5 @@ function afterExecution() {
         }
         oldDistance = distance;
     }
-    addCase('Afstand van Kat tot Voetbal', test, 'De afstand van de kat naar de voetbal moet verkleinen over de tijd');
-
+    addCase('Afstand van kat tot voetbal wordt kleiner', test, 'De afstand van de kat naar de voetbal verkleint niet over de tijd');
 }

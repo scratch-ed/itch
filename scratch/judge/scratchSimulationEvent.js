@@ -155,15 +155,15 @@ class ScratchSimulationEvent extends SimulationEvent {
             dodona.startTestCase(`Druk op toets: ${key}`);
 
             // save sprites state before click
-            let event = new Event('key', {key: key, before: oldFrame});
+            let event = new Event('key', {key: key});
             event.previousFrame = new Frame('key');
             log.addEvent(event);
 
             let keyData = {key: key, isDown: true};
-            var scratchKey = Scratch.vm.runtime.ioDevices.keyboard._keyStringToScratchKey(data.key);
+            let scratchKey = Scratch.vm.runtime.ioDevices.keyboard._keyStringToScratchKey(data.key);
 
-            if (scratchKey = '') {
-                console.log('Geen herkende key meegegeven')
+            if (scratchKey === '') {
+                console.log('Geen herkende key meegegeven');
                 reject();
             }
 

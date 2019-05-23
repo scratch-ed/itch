@@ -1,4 +1,3 @@
-
 /**
  * Frame describes one captured moment during execution. It saves a snapshot of the current state of the sprites.
  * @example
@@ -40,7 +39,10 @@ class Frame {
             let touchings = [];
             for (let touchingTarget of targets) {
                 if (touchingTarget.id !== target.id) {
-                    let x = {name: touchingTarget.sprite.name, value: target.isTouchingSprite(touchingTarget.sprite.name)};
+                    let x = {
+                        name: touchingTarget.sprite.name,
+                        value: target.isTouchingSprite(touchingTarget.sprite.name)
+                    };
                     touchings.push(x);
                 }
             }
@@ -75,14 +77,14 @@ class Frame {
      * @returns {boolean} true if the sprites are touching, false if they are not.
      */
     isTouching(spriteName1, spriteName2) {
-        for (let sprite of this.getSprite(spriteName1)) {
-            if (sprite.isTouchingSprite === spriteName2) {
-                return true;
+        let sprite = this.getSprite(spriteName1);
+        for (let s of sprite.isTouchingSprite) {
+            if (s.name === spriteName2) {
+                return s.value;
             }
         }
         return false;
     }
-
 }
 
 /**
@@ -148,7 +150,7 @@ class Event {
 }
 
 class Events {
-    constructor () {
+    constructor() {
         this.list = [];
         this.length = 0;
         this.lastTime = 0;
@@ -178,7 +180,7 @@ class Events {
 }
 
 class Renderer {
-    constructor () {
+    constructor() {
         this.index = 0;
         this.lines = [];
         this.color = null;
@@ -388,13 +390,7 @@ class Log {
     }
 
     isTouchingSprite(spriteName, targetName, frame) {
-        let sprite = frame.getSprite(spriteName);
-        for (let target of sprite.isTouchingSprite) {
-            if (target.name === targetName) {
-                return target.value;
-            }
-        }
-        return false;
+        return frame.isTouching(spriteName, targetName);
     }
 
     getDistancesToSprite(spriteName, targetName, frames = this.frames.list) {
