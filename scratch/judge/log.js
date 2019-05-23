@@ -405,6 +405,23 @@ class Log {
         return distances;
     }
 
+    getSpriteLocations(spriteName, frames = this.frames.list) {
+        let places = [];
+        let lastX = 0;
+        let lastY = 0;
+        let first = true;
+        for (let frame of frames) {
+            let sprite = frame.getSprite(spriteName);
+            if (lastX !== sprite.x || lastY !== sprite.y || first) {
+                lastX = sprite.x;
+                lastY = sprite.y;
+                places.push({x: lastX, y: lastY});
+                first = false;
+            }
+        }
+        return places;
+    }
+
     // EVENT RELATED
 
     getSpriteBeforeEvent(spriteName, event) {
