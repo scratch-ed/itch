@@ -41,10 +41,9 @@ function afterExecution() {
     for (let frame of frames) {
         let sprite = frame.getSprite('Papegaai');
         if (sprite != null) {
-            if (oldDirection !== sprite.direction) {
+            if (oldDirection !== sprite.direction) { // De richting van de sprite is veranderd
                 directions.push(sprite.direction);
                 oldDirection = sprite.direction;
-                // De richting van de sprite is veranderd
                 // Test of de papegaai de rand raakt
                 let papegaai = previousFrame.getSprite('Papegaai');
                 let raaktRand = (papegaai.x + papegaai.bounds.width / 2 > 230) || (papegaai.x - papegaai.bounds.width / 2 < -230);
