@@ -1,12 +1,6 @@
-function check(templateJSON, testJSON) {
-    return false;
-}
+function beforeExecution() {
 
-function prepare() {
-
-    actionTimeout = 6000;
-
-    scratch.answers = ['Louise', 'Pieter'];
+    scratch.answers = ['Louise'];
 
     scratch.eventScheduling
         .greenFlag({sync: true})
@@ -15,7 +9,7 @@ function prepare() {
     scratch.start();
 }
 
-function evaluate() {
+function afterExecution() {
 
     //Controleer de tekst van de drie tekstballonnen
     addTest('Devin stelt zich voor', 'Hallo, ik ben Devin.', log.renderer.responses[0], 'Er wordt foute tekst weergegeven in de tekstballon');
