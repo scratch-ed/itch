@@ -3,7 +3,7 @@ function beforeExecution() {
     scratch.answers = ['Louise'];
 
     scratch.eventScheduling
-        .greenFlag({sync: true})
+        .greenFlag()
         .end();
 
     scratch.start();
@@ -17,5 +17,5 @@ function afterExecution() {
     addTest('Devin zegt hallo', `Hallo, ${scratch.answers[0]}`, log.renderer.responses[2], 'Er wordt foute tekst weergegeven in de tekstballon');
 
     //Controleer of de eerste tekstballon 2 seconden wordt weergegeven
-    addCase('Devin stelt zich minstends 2 seconden lang voor', log.getSkinDuration('Hallo, ik ben Devin.') >= 2000, 'De eerste tekstballon moet minimum 2 seconden getoond worden.')
+    addCase('Devin stelt zich minstens 2 seconden lang voor', log.getSkinDuration('Hallo, ik ben Devin.') >= 2000, 'De eerste tekstballon moet minimum 2 seconden getoond worden.')
 }

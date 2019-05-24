@@ -99,6 +99,10 @@ function vmHandleEvents(vm) {
         numberOfRun++;
     });
 
+    vm.runtime.on('PROJECT_LOADED', () => {
+        //Possible to put extra check here, so projects don't start before they finished loading.
+    });
+
     vm.runtime.on('SAY', (target, type, text) => {
         console.log(`${getTimeStamp()}: say: ${text}`);
 
@@ -111,8 +115,10 @@ function vmHandleEvents(vm) {
     vm.runtime.on('QUESTION', (question) => {
         if (question != null) {
             let x = answers.shift();
-            addError('Er werd een vraag gesteld waarop geen antwoord voorzien is.');
-            
+            if (x === null) {
+                addError('Er werd een vraag gesteld waarop geen antwoord voorzien is.');
+            }
+
             console.log(`${getTimeStamp()}: input: ${x}`);
 
             let event = new Event('answer', {question: question, text: x});
@@ -129,17 +135,13 @@ function vmHandleEvents(vm) {
     });
 
     vm.runtime.on('DONE_THREADS_UPDATE', (threads) => {
-        for (thread of threads) {
-            for (action of activeActions) {
+        for (let thread of threads) {
+            for (let action of activeActions) {
                 if (action.active) {
                     action.update(thread.topBlock);
                 }
             }
         }
-    });
-
-    vm.runtime.on('TOUCHING_EDGE', () => {
-       log.addEvent('touch', {target: 'edge'});
     });
 }
 

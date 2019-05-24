@@ -76,7 +76,9 @@ class ScratchSimulationEvent extends SimulationEvent {
                     console.log(`finished click on ${spriteName}`);
                     // save sprites state after click
                     event.nextFrame = new Frame('clickEnd');
-                    resolve('finished action resolve');
+                    if (sync) {
+                        resolve('sync resolve');
+                    }
 
                 }, extraWaitTime);
             });
@@ -133,7 +135,9 @@ class ScratchSimulationEvent extends SimulationEvent {
                 setTimeout(() => {
                     console.log(`finished greenFlag()`);
                     event.nextFrame = new Frame('greenFlagEnd');
-                    resolve('finished action resolve');
+                    if (sync) {
+                        resolve('sync resolve');
+                    }
                 }, extraWaitTime);
             });
         });
@@ -213,7 +217,9 @@ class ScratchSimulationEvent extends SimulationEvent {
                     console.log(`finished keyPress on ${key}`);
                     // save sprites state after click
                     event.nextFrame = new Frame('keyEnd');
-                    resolve('finished action resolve');
+                    if (sync) {
+                        resolve('sync resolve');
+                    }
 
                 }, extraWaitTime);
             });
@@ -235,6 +241,10 @@ class ScratchSimulationEvent extends SimulationEvent {
             fun(log);
             resolve();
         });
+    }
+
+    reset() {
+        log = new Log();
     }
 
     end() {
