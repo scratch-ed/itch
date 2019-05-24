@@ -106,7 +106,7 @@ function vmHandleEvents(vm) {
     vm.runtime.on('SAY', (target, type, text) => {
         console.log(`${getTimeStamp()}: say: ${text}`);
 
-        let event = new Event('say', {text: text, target: target, type: type});
+        let event = new Event('say', {text: text, target: target, type: type, sprite: target.sprite.name});
         event.previousFrame = new Frame('say');
         event.nextFrame = new Frame('sayEnd');
         log.addEvent(event);
