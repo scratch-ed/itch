@@ -22,4 +22,8 @@ function afterExecution() {
 
     // Er werd gebruik gemaakt van de pen
     addCase('De pen werd gebruikt', log.blocks.containsBlock('pen_penDown'), 'Het blok pen_down werd niet gebruikt in de code');
+
+    if (!log.blocks.containsLoop()) {
+        addMessage('Je kan je oplossing verbeteren door gebruik te maken van het "herhaal-blok"');
+    }
 }
