@@ -1,6 +1,6 @@
 function containsLoop(blocks) {
   for (let key in blocks) {
-    if (key === "control_repeat") return true;
+    if (key === "control_repeat" || key === "control_forever") return true;
   }
   return false;
 }

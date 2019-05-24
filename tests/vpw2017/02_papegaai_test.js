@@ -35,8 +35,8 @@ function afterExecution() {
     let klikEvent = log.events.filter({type: 'click'})[0];
     let frames = log.frames.filter({after: klikEvent.time});
     let directions = []; // We slaan de richting van de papegaai op bij elke verandering van richting.
-    let oldDirection = papegaaiBegin.direction;
     let previousFrame = frames[0];
+    let oldDirection = previousFrame.getSprite('Papegaai').direction;
 
     for (let frame of frames) {
         let sprite = frame.getSprite('Papegaai');
@@ -63,8 +63,8 @@ function afterExecution() {
     addCase('Papegaai klappert met vleugels', costumeChanges.length > 30, `De Papegaai moet constant wisselen tussen de kostuums 'VleugelsOmhoog' en 'VleugelsOmlaag'`);
 
     // Gebruik best een lus de papegaai te bewegen en van kostuum te veranderen.
-    addCase('Gebruik van een lus', log.blocks.containsBlock('control_repeat'), 'Er werd geen herhalingslus gebruikt');
+    addCase('Gebruik van een lus', log.blocks.containsLoop(), 'Er werd geen herhalingslus gebruikt');
 
     // De code in de lus wordt minstens 2 keer herhaald
-    addCase('Correcte gebruik van de lus', log.blocks.numberOfExecutions('control_repeat') > 2, 'De code in de lus werd minder dan 2 keer herhaald');
+    addCase('Correcte gebruik van de lus', log.blocks.numberOfExecutions('control_forever') > 2, 'De code in de lus werd minder dan 2 keer herhaald');
 }
