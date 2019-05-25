@@ -227,6 +227,15 @@ class ScratchSimulationEvent extends SimulationEvent {
 
     }
 
+    moveMouse(data = {}) {
+        return this.next((resolve, reject) => {
+            data['canvasWidth'] = 480;
+            data['canvasHeight'] = 360;
+            Scratch.vm.runtime.ioDevices.mouse.postData(data);
+            resolve();
+        });
+    }
+
     test(testName, messageIfWrong, fun) {
         return this.next((resolve, reject) => {
             let correct = fun(log);
