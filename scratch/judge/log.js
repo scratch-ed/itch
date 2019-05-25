@@ -13,6 +13,7 @@ class Frame {
     constructor(block) {
         this.time = getTimeStamp();
         this.block = block;
+        this.type = block;
         this.sprites = [];
 
         let targets = Scratch.vm.runtime.targets;
@@ -27,7 +28,11 @@ class Frame {
                 sprite[variable] = target[variable];
             });
 
-            sprite['variables'] = JSON.parse(JSON.stringify(target['variables']));
+            let variables = [];
+            for (let property in target['variables']) {
+                variables.push({name: target.variables[property].name, value: target.variables[property].value});
+            }
+            sprite['variables'] = variables;
 
             // sprite properties to log
             sprite['costume'] = target.sprite.costumes_[target['currentCostume']].name;
@@ -117,10 +122,13 @@ class Frames {
     filter(arg) {
         let before = arg['before'] || this.lastTime;
         let after = arg['after'] || 0;
+        let type = arg['type'] || 'any';
         let filtered = [];
         for (let frame of this.list) {
             if (frame.time >= after && frame.time <= before) {
-                filtered.push(frame);
+                if (frame.type === type || type === 'any') {
+                    filtered.push(frame);
+                }
             }
         }
         return filtered;
@@ -266,16 +274,12 @@ class Log {
         return Object.keys(costumes).length;
     }
 
-    getVariableValue(variableName, spriteName = 'Stage') {
-        for (let sprite of this.sprites) {
+    getVariableValue(variableName, spriteName = 'Stage', frame = this.sprites) {
+        for (let sprite of frame.sprites) {
             if (sprite.name === spriteName) {
-                if (sprite.variables !== undefined) {
-                    for (let property in sprite.variables) {
-                        if (sprite.variables.hasOwnProperty(property)) {
-                            if (sprite.variables[property].name === variableName) {
-                                return sprite.variables[property].value;
-                            }
-                        }
+                for (let variable of sprite.variables) {
+                    if (variable.name === variableName) {
+                        return variable.value;
                     }
                 }
             }
@@ -405,6 +409,23 @@ class Log {
         return distances;
     }
 
+    doSpritesOverlap(spriteName1, spriteName2, frame = this.sprites) {
+        let sprite1 = frame.getSprite(spriteName1);
+        let sprite2 = frame.getSprite(spriteName2);
+        let bounds1 = sprite1.bounds;
+        let bounds2 = sprite2.bounds;
+        // If one rectangle is on left side of other
+        if (bounds1.left > bounds2.right || bounds1.right < bounds2.left) {
+            return false;
+        }
+        // If one rectangle is above other
+        if (bounds1.top < bounds2.bottom || bounds1.bottom > bounds2.top) {
+            return false;
+        }
+        return true;
+
+    }
+
     getSpriteLocations(spriteName, frames = this.frames.list) {
         let places = [];
         let lastX = 0;
@@ -422,23 +443,6 @@ class Log {
         return places;
     }
 
-    // EVENT RELATED
-
-    getSpriteBeforeEvent(spriteName, event) {
-        for (let sprite of event.previousFrame.sprites) {
-            if (sprite.name === spriteName) {
-                return sprite;
-            }
-        }
-    }
-
-    getSpriteAfterEvent(spriteName, event) {
-        for (let sprite of event.nextFrame.sprites) {
-            if (sprite.name === spriteName) {
-                return sprite;
-            }
-        }
-    }
 
     // RENDERER RELATED
 
