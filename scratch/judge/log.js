@@ -292,7 +292,7 @@ class Log {
 
     getMaxX(spriteName, frames = this.frames.list) {
 
-        let max = 0;
+        let max = -240;
         for (let frame of frames) {
             let sprite = frame.getSprite(spriteName);
             if (sprite != null) {
@@ -307,7 +307,7 @@ class Log {
 
     getMinX(spriteName, frames = this.frames.list) {
 
-        let min = 0;
+        let min = 240;
         for (let frame of frames) {
             let sprite = frame.getSprite(spriteName);
             if (sprite != null) {
@@ -322,7 +322,7 @@ class Log {
 
     getMaxY(spriteName, frames = this.frames.list) {
 
-        let max = 0;
+        let max = -180;
         for (let frame of frames) {
             let sprite = frame.getSprite(spriteName);
             if (sprite != null) {
@@ -337,7 +337,7 @@ class Log {
 
     getMinY(spriteName, frames = this.frames.list) {
 
-        let min = 0;
+        let min = 180;
         for (let frame of frames) {
             let sprite = frame.getSprite(spriteName);
             if (sprite != null) {
