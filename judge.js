@@ -90,7 +90,16 @@ class Judge {
         });
         await page.exposeFunction('closeTestcase', (accepted = undefined) => {
             if (accepted !== null && accepted !== undefined) {
-                toDodona({command: "close-testcase", accepted: accepted.toString()});
+                //toDodona({command: "close-testcase", accepted: accepted.toString()});
+                toDodona({command: "start-test", expected: "true"});
+                let status = {};
+                if (accepted) {
+                    status = {enum: 'correct', human: 'Correct'};
+                } else {
+                    status = {enum: 'wrong', human: 'Wrong'};
+                }
+                toDodona({command: "close-test", generated: accepted.toString(), status: status});
+                toDodona({command: "close-testcase"});
             } else {
                 toDodona({command: "close-testcase"});
             }
