@@ -9,12 +9,12 @@ const sourceFileTest = path.resolve(__dirname, 'source/sourceFile.sb3');
 const testFile = path.resolve(__dirname, 'tests/test.js');
 */
 
-const oefening = '11_vang_de_appels';
+const oefening = 'draw_a_square';
 const sourceFileTest = path.resolve(__dirname, `scratch_code/vpw2017/${oefening}.sb3`);
 const sourceFileTemplate = path.resolve(__dirname, `scratch_code/vpw2017/${oefening}.sb3`);
 const testFile = path.resolve(__dirname, `tests/vpw2017/${oefening}_test.js`);
 
-const DEBUG = true;
+const DEBUG = false;
 let acceptsOutput = true;
 
 // unzipping
