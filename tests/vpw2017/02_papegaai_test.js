@@ -6,7 +6,7 @@ function beforeExecution(templateJSON, testJSON) {
 
 function duringExecution() {
 
-    actionTimeout = 800000;
+    actionTimeout = 8000;
 
     scratch.eventScheduling
         .wait(1000)
@@ -36,18 +36,16 @@ function afterExecution() {
 
     for (let frame of frames) {
         let sprite = frame.getSprite('Papegaai');
-        if (sprite != null) {
-            if (oldDirection !== sprite.direction) { // De richting van de sprite is veranderd
-                directions.push(sprite.direction);
-                oldDirection = sprite.direction;
-                // Test of de papegaai de rand raakt
-                let papegaai = previousFrame.getSprite('Papegaai');
-                let raaktRand = (papegaai.x + papegaai.bounds.width / 2 > 230) || (papegaai.x - papegaai.bounds.width / 2 < -230);
-                addCase('De papegaai raakt de rand bij het veranderen van richting', raaktRand, 'De papegaai is veranderd van richting zonder de rand te raken van het speelveld');
-                // Test of de papegaai altijd van links naar rechts en omgekeerd beweegt
-                let vliegtHorizontaal = (sprite.direction === 90 || sprite.direction === -90);
-                addCase('De papegaai vliegt horizontaal', vliegtHorizontaal, 'De richting van de papegaai is niet 90 of -90, de papegaai vliegt niet horizontaal.');
-            }
+        if (oldDirection !== sprite.direction) { // De richting van de sprite is veranderd
+            directions.push(sprite.direction);
+            oldDirection = sprite.direction;
+            // Test of de papegaai de rand raakt
+            let papegaai = previousFrame.getSprite('Papegaai');
+            let raaktRand = (papegaai.x + papegaai.bounds.width / 2 > 230) || (papegaai.x - papegaai.bounds.width / 2 < -230);
+            addCase('De papegaai raakt de rand bij het veranderen van richting', raaktRand, 'De papegaai is veranderd van richting zonder de rand te raken van het speelveld');
+            // Test of de papegaai altijd van links naar rechts en omgekeerd beweegt
+            let vliegtHorizontaal = (sprite.direction === 90 || sprite.direction === -90);
+            addCase('De papegaai vliegt horizontaal', vliegtHorizontaal, 'De richting van de papegaai is niet 90 of -90, de papegaai vliegt niet horizontaal.');
         }
         previousFrame = frame;
     }
