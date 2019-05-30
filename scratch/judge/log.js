@@ -349,6 +349,14 @@ class Log {
         return min;
 
     }
+    
+    hasSpriteMoved(spriteName, frames = this.frames.list) {
+        let minX = log.getMinX(spriteName, frames);
+        let maxX = log.getMaxX(spriteName, frames);
+        let minY = log.getMinY(spriteName, frames);
+        let maxY = log.getMaxY(spriteName, frames);
+        return !(minX === maxX && minY === maxY);
+    }
 
     inBounds(spriteName, frames = this.frames.list) {
 
