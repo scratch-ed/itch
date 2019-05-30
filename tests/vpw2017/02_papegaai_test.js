@@ -11,11 +11,7 @@ function duringExecution() {
     scratch.eventScheduling
         .wait(1000)
         .test('De papegaai heeft nog niet bewogen', 'De papegaai mag niet bewegen voor er op geklikt wordt', (log) => {
-            let minX = log.getMinX('Papegaai');
-            let maxX = log.getMaxX('Papegaai');
-            let minY = log.getMinY('Papegaai');
-            let maxY = log.getMaxY('Papegaai');
-            return (minX === maxX && minY === maxY);
+            return !hasSpriteMoved('Papegaai');
         })
         .clickSprite({spriteName: 'Papegaai', sync: false}) // De eerste klik laat de papegaai starten met bewegen.
         .wait(3000)
