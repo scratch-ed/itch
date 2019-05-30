@@ -26,6 +26,7 @@ class ScratchJudge {
 
 const scratch = new ScratchJudge();
 let actionTimeout = 5000;
+let speed = 1;
 
 async function runTests(templateJSON, testJSON) {
 
