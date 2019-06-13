@@ -30,12 +30,11 @@ let speed = 1;
 
 async function runTests(templateJSON, testJSON) {
 
-    dodona.startTestTab('Testen voor de uitvoer');
+    dodona.startTestTab('Testen uit het testplan');
+    dodona.startTestContext();
     // Check if the given sprites are not modified by the student
     beforeExecution(JSON.parse(templateJSON), JSON.parse(testJSON));
-    dodona.closeTestTab();
-
-    dodona.startTestTab('Testen op de uitvoer');
+    dodona.closeTestContext();
 
     //Schedule events and tests executed during execution
     duringExecution();

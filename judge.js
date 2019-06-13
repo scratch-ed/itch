@@ -110,8 +110,18 @@ class Judge {
         await page.exposeFunction('closeTab', () => {
             toDodona({command: "close-tab"});
         });
-        await page.exposeFunction('closeJudge', () => {
-            toDodona({command: "close-judgement"});
+        await page.exposeFunction('closeJudge', (accepted = undefined) => {
+            if (accepted !== null && accepted !== undefined) {
+                toDodona({command: "close-judgement"});
+            } else {
+                let status = {};
+                if (accepted) {
+                    status = {enum: 'correct', human: 'Correct'};
+                } else {
+                    status = {enum: 'wrong', human: 'Wrong'};
+                }
+                toDodona({command: "close-judgement", accepted: accepted.toString(), status: status});
+            }
             acceptsOutput = false;
         });
 

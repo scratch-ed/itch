@@ -85,7 +85,7 @@ class Dodona {
         if (this.hasOpenTab) {
             this.closeTestTab();
         }
-        window.closeJudge();
+        window.closeJudge(false);
     }
 
 }
