@@ -9,7 +9,7 @@ const sourceFileTest = path.resolve(__dirname, 'source/sourceFile.sb3');
 const testFile = path.resolve(__dirname, 'tests/test.js');
 */
 
-const oefening = '07_heksenjacht';
+const oefening = '02_papegaai';
 const sourceFileTest = path.resolve(__dirname, `scratch_code/vpw2017/${oefening}.sb3`);
 const sourceFileTemplate = path.resolve(__dirname, `scratch_code/vpw2017/${oefening}.sb3`);
 const testFile = path.resolve(__dirname, `tests/vpw2017/${oefening}_test.js`);

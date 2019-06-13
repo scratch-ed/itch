@@ -6,7 +6,7 @@ function duringExecution() {
         .wait(500)
         .test('De Heks beweegt niet voor de klik', 'De heks bewoog nog voor er op geklikt werd', (log) => {
             // De heks mag nog maar op 1 locatie geweest zijn
-            return log.getSpriteLocations('Heks') === 1;
+            return log.getSpriteLocations('Heks') <= 1;
         })
         .clickSprite({spriteName: 'Heks', sync: false}) // De eerste klik laat heks starten met bewegen.
         .range(0, 4000, 50, (index, anchor) => { // Manueel elke 50 ms, 4000 ms lang, de sprites loggen.
