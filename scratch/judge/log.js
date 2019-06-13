@@ -349,8 +349,9 @@ class Log {
         return min;
 
     }
-    
+
     hasSpriteMoved(spriteName, frames = this.frames.list) {
+        if (frames.length === 0) return false;
         let minX = log.getMinX(spriteName, frames);
         let maxX = log.getMaxX(spriteName, frames);
         let minY = log.getMinY(spriteName, frames);
