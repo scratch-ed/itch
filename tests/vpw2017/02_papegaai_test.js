@@ -23,7 +23,8 @@ function duringExecution() {
 function afterExecution() {
 
     // Test of de papegaai nooit verticaal beweegt:
-    addCase('De papegaai beweegt niet verticaal', log.getMaxY('Papegaai') === log.getMinY('Papegaai'), 'De y-coordinaat van de Papegaai blijft niet constant');
+    addCase('De papegaai beweegt niet verticaal', log.getMaxY('Papegaai') === log.getMinY('Papegaai'), 
+            'De y-coordinaat van de Papegaai blijft niet constant');
 
     // De papegaai moet (horizontaal) van richting veranderen, maar enkel als de papegaai zich bij rand van het speelveld bevindt.
 
