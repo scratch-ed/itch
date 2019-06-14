@@ -53,7 +53,7 @@ function afterExecution() {
         previousFrame = frame;
     }
 
-    addCase('De papegaai veranderde van richting', directions.length > 2, 
+    addCase('De papegaai veranderde minimum 2 keer van richting', directions.length > 2, 
             `De papegaai moet minstens twee veranderen van richting, maar is maar ${directions.length} keer veranderd`);
 
     // De papegaai verandert van kostuum tijdens het vliegen
