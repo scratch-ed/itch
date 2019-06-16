@@ -41,7 +41,8 @@ function afterExecution() {
             oldDirection = sprite.direction;
             // Test of de papegaai de rand raakt
             let papegaai = previousFrame.getSprite('Papegaai');
-            let raaktRand = (papegaai.x + papegaai.bounds.width / 2 > 230) || (papegaai.x - papegaai.bounds.width / 2 < -230);
+            console.log(papegaai);
+            let raaktRand = (papegaai.bounds.right > 220) || (papegaai.bounds.left < -220);
             addCase('De papegaai raakt de rand bij het veranderen van richting', raaktRand, 'De papegaai is veranderd van richting zonder de rand te raken van het speelveld');
             // Test of de papegaai altijd van links naar rechts en omgekeerd beweegt
             let vliegtHorizontaal = (sprite.direction === 90 || sprite.direction === -90);
