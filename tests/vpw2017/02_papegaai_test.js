@@ -11,7 +11,7 @@ function duringExecution() {
     scratch.eventScheduling
         .wait(1000)
         .test('De papegaai heeft nog niet bewogen', 'De papegaai mag niet bewegen voor er op geklikt wordt', 
-              log => !log.hasSpriteMoved('Papegaai');
+              (log) => { !log.hasSpriteMoved('Papegaai') }
         )
         .clickSprite({spriteName: 'Papegaai', sync: false}) // De eerste klik laat de papegaai starten met bewegen.
         .wait(3000)
