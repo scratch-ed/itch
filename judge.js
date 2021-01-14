@@ -169,7 +169,7 @@ class Judge {
         // TODO: also do file test here
         await fileHandle.uploadFile(sourceFileTemplate);
 
-        await page.waitFor(50);
+        await page.waitForTimeout(50);
 
         if (DEBUG) {
             await page.evaluate(() => {
