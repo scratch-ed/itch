@@ -1,9 +1,10 @@
 {
   "resources": "tests",
-  "source": "tests/projects/vpw2017/08_op_bezoek_bij_devin.sb3",
-  "plan": "plans/vpw2017/08_op_bezoek_bij_devin_test.js",
+  "source": "tests/projects/status/01.space_mission.sb3",
+  "plan": "plans/status/01-space-mission.js",
   "time_limit": 20000,
   "memory_limit": 5000000,
   "natural_language": "nl",
-  "programming_language": "Scratch"
+  "programming_language": "Scratch",
+  "debug": true
 }

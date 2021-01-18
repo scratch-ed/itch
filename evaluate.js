@@ -27,6 +27,7 @@ process.stdin.on("data", function(data) {
             memory_limit: memoryLimit,
             natural_language: naturalLanguage,
             programming_language: programmingLanguage,
+            debug: config["debug"]
         }
     );
 

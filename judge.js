@@ -1,6 +1,8 @@
 /* Copyright (C) 2019 Ghent University - All Rights Reserved */
 const path = require('path');
 const url = path.resolve(__dirname, 'scratch/scratch-test-environment.html');
+const server = require('server');
+const { status } = require('server/reply');
 
 const DEBUG = false;
 let acceptsOutput = true;
@@ -34,28 +36,39 @@ class Judge {
         // extract options
         this.time_limit = options.time_limit || 10000;
 
-        this.test_file = path.resolve(__dirname, testFile);
+        this.test_file = testFile;
 
         this.toDodona = toDodona;
+        
+        this.debug = options["debug"] || false;
     }
 
     async run(sourceFile) {
+        
+        const ctx = await server({
+            public: './',
+            port: 3007
+        }, [ctx => status(404)]);
 
         let browser;
-        if (DEBUG) {
-            browser = await puppeteer.launch({headless: false, devtools: true, args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']});
+        if (this.debug) {
+            browser = await puppeteer.launch({
+                headless: false, 
+                devtools: true, 
+                args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', '--disable-web-security']});
         } else {
-            browser = await puppeteer.launch({args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']});
+            browser = await puppeteer.launch({
+                args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', '--disable-web-security']
+            });
         }
 
         const page = await browser.newPage();
-        
 
-        if (DEBUG) {
+        if (this.debug) {
             page.on('console', msg => console.debug('PAGE LOG:', msg.text()));
         }
 
-        await page.goto(`file://${url}`);
+        await page.goto(`http://localhost:${ctx.options.port}/scratch/scratch-test-environment.html`);
 
         await page.exposeFunction('appendMessage', (message) => {
             this.toDodona({command: "append-message", message: message});
@@ -114,6 +127,8 @@ class Judge {
             }
             acceptsOutput = false;
         });
+        
+        this.test_file = `http://localhost:${ctx.options.port}/${this.test_file}`
 
         await page.addScriptTag({url: this.test_file});
 
@@ -171,7 +186,7 @@ class Judge {
 
         await page.waitForTimeout(50);
 
-        if (DEBUG) {
+        if (this.debug) {
             await page.evaluate(() => {
                 debugger;
             });
@@ -181,8 +196,9 @@ class Judge {
             return runTests(templateJSON, testJSON);
         }, templateJSON, testJSON);
 
-        if (!DEBUG) {
+        if (!this.debug) {
             await browser.close();
+            await ctx.close();
         }
 
         // END JUDGE
