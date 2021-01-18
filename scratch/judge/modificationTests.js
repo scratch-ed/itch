@@ -1,4 +1,5 @@
 /* Copyright (C) 2019 Ghent University - All Rights Reserved */
+/** @deprecated */
 function hasRemovedSprites(templateJSON, testJSON) {
     let names = [];
     for (let target of templateJSON.targets) {
@@ -13,11 +14,13 @@ function hasRemovedSprites(templateJSON, testJSON) {
 }
 
 //We check if the templateJSON does not have all sprites that testJSON has.
+/** @deprecated */
 function hasAddedSprites(templateJSON, testJSON) {
     return hasRemovedSprites(testJSON, templateJSON);
 }
 
 //Check if no costumes were added or removed from sprite with name spriteName
+/** @deprecated */
 function hasChangedCostumes(templateJSON, testJSON, spriteName) {
     let costumeIds = [];
     for (let target of templateJSON.targets) {
@@ -40,6 +43,7 @@ function hasChangedCostumes(templateJSON, testJSON, spriteName) {
     return false;
 }
 
+/** @deprecated */
 function hasChangedPosition(templateJSON, testJSON, spriteName) {
     let x = 0;
     let y = 0;
@@ -60,6 +64,7 @@ function hasChangedPosition(templateJSON, testJSON, spriteName) {
     return false;
 }
 
+/** @deprecated */
 function hasChangedSize(templateJSON, testJSON, spriteName) {
     let size = 0;
     for (let target of templateJSON.targets) {
@@ -78,6 +83,7 @@ function hasChangedSize(templateJSON, testJSON, spriteName) {
     return false;
 }
 
+/** @deprecated */
 function objectIsEmpty(obj) {
     for(let key in obj) {
         if(obj.hasOwnProperty(key))
@@ -86,6 +92,7 @@ function objectIsEmpty(obj) {
     return true;
 }
 
+/** @deprecated */
 function containsSprite(testJSON, spriteName) {
     for (let target of testJSON.targets) {
         if (target.name === spriteName) {

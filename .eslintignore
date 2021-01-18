@@ -1,0 +1,2 @@
+scratch/judge/*.js
+!scratch/judge/project.js

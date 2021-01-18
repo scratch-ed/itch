@@ -1,3 +1,1 @@
-import { Project } from "./judge/project.js";
-
-new Project("test");
+// import { Project } from './judge/project.js'
