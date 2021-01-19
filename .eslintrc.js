@@ -14,7 +14,9 @@ module.exports = {
   },
   rules: {
     'space-before-function-paren': 'off',
-    semi: 'off'
+    semi: 'off',
+    'no-undef': 'off',
+    'no-unused-vars': ['error', { varsIgnorePattern: 'beforeExecution2?|afterExecution2?|duringExecution2?' }]
   },
   plugins: ['jest']
-}
+};

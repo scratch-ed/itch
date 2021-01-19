@@ -1,2 +1,3 @@
 scratch/judge/*.js
 !scratch/judge/project.js
+!scratch/judge/log2.js

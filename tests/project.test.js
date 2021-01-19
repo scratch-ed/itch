@@ -1,4 +1,4 @@
-import { Project } from '../scratch/judge/project.js';
+const Project = require('../scratch/judge/project.js');
 
 function project(...names) {
   return new Project({

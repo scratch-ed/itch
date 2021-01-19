@@ -7,7 +7,6 @@
     "doc": "doc",
     "test": "tests"
   },
-  "type": "module",
   "dependencies": {
     "esdoc": "^1.1.0",
     "esdoc-standard-plugin": "^1.0.0",
@@ -50,9 +49,5 @@
     "Automated"
   ],
   "author": "Nils Mak",
-  "license": "MIT",
-  "jest": {
-    "testEnvironment": "jest-environment-node",
-    "transform": {}
-  }
+  "license": "MIT"
 }
