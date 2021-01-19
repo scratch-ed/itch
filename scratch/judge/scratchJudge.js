@@ -39,8 +39,6 @@ let speed = 1;
 
 async function runTests(templateJSON, testJSON) {
     
-    
-    
 
     dodona.startTestTab('Testen uit het testplan');
     dodona.startTestContext();

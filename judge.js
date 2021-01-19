@@ -20,8 +20,32 @@ function toStdOut(output) {
 // Judge
 //
 
-class Judge {
+function projectToJson(where) {
+  const chunks = [];
+  const str = '';
+  yauzl.open(where, { lazyEntries: true }, function (err, zipfile) {
+    if (err) throw err;
+    zipfile.readEntry();
+    zipfile.on('entry', function (entry) {
+      if (entry.fileName === 'project.json') {
+        zipfile.openReadStream(entry, function (err, readStream) {
+          if (err) throw err;
+          readStream.on('end', function() {
+            str = Buffer.concat(chunks).toString('utd8');
+          });
+          readStream.on('data', function (data) {
+            chunks.push(data);
+          });
+        });
+      } else {
+        zipfile.readEntry();
+      }
+    });
+  });
+  return templateJSON;
+}
 
+class Judge {
   constructor(testFile, options, toDodona = toStdOut) {
 
     // options parameter is optional
@@ -37,11 +61,10 @@ class Judge {
 
     this.toDodona = toDodona;
 
-    this.debug = options['debug'] || false;
+    this.debug = options.debug || false;
   }
 
-  async run(sourceFile) {
-
+  async run(templateFile, submissionFile) {
     const ctx = await server({
       public: './',
       port: 3007
@@ -91,7 +114,7 @@ class Judge {
     });
     await page.exposeFunction('closeTestcase', (accepted = undefined) => {
       if (accepted !== null && accepted !== undefined && accepted !== true) {
-        //this.toDodona({command: "close-testcase", accepted: accepted.toString()});
+        // this.toDodona({command: "close-testcase", accepted: accepted.toString()});
         this.toDodona({ command: 'start-test', expected: 'true' });
         let status = {};
         if (accepted) {
@@ -131,8 +154,9 @@ class Judge {
     await page.addScriptTag({ url: this.test_file });
 
     let templateJSON = '';
-    const sourceFileTemplate = path.resolve(__dirname, sourceFile);
-    yauzl.open(sourceFileTemplate, { lazyEntries: true }, function (err, zipfile) {
+    const sourceFileTemplate = path.resolve(__dirname, submissionFile);
+    const templateFileTemplate = path.resolve(__dirname, templateFile);
+    yauzl.open(templateFileTemplate, { lazyEntries: true }, function (err, zipfile) {
       if (err) throw err;
       zipfile.readEntry();
       zipfile.on('entry', function (entry) {
@@ -191,7 +215,7 @@ class Judge {
       });
     }
 
-    let output = await page.evaluate((templateJSON, testJSON) => {
+    const output = await page.evaluate((templateJSON, testJSON) => {
       return runTests(templateJSON, testJSON);
     }, templateJSON, testJSON);
 
@@ -206,5 +230,5 @@ class Judge {
 }
 
 module.exports = {
-  Judge,
+  Judge
 };

@@ -11,6 +11,7 @@ const config = JSON.parse(data);
 // extract configuration settings
 const resourcesDir = config.resources;
 const sourceFile = config.source;
+const templateFile = config.template;
 const timeLimit = config.time_limit;
 const memoryLimit = config.memory_limit;
 const naturalLanguage = config.natural_language;
@@ -32,4 +33,4 @@ const judge = new Judge(
 );
 
 // evaluate tests and output result to stdout
-judge.run(sourceFile);
+judge.run(templateFile, sourceFile);

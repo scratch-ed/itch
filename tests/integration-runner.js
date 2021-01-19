@@ -30,7 +30,7 @@ async function runTest(projectName, testName = null, configuration = {}) {
     source: sourceFile
   }, collector);
 
-  await judge.run(sourceFile);
+  await judge.run(sourceFile, sourceFile);
 
   return results;
 }
