@@ -46,10 +46,7 @@ function projectToJson(where) {
 }
 
 class Judge {
-  constructor(testFile, options, toDodona = toStdOut) {
-    // options parameter is optional
-    options = options || {};
-
+  constructor(testFile, options = {}, outputStream = toStdOut) {
     // start timing
     this.time_start = new Date();
 
@@ -58,7 +55,7 @@ class Judge {
 
     this.test_file = testFile;
 
-    this.toDodona = toDodona;
+    this.log = outputStream;
 
     this.debug = options.debug || false;
   }
@@ -112,10 +109,10 @@ class Judge {
     );
 
     await page.exposeFunction('appendMessage', (message) => {
-      this.toDodona({ command: 'append-message', message: message });
+      this.log({ command: 'append-message', message: message });
     });
     await page.exposeFunction('annotate', (row, column, text) => {
-      this.toDodona({
+      this.log({
         command: 'annotate',
         row: row,
         column: column,
@@ -123,19 +120,19 @@ class Judge {
       });
     });
     await page.exposeFunction('startTab', (title) => {
-      this.toDodona({ command: 'start-tab', title: title });
+      this.log({ command: 'start-tab', title: title });
     });
     await page.exposeFunction('startContext', () => {
-      this.toDodona({ command: 'start-context' });
+      this.log({ command: 'start-context' });
     });
     await page.exposeFunction('startTestcase', (description) => {
-      this.toDodona({ command: 'start-testcase', description: description });
+      this.log({ command: 'start-testcase', description: description });
     });
     await page.exposeFunction('startTest', (expected) => {
-      this.toDodona({ command: 'start-test', expected: expected.toString() });
+      this.log({ command: 'start-test', expected: expected.toString() });
     });
     await page.exposeFunction('closeTest', (generated, status) => {
-      this.toDodona({
+      this.log({
         command: 'close-test',
         generated: generated.toString(),
         status: status,
@@ -143,33 +140,33 @@ class Judge {
     });
     await page.exposeFunction('closeTestcase', (accepted = undefined) => {
       if (accepted !== null && accepted !== undefined && accepted !== true) {
-        // this.toDodona({command: "close-testcase", accepted: accepted.toString()});
-        this.toDodona({ command: 'start-test', expected: 'true' });
+        // this.log({command: "close-testcase", accepted: accepted.toString()});
+        this.log({ command: 'start-test', expected: 'true' });
         let status = {};
         if (accepted) {
           status = { enum: 'correct', human: 'Correct' };
         } else {
           status = { enum: 'wrong', human: 'Wrong' };
         }
-        this.toDodona({
+        this.log({
           command: 'close-test',
           generated: accepted.toString(),
           status: status,
         });
-        this.toDodona({ command: 'close-testcase' });
+        this.log({ command: 'close-testcase' });
       } else {
-        this.toDodona({ command: 'close-testcase' });
+        this.log({ command: 'close-testcase' });
       }
     });
     await page.exposeFunction('closeContext', () => {
-      this.toDodona({ command: 'close-context' });
+      this.log({ command: 'close-context' });
     });
     await page.exposeFunction('closeTab', () => {
-      this.toDodona({ command: 'close-tab' });
+      this.log({ command: 'close-tab' });
     });
     await page.exposeFunction('closeJudge', (accepted = undefined) => {
       if (accepted !== null && accepted !== undefined) {
-        this.toDodona({ command: 'close-judgement' });
+        this.log({ command: 'close-judgement' });
       } else {
         let status = {};
         if (accepted) {
@@ -177,7 +174,7 @@ class Judge {
         } else {
           status = { enum: 'wrong', human: 'Wrong' };
         }
-        this.toDodona({
+        this.log({
           command: 'close-judgement',
           accepted: accepted.toString(),
           status: status,
@@ -245,7 +242,7 @@ class Judge {
     );
 
     // START JUDGE
-    this.toDodona({ command: 'start-judgement' });
+    this.log({ command: 'start-judgement' });
 
     const fileHandle = await page.$('#file');
     // TODO: also do file test here
@@ -274,7 +271,7 @@ class Judge {
     }
 
     // END JUDGE
-    this.toDodona({ command: 'close-judgement' });
+    this.log({ command: 'close-judgement' });
   }
 }
 
