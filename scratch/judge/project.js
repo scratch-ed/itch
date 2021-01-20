@@ -1,18 +1,10 @@
 /**
- * @typedef {Object} ProjectJson
- * @property {list} extensions - A list of used extension.
- * @property {list} monitors - A list of used monitors.
- * @property {Object} metadata - Some information about the project.
- * @property {LoggedSprite[]} targets - A list of used targets in the project.
- */
-
-/**
  * A callback allowing comparison between two sprites.
  *
  * @callback SpritePredicate
  *
- * @param {LoggedSprite} one - The first sprite, from the base project.
- * @param {LoggedSprite} two - The second sprite, from the comparing project.
+ * @param {Sb3Target} one - The first sprite, from the base project.
+ * @param {Sb3Target} two - The second sprite, from the comparing project.
  *
  * @return {boolean} Value defined by usage.
  */
@@ -25,10 +17,11 @@
  */
 class Project {
   /**
-   * @param {ProjectJson} json - The JSON extracted from the sb3 file.
+   * @param json - The JSON extracted from the sb3 file.
    */
   constructor(json) {
     /**
+     * @type {Sb3Json}
      * @private
      */
     this.json = json;
@@ -156,7 +149,7 @@ class Project {
    *
    * @param {string} name - The name.
    *
-   * @return {LoggedSprite | null} The sprite or null if not found.
+   * @return {Sb3Target | null} The sprite or null if not found.
    * @private
    */
   sprite(name) {
@@ -164,7 +157,7 @@ class Project {
   }
 
   /**
-   * @return {LoggedSprite[]} A list of sprites in this project.
+   * @return {Sb3Target[]} A list of sprites in this project.
    */
   sprites() {
     return this.json.targets;
