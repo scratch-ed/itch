@@ -75,6 +75,9 @@ class Judge {
     let browser;
     if (this.debug) {
       browser = await puppeteer.launch({
+        ...(process.env.PUPPETEER_BROWSER_PATH && {
+          executablePath: process.env.PUPPETEER_BROWSER_PATH,
+        }),
         headless: false,
         devtools: true,
         args: [
@@ -86,6 +89,9 @@ class Judge {
       });
     } else {
       browser = await puppeteer.launch({
+        ...(process.env.PUPPETEER_BROWSER_PATH && {
+          executablePath: process.env.PUPPETEER_BROWSER_PATH,
+        }),
         args: [
           '--no-sandbox',
           '--disable-setuid-sandbox',
