@@ -30,7 +30,7 @@ function projectToJson(where) {
       if (entry.fileName === 'project.json') {
         zipfile.openReadStream(entry, function (err, readStream) {
           if (err) throw err;
-          readStream.on('end', function() {
+          readStream.on('end', function () {
             str = Buffer.concat(chunks).toString('utd8');
           });
           readStream.on('data', function (data) {
@@ -47,7 +47,6 @@ function projectToJson(where) {
 
 class Judge {
   constructor(testFile, options, toDodona = toStdOut) {
-
     // options parameter is optional
     options = options || {};
 
@@ -65,37 +64,57 @@ class Judge {
   }
 
   async run(templateFile, submissionFile) {
-    const ctx = await server({
-      public: './',
-      port: 3007
-    }, [ctx => status(404)]);
+    const ctx = await server(
+      {
+        public: './',
+        port: 3007,
+      },
+      [(ctx) => status(404)],
+    );
 
     let browser;
     if (this.debug) {
       browser = await puppeteer.launch({
         headless: false,
         devtools: true,
-        args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', '--disable-web-security']
+        args: [
+          '--no-sandbox',
+          '--disable-setuid-sandbox',
+          '--disable-dev-shm-usage',
+          '--disable-web-security',
+        ],
       });
     } else {
       browser = await puppeteer.launch({
-        args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', '--disable-web-security']
+        args: [
+          '--no-sandbox',
+          '--disable-setuid-sandbox',
+          '--disable-dev-shm-usage',
+          '--disable-web-security',
+        ],
       });
     }
 
     const page = await browser.newPage();
 
     if (this.debug) {
-      page.on('console', msg => console.debug('PAGE LOG:', msg.text()));
+      page.on('console', (msg) => console.debug('PAGE LOG:', msg.text()));
     }
 
-    await page.goto(`http://localhost:${ctx.options.port}/scratch/scratch-test-environment.html`);
+    await page.goto(
+      `http://localhost:${ctx.options.port}/scratch/scratch-test-environment.html`,
+    );
 
     await page.exposeFunction('appendMessage', (message) => {
       this.toDodona({ command: 'append-message', message: message });
     });
     await page.exposeFunction('annotate', (row, column, text) => {
-      this.toDodona({ command: 'annotate', row: row, column: column, text: text });
+      this.toDodona({
+        command: 'annotate',
+        row: row,
+        column: column,
+        text: text,
+      });
     });
     await page.exposeFunction('startTab', (title) => {
       this.toDodona({ command: 'start-tab', title: title });
@@ -110,7 +129,11 @@ class Judge {
       this.toDodona({ command: 'start-test', expected: expected.toString() });
     });
     await page.exposeFunction('closeTest', (generated, status) => {
-      this.toDodona({ command: 'close-test', generated: generated.toString(), status: status });
+      this.toDodona({
+        command: 'close-test',
+        generated: generated.toString(),
+        status: status,
+      });
     });
     await page.exposeFunction('closeTestcase', (accepted = undefined) => {
       if (accepted !== null && accepted !== undefined && accepted !== true) {
@@ -122,7 +145,11 @@ class Judge {
         } else {
           status = { enum: 'wrong', human: 'Wrong' };
         }
-        this.toDodona({ command: 'close-test', generated: accepted.toString(), status: status });
+        this.toDodona({
+          command: 'close-test',
+          generated: accepted.toString(),
+          status: status,
+        });
         this.toDodona({ command: 'close-testcase' });
       } else {
         this.toDodona({ command: 'close-testcase' });
@@ -144,7 +171,11 @@ class Judge {
         } else {
           status = { enum: 'wrong', human: 'Wrong' };
         }
-        this.toDodona({ command: 'close-judgement', accepted: accepted.toString(), status: status });
+        this.toDodona({
+          command: 'close-judgement',
+          accepted: accepted.toString(),
+          status: status,
+        });
       }
       acceptsOutput = false;
     });
@@ -156,48 +187,56 @@ class Judge {
     let templateJSON = '';
     const sourceFileTemplate = path.resolve(__dirname, submissionFile);
     const templateFileTemplate = path.resolve(__dirname, templateFile);
-    yauzl.open(templateFileTemplate, { lazyEntries: true }, function (err, zipfile) {
-      if (err) throw err;
-      zipfile.readEntry();
-      zipfile.on('entry', function (entry) {
-        if (entry.fileName === 'project.json') {
-          zipfile.openReadStream(entry, function (err, readStream) {
-            if (err) throw err;
-            readStream.on('data', function (data) {
-              templateJSON += data;
+    yauzl.open(
+      templateFileTemplate,
+      { lazyEntries: true },
+      function (err, zipfile) {
+        if (err) throw err;
+        zipfile.readEntry();
+        zipfile.on('entry', function (entry) {
+          if (entry.fileName === 'project.json') {
+            zipfile.openReadStream(entry, function (err, readStream) {
+              if (err) throw err;
+              readStream.on('data', function (data) {
+                templateJSON += data;
+              });
+              readStream.on('end', function () {
+                //continue
+              });
             });
-            readStream.on('end', function () {
-              //continue
-            });
-          });
-        } else {
-          zipfile.readEntry();
-        }
-      });
-    });
+          } else {
+            zipfile.readEntry();
+          }
+        });
+      },
+    );
 
     let testJSON = '';
     // TODO: use file test
-    yauzl.open(sourceFileTemplate, { lazyEntries: true }, function (err, zipfile) {
-      if (err) throw err;
-      zipfile.readEntry();
-      zipfile.on('entry', function (entry) {
-        if (entry.fileName === 'project.json') {
-          zipfile.openReadStream(entry, function (err, readStream) {
-            if (err) throw err;
-            let json = '';
-            readStream.on('data', function (data) {
-              testJSON += data;
+    yauzl.open(
+      sourceFileTemplate,
+      { lazyEntries: true },
+      function (err, zipfile) {
+        if (err) throw err;
+        zipfile.readEntry();
+        zipfile.on('entry', function (entry) {
+          if (entry.fileName === 'project.json') {
+            zipfile.openReadStream(entry, function (err, readStream) {
+              if (err) throw err;
+              let json = '';
+              readStream.on('data', function (data) {
+                testJSON += data;
+              });
+              readStream.on('end', function () {
+                //continue
+              });
             });
-            readStream.on('end', function () {
-              //continue
-            });
-          });
-        } else {
-          zipfile.readEntry();
-        }
-      });
-    });
+          } else {
+            zipfile.readEntry();
+          }
+        });
+      },
+    );
 
     // START JUDGE
     this.toDodona({ command: 'start-judgement' });
@@ -215,9 +254,13 @@ class Judge {
       });
     }
 
-    const output = await page.evaluate((templateJSON, testJSON) => {
-      return runTests(templateJSON, testJSON);
-    }, templateJSON, testJSON);
+    const output = await page.evaluate(
+      (templateJSON, testJSON) => {
+        return runTests(templateJSON, testJSON);
+      },
+      templateJSON,
+      testJSON,
+    );
 
     if (!this.debug) {
       await browser.close();
@@ -230,5 +273,5 @@ class Judge {
 }
 
 module.exports = {
-  Judge
+  Judge,
 };

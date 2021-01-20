@@ -3,20 +3,24 @@ module.exports = {
     browser: true,
     es2021: true,
     node: true,
-    'jest/globals': true
+    'jest/globals': true,
   },
-  extends: [
-    'standard'
-  ],
+  extends: ['standard', 'prettier'],
   parserOptions: {
     ecmaVersion: 12,
-    sourceType: 'module'
+    sourceType: 'module',
   },
   rules: {
     'space-before-function-paren': 'off',
     semi: 'off',
     'no-undef': 'off',
-    'no-unused-vars': ['error', { varsIgnorePattern: 'beforeExecution2?|afterExecution2?|duringExecution2?' }]
+    'no-unused-vars': [
+      'error',
+      {
+        varsIgnorePattern:
+          'beforeExecution2?|afterExecution2?|duringExecution2?',
+      },
+    ],
   },
-  plugins: ['jest']
+  plugins: ['jest'],
 };
