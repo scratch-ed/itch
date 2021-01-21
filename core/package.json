@@ -1,0 +1,36 @@
+{
+  "name": "itch-judge",
+  "version": "0.0.1",
+  "description": "Core judge for Scratch projects",
+  "main": "dist/js/judge.node.js",
+  "module": "dist/js/judge.es.js",
+  "browser": "dist/js/judge.browser.js",
+  "type": "module",
+  "directories": {
+    "test": "tests",
+    "lib": "src",
+    "doc": "doc"
+  },
+  "dependencies": {
+    "deasync": "^0.1.21",
+    "scratch-vm": "^0.2.0-prerelease.20201125065300",
+    "source-map": "^0.6.1",
+    "underscore": "^1.12.0"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^17.0.0",
+    "@rollup/plugin-node-resolve": "^11.1.0",
+    "@webpack-cli/init": "^1.1.2",
+    "jest": "^26.6.3",
+    "jsdoc": "^3.6.6",
+    "rollup": "^2.37.1",
+    "rollup-jest": "niknetniko/rollup-jest",
+    "webpack": "^4.46.0",
+    "webpack-cli": "^4.4.0"
+  },
+  "scripts": {
+    "test": "jest --no-cache",
+    "build": "rollup --config",
+    "docs": "jsdoc -c jsdoc.config.js"
+  }
+}
