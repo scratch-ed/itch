@@ -1,8 +1,7 @@
 /* Copyright (C) 2019 Ghent University - All Rights Reserved */
 const path = require('path');
-const server = require('server');
-const { status } = require('server/reply');
 let acceptsOutput = true;
+const url = path.resolve(__dirname, 'scratch/scratch-test-environment.html');
 
 // unzipping
 const yauzl = require('yauzl');
@@ -53,7 +52,7 @@ class Judge {
     // extract options
     this.time_limit = options.time_limit || 10000;
 
-    this.test_file = testFile;
+    this.test_file = path.resolve(__dirname, testFile);
 
     this.log = outputStream;
 
@@ -61,14 +60,6 @@ class Judge {
   }
 
   async run(templateFile, submissionFile) {
-    const ctx = await server(
-      {
-        public: './',
-        port: 3007,
-      },
-      [(ctx) => status(404)],
-    );
-
     let browser;
     if (this.debug) {
       browser = await puppeteer.launch({
@@ -104,9 +95,7 @@ class Judge {
       page.on('console', (msg) => console.debug('PAGE LOG:', msg.text()));
     }
 
-    await page.goto(
-      `http://localhost:${ctx.options.port}/scratch/scratch-test-environment.html`,
-    );
+    await page.goto(`file://${url}`);
 
     await page.exposeFunction('appendMessage', (message) => {
       this.log({ command: 'append-message', message: message });
@@ -182,9 +171,7 @@ class Judge {
       }
       acceptsOutput = false;
     });
-
-    this.test_file = `http://localhost:${ctx.options.port}/${this.test_file}`;
-
+    
     await page.addScriptTag({ url: this.test_file });
 
     let templateJSON = '';
@@ -267,7 +254,6 @@ class Judge {
 
     if (!this.debug) {
       await browser.close();
-      await ctx.close();
     }
 
     // END JUDGE
