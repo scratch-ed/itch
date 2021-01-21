@@ -61,6 +61,14 @@ class Judge {
   }
 
   async run(templateFile, submissionFile) {
+    const ctx = await server(
+      {
+        public: './',
+        port: 3007,
+      },
+      [(ctx) => status(404)],
+    );
+
     let browser;
     if (this.debug) {
       browser = await puppeteer.launch({
