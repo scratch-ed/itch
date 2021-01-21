@@ -6,7 +6,8 @@ const defaultConfig = {
   timeLimit: 10000,
   memoryLimit: 5000000,
   natural_language: 'nl',
-  programming_language: 'scratch'
+  programming_language: 'scratch',
+  debug: true
 };
 
 /**

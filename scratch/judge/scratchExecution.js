@@ -56,7 +56,7 @@ function init(file) {
 
     // Instantiate the renderer and connect it to the VM.
     const canvas = document.getElementById('scratch-stage');
-    const renderer = new makeProxiedRenderer(canvas, log);
+    const renderer = makeProxiedRenderer(vm, canvas, log);
     Scratch.renderer = renderer;
     vm.attachRenderer(renderer);
 
@@ -96,7 +96,7 @@ function init(file) {
 
 function vmHandleEvents(vm) {
     vm.runtime.on('PROJECT_START', () => {
-        console.log(`${getTimeStamp()}: run number: ${numberOfRun}`);
+        console.log(`${Date.now() - window.startTimestamp || 0}: run number: ${numberOfRun}`);
         numberOfRun++;
     });
 
@@ -105,11 +105,11 @@ function vmHandleEvents(vm) {
     });
 
     vm.runtime.on('SAY', (target, type, text) => {
-        console.log(`${getTimeStamp()}: say: ${text}`);
+        console.log(`${Date.now() - window.startTimestamp || 0}: say: ${text}`);
 
-        let event = new Event('say', {text: text, target: target, type: type, sprite: target.sprite.name});
-        event.previousFrame = new Frame('say');
-        event.nextFrame = new Frame('sayEnd');
+        let event = new LogEvent('say', {text: text, target: target, type: type, sprite: target.sprite.name});
+        event.previousFrame = new LogFrame(vm, 'say');
+        event.nextFrame = new LogFrame(vm, 'sayEnd');
         log.addEvent(event);
     });
 
@@ -120,11 +120,11 @@ function vmHandleEvents(vm) {
                 addError('Er werd een vraag gesteld waarop geen antwoord voorzien is.');
             }
 
-            console.log(`${getTimeStamp()}: input: ${x}`);
+            console.log(`${Date.now() - window.startTimestamp || 0}: input: ${x}`);
 
-            let event = new Event('answer', {question: question, text: x});
-            event.previousFrame = new Frame('answer');
-            event.nextFrame = new Frame('answerEnd');
+            let event = new LogEvent('answer', {question: question, text: x});
+            event.previousFrame = new LogFrame(vm, 'answer');
+            event.nextFrame = new LogFrame(vm, 'answerEnd');
             log.addEvent(event);
 
             vm.runtime.emit("ANSWER", x);
@@ -132,7 +132,7 @@ function vmHandleEvents(vm) {
     });
 
     vm.runtime.on('PROJECT_RUN_STOP', () => {
-        console.log(`${getTimeStamp()}: Ended run`);
+        console.log(`${Date.now() - window.startTimestamp || 0}: Ended run`);
     });
 
     vm.runtime.on('DONE_THREADS_UPDATE', (threads) => {
@@ -162,7 +162,7 @@ function createProfiler() {
             firstState = false;
         }*/
         if (id === blockId) {
-            log.addFrame(arg);
+            log.addFrame(vm, arg);
         }
     };
 }

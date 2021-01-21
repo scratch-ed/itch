@@ -1,4 +1,10 @@
 import { last } from 'underscore';
+import { containsBlock, containsLoop, countExecutions } from './blocks';
+import { findSquares, findTriangles, mergeLines, dist, distSq } from './lines';
+
+function getTimeStamp() {
+  return Date.now() - window.startTimestamp || 0;
+}
 
 /**
  * Our own version of a variable. Basically a copy of a {@link Variable}.
@@ -42,11 +48,12 @@ export class LoggedSprite {
 
     // Copy variables.
     this.variables = [];
-    for (const varName of target.variables) {
+    for (const varName of Object.keys(target.variables || {})) {
       this.variables.push(new LoggedVariable(target.lookupVariableById(varName)));
     }
 
     // Copy sprite information.
+    this.currentCostume = target.currentCostume;
     this.costume = target.getCurrentCostume().name;
     this.costumeSize = target.getCurrentCostume().size;
 
@@ -97,23 +104,22 @@ export class LoggedSprite {
  * @example
  * let frame = new Frame('looks_nextcostume');
  */
-export class Frame {
+export class LogFrame {
   /**
    * When a new frame is created, information from the current state of the targets is saved. Some properties, like if the target is touching another target,
    * are calculated before being saved.
    *
    * @param {VirtualMachine} scratchVm - The scratch virtual machine.
    * @param {string} block - The block that triggered the fame saving.
-   * @param {object} meta - Some metadata about the execution.
    */
-  constructor(scratchVm, block, meta) {
+  constructor(scratchVm, block) {
 
     /**
      * The timestamp of the frame.
      * TODO: investigate using currentMSecs instead.
      * @type {number}
      */
-    this.time = Date.now() - meta.start;
+    this.time = getTimeStamp();
 
     /**
      * The name of the block that triggerd this frame.
@@ -132,13 +138,6 @@ export class Frame {
     // For now we only save rendered targets.
 
     for (const target of scratchVm.runtime.targets) {
-
-      // eslint-disable-next-line no-undef
-      if (!(target instanceof RenderedTarget)) {
-        console.warn('Found non rendered target, ignoring...');
-        continue;
-      }
-
       this.sprites.push(new LoggedSprite(target, scratchVm.runtime.targets));
     }
   }
@@ -201,7 +200,7 @@ export class Frame {
  * @return {Frame[]} A new instance of this array with the filtered values.
  */
 export function searchFrames(frames, constraints) {
-  const before = constraints.before || last(this);
+  const before = constraints.before || last(frames).time;
   const after = constraints.after || 0;
   const type = constraints.type || null;
 
@@ -267,4 +266,375 @@ export class LogBlocks {
   numberOfExecutions(blockName) {
     return this.countExecutions(blockName, this.blocks);
   }
+}
+
+// TODO: review
+export class LogEvent {
+  constructor(type, data = {}) {
+    this.time = getTimeStamp();
+    this.type = type;
+    this.data = data;
+
+    this.nextFrame = null;
+    this.previousFrame = null;
+  }
+
+  getNextFrame() {
+    return this.nextFrame;
+  }
+
+  getPreviousFrame() {
+    return this.previousFrame;
+  }
+}
+
+class Events {
+  constructor() {
+    this.list = [];
+    this.length = 0;
+    this.lastTime = 0;
+  }
+
+  push(event) {
+    this.list.push(event);
+    this.length++;
+    this.lastTime = event.time;
+  }
+
+  filter(arg) {
+    const type = arg.type || 'all';
+    const before = arg.before || this.lastTime;
+    const after = arg.after || 0;
+
+    const filtered = [];
+    for (const event of this.list) {
+      if (type === 'all' || event.type === type) {
+        if (event.time >= after && event.time <= before) {
+          filtered.push(event);
+        }
+      }
+    }
+    return filtered;
+  }
+}
+
+class Blocks {
+  constructor() {
+    this.blocks = {};
+  }
+
+  push(block) {
+    if (!this.blocks[block]) {
+      this.blocks[block] = 0;
+    }
+    this.blocks[block]++;
+  }
+
+  containsLoop() {
+    return containsLoop(this.blocks);
+  }
+
+  containsBlock(blockName) {
+    return containsBlock(blockName, this.blocks);
+  }
+
+  numberOfExecutions(blockName) {
+    return countExecutions(blockName, this.blocks);
+  }
+}
+
+// TODO: review
+export class Log {
+
+  constructor() {
+    this.frames = [];
+    this.events = new Events();
+    this.renderer = new LogRenderer();
+    this.blocks = new Blocks();
+  }
+
+  addFrame(vm, block) {
+    const frame = new LogFrame(vm, block);
+    this.frames.push(frame);
+    this.blocks.push(block);
+  }
+
+  addEvent(event) {
+    this.events.push(event);
+  }
+
+  reset() {
+    // not needed
+  }
+
+  // return final state of sprites
+  get sprites() {
+    return this.frames[this.frames.length - 1];
+  }
+
+  // Functions needed for evaluation
+
+  // Sprite related
+  getCostumes(spriteName, frames = this.frames) {
+    const costumes = {};
+    const costumeIds = new Set();
+    for (const frame of frames) {
+      const sprite = frame.getSprite(spriteName);
+      if (sprite != null) {
+        if (!costumeIds.has(sprite.currentCostume)) {
+          costumeIds.add(sprite.currentCostume);
+          costumes[sprite.currentCostume] = sprite.costume;
+        }
+      }
+    }
+    return costumes;
+  }
+
+  getNumberOfCostumes(spriteName) {
+    const costumes = this.getCostumes(spriteName);
+    return Object.keys(costumes).length;
+  }
+
+  getVariableValue(variableName, spriteName = 'Stage', frame = this.sprites) {
+    for (const sprite of frame.sprites) {
+      if (sprite.name === spriteName) {
+        for (const variable of sprite.variables) {
+          if (variable.name === variableName) {
+            return variable.value;
+          }
+        }
+      }
+    }
+  }
+
+  getStartSprites() {
+    return this.frames[0].sprites;
+  }
+
+  getMaxX(spriteName, frames = this.frames) {
+
+    let max = -240;
+    for (const frame of frames) {
+      const sprite = frame.getSprite(spriteName);
+      if (sprite != null) {
+        if (sprite.x > max) {
+          max = sprite.x;
+        }
+      }
+    }
+    return max;
+
+  }
+
+  getMinX(spriteName, frames = this.frames) {
+
+    let min = 240;
+    for (const frame of frames) {
+      const sprite = frame.getSprite(spriteName);
+      if (sprite != null) {
+        if (sprite.x < min) {
+          min = sprite.x;
+        }
+      }
+    }
+    return min;
+
+  }
+
+  getMaxY(spriteName, frames = this.frames) {
+
+    let max = -180;
+    for (const frame of frames) {
+      const sprite = frame.getSprite(spriteName);
+      if (sprite != null) {
+        if (sprite.y > max) {
+          max = sprite.y;
+        }
+      }
+    }
+    return max;
+
+  }
+
+  getMinY(spriteName, frames = this.frames) {
+
+    let min = 180;
+    for (const frame of frames) {
+      const sprite = frame.getSprite(spriteName);
+      if (sprite != null) {
+        if (sprite.y < min) {
+          min = sprite.y;
+        }
+      }
+    }
+    return min;
+
+  }
+
+  hasSpriteMoved(spriteName, frames = this.frames) {
+    if (frames.length === 0) return false;
+    const minX = log.getMinX(spriteName, frames);
+    const maxX = log.getMaxX(spriteName, frames);
+    const minY = log.getMinY(spriteName, frames);
+    const maxY = log.getMaxY(spriteName, frames);
+    return !(minX === maxX && minY === maxY);
+  }
+
+  inBounds(spriteName, frames = this.frames) {
+
+    for (const frame of frames) {
+      const sprite = frame.getSprite(spriteName);
+      if (sprite != null) {
+        if (sprite.isTouchingEdge) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  getDirectionChanges(spriteName, frames = this.frames) {
+    const directions = [];
+    let oldDirection = 0;
+    for (const frame of frames) {
+      const sprite = frame.getSprite(spriteName);
+      if (sprite != null) {
+        if (oldDirection !== sprite.direction) {
+          directions.push(sprite.direction);
+          oldDirection = sprite.direction;
+        }
+      }
+    }
+    return directions;
+  }
+
+  getCostumeChanges(spriteName, frames = this.frames) {
+    const costumes = [];
+    let oldCostume = '';
+    for (const frame of frames) {
+      const sprite = frame.getSprite(spriteName);
+      if (sprite != null) {
+        if (oldCostume !== sprite.costume) {
+          costumes.push(sprite.costume);
+          oldCostume = sprite.costume;
+        }
+      }
+    }
+    return costumes;
+  }
+
+  isTouchingSprite(spriteName, targetName, frame) {
+    return frame.isTouching(spriteName, targetName);
+  }
+
+  getDistancesToSprite(spriteName, targetName, frames = this.frames) {
+    const distances = [];
+    for (const frame of frames) {
+      const sprite = frame.getSprite(spriteName);
+      const target = frame.getSprite(targetName);
+      if (sprite != null && target != null) {
+        distances.push(Math.sqrt(distSq(sprite, target)));
+      }
+    }
+    return distances;
+  }
+
+  doSpritesOverlap(spriteName1, spriteName2, frame = this.sprites) {
+    const sprite1 = frame.getSprite(spriteName1);
+    const sprite2 = frame.getSprite(spriteName2);
+    const bounds1 = sprite1.bounds;
+    const bounds2 = sprite2.bounds;
+    // If one rectangle is on left side of other
+    if (bounds1.left > bounds2.right || bounds1.right < bounds2.left) {
+      return false;
+    }
+    // If one rectangle is above other
+    if (bounds1.top < bounds2.bottom || bounds1.bottom > bounds2.top) {
+      return false;
+    }
+    return true;
+
+  }
+
+  getSpriteLocations(spriteName, frames = this.frames) {
+    const places = [];
+    let lastX = 0;
+    let lastY = 0;
+    let first = true;
+    for (const frame of frames) {
+      const sprite = frame.getSprite(spriteName);
+      if (lastX !== sprite.x || lastY !== sprite.y || first) {
+        lastX = sprite.x;
+        lastY = sprite.y;
+        places.push({ x: lastX, y: lastY });
+        first = false;
+      }
+    }
+    return places;
+  }
+
+  // RENDERER RELATED
+
+  getSquares() {
+    return findSquares(this.renderer.lines);
+  }
+
+  getTriangles() {
+    return findTriangles(this.renderer.lines);
+  }
+
+  getMergedLines() {
+    return mergeLines(this.renderer.lines);
+  }
+
+  getLineLength(line) {
+    return dist(line);
+  }
+
+  getResponses() {
+    return this.renderer.responses;
+  }
+
+  getCreateSkinEvents() {
+    const rendererEvents = this.events.filter({ type: 'renderer' });
+    const createTextSkinEvents = [];
+    for (const event of rendererEvents) {
+      if (event.data.name === 'createTextSkin') {
+        createTextSkinEvents.push(event);
+      }
+    }
+    return createTextSkinEvents;
+  }
+
+  getDestroySkinEvents() {
+    const rendererEvents = this.events.filter({ type: 'renderer' });
+    const destroySkinEvents = [];
+    for (const event of rendererEvents) {
+      if (event.data.name === 'destroySkin') {
+        destroySkinEvents.push(event);
+      }
+    }
+    return destroySkinEvents;
+  }
+
+  getSkinDuration(text) {
+    const createTextSkinEvents = this.getCreateSkinEvents();
+    const destroyTextSkinEvents = this.getDestroySkinEvents();
+
+    let time = 0;
+    let id = -1;
+    for (const e of createTextSkinEvents) {
+      if (e.data.text === text) {
+        time = e.time;
+        id = e.data.id;
+      }
+    }
+    for (const e of destroyTextSkinEvents) {
+      if (e.data.id === id) {
+        return (e.time - time);
+      }
+    }
+    return null;
+  }
+
 }

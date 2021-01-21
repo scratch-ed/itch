@@ -5,7 +5,7 @@ const fs = require('fs');
 const { Judge } = require('./judge.js');
 
 // parse JSON with configuration settings from stdin
-const data = fs.readFileSync('./runconfig.json');
+const data = fs.readFileSync('./defaultConfig.json');
 const config = JSON.parse(data);
 
 // extract configuration settings

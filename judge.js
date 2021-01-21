@@ -123,7 +123,7 @@ class Judge {
     await page.exposeFunction('closeTest', (generated, status) => {
       this.log({
         command: 'close-test',
-        generated: generated.toString(),
+        generated: generated?.toString(),
         status: status,
       });
     });

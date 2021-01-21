@@ -192,16 +192,16 @@ export function pointsAreTriangle(points) {
 export function findTriangles(lines) {
   const triangles = [];
   if (lines.length < 3) return false;
-  const merged_lines = mergeLines(lines);
-  for (let i = 0; i < merged_lines.length - 2; i++) {
-    for (let j = i + 1; j < merged_lines.length - 1; j++) {
-      for (let k = j + 1; k < merged_lines.length; k++) {
-        const p11 = merged_lines[i].start;
-        const p12 = merged_lines[i].end;
-        const p21 = merged_lines[j].start;
-        const p22 = merged_lines[j].end;
-        const p31 = merged_lines[k].start;
-        const p32 = merged_lines[k].end;
+  const mergedLinesList = mergeLines(lines);
+  for (let i = 0; i < mergedLinesList.length - 2; i++) {
+    for (let j = i + 1; j < mergedLinesList.length - 1; j++) {
+      for (let k = j + 1; k < mergedLinesList.length; k++) {
+        const p11 = mergedLinesList[i].start;
+        const p12 = mergedLinesList[i].end;
+        const p21 = mergedLinesList[j].start;
+        const p22 = mergedLinesList[j].end;
+        const p31 = mergedLinesList[k].start;
+        const p32 = mergedLinesList[k].end;
         let points = [p11, p12, p21, p22, p31, p32];
 
         // from the 6 points, there should be 3 pairs of equal points

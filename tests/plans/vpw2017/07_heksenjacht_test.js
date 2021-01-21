@@ -31,9 +31,9 @@ function afterExecution() {
   const clickTime = log.events.filter({ type: 'click' })[0].time;
 
   // Na clickTime moet de positie van de heks veranderd zijn en daarna constant blijven voor een seconde
-  const frames1 = log.frames.filter({ after: clickTime + 200, before: clickTime + 800 });
-  const frames2 = log.frames.filter({ after: clickTime + 1200, before: clickTime + 1800 });
-  const frames3 = log.frames.filter({ after: clickTime + 2200, before: clickTime + 2800 });
+  const frames1 = searchFrames(log.frames, { after: clickTime + 200, before: clickTime + 800 });
+  const frames2 = searchFrames(log.frames, { after: clickTime + 1200, before: clickTime + 1800 });
+  const frames3 = searchFrames(log.frames, { after: clickTime + 2200, before: clickTime + 2800 });
   const heks1 = frames1[0].getSprite('Heks');
   const heks2 = frames2[0].getSprite('Heks');
   const heks3 = frames3[0].getSprite('Heks');

@@ -1,7 +1,7 @@
 /* Copyright (C) 2019 Ghent University - All Rights Reserved */
 function duringExecution() {
   scratch.eventScheduling
-    .pressKey({ key: ' ' })
+    .pressKey({ key: ' ', sync: true })
     .end();
 
   scratch.start();

@@ -27,20 +27,18 @@ function duringExecution() {
 
 function afterExecution() {
   // Test of de papegaai nooit verticaal beweegt:
-  const correct = equals(log.getMaxY('Papegaai'), log.getMinY('Papegaai'));
+  const correct = numericEquals(log.getMaxY('Papegaai'), log.getMinY('Papegaai'));
   addCase('De papegaai beweegt niet verticaal', correct,
     'De y-coordinaat van de Papegaai blijft niet constant');
 
   console.log('Max y is', log.getMaxY('Papegaai'));
   console.log('Min y is ', log.getMinY('Papegaai'));
-  const bounds = log.frames.list.map(f => f);
-  console.log('Bounds ', bounds);
 
   // De papegaai moet (horizontaal) van richting veranderen, maar enkel als de papegaai zich bij rand van het speelveld bevindt.
 
   // We beschouwen enkel de frames na de klik
   let klikEvent = log.events.filter({ type: 'click' })[0];
-  let frames = log.frames.filter({ after: klikEvent.time });
+  let frames = searchFrames(log.frames, { after: klikEvent.time });
   let directions = []; // We slaan de richting van de papegaai op bij elke verandering van richting.
   let previousFrame = frames[0];
   let oldDirection = previousFrame.getSprite('Papegaai').direction;
