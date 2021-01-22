@@ -49,6 +49,7 @@ function duringExecution() {
       }
     )
     .end();
+  debugger;
 
   scratch.start();
 }

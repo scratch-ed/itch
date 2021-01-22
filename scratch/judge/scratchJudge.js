@@ -1,13 +1,6 @@
 /* Copyright (C) 2019 Ghent University - All Rights Reserved */
 
-/**
- * Entry point for the test plan API.
- * 
- * When writing tests, you should limit interaction with Scratch and
- * the judge to this class, if at all possible.
- * 
- * 
- */
+
 class ScratchJudge {
 
     constructor() {

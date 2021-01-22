@@ -1,11 +1,13 @@
 /* Copyright (C) 2019 Ghent University - All Rights Reserved */
 export class SimulationEvent {
-  constructor(action, delay) {
+  constructor(context, action, delay) {
 
+    this.context = context;
+    
     // delay after action is executed
     this.delay = delay || 0;
 
-    let f = function (resolve, reject) {
+    const f = function (resolve, reject) {
       setTimeout(() => {
         resolve('Start event resolved');
       }, this.delay);
@@ -19,22 +21,25 @@ export class SimulationEvent {
   }
 
   async launch() {
-
-    let executeAction = new Promise((resolve, reject) => {
+    const executeAction = new Promise((resolve, reject) => {
+      console.log("Executed action...");
       this.action(resolve, reject);
     });
 
-    executeAction.then(() => {
-      for (let event of this.nextEvents) {
+    const vm = this.context.vm;
+    console.log("Doing promise new event...");
+    return executeAction.then(() => {
+      for (const event of this.nextEvents) {
+        console.log("Launching new event...");
+        console.log(event);
         event.launch();
       }
     }, (reason) => {
       console.log(reason);
       console.log('Test ended: time limit exceeded');
-      Scratch.vm.stopAll();
+      vm.stopAll();
       addError('Time limit exceeded!');
     });
-
   }
 
   nextEvent(event) {
@@ -50,7 +55,7 @@ export class SimulationEvent {
   next(action, delay = 0) {
 
     // create the next event based on the given action and delay
-    return this.nextEvent(new this.constructor(action, delay));
+    return this.nextEvent(new this.constructor(this.context, action, delay));
 
   }
 
@@ -63,7 +68,7 @@ export class SimulationEvent {
     let nextAnchor;
 
     // call each of the eventGenerators on the current event
-    for (let eventGenerator of eventGenerators) {
+    for (const eventGenerator of eventGenerators) {
 
       // call event generator on the current event
       // NOTE: the current event is bound to this in the event generator,
@@ -101,7 +106,7 @@ export class SimulationEvent {
     let nextAnchor;
 
     // for each item, launch the event (tree) after the current event
-    for (let index in items) {
+    for (const index in items) {
 
       // call event generator on the current event
       // NOTE: the current event is bound to this in the event generator,
@@ -127,14 +132,14 @@ export class SimulationEvent {
 
   range(start, stop, step, eventGenerator) {
 
-    let anchor = this,        // start from event on which method is called
-      index = 0,            // keep track of number of repetitions
-      next = start;         // next event should be generated at start time
+    let anchor = this;        // start from event on which method is called
+      let index = 0;            // keep track of number of repetitions
+      let next = start;         // next event should be generated at start time
 
     while (next < stop) {
 
       // call event generator on the current event
-      let nextAnchor = eventGenerator.call(anchor, index, anchor);
+      const nextAnchor = eventGenerator.call(anchor, index, anchor);
 
       // new anchor is event returned by event generator (if any)
       // NOTE: sequential behaviour only if event generator returns a

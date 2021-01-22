@@ -5,13 +5,12 @@ import { LogFrame, LogEvent } from './log';
 /**
  * Intercept events from pen extension.
  *
- * @param {VirtualMachine} vm - The vm to intercept info from.
+ * @param {Context} context - The vm to intercept info from.
  * @param {ScratchRender} renderer - Renderer
- * @param {Log} log - Save information to this log.
  *
  * @see https://en.scratch-wiki.info/wiki/Pen_Extension
  */
-function interceptPen(vm, renderer, log) {
+function interceptPen(context, renderer) {
 
   console.log('Intercepting pen events...');
 
@@ -22,11 +21,11 @@ function interceptPen(vm, renderer, log) {
       const p1 = { x: argumentsList[2], y: argumentsList[3] };
       const p2 = { x: argumentsList[4], y: argumentsList[5] };
       const line = { start: p1, end: p2 };
-      log.renderer.lines.push(line);
-      const event = new LogEvent('renderer', { name: 'penLine', line: line, color: argumentsList[1].color4f });
-      event.previousFrame = new LogFrame(vm, 'penLine');
-      event.nextFrame = new LogFrame(vm, 'penLineEnd');
-      log.addEvent(event);
+      context.log.renderer.lines.push(line);
+      const event = new LogEvent(context, 'renderer', { name: 'penLine', line: line, color: argumentsList[1].color4f });
+      event.previousFrame = new LogFrame(context, 'penLine');
+      event.nextFrame = new LogFrame(context, 'penLineEnd');
+      context.log.addEvent(event);
 
       return target.apply(thisArg, argumentsList);
     }
@@ -38,11 +37,11 @@ function interceptPen(vm, renderer, log) {
     apply: function (target, thisArg, argumentsList) {
 
       const point = { x: argumentsList[2], y: argumentsList[3] };
-      log.renderer.points.push(point);
-      const event = new LogEvent('renderer', { name: 'penPoint', point: point, color: argumentsList[1].color4f });
-      event.previousFrame = new LogFrame(vm, 'penPoint');
-      event.nextFrame = new LogFrame(vm, 'penPointEnd');
-      log.addEvent(event);
+      context.log.renderer.points.push(point);
+      const event = new LogEvent(context, 'renderer', { name: 'penPoint', point: point, color: argumentsList[1].color4f });
+      event.previousFrame = new LogFrame(context, 'penPoint');
+      event.nextFrame = new LogFrame(context, 'penPointEnd');
+      context.log.addEvent(event);
 
       return target.apply(thisArg, argumentsList);
     }
@@ -54,12 +53,12 @@ function interceptPen(vm, renderer, log) {
   renderer.penClear = new Proxy(penClearOld, {
     apply: function (target, thisArg, argumentsList) {
 
-      log.renderer.lines = [];
-      log.renderer.points = [];
-      const event = new LogEvent('renderer', { name: 'penClear' });
-      event.previousFrame = new LogFrame(vm, 'penClear');
-      event.nextFrame = new LogFrame(vm, 'penClearEnd');
-      log.addEvent(event);
+      context.log.renderer.lines = [];
+      context.log.renderer.points = [];
+      const event = new LogEvent(context, 'renderer', { name: 'penClear' });
+      event.previousFrame = new LogFrame(context, 'penClear');
+      event.nextFrame = new LogFrame(context, 'penClearEnd');
+      context.log.addEvent(event);
 
       return target.apply(thisArg, argumentsList);
     }
@@ -69,17 +68,16 @@ function interceptPen(vm, renderer, log) {
 /**
  * Create a proxied renderer, allowing us to intercept various stuff.
  *
- * @param {VirtualMachine} vm - The virtual machine.
+ * @param {Context} context - The context.
  * @param {HTMLCanvasElement} canvas - The canvas where the renderer should work.
- * @param {Log} log - The log to save information in.
  *
  * @return {ScratchRender}
  */
-export function makeProxiedRenderer(vm, canvas, log) {
+export function makeProxiedRenderer(context, canvas) {
   const render = new ScratchRender(canvas);
   console.log('renderer created');
   
-  interceptPen(vm, render, log);
+  interceptPen(context, render);
 
   // text bubble creation
   const createTextSkinOld = render.createTextSkin;
@@ -87,11 +85,11 @@ export function makeProxiedRenderer(vm, canvas, log) {
     apply: function (target, thisArg, argumentsList) {
       const skinId = target.apply(thisArg, argumentsList);
 
-      log.renderer.responses.push(argumentsList[1]);
-      const event = new LogEvent('renderer', { id: skinId, name: 'createTextSkin', text: argumentsList[1] });
-      event.previousFrame = new LogFrame(vm, 'createTextSkin');
-      event.nextFrame = new LogFrame(vm, 'createTextSkinEnd');
-      log.addEvent(event);
+      context.log.renderer.responses.push(argumentsList[1]);
+      const event = new LogEvent(context, 'renderer', { id: skinId, name: 'createTextSkin', text: argumentsList[1] });
+      event.previousFrame = new LogFrame(context, 'createTextSkin');
+      event.nextFrame = new LogFrame(context, 'createTextSkinEnd');
+      context.log.addEvent(event);
 
       return skinId;
     }
@@ -101,11 +99,11 @@ export function makeProxiedRenderer(vm, canvas, log) {
   render.updateTextSkin = new Proxy(updateTextSkinOld, {
     apply: function (target, thisArg, argumentsList) {
 
-      log.renderer.responses.push(argumentsList[2]);
-      const event = new LogEvent('renderer', { name: 'updateTextSkin', text: argumentsList[2] });
-      event.previousFrame = new LogFrame(vm, 'updateTextSkin');
-      event.nextFrame = new LogFrame(vm, 'updateTextSkinEnd');
-      log.addEvent(event);
+      context.log.renderer.responses.push(argumentsList[2]);
+      const event = new LogEvent(context, 'renderer', { name: 'updateTextSkin', text: argumentsList[2] });
+      event.previousFrame = new LogFrame(context, 'updateTextSkin');
+      event.nextFrame = new LogFrame(context, 'updateTextSkinEnd');
+      context.log.addEvent(event);
 
       return target.apply(thisArg, argumentsList);
     }
@@ -115,10 +113,10 @@ export function makeProxiedRenderer(vm, canvas, log) {
   render.destroySkin = new Proxy(destroySkinOld, {
     apply: function (target, thisArg, argumentsList) {
       const skinId = argumentsList[0];
-      const event = new LogEvent('renderer', { name: 'destroySkin', id: skinId });
-      event.previousFrame = new LogFrame(vm, 'destroySkin');
-      event.nextFrame = new LogFrame(vm, 'destroySkinEnd');
-      log.addEvent(event);
+      const event = new LogEvent(context, 'renderer', { name: 'destroySkin', id: skinId });
+      event.previousFrame = new LogFrame(context, 'destroySkin');
+      event.nextFrame = new LogFrame(context, 'destroySkinEnd');
+      context.log.addEvent(event);
 
       return target.apply(thisArg, argumentsList);
     }

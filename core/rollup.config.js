@@ -10,7 +10,8 @@ export default [
         name: 'itch-judge',
         file: pkg.browser,
         format: 'umd',
-        sourcemap: 'inline'
+        sourcemap: 'inline',
+        strict: false
       }, {
         file: pkg.main,
         format: 'cjs',

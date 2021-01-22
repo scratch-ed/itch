@@ -2,10 +2,6 @@ import { last } from 'underscore';
 import { containsBlock, containsLoop, countExecutions } from './blocks';
 import { findSquares, findTriangles, mergeLines, dist, distSq } from './lines';
 
-function getTimeStamp() {
-  return Date.now() - window.startTimestamp || 0;
-}
-
 /**
  * Our own version of a variable. Basically a copy of a {@link Variable}.
  */
@@ -109,17 +105,16 @@ export class LogFrame {
    * When a new frame is created, information from the current state of the targets is saved. Some properties, like if the target is touching another target,
    * are calculated before being saved.
    *
-   * @param {VirtualMachine} scratchVm - The scratch virtual machine.
+   * @param {Context} context - The scratch virtual machine.
    * @param {string} block - The block that triggered the fame saving.
    */
-  constructor(scratchVm, block) {
-
+  constructor(context, block) {
     /**
      * The timestamp of the frame.
      * TODO: investigate using currentMSecs instead.
      * @type {number}
      */
-    this.time = getTimeStamp();
+    this.time = context.timestamp();
 
     /**
      * The name of the block that triggerd this frame.
@@ -137,8 +132,8 @@ export class LogFrame {
 
     // For now we only save rendered targets.
 
-    for (const target of scratchVm.runtime.targets) {
-      this.sprites.push(new LoggedSprite(target, scratchVm.runtime.targets));
+    for (const target of context.vm.runtime.targets) {
+      this.sprites.push(new LoggedSprite(target, context.vm.runtime.targets));
     }
   }
 
@@ -270,8 +265,14 @@ export class LogBlocks {
 
 // TODO: review
 export class LogEvent {
-  constructor(type, data = {}) {
-    this.time = getTimeStamp();
+  /**
+   * 
+   * @param {Context} context
+   * @param type
+   * @param data
+   */
+  constructor(context, type, data = {}) {
+    this.time = context.timestamp();
     this.type = type;
     this.data = data;
 
@@ -353,8 +354,13 @@ export class Log {
     this.blocks = new Blocks();
   }
 
-  addFrame(vm, block) {
-    const frame = new LogFrame(vm, block);
+  /**
+   * Add a frame.
+   * @param {Context} context
+   * @param block
+   */
+  addFrame(context, block) {
+    const frame = new LogFrame(context, block);
     this.frames.push(frame);
     this.blocks.push(block);
   }

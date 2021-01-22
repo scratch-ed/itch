@@ -1,8 +1,5 @@
 /* Copyright (C) 2019 Ghent University - All Rights Reserved */
-
-function getTimeStamp() {
-  return Date.now() - window.startTimestamp || 0;
-}
+import Deferred from './deferred';
 
 export async function promiseTimeout(future, ms) {
 
@@ -25,10 +22,15 @@ export async function promiseTimeout(future, ms) {
 }
 
 export class Action {
-  constructor(topBlocks) {
-    this.startTime = getTimeStamp();
+  /**
+   * 
+   * @param {Context} context
+   * @param topBlocks
+   */
+  constructor(context, topBlocks) {
+    this.startTime = context.timestamp();
     this.topBlocks = topBlocks;
-    this.actionEnded = new Future();
+    this.actionEnded = new Deferred();
     this.active = true;
 
     // if the list with topBlocks is empty, no threads have started
