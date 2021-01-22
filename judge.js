@@ -240,7 +240,7 @@ class Judge {
     if (this.debug) {
       await page.evaluate(() => {
         // eslint-disable-next-line no-debugger
-        //debugger;
+        debugger;
       });
     }
 

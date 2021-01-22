@@ -51,8 +51,9 @@ class Judge {
       eventScheduling: this.context.simulationChain,
       start: () => {
         this.context.actionTimeout = object.actionTimeout;
-        this.context.answers = object.answers;
-      }
+        this.context.answers = object.scratch.answers;
+      },
+      answers: []
     };
   }
 }
@@ -100,6 +101,9 @@ export async function run(config) {
   
   // Schedule the commands for the duration.
   testplan.duringExecution();
+  
+  // Prepare the context for execution.
+  context.prepareForExecution();
 
   console.log("Run the simulation.");
 

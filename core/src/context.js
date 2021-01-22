@@ -4,7 +4,7 @@ import Deferred from './deferred';
 import VirtualMachine from 'scratch-vm/dist/web/scratch-vm';
 import ScratchStorage from 'scratch-storage/dist/web/scratch-storage';
 import ScratchSVGRenderer from 'scratch-svg-renderer/dist/web/scratch-svg-renderer';
-import AudioEngine from './audio_engine';
+import AudioEngine from './external/audio_engine';
 import { makeProxiedRenderer } from './renderer';
 
 const Events = {
@@ -60,6 +60,9 @@ export default class Context {
      * @type {string[]}
      */
     this.answers = [];
+    
+    this.providedAnswers = [];
+    
     /**
      * Resolves once the scratch files have been loaded.
      * @type {Deferred}
@@ -112,7 +115,7 @@ export default class Context {
 
     this.vm.runtime.on(Events.SCRATCH_QUESTION, (question) => {
       if (question != null) {
-        let x = this.answers.shift();
+        let x = this.providedAnswers.shift();
         if (x === undefined) {
           addError('Er werd een vraag gesteld waarop geen antwoord voorzien is.');
           x = null;
@@ -204,6 +207,10 @@ export default class Context {
 
     console.log("Loading is finished.");
     this.vmLoaded.resolve();
+  }
+  
+  prepareForExecution() {
+    this.providedAnswers = this.answers.slice();
   }
 
   /**
