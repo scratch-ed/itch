@@ -1,4 +1,3 @@
-
 const fileDeferred = new Deferred();
 
 document.getElementById('file').addEventListener('change', e => {
@@ -10,6 +9,7 @@ document.getElementById('file').addEventListener('change', e => {
   reader.readAsArrayBuffer(thisFileInput.files[0]);
 });
 
+// This function is called by puppeteer to actually execute the tests.
 async function runTests(templateJSON, testJSON) {
   
   const config = new JudgeConfig();
