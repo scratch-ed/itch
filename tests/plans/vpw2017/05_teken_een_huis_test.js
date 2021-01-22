@@ -1,18 +1,18 @@
 /* Copyright (C) 2019 Ghent University - All Rights Reserved */
-function duringExecution() {
-  actionTimeout = 2000;
+/** @param {Evaluation} e */
+function duringExecution(e) {
+  e.actionTimeout = 2000;
 
-  scratch.eventScheduling
+  e.eventScheduling
     .greenFlag()
     .end();
-
-  scratch.start();
 }
 
-function afterExecution() {
+/** @param {Evaluation} e */
+function afterExecution(e) {
   // Er werkt gebruik gemaakt van de pen
-  addCase('De pen werkt gebruikt',
-    log.blocks.containsBlock('pen_penDown'),
+  e.output.addCase('De pen werkt gebruikt',
+    e.log.blocks.containsBlock('pen_penDown'),
     'Het blok pen_Down werd niet gebruikt in de code'
   );
 }

@@ -1,18 +1,20 @@
 /* Copyright (C) 2019 Ghent University - All Rights Reserved */
-function duringExecution() {
-  scratch.eventScheduling
+/** @param {Evaluation} e */
+function duringExecution(e) {
+  e.eventScheduling
     .pressKey({ key: ' ', sync: true })
     .end();
-
-  scratch.start();
 }
 
-function afterExecution() {
+/** @param {Evaluation} e */
+function afterExecution(e) {
   // De kat raakt de voetbal in de laatste frame
-  addCase('De kat raakt de voetbal', log.sprites.isTouching('Kat', 'Voetbal'), 'Op het einde van de uitvoer raakt de kat de voetbal niet');
+  e.output.addCase('De kat raakt de voetbal', 
+    e.log.sprites.areTouching('Kat', 'Voetbal'), 
+    'Op het einde van de uitvoer raakt de kat de voetbal niet');
 
   // De afstand van de kat naar de bal verkleint over tijd
-  const distances = log.getDistancesToSprite('Kat', 'Voetbal');
+  const distances = e.log.getDistancesToSprite('Kat', 'Voetbal');
   let oldDistance = distances[0];
   let test = true;
   for (const distance of distances) {
@@ -21,5 +23,5 @@ function afterExecution() {
     }
     oldDistance = distance;
   }
-  addCase('Afstand van kat tot voetbal wordt kleiner', test, 'De afstand van de kat naar de voetbal verkleint niet over de tijd');
+  e.output.addCase('Afstand van kat tot voetbal wordt kleiner', test, 'De afstand van de kat naar de voetbal verkleint niet over de tijd');
 }

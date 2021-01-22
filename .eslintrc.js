@@ -18,7 +18,8 @@ module.exports = {
       'error',
       {
         varsIgnorePattern:
-          'beforeExecution2?|afterExecution2?|duringExecution2?',
+          'beforeExecution|afterExecution|duringExecution|^_',
+        argsIgnorePattern: '^_'
       },
     ],
   },

@@ -4,7 +4,7 @@ import pkg from './package.json';
 
 export default [
   {
-    input: 'src/judge.js',
+    input: 'src/evaluation.js',
     output: [
       {
         name: 'itch-judge',

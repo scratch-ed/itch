@@ -181,9 +181,9 @@ export class LogFrame {
 
 /**
  * @typedef {Object} Constraints
- * @property {number|null} before
- * @property {number|null} after
- * @property {string|null} type
+ * @property {number|null} [before]
+ * @property {number|null} [after]
+ * @property {string|null} [type]
  */
 
 /**

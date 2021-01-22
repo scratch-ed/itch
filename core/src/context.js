@@ -1,11 +1,12 @@
 import { Log, LogEvent, LogFrame } from './log';
-import ScratchSimulationEvent from './scratchSimulationEvent';
+import SimulationEvent from './simulationEvent';
 import Deferred from './deferred';
 import VirtualMachine from 'scratch-vm/dist/web/scratch-vm';
 import ScratchStorage from 'scratch-storage/dist/web/scratch-storage';
 import ScratchSVGRenderer from 'scratch-svg-renderer/dist/web/scratch-svg-renderer';
 import AudioEngine from './external/audio_engine';
 import { makeProxiedRenderer } from './renderer';
+import ResultManager from './output';
 
 const Events = {
   SCRATCH_PROJECT_START: 'PROJECT_START',
@@ -81,9 +82,13 @@ export default class Context {
     this.activeActions = [];
     /**
      * Control events.
-     * @type {ScratchSimulationEvent}
+     * @type {SimulationEvent}
      */
-    this.simulationChain = new ScratchSimulationEvent(this, null, null);
+    this.simulationChain = new SimulationEvent(this, null, null);
+    /**
+     * Output manager
+     */
+    this.output = new ResultManager();
   }
 
   /**
@@ -117,7 +122,7 @@ export default class Context {
       if (question != null) {
         let x = this.providedAnswers.shift();
         if (x === undefined) {
-          addError('Er werd een vraag gesteld waarop geen antwoord voorzien is.');
+          this.output.addError('Er werd een vraag gesteld waarop geen antwoord voorzien is.');
           x = null;
         }
 
@@ -167,7 +172,7 @@ export default class Context {
    * Set-up the scratch vm. After calling this function,
    * the vmLoaded promise will be resolved.
    *
-   * @param {JudgeConfig} config
+   * @param {EvalConfig} config
    */
   async prepareVm(config) {
     /**
@@ -216,7 +221,7 @@ export default class Context {
   /**
    * Create a context with a fully prepared VM.
    * 
-   * @param {JudgeConfig} config
+   * @param {EvalConfig} config
    * @return {Promise<Context>}
    */
   static async create(config) {

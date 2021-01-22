@@ -73,7 +73,6 @@ test('07_heksenjacht', () => {
     });
 });
 
-// TODO: this is flaky sometimes
 test('08_op_bezoek_bij_devin', () => {
   return runTest(`vpw2017/${expect.getState().currentTestName}`)
     .then(result => {

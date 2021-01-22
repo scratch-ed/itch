@@ -2,14 +2,6 @@
  * A "Deferred" like implementation on top of a Promise.
  * 
  * @template R
- * 
- * @callback resolve
- * @param {R} value
- * @return void
- * 
- * @callback reject
- * @param {*} [reason]
- * @return void
  */
 export default class Deferred {
   constructor() {
@@ -20,12 +12,12 @@ export default class Deferred {
     this.promise = new Promise((resolve, reject) => {
       /**
        * Call to resolve the underlying promise.
-       * @type {resolve}
+       * @type {function(R): void}
        */
       this.resolve = resolve;
       /**
        * Call to reject the underlying promise.
-       * @type {reject}
+       * @type {function(*): void}
        */
       this.reject = reject;
     });

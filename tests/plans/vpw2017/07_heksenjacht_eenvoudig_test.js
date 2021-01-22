@@ -1,17 +1,23 @@
 /* Copyright (C) 2019 Ghent University - All Rights Reserved */
-function beforeExecution(template, submission) {
+/**
+ * @param {Project} template
+ * @param {Project} submission
+ * @param {ResultManager} output
+ */
+function beforeExecution(template, submission, output) {
   // Controleer of het ingediende project van de leerling een sprite heeft met als naam 'Heks'
   if (!submission.containsSprite('Heks')) {
-    addError('De sprite met als naam Heks werd niet teruggevonden in het project');
+    output.addError('De sprite met als naam Heks werd niet teruggevonden in het project');
   }
 }
 
-function duringExecution() {
-  actionTimeout = 7000; // Indien een actie langer dan 7 seconden duurt, geef een timeout error.
+/** @param {Evaluation} e */
+function duringExecution(e) {
+  e.actionTimeout = 7000; // Indien een actie langer dan 7 seconden duurt, geef een timeout error.
 
   const heksPositie = {}; // We slaan de positie van de heks op om op te testen tijdens de uitvoering
 
-  scratch.eventScheduling
+  e.eventScheduling
     .log((log) => {
       heksPositie.x = log.sprites.getSprite('Heks').x; // De eerste positie van de heks wordt opgeslagen.
       heksPositie.y = log.sprites.getSprite('Heks').y;
@@ -42,18 +48,17 @@ function duringExecution() {
       return heeftBewogen;
     })
     .end();
-
-  scratch.start();
 }
 
-function afterExecution() {
+/** @param {Evaluation} e */
+function afterExecution(e) {
   // Gebruik best een lus om elke seconde de heks te verplaatsen
-  addCase('Gebruik van een lus',
-    log.blocks.containsBlock('control_forever'),
+  e.output.addCase('Gebruik van een lus',
+    e.log.blocks.containsBlock('control_forever'),
     'Er werd geen herhalingslus gebruikt');
 
   // De code in de lus wordt minstens 2 keer herhaald
-  addCase('Correcte gebruik van de lus',
-    log.blocks.numberOfExecutions('control_forever') >= 2,
+  e.output.addCase('Correcte gebruik van de lus',
+    e.log.blocks.numberOfExecutions('control_forever') >= 2,
     'De code in de lus werd minder dan 2 keer herhaald');
 }

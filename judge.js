@@ -1,6 +1,5 @@
 /* Copyright (C) 2019 Ghent University - All Rights Reserved */
 const path = require('path');
-let acceptsOutput = true;
 const url = path.resolve(__dirname, 'scratch/scratch-test-environment.html');
 
 // unzipping
@@ -10,9 +9,7 @@ const yauzl = require('yauzl');
 const puppeteer = require('puppeteer');
 
 function toStdOut(output) {
-  if (acceptsOutput) {
-    process.stdout.write(JSON.stringify(output));
-  }
+  process.stdout.write(JSON.stringify(output));
 }
 
 //
@@ -46,15 +43,12 @@ function projectToJson(where) {
 
 class Judge {
   constructor(testFile, options = {}, outputStream = toStdOut) {
-    // start timing
-    this.time_start = new Date();
-
     // extract options
     this.time_limit = options.time_limit || 10000;
 
     this.test_file = path.resolve(__dirname, testFile);
-
-    this.log = outputStream;
+    
+    this.out = outputStream;
 
     this.debug = options.debug || false;
   }
@@ -89,6 +83,7 @@ class Judge {
       });
     }
 
+    /** @type {Page} */
     const page = await browser.newPage();
 
     if (this.debug) {
@@ -96,81 +91,9 @@ class Judge {
     }
 
     await page.goto(`file://${url}`);
-
-    await page.exposeFunction('appendMessage', (message) => {
-      this.log({ command: 'append-message', message: message });
-    });
-    await page.exposeFunction('annotate', (row, column, text) => {
-      this.log({
-        command: 'annotate',
-        row: row,
-        column: column,
-        text: text,
-      });
-    });
-    await page.exposeFunction('startTab', (title) => {
-      this.log({ command: 'start-tab', title: title });
-    });
-    await page.exposeFunction('startContext', () => {
-      this.log({ command: 'start-context' });
-    });
-    await page.exposeFunction('startTestcase', (description) => {
-      this.log({ command: 'start-testcase', description: description });
-    });
-    await page.exposeFunction('startTest', (expected) => {
-      this.log({ command: 'start-test', expected: expected.toString() });
-    });
-    await page.exposeFunction('closeTest', (generated, status) => {
-      this.log({
-        command: 'close-test',
-        generated: generated?.toString(),
-        status: status,
-      });
-    });
-    await page.exposeFunction('closeTestcase', (accepted = undefined) => {
-      if (accepted !== null && accepted !== undefined && accepted !== true) {
-        // this.log({command: "close-testcase", accepted: accepted.toString()});
-        this.log({ command: 'start-test', expected: 'true' });
-        let status = {};
-        if (accepted) {
-          status = { enum: 'correct', human: 'Correct' };
-        } else {
-          status = { enum: 'wrong', human: 'Wrong' };
-        }
-        this.log({
-          command: 'close-test',
-          generated: accepted.toString(),
-          status: status,
-        });
-        this.log({ command: 'close-testcase' });
-      } else {
-        this.log({ command: 'close-testcase' });
-      }
-    });
-    await page.exposeFunction('closeContext', () => {
-      this.log({ command: 'close-context' });
-    });
-    await page.exposeFunction('closeTab', () => {
-      this.log({ command: 'close-tab' });
-    });
-    await page.exposeFunction('closeJudge', (accepted = undefined) => {
-      if (accepted !== null && accepted !== undefined) {
-        this.log({ command: 'close-judgement' });
-      } else {
-        let status = {};
-        if (accepted) {
-          status = { enum: 'correct', human: 'Correct' };
-        } else {
-          status = { enum: 'wrong', human: 'Wrong' };
-        }
-        this.log({
-          command: 'close-judgement',
-          accepted: accepted.toString(),
-          status: status,
-        });
-      }
-      acceptsOutput = false;
-    });
+    
+    // Hook up the test output to stdout.
+    await page.exposeFunction('handleOut', this.out);
     
     await page.addScriptTag({ url: this.test_file });
 
@@ -229,10 +152,10 @@ class Judge {
     );
 
     // START JUDGE
-    this.log({ command: 'start-judgement' });
+    this.out({ command: 'start-judgement' });
 
+    /** @type {ElementHandle} */
     const fileHandle = await page.$('#file');
-    // TODO: also do file test here
     await fileHandle.uploadFile(sourceFileTemplate);
 
     await page.waitForTimeout(50);
@@ -244,12 +167,13 @@ class Judge {
       });
     }
 
-    const output = await page.evaluate(
-      (templateJSON, testJSON) => {
-        return runTests(templateJSON, testJSON);
+    await page.evaluate(
+      (templateJSON, testJSON, testplan) => {
+        return runTests(templateJSON, testJSON, testplan);
       },
       templateJSON,
       testJSON,
+      this.test_file
     );
 
     if (!this.debug) {
@@ -257,7 +181,7 @@ class Judge {
     }
 
     // END JUDGE
-    this.log({ command: 'close-judgement' });
+    this.out({ command: 'close-judgement' });
   }
 }
 

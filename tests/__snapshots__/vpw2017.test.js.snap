@@ -437,10 +437,6 @@ Array [
     "description": "De papegaai heeft nog niet bewogen",
   },
   Object {
-    "command": "append-message",
-    "message": "De papegaai mag niet bewegen voor er op geklikt wordt",
-  },
-  Object {
     "command": "close-testcase",
   },
   Object {
