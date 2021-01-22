@@ -7,6 +7,6 @@
     "memory_limit": 5000000,
     "natural_language": "nl",
     "programming_language": "Scratch",
-    "debug": true
+    "debug": false
   }
   
