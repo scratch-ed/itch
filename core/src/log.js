@@ -373,7 +373,9 @@ export class Log {
     // not needed
   }
 
-  // return final state of sprites
+  /** 
+   * @return {LogFrame} return final state of sprites
+   */
   get sprites() {
     return this.frames[this.frames.length - 1];
   }
@@ -479,10 +481,10 @@ export class Log {
 
   hasSpriteMoved(spriteName, frames = this.frames) {
     if (frames.length === 0) return false;
-    const minX = log.getMinX(spriteName, frames);
-    const maxX = log.getMaxX(spriteName, frames);
-    const minY = log.getMinY(spriteName, frames);
-    const maxY = log.getMaxY(spriteName, frames);
+    const minX = this.getMinX(spriteName, frames);
+    const maxX = this.getMaxX(spriteName, frames);
+    const minY = this.getMinY(spriteName, frames);
+    const maxY = this.getMaxY(spriteName, frames);
     return !(minX === maxX && minY === maxY);
   }
 

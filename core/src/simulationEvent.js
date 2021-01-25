@@ -41,8 +41,9 @@ export default class SimulationEvent {
    * @param {EventAction<*>} action - The first action to execute.
    * @param delay
    */
-  constructor(context, action, delay) {
+  constructor(context, action, delay, debugName = "initial") {
     this.context = context;
+    this.debugName = debugName;
 
     // action that needs to be executed
     this.action = action || delayedAction('Start event resolved', delay);
@@ -61,6 +62,7 @@ export default class SimulationEvent {
 
   async launch() {
     const executeAction = new Promise((resolve, reject) => {
+      console.log(`Doing action of ${this.debugName}`);
       this.action(resolve, reject);
     });
 
@@ -101,8 +103,8 @@ export default class SimulationEvent {
    * @param {number} delay
    * @return {SimulationEvent}
    */
-  next(action, delay = 0) {
-    return this.nextEvent(new this.constructor(this.context, action, delay));
+  next(action, delay = 0, debugName = "") {
+    return this.nextEvent(new this.constructor(this.context, action, delay, debugName));
   }
 
   // start() {
@@ -254,7 +256,7 @@ export default class SimulationEvent {
       setTimeout(() => {
         resolve('wait resolved');
       }, delay);
-    });
+    }, 0, "WAIT");
 
   }
 
@@ -331,7 +333,7 @@ export default class SimulationEvent {
 
         }, extraWaitTime);
       });
-    });
+    }, 0, `CLICK ${spriteName}`);
 
   }
 
@@ -389,7 +391,7 @@ export default class SimulationEvent {
           }
         }, extraWaitTime);
       });
-    });
+    }, 0, "GREEN FLAG");
   }
 
   pressKey(data = {}) {
@@ -472,7 +474,7 @@ export default class SimulationEvent {
 
         }, extraWaitTime);
       });
-    });
+    }, 0, `PRESS KEY ${data.key}`);
 
   }
 
@@ -484,7 +486,7 @@ export default class SimulationEvent {
       data.canvasHeight = 360;
       this.context.vm.runtime.ioDevices.mouse.postData(data);
       resolve();
-    });
+    }, 0, "MOUSE");
   }
 
   test(testName, messageIfWrong, fun) {
@@ -492,7 +494,7 @@ export default class SimulationEvent {
       const correct = fun(this.context.log);
       this.context.output.addCase(testName, correct, messageIfWrong);
       resolve();
-    });
+    }, 0, "TEST");
   }
 
   /**
@@ -507,7 +509,7 @@ export default class SimulationEvent {
       this.context.log.addFrame(this.context, 'manual_logging');
       fun(this.context.log);
       resolve();
-    });
+    }, 0, "LOG");
   }
 
   reset() {
@@ -515,9 +517,7 @@ export default class SimulationEvent {
   }
 
   end() {
-    console.log('Schedule end...');
     return this.next((resolve, reject) => {
-      console.log('Finished simulation');
       for (const event of this.context.log.events.list) {
         if (event.nextFrame == null) {
           event.nextFrame = new LogFrame(this.context, 'programEnd');
@@ -528,7 +528,6 @@ export default class SimulationEvent {
       // stop all Scratch processes
       this.context.vm.stopAll();
       this.context.simulationEnd.resolve();
-    });
-
+    }, 0, "END");
   }
 }
