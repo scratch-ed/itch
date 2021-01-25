@@ -337,6 +337,7 @@ export default class SimulationEvent {
 
   }
 
+  /** @return {SimulationEvent} */
   greenFlag(data = {}) {
     return this.next((resolve, reject) => {
 
@@ -392,6 +393,17 @@ export default class SimulationEvent {
         }, extraWaitTime);
       });
     }, 0, "GREEN FLAG");
+  }
+  
+  // TODO: better implementation; can this be sync?
+  pressKeySecond(data = {}) {
+    // TODO: find running threads waiting on this key press.
+    // We could just check the blocks.
+    return this.next((resolve, reject) => {
+      this.context.vm.runtime.ioDevices.keyboard.postData({key: data.key, isDown: true});
+      resolve();
+    })
+    
   }
 
   pressKey(data = {}) {

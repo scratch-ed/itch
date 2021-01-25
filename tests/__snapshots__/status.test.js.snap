@@ -662,3 +662,77 @@ Array [
   },
 ]
 `;
+
+exports[`02.pico_desert 1`] = `
+Array [
+  Object {
+    "command": "start-judgement",
+  },
+  Object {
+    "command": "start-tab",
+    "title": "Testen uit het testplan",
+  },
+  Object {
+    "command": "start-context",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Niet geprutst met ingebouwde sprites",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "false",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "false",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "close-context",
+  },
+  Object {
+    "command": "start-context",
+  },
+  Object {
+    "command": "close-context",
+  },
+  Object {
+    "command": "start-context",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Laatste level is bereikt",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "7",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "7",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "close-context",
+  },
+  Object {
+    "command": "close-tab",
+  },
+  Object {
+    "command": "close-judgement",
+  },
+]
+`;

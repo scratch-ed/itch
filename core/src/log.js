@@ -13,6 +13,7 @@ export class LoggedVariable {
     this.id = variable.id;
     this.name = variable.name;
     this.type = variable.type;
+    this.value = variable.value;
   }
 }
 
