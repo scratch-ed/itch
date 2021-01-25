@@ -1,3 +1,5 @@
+import { isEqual } from 'lodash';
+
 export class Sb3Variable {
   constructor(data) {
     /**
@@ -143,6 +145,35 @@ export class Sb3Target {
     this.volume = data.volume;
     /** @type {number} */
     this.layerOrder = data.layerOrder;
+  }
+
+  /**
+   * Check if this target is equal to another target.
+   * @param {Sb3Target} other
+   */
+  equals(other) {
+    return isEqual(this, other);
+  }
+
+  /**
+   * Deep diff between two object, using lodash
+   * @param  {Object} object Object compared
+   * @param  {Object} base   Object to compare with
+   * @return {Object}        Return a new object who represent the diff
+   */
+  difference(object, base) {
+    function changes(object, base) {
+      return _.transform(object, function(result, value, key) {
+        if (!_.isEqual(value, base[key])) {
+          result[key] = (_.isObject(value) && _.isObject(base[key])) ? changes(value, base[key]) : value;
+        }
+      });
+    }
+    return changes(object, base);
+  }
+  
+  diff(other) {
+    return this.difference(this, other);
   }
 }
 

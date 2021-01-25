@@ -12,7 +12,9 @@ function beforeExecution(template, submission, output) {
   for (const square of squares) {
     output.startTest(false);
     let status;
-    const gen = template.hasChangedSprite(submission, square, (a, b) => a !== b);
+    const gen = template.hasChangedSprite(submission, square, (a, b) => {
+      return !a.equals(b); 
+    });
     if (gen) {
       output.addMessage('Er is iets veranderd aan de ingebouwde sprites, waar je niets mag aan veranderen.');
       status = {enum: "wrong", human: "Verkeerd"}
