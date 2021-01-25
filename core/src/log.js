@@ -1,4 +1,4 @@
-import { last } from 'underscore';
+import { last } from 'lodash';
 import { containsBlock, containsLoop, countExecutions } from './blocks';
 import { findSquares, findTriangles, mergeLines, dist, distSq } from './lines';
 
