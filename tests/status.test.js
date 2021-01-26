@@ -18,3 +18,12 @@ test('02.pico_desert', () => {
       expect(testStatuses(result)).allStatusesAre('correct');
     });
 });
+
+test('03.space_mission_iterations', () => {
+  return runTest(`status/${expect.getState().currentTestName}`)
+    .then(result => {
+      expect(result).toMatchSnapshot();
+      expect(testStatuses(result)).exactStatus('correct', 46);
+      expect(testStatuses(result)).exactStatus('wrong', 1);
+    });
+});

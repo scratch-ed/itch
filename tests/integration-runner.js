@@ -56,6 +56,13 @@ expect.extend({
       pass: correct
     };
   },
+  exactStatus(statusses, expected, amount) {
+    const counted = statusses.filter(s => s === expected).length;
+    return {
+      message: () => `expected ${amount} statusses of ${expected}, but got ${counted}`,
+      pass: counted === amount
+    };
+  },
   minimumCommands(result, command, amount) {
     const am = result
       .filter(obj => obj.command === command)

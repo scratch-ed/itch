@@ -153,7 +153,6 @@ export default class Project {
    * @param {string} name - The name.
    *
    * @return {Sb3Target | null} The sprite or null if not found.
-   * @private
    */
   sprite(name) {
     return this.json.targets.find(t => t.name === name) || null;
