@@ -12,40 +12,38 @@ function beforeExecution(template, submission, output) {
   // Find all "hooibalen".
   const hooibalen = [];
   for (const sprite of template.sprites()) {
-    if (sprite.name.startsWith("Hooibaal")) {
+    if (sprite.name.startsWith("Hooi")) {
       hooibalen.push(sprite.name);
     }
   }
   
-  output.startTestCase("Hooibalen zijn zichtbaar.");
+  output.startTestTab("Hooibalen zijn zichtbaar.");
   
   // Check that every hooibaal is visible.
   for (const found of hooibalen) {
-    output.startTest(true);
     const sprite = submission.sprite(found);
-    let status;
-    if (sprite.visible) {
-      output.addMessage('Er is iets veranderd aan de ingebouwde sprites, waar je niets mag aan veranderen.');
-      status = {enum: "wrong", human: "Verkeerd"}
-    } else {
-      status = {enum: "correct", human: "Juist"}
-    }
-    output.closeTest(sprite.visible, status);
+    output.addTest(`${found} moet zichtbaar zijn`,
+      true,
+      sprite.visible,
+      `De sprite ${found} moet zichtbaar zijn aan het begin van het spel.`);
   }
   
-  output.closeTestCase();
+  output.closeTestTab();
 }
 
 /** @param {Evaluation} e */
 function duringExecution(e) {
   
+  e.actionTimeout = 15000;
   let lastX = 0;
   let lastY = 0;
   e.eventScheduling
-    .wait(1000)
-    .test('No movement without key press', 'The paddle cannot move when not pressing keys', (log) => {
-      return !log.hasSpriteMoved('Paddle');
-    })
+    .greenFlag({sync: false})
+    // .wait(1000)
+    // .test('No movement without key press', 'The paddle cannot move when not pressing keys', (log) => {
+    //   return !log.hasSpriteMoved('Paddle');
+    // })
+    .wait(8000)
     .pressKey({ key: 'Left', sync: true })
     .test('Paddle moves to left', 'The paddle must move to the left when the left key is pressed.', (log) => {
       const minX = log.getMinX('Paddle');
@@ -64,5 +62,6 @@ function duringExecution(e) {
     .test('Paddle moves to right', 'The paddle must move to the right when the right key is pressed.', (log) => {
       const spr = log.sprites.getSprite('Paddle');
       return lastX < spr.x && numericEquals(lastY, spr.y);
-    });
+    })
+    .end();
 }
