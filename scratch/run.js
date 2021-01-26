@@ -23,6 +23,12 @@ async function runTests(templateJSON, testJSON, testplan) {
     canvas: document.getElementById('scratch-stage')
   };
   
+  // Hook up the output visualizer.
+  if (window.visualise()) {
+    console.log("Initialising test output visualizer");
+    init(document.getElementById("output"));
+  }
+  
   // Main function of the Itch judge, exposed by the evaluation module.
   await window.run(config);
 }

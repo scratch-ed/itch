@@ -214,7 +214,6 @@ export async function run(config) {
 
   context.output.startTestTab('Testen uit het testplan');
   context.output.startTestContext();
-  
 
   // Run the tests before the execution.
   const templateJson = JSON.parse(config.templateJson);
@@ -226,7 +225,6 @@ export async function run(config) {
   expose();
 
   await context.vmLoaded.promise;
-
 
   // Schedule the commands for the duration.
   testplan.duringExecution(judge);

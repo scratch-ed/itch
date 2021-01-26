@@ -51,6 +51,7 @@ class Judge {
     this.out = outputStream;
 
     this.debug = options.debug || false;
+    this.visualise = options.visualise || false;
   }
 
   async run(templateFile, submissionFile) {
@@ -94,6 +95,7 @@ class Judge {
     
     // Hook up the test output to stdout.
     await page.exposeFunction('handleOut', this.out);
+    await page.exposeFunction('visualise', () => this.visualise);
     
     await page.addScriptTag({ url: this.test_file });
 
@@ -158,6 +160,7 @@ class Judge {
     const fileHandle = await page.$('#file');
     await fileHandle.uploadFile(sourceFileTemplate);
 
+    await page.setViewport({height: 1080, width: 960});
     await page.waitForTimeout(50);
 
     if (this.debug) {

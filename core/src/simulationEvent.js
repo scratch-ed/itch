@@ -501,10 +501,17 @@ export default class SimulationEvent {
     }, 0, "MOUSE");
   }
 
+  /**
+   * 
+   * @param {string} testName
+   * @param {string} messageIfWrong
+   * @param {function(Log):boolean} fun
+   * @return {SimulationEvent}
+   */
   test(testName, messageIfWrong, fun) {
-    return this.next((resolve, reject) => {
+    return this.next((resolve, _reject) => {
       const correct = fun(this.context.log);
-      this.context.output.addCase(testName, correct, messageIfWrong);
+      this.context.output.addTest(testName, true, correct, messageIfWrong);
       resolve();
     }, 0, "TEST");
   }

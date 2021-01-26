@@ -152,14 +152,14 @@ export default class Project {
    *
    * @param {string} name - The name.
    *
-   * @return {Sb3Target | null} The sprite or null if not found.
+   * @return {Sb3Sprite|Sb3Stage|null} The sprite or null if not found.
    */
   sprite(name) {
     return this.json.targets.find(t => t.name === name) || null;
   }
 
   /**
-   * @return {Sb3Target[]} A list of sprites in this project.
+   * @return {Sb3Sprite|Sb3Stage[]} A list of sprites in this project.
    */
   sprites() {
     return this.json.targets;
