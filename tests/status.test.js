@@ -27,3 +27,11 @@ test('03.space_mission_iterations', () => {
       expect(testStatuses(result)).exactStatus('wrong', 1);
     });
 });
+
+test('04.escape_the_cave', () => {
+  return runTest(`status/${expect.getState().currentTestName}`)
+    .then(result => {
+      expect(result).toMatchSnapshot();
+      expect(testStatuses(result)).allStatusesAre('correct');
+    });
+});

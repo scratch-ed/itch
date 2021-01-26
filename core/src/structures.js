@@ -175,6 +175,40 @@ export class Sb3Target {
   diff(other) {
     return this.difference(this, other);
   }
+
+  /**
+   * Check if this sprite contains a block with the given opcode.
+   * 
+   * @param {string} opcode
+   * @return {boolean}
+   */
+  hasBlock(opcode) {
+    let found = null;
+    for (const key of Object.keys(this.blocks)) {
+      if (this.blocks[key].opcode === opcode) {
+        found = this.blocks[key];
+        break;
+      }
+    }
+    return found !== null;
+  }
+
+  /**
+   * Get the first block with opcode.
+   * 
+   * @param {string} opcode
+   * @return {null|Sb3Block}
+   */
+  getFirst(opcode) {
+    let found = null;
+    for (const key of Object.keys(this.blocks)) {
+      if (this.blocks[key].opcode === opcode) {
+        found = this.blocks[key];
+        break;
+      }
+    }
+    return found;
+  }
 }
 
 export class Sb3Stage extends Sb3Target {

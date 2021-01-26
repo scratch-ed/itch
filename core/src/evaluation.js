@@ -157,10 +157,11 @@ function defaultBeforeExecution(template, submission, output) {
  * @return {void} Nothing -> ignored.
  */
 
-/** @type {DuringExecution} */
+/** @param {Evaluation} evaluation */
 // eslint-disable-next-line no-unused-vars
 function defaultDuringExecution(evaluation) {
   // pass
+  evaluation.eventScheduling.end();
 }
 
 /**
