@@ -1,7 +1,0 @@
-#!/bin/bash
-
-# find location of this script
-DIR="$(dirname $0)"
-
-# launch scratch-judge
-node "$DIR/evaluate.js"

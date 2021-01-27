@@ -33,7 +33,9 @@
     "prettier": "^2.2.1"
   },
   "scripts": {
-    "start": "node index.js",
+    "start": "npm --prefix ./core run build && node fileEval.js",
+    "clean": "rm -rf ./node_modules && rm -rf ./core/node_modules",
+    "preinstall": "npm --prefix ./core install",
     "test": "jest"
   },
   "prettier": {
