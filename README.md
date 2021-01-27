@@ -4,7 +4,7 @@ This repo is created with npm workspaces, this means `npm 7` is a requirement. I
 
 ## Running the judge
 
-This repo contains a few test exercises and test plans, located respecitvely in `./tests/projects` and `./tests/plans`. To start test, execute following commands:
+This repo contains a few test exercises and test plans, located respecitvely in `./tests/projects` and `./tests/plans`. To start a test, execute following commands:
 
 ```bash
 # This installs the dependencies for the core package and the root package
