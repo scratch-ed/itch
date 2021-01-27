@@ -7,6 +7,7 @@ import ScratchSVGRenderer from 'scratch-svg-renderer/dist/web/scratch-svg-render
 import AudioEngine from './external/audio_engine';
 import { makeProxiedRenderer } from './renderer';
 import ResultManager from './output';
+import ScratchRender from 'scratch-render/dist/web/scratch-render';
 
 const Events = {
   SCRATCH_PROJECT_START: 'PROJECT_START',
@@ -33,6 +34,36 @@ function wrapStep(vm) {
     }
     return oldResult;
   };
+}
+
+async function loadVm(vm, project, canvas = null, context = null) {
+  vm.setTurboMode(false);
+
+  // Set up the components.
+  const storage = new ScratchStorage();
+  vm.attachStorage(storage);
+  const audioEngine = new AudioEngine();
+  vm.attachAudioEngine(audioEngine);
+  vm.attachV2SVGAdapter(new ScratchSVGRenderer.SVGRenderer());
+  vm.attachV2BitmapAdapter(new ScratchSVGRenderer.BitmapAdapter());
+
+  // Set up the renderer, and inject our proxy.
+  if (context !== null) {
+    const renderer = makeProxiedRenderer(context, canvas);
+    vm.attachRenderer(renderer);
+  } else {
+    vm.attachRenderer(new ScratchRender(canvas));
+  }
+
+  if (context !== null) {
+    // Wrap the step function.
+    wrapStep(vm);
+  }
+
+  // Load the project.
+  await vm.loadProject(project);
+
+  return vm;
 }
 
 /**
@@ -169,40 +200,45 @@ export default class Context {
   }
 
   /**
+   * Extract the project.json from a sb3 project.
+   * 
+   * If you need the project JSON from the actual project you want to test,
+   * it's more efficient to use `prepareVm`, since that will re-use the created
+   * VM.
+   * 
+   * @param {EvalConfig} config
+   * @return {Promise<Object>}
+   */
+  async getProjectJson(config) {
+    if (!this.vm) {
+      this.vm = new VirtualMachine();
+    }
+    await loadVm(this.vm, config.template, config.canvas);
+    const json = JSON.parse(this.vm.toJSON());
+    this.vm.clear();
+    return json;
+  }
+
+  /**
    * Set-up the scratch vm. After calling this function,
    * the vmLoaded promise will be resolved.
    *
    * @param {EvalConfig} config
+   * 
+   * @return {Promise<Object>} The JSON representation of the 
    */
   async prepareVm(config) {
+    if (!this.vm) {
+      this.vm = new VirtualMachine();
+    }
     /**
      * The scratch virtual machine.
      *
      * @type {VirtualMachine};
      */
-    this.vm = new VirtualMachine();
-    this.vm.setTurboMode(false);
-
-    // Set up the components.
-    const storage = new ScratchStorage();
-    this.vm.attachStorage(storage);
-    const audioEngine = new AudioEngine();
-    this.vm.attachAudioEngine(audioEngine);
-    this.vm.attachV2SVGAdapter(new ScratchSVGRenderer.SVGRenderer());
-    this.vm.attachV2BitmapAdapter(new ScratchSVGRenderer.BitmapAdapter());
-
-    // Set up the renderer, and inject our proxy.
-    const renderer = makeProxiedRenderer(this, config.canvas);
-    this.vm.attachRenderer(renderer);
-
-    // Wrap the step function.
-    wrapStep(this.vm);
-    
+    await loadVm(this.vm, config.submission, config.canvas, this);
     // Attach handlers
     this.attachEventHandles();
-
-    // Load the project.
-    await this.vm.loadProject(config.submission);
     
     // Start the vm.
     this.vm.start();
@@ -212,6 +248,8 @@ export default class Context {
 
     console.log("Loading is finished.");
     this.vmLoaded.resolve();
+    
+    return JSON.parse(this.vm.toJSON());
   }
   
   prepareForExecution() {

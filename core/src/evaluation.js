@@ -27,8 +27,7 @@ function expose() {
  *
  * @typedef {Object} EvalConfig
  * @property {string|ArrayBuffer} submission - The submission sb3 data.
- * @property {string} templateJson - The JSON for the template.
- * @property {string} submissionJson - The JSON for the submission.
+ * @property {string|ArrayBuffer} template - The template sb3 file.
  * @property {HTMLCanvasElement} canvas - The canvas for the renderer.
  * @property {string} testplan - Location of the testplan.
  */
@@ -209,15 +208,15 @@ async function loadTestplan(value) {
  */
 export async function run(config) {
 
-  const context = await Context.create(config);
+  const context = new Context();
+  const templateJson = await context.getProjectJson(config);
+  const submissionJson = await context.prepareVm(config);
   const testplan = await loadTestplan(config.testplan);
 
   context.output.startTestTab('Testen uit het testplan');
   context.output.startTestContext();
 
   // Run the tests before the execution.
-  const templateJson = JSON.parse(config.templateJson);
-  const submissionJson = JSON.parse(config.submissionJson);
   testplan.beforeExecution(new Project(templateJson), new Project(submissionJson), context.output);
   context.output.closeTestContext();
 

@@ -2,9 +2,6 @@
 const path = require('path');
 const url = path.resolve(__dirname, 'scratch/scratch-test-environment.html');
 
-// unzipping
-const yauzl = require('yauzl');
-
 // puppeteer
 const puppeteer = require('puppeteer');
 
@@ -15,31 +12,6 @@ function toStdOut(output) {
 //
 // Judge
 //
-
-function projectToJson(where) {
-  const chunks = [];
-  const str = '';
-  yauzl.open(where, { lazyEntries: true }, function (err, zipfile) {
-    if (err) throw err;
-    zipfile.readEntry();
-    zipfile.on('entry', function (entry) {
-      if (entry.fileName === 'project.json') {
-        zipfile.openReadStream(entry, function (err, readStream) {
-          if (err) throw err;
-          readStream.on('end', function () {
-            str = Buffer.concat(chunks).toString('utd8');
-          });
-          readStream.on('data', function (data) {
-            chunks.push(data);
-          });
-        });
-      } else {
-        zipfile.readEntry();
-      }
-    });
-  });
-  return templateJSON;
-}
 
 class Judge {
   constructor(testFile, options = {}, outputStream = toStdOut) {
@@ -99,59 +71,8 @@ class Judge {
     
     await page.addScriptTag({ url: this.test_file });
 
-    let templateJSON = '';
     const sourceFileTemplate = path.resolve(__dirname, submissionFile);
     const templateFileTemplate = path.resolve(__dirname, templateFile);
-    yauzl.open(
-      templateFileTemplate,
-      { lazyEntries: true },
-      function (err, zipfile) {
-        if (err) throw err;
-        zipfile.readEntry();
-        zipfile.on('entry', function (entry) {
-          if (entry.fileName === 'project.json') {
-            zipfile.openReadStream(entry, function (err, readStream) {
-              if (err) throw err;
-              readStream.on('data', function (data) {
-                templateJSON += data;
-              });
-              readStream.on('end', function () {
-                //continue
-              });
-            });
-          } else {
-            zipfile.readEntry();
-          }
-        });
-      },
-    );
-
-    let testJSON = '';
-    // TODO: use file test
-    yauzl.open(
-      sourceFileTemplate,
-      { lazyEntries: true },
-      function (err, zipfile) {
-        if (err) throw err;
-        zipfile.readEntry();
-        zipfile.on('entry', function (entry) {
-          if (entry.fileName === 'project.json') {
-            zipfile.openReadStream(entry, function (err, readStream) {
-              if (err) throw err;
-              let json = '';
-              readStream.on('data', function (data) {
-                testJSON += data;
-              });
-              readStream.on('end', function () {
-                //continue
-              });
-            });
-          } else {
-            zipfile.readEntry();
-          }
-        });
-      },
-    );
 
     // START JUDGE
     this.out({ command: 'start-judgement' });
@@ -159,6 +80,8 @@ class Judge {
     /** @type {ElementHandle} */
     const fileHandle = await page.$('#file');
     await fileHandle.uploadFile(sourceFileTemplate);
+    const templateHandle = await page.$('#template');
+    await templateHandle.uploadFile(templateFileTemplate);
 
     await page.setViewport({height: 1080, width: 960});
     await page.waitForTimeout(50);
@@ -171,11 +94,9 @@ class Judge {
     }
 
     await page.evaluate(
-      (templateJSON, testJSON, testplan) => {
-        return runTests(templateJSON, testJSON, testplan);
+      (testplan) => {
+        return runTests(testplan);
       },
-      templateJSON,
-      testJSON,
       this.test_file
     );
 
