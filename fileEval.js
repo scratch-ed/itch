@@ -1,7 +1,7 @@
 /* Copyright (C) 2019 Ghent University - All Rights Reserved */
 
 const path = require('path');
-const config = require('./defaultConfig.js');
+const config = require('./config.js');
 require('dotenv').config();
 
 const { Judge } = require('./judge.js');
