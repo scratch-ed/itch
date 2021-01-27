@@ -27,7 +27,7 @@ PUPPETEER_BROWSER_PATH=/usr/bin/chromium
 
 ### npm installation fails
 
-Try cleaning your node_modules and reinstalling with following commands:
+Try cleaning your `node_modules` and reinstalling with following commands:
 
 ```bash
 npm run clean
