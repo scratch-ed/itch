@@ -5,7 +5,10 @@ function setupRoutes(server) {
 
     // TODO: judge.runTests here
 
-    res.send({ result: 'You did not write any code...' });
+    res.send({
+      result:
+        'Je bent nog niet begonnen met programmeren! Neem een blokje en go go go!',
+    });
     next();
   });
 }

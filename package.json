@@ -40,8 +40,9 @@
   },
   "scripts": {
     "start": "npm --prefix ./core run build && node fileEval.js",
+    "api": "npm --prefix ./api start",
     "clean": "rm -rf ./node_modules && rm -rf ./core/node_modules",
-    "preinstall": "npm --prefix ./core install",
+    "preinstall": "npm --prefix ./core install npm --prefix ./api install",
     "test": "jest"
   },
   "prettier": {
