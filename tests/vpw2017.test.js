@@ -1,7 +1,7 @@
 /* Copyright (C) 2020 Ghent University - All Rights Reserved */
 const { runTest, testStatuses } = require('./integration-runner');
 
-jest.setTimeout(20000);
+jest.setTimeout(2000000);
 
 test('01_mad_hatter', () => {
   return runTest(`vpw2017/${expect.getState().currentTestName}`)

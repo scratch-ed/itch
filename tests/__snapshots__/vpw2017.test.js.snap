@@ -30,6 +30,18 @@ Array [
     "description": "Na 1 klik op de hoed",
   },
   Object {
+    "command": "start-test",
+    "expected": "true",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "true",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
     "command": "close-testcase",
   },
   Object {
@@ -435,6 +447,18 @@ Array [
   Object {
     "command": "start-testcase",
     "description": "De papegaai heeft nog niet bewogen",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "true",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "true",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
   },
   Object {
     "command": "close-testcase",
@@ -867,6 +891,18 @@ Array [
     "description": "De Heks beweegt niet voor de klik",
   },
   Object {
+    "command": "start-test",
+    "expected": "true",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "true",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
     "command": "close-testcase",
   },
   Object {
@@ -966,6 +1002,18 @@ Array [
     "description": "De Heks beweegt niet voor de klik",
   },
   Object {
+    "command": "start-test",
+    "expected": "true",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "true",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
     "command": "close-testcase",
   },
   Object {
@@ -980,11 +1028,35 @@ Array [
     "description": "De heks is veranderd van positie",
   },
   Object {
+    "command": "start-test",
+    "expected": "true",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "true",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
     "command": "close-testcase",
   },
   Object {
     "command": "start-testcase",
     "description": "De heks is veranderd van positie",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "true",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "true",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
   },
   Object {
     "command": "close-testcase",

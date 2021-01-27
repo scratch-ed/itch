@@ -333,7 +333,7 @@ export default class SimulationEvent {
 
         }, extraWaitTime);
       });
-    }, 0, `CLICK ${spriteName}`);
+    }, 0, `CLICK ${data.spriteName || 'Stage'}`);
 
   }
 

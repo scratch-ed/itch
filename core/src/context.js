@@ -215,7 +215,7 @@ export default class Context {
     }
     await loadVm(this.vm, config.template, config.canvas);
     const json = JSON.parse(this.vm.toJSON());
-    this.vm.clear();
+    //this.vm.clear();
     return json;
   }
 

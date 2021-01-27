@@ -1,6 +1,6 @@
 /* Copyright (C) 2019 Ghent University - All Rights Reserved */
 import ScratchRender from 'scratch-render/dist/web/scratch-render';
-import { LogFrame, LogEvent } from './log';
+import { LogEvent, LogFrame } from './log';
 
 /**
  * Intercept events from pen extension.
@@ -38,7 +38,11 @@ function interceptPen(context, renderer) {
 
       const point = { x: argumentsList[2], y: argumentsList[3] };
       context.log.renderer.points.push(point);
-      const event = new LogEvent(context, 'renderer', { name: 'penPoint', point: point, color: argumentsList[1].color4f });
+      const event = new LogEvent(context, 'renderer', {
+        name: 'penPoint',
+        point: point,
+        color: argumentsList[1].color4f
+      });
       event.previousFrame = new LogFrame(context, 'penPoint');
       event.nextFrame = new LogFrame(context, 'penPointEnd');
       context.log.addEvent(event);
@@ -48,7 +52,6 @@ function interceptPen(context, renderer) {
   });
 
   // Intercept clear
-  // penClear
   const penClearOld = renderer.penClear;
   renderer.penClear = new Proxy(penClearOld, {
     apply: function (target, thisArg, argumentsList) {
@@ -76,7 +79,7 @@ function interceptPen(context, renderer) {
 export function makeProxiedRenderer(context, canvas) {
   const render = new ScratchRender(canvas);
   console.log('renderer created');
-  
+
   interceptPen(context, render);
 
   // text bubble creation
