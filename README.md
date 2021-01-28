@@ -4,7 +4,7 @@ This repo is created with npm workspaces, this means `npm 7` and `node 15` is a 
 
 ## Running the judge
 
-This repo contains a few test exercises and test plans, located respecitvely in `./tests/projects` and `./tests/plans`. You need to create a `config.js` file. You can copy `config.example.js` to get a configuration. A configuration file looks like this:
+This repo contains a few test exercises and test plans, located respectively in `./tests/projects` and `./tests/plans`. You need to create a `config.js` file. You can copy `config.example.js` to get a configuration. A configuration file looks like this:
 
 ```js
 // config.js
