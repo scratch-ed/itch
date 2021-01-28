@@ -4,9 +4,11 @@ This repo is created with npm workspaces, this means `npm 7` is a requirement. I
 
 ## Running the judge
 
-This repo contains a few test exercises and test plans, located respecitvely in `./tests/projects` and `./tests/plans`. You need to create a `config.js` file. You can copy `config.example.js` to a new file to get a configuration. A configuration file looks like this:
+This repo contains a few test exercises and test plans, located respecitvely in `./tests/projects` and `./tests/plans`. You need to create a `config.js` file. You can copy `config.example.js` to get a configuration. A configuration file looks like this:
 
 ```js
+// config.js
+
 module.exports = {
   resources: 'tests', // where the resources are located
   template: 'tests/projects/status/01.space_mission.sb3', // the template file, the starter project.
