@@ -1,6 +1,6 @@
 # scratch4d-judge
 
-This repo is created with npm workspaces, this means `npm 7` is a requirement. If you use `nvm`, you can simply execute `nvm use` to get the desired `node` and `npm` version.
+This repo is created with npm workspaces, this means `npm 7` and `node 15` is a requirement. If you use `nvm`, you can simply execute `nvm use` to get the desired `node` and `npm` version.
 
 ## Running the judge
 
