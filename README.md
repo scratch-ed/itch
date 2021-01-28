@@ -4,7 +4,27 @@ This repo is created with npm workspaces, this means `npm 7` is a requirement. I
 
 ## Running the judge
 
-This repo contains a few test exercises and test plans, located respecitvely in `./tests/projects` and `./tests/plans`. To start a test, execute following commands:
+This repo contains a few test exercises and test plans, located respecitvely in `./tests/projects` and `./tests/plans`. You need to create a `config.js` file. You can copy `config.example.js` to a new file to get a configuration. A configuration file looks like this:
+
+```js
+module.exports = {
+  resources: 'tests', // where the resources are located
+  template: 'tests/projects/status/01.space_mission.sb3', // the template file, the starter project.
+  source: 'tests/projects/status/01.space_mission.sb3', // the submitted scratch exercise
+  plan: 'plans/status/07.break_the_hay_bale_test.js', // the test plan you want to execute
+  time_limit: 20000,
+  memory_limit: 5000000,
+  natural_language: 'nl', 
+  programming_language: 'Scratch',
+  debug: true, // if this is true, puppeteer will open a new window
+  visualise: true,
+};
+
+```
+
+
+
+Then, execute these commands:
 
 ```bash
 # This installs the dependencies for the core package and the root package
