@@ -1,6 +1,6 @@
 /* Copyright (C) 2019 Ghent University - All Rights Reserved */
-import ScratchRender from 'scratch-render/dist/web/scratch-render';
-import { LogEvent, LogFrame } from './log';
+import ScratchRender from 'scratch-render';
+import { LogEvent, LogFrame } from './log.js';
 
 /**
  * Intercept events from pen extension.

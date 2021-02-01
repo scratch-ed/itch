@@ -1,6 +1,6 @@
 /* Copyright (C) 2019 Ghent University - All Rights Reserved */
-import { Log, LogEvent, LogFrame } from './log';
-import { Action } from './scratchThreads';
+import { Log, LogEvent, LogFrame } from './log.js';
+import { Action } from './scratchThreads.js';
 
 // TODO: can the action system be based on Promises instead?
 

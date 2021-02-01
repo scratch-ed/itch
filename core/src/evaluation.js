@@ -1,8 +1,11 @@
-import { searchFrames } from './log';
-import { numericEquals } from './utils';
-import Context from './context';
-import Deferred from './deferred';
-import Project from './project';
+// Neede for https://github.com/LLK/scratch-gui/issues/5025
+import "regenerator-runtime/runtime.js";
+
+import { searchFrames } from './log.js';
+import { numericEquals } from './utils.js';
+import Context from './context.js';
+import Deferred from './deferred.js';
+import Project from './project.js';
 
 let object;
 if (typeof global === 'undefined') {
@@ -195,7 +198,8 @@ async function loadTestplan(value) {
     // This does currently not work :(
     // Since we use file://, the mime type is wrong in Chrome.
     // See https://bugs.chromium.org/p/chromium/issues/detail?id=824651
-    return await import(value);
+    //return await import(value);
+    return null;
   }
 }
 

@@ -1,5 +1,5 @@
 /* Copyright (C) 2019 Ghent University - All Rights Reserved */
-import Deferred from './deferred';
+import Deferred from './deferred.js';
 
 export async function promiseTimeout(future, ms) {
 

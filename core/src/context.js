@@ -1,13 +1,16 @@
-import { Log, LogEvent, LogFrame } from './log';
-import SimulationEvent from './simulationEvent';
-import Deferred from './deferred';
-import VirtualMachine from 'scratch-vm/dist/web/scratch-vm';
-import ScratchStorage from 'scratch-storage/dist/web/scratch-storage';
-import ScratchSVGRenderer from 'scratch-svg-renderer/dist/web/scratch-svg-renderer';
-import AudioEngine from './external/audio_engine';
+import { Log, LogEvent, LogFrame } from './log.js';
+import SimulationEvent from './simulationEvent.js';
+import Deferred from './deferred.js';
+
+import VirtualMachine from 'scratch-vm';
+import ScratchStorage from 'scratch-storage';
+import ScratchSVGRenderer from 'scratch-svg-renderer';
+import AudioEngine from 'scratch-audio';
+import ScratchRender from 'scratch-render';
+
 import { makeProxiedRenderer } from './renderer';
 import ResultManager from './output';
-import ScratchRender from 'scratch-render/dist/web/scratch-render';
+
 
 const Events = {
   SCRATCH_PROJECT_START: 'PROJECT_START',
@@ -215,7 +218,7 @@ export default class Context {
     }
     await loadVm(this.vm, config.template, config.canvas);
     const json = JSON.parse(this.vm.toJSON());
-    //this.vm.clear();
+    // this.vm.clear();
     return json;
   }
 

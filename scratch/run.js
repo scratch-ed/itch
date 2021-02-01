@@ -1,4 +1,24 @@
-/** @type {Deferred<string|ArrayBuffer>} */
+class Deferred {
+  constructor() {
+    /**
+     * The promise. Use this to await completion.
+     * @type {Promise<R>}
+     */
+    this.promise = new Promise((resolve, reject) => {
+      /**
+       * Call to resolve the underlying promise.
+       * @type {function(R): void}
+       */
+      this.resolve = resolve;
+      /**
+       * Call to reject the underlying promise.
+       * @type {function(*): void}
+       */
+      this.reject = reject;
+    });
+  }
+}
+
 const submissionUpload = new Deferred();
 
 document.getElementById('file').addEventListener('change', e => {
