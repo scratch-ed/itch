@@ -1,4 +1,4 @@
-import isEqual from 'lodash-es/isEqual';
+import isEqual from 'lodash/isEqual';
 
 export class Sb3Variable {
   constructor(data) {

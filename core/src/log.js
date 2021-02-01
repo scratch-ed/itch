@@ -1,4 +1,4 @@
-import last from 'lodash-es/last';
+import last from 'lodash/last';
 import { containsBlock, containsLoop, countExecutions } from './blocks';
 import { findSquares, findTriangles, mergeLines, dist, distSq } from './lines';
 

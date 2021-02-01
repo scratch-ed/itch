@@ -1,6 +1,7 @@
 // const CopyWebpackPlugin = require('copy-webpack-plugin');
 const path = require('path');
 
+// Common config for web & node.
 const base = {
   mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
   devServer: {
@@ -15,22 +16,9 @@ const base = {
         include: [
           path.resolve(__dirname, 'src'),
           /node_modules[\\/]scratch-[^\\/]+[\\/]src/,
-          /node_modules[\\/]pify/,
-          /node_modules[\\/]@vernier[\\/]godirect/
         ],
         test: /\.js$/,
-        loader: 'babel-loader',
-        options: {
-          // Explicitly disable babelrc so we don't catch various config
-          // in much lower dependencies.
-          babelrc: false,
-          plugins: [
-            '@babel/plugin-syntax-dynamic-import',
-            '@babel/plugin-transform-async-to-generator',
-            '@babel/plugin-proposal-object-rest-spread',
-            ],
-          presets: ['@babel/preset-env']
-        }
+        loader: 'babel-loader'
       }
     ]
   },
