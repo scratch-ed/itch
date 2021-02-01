@@ -48,7 +48,7 @@
   "scripts": {
     "test": "jest",
     "build": "webpack --progress",
-    "docs": "jsdoc -c jsdoc.config.js",
+    "docs": "jsdoc -c jsdoc.config.json",
     "lint": "eslint .",
     "watch": "webpack --progress --watch"
   }
