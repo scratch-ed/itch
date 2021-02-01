@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = {
   plugins: [
     '@babel/plugin-syntax-dynamic-import',
@@ -5,13 +7,13 @@ module.exports = {
     '@babel/plugin-proposal-object-rest-spread',
     'lodash'
   ],
-  'presets': [
+  presets: [
     ['@babel/preset-env', {
-      'targets': {
-        'browsers': [
+      targets: {
+        browsers: [
           'last 3 versions'
         ],
-        'node': 'current'
+        node: 'current'
       }
     }]
   ]

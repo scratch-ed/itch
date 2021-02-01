@@ -1,5 +1,7 @@
-// const CopyWebpackPlugin = require('copy-webpack-plugin');
+'use strict';
+
 const path = require('path');
+const pack = require('./package.json');
 
 // Common config for web & node.
 const base = {
@@ -35,8 +37,8 @@ module.exports = [
     output: {
       library: 'itch-core',
       libraryTarget: 'umd',
-      path: path.resolve('dist', 'web'),
-      filename: '[name].js'
+      path: path.resolve(path.dirname(pack.browser)),
+      filename: path.basename(pack.browser)
     }
   }),
   // Node-compatible
@@ -48,8 +50,8 @@ module.exports = [
     output: {
       library: 'itch-core',
       libraryTarget: 'commonjs2',
-      path: path.resolve('dist', 'node'),
-      filename: '[name].js'
+      path: path.resolve(path.dirname(pack.main)),
+      filename: path.basename(pack.main)
     },
     externals: {
       '!ify-loader!grapheme-breaker': 'grapheme-breaker',
