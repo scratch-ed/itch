@@ -1,15 +1,15 @@
-import { Log, LogEvent, LogFrame } from './log.js';
-import SimulationEvent from './simulationEvent.js';
-import Deferred from './deferred.js';
-
 import VirtualMachine from 'scratch-vm';
 import ScratchStorage from 'scratch-storage';
 import ScratchSVGRenderer from 'scratch-svg-renderer';
 import AudioEngine from 'scratch-audio';
 import ScratchRender from 'scratch-render';
 
+import { Log, LogEvent, LogFrame } from './log.js';
+import SimulationEvent from './simulationEvent.js';
+import Deferred from './deferred.js';
 import { makeProxiedRenderer } from './renderer';
 import ResultManager from './output';
+import ScheduledEvent from './scheduler.js';
 
 
 const Events = {
@@ -117,8 +117,12 @@ export default class Context {
     /**
      * Control events.
      * @type {SimulationEvent}
+     * @deprecated
      */
     this.simulationChain = new SimulationEvent(this, null, null);
+    
+    /** @type {ScheduledEvent} */
+    this.event = ScheduledEvent.create();
     /**
      * Output manager
      */

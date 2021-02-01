@@ -3,9 +3,9 @@
 function duringExecution(e) {
   e.actionTimeout = 15000;
 
-  e.eventScheduling
+  e.scheduler
     // TODO: we don't want to wait here.
-    .greenFlag({ sync: false })
+    .greenFlag(false)
     .wait(12000)
     .end();
 }

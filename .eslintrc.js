@@ -22,6 +22,7 @@ module.exports = {
         argsIgnorePattern: '^_'
       },
     ],
+    "promise/param-names": "off"
   },
   plugins: ['jest'],
 };

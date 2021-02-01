@@ -3,7 +3,7 @@
 function duringExecution(e) {
   e.answers = ['Louise'];
 
-  e.eventScheduling
+  e.scheduler
     .greenFlag()
     .end();
 }

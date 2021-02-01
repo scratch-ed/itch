@@ -51,7 +51,7 @@ test('06_voetballende_kat', () => {
     .then(result => {
       expect(result).toMatchSnapshot();
       expect(testStatuses(result)).onlyStatusesIs('correct');
-      expect(result).minimumCommands('close-testcase', 3);
+      expect(result).minimumCommands('close-testcase', 2);
     });
 });
 
@@ -60,7 +60,7 @@ test('07_heksenjacht_eenvoudig', () => {
     .then(result => {
       expect(result).toMatchSnapshot();
       expect(testStatuses(result)).onlyStatusesIs('correct');
-      expect(result).minimumCommands('close-testcase', 6);
+      expect(result).minimumCommands('close-testcase', 5);
     });
 });
 
@@ -69,7 +69,7 @@ test('07_heksenjacht', () => {
     .then(result => {
       expect(result).toMatchSnapshot();
       expect(testStatuses(result)).onlyStatusesIs('correct');
-      expect(result).minimumCommands('close-testcase', 9);
+      expect(result).minimumCommands('close-testcase', 8);
     });
 });
 

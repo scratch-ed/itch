@@ -33,15 +33,18 @@ function beforeExecution(template, submission, output) {
 /** @param {Evaluation} e */
 function duringExecution(e) {
   e.actionTimeout = 30000;
-  e.eventScheduling
-    .greenFlag({sync: false})
+  e.scheduler
+    .greenFlag(false)
     .wait(1000)
-    .test('Het ruimteschip staat klaar', 'Het ruimteschip mag niet bewegen voor er op 1 gedrukt wordt.',
-      (log) => {
-      console.log("Doing test!");
-      return !log.hasSpriteMoved('Ruimteschip'); 
+    .log(() => {
+      e.output.addTest(
+        'Het ruimteschip staat klaar',
+        false,
+        e.log.hasSpriteMoved('Ruimteschip'),
+        'Het ruimteschip mag niet bewegen voor er op 1 gedrukt wordt.'
+      )
     })
-    .pressKey({ key: '1'})
+    .pressKey('1')
     .end();
 }
 

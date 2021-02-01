@@ -3,18 +3,17 @@
 function duringExecution(e) {
   e.actionTimeout = 7000;
 
-  e.eventScheduling
+  e.scheduler
     .wait(500)
-    .test('De Heks beweegt niet voor de klik', 'De heks bewoog nog voor er op geklikt werd', (log) => {
-      // De heks mag nog maar op 1 locatie geweest zijn
-      return log.getSpriteLocations('Heks') <= 1;
+    .log(() => {
+      e.output.addTest('De Heks beweegt niet voor de klik',
+        false,
+        e.log.hasSpriteMoved('Heks'),
+        'De heks bewoog nog voor er op geklikt werd'
+      );
     })
-    .clickSprite({ spriteName: 'Heks', sync: false }) // De eerste klik laat heks starten met bewegen.
-    .range(0, 4000, 50, (index, anchor) => { // Manueel elke 50 ms, 4000 ms lang, de sprites loggen.
-      return anchor
-        .wait(50)
-        .log();
-    })
+    .clickSprite('Heks', false) // De eerste klik laat heks starten met bewegen.
+    .forEach(_.range(0, 4000, 50), (event) => event.wait(50).log()) // Manueel elke 50 ms, 4000 ms lang, de sprites loggen.
     .end();
 }
 

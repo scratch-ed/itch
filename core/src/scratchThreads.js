@@ -1,26 +1,6 @@
 /* Copyright (C) 2019 Ghent University - All Rights Reserved */
 import Deferred from './deferred.js';
 
-export async function promiseTimeout(future, ms) {
-
-  // Create a promise that rejects in <ms> milliseconds
-  const timeout = new Promise((resolve, reject) => {
-    setTimeout(() => {
-      reject('Timed out in ' + ms + 'ms.');
-    }, ms);
-  });
-
-  const promise = new Promise((resolve, reject) => {
-    future.promise.then(() => resolve());
-  });
-
-  // Returns a race between our timeout and the passed in promise
-  return Promise.race([
-    promise,
-    timeout
-  ]);
-}
-
 export class Action {
   /**
    * 
@@ -30,12 +10,13 @@ export class Action {
   constructor(context, topBlocks) {
     this.startTime = context.timestamp();
     this.topBlocks = topBlocks;
+    /** @type {Deferred<string>} */
     this.actionEnded = new Deferred();
     this.active = true;
 
     // if the list with topBlocks is empty, no threads have started
     if (topBlocks === undefined || topBlocks.length === 0) {
-      this.actionEnded.resolve();
+      this.actionEnded.resolve('no threads found');
     }
   }
 
@@ -47,7 +28,7 @@ export class Action {
       }
     }
     if (newTopBlocks.length === 0) {
-      this.actionEnded.resolve();
+      this.actionEnded.resolve('all threads completed');
       this.active = false;
     }
     this.topBlocks = newTopBlocks;

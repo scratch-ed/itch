@@ -13,8 +13,21 @@ Array [
     "command": "start-context",
   },
   Object {
+    "command": "close-context",
+  },
+  Object {
+    "command": "close-tab",
+  },
+  Object {
+    "command": "start-tab",
+    "title": "Controle op vakjes",
+  },
+  Object {
+    "command": "start-context",
+  },
+  Object {
     "command": "start-testcase",
-    "description": "Niet geprutst aan vakjes",
+    "description": "Vakje0 is niet veranderd",
   },
   Object {
     "command": "start-test",
@@ -25,431 +38,689 @@ Array [
     "generated": "false",
     "status": Object {
       "enum": "correct",
-      "human": "Juist",
-    },
-  },
-  Object {
-    "command": "start-test",
-    "expected": "false",
-  },
-  Object {
-    "command": "close-test",
-    "generated": "false",
-    "status": Object {
-      "enum": "correct",
-      "human": "Juist",
-    },
-  },
-  Object {
-    "command": "start-test",
-    "expected": "false",
-  },
-  Object {
-    "command": "close-test",
-    "generated": "false",
-    "status": Object {
-      "enum": "correct",
-      "human": "Juist",
-    },
-  },
-  Object {
-    "command": "start-test",
-    "expected": "false",
-  },
-  Object {
-    "command": "close-test",
-    "generated": "false",
-    "status": Object {
-      "enum": "correct",
-      "human": "Juist",
-    },
-  },
-  Object {
-    "command": "start-test",
-    "expected": "false",
-  },
-  Object {
-    "command": "close-test",
-    "generated": "false",
-    "status": Object {
-      "enum": "correct",
-      "human": "Juist",
-    },
-  },
-  Object {
-    "command": "start-test",
-    "expected": "false",
-  },
-  Object {
-    "command": "close-test",
-    "generated": "false",
-    "status": Object {
-      "enum": "correct",
-      "human": "Juist",
-    },
-  },
-  Object {
-    "command": "start-test",
-    "expected": "false",
-  },
-  Object {
-    "command": "close-test",
-    "generated": "false",
-    "status": Object {
-      "enum": "correct",
-      "human": "Juist",
-    },
-  },
-  Object {
-    "command": "start-test",
-    "expected": "false",
-  },
-  Object {
-    "command": "close-test",
-    "generated": "false",
-    "status": Object {
-      "enum": "correct",
-      "human": "Juist",
-    },
-  },
-  Object {
-    "command": "start-test",
-    "expected": "false",
-  },
-  Object {
-    "command": "close-test",
-    "generated": "false",
-    "status": Object {
-      "enum": "correct",
-      "human": "Juist",
-    },
-  },
-  Object {
-    "command": "start-test",
-    "expected": "false",
-  },
-  Object {
-    "command": "close-test",
-    "generated": "false",
-    "status": Object {
-      "enum": "correct",
-      "human": "Juist",
-    },
-  },
-  Object {
-    "command": "start-test",
-    "expected": "false",
-  },
-  Object {
-    "command": "close-test",
-    "generated": "false",
-    "status": Object {
-      "enum": "correct",
-      "human": "Juist",
-    },
-  },
-  Object {
-    "command": "start-test",
-    "expected": "false",
-  },
-  Object {
-    "command": "close-test",
-    "generated": "false",
-    "status": Object {
-      "enum": "correct",
-      "human": "Juist",
-    },
-  },
-  Object {
-    "command": "start-test",
-    "expected": "false",
-  },
-  Object {
-    "command": "close-test",
-    "generated": "false",
-    "status": Object {
-      "enum": "correct",
-      "human": "Juist",
-    },
-  },
-  Object {
-    "command": "start-test",
-    "expected": "false",
-  },
-  Object {
-    "command": "close-test",
-    "generated": "false",
-    "status": Object {
-      "enum": "correct",
-      "human": "Juist",
-    },
-  },
-  Object {
-    "command": "start-test",
-    "expected": "false",
-  },
-  Object {
-    "command": "close-test",
-    "generated": "false",
-    "status": Object {
-      "enum": "correct",
-      "human": "Juist",
-    },
-  },
-  Object {
-    "command": "start-test",
-    "expected": "false",
-  },
-  Object {
-    "command": "close-test",
-    "generated": "false",
-    "status": Object {
-      "enum": "correct",
-      "human": "Juist",
-    },
-  },
-  Object {
-    "command": "start-test",
-    "expected": "false",
-  },
-  Object {
-    "command": "close-test",
-    "generated": "false",
-    "status": Object {
-      "enum": "correct",
-      "human": "Juist",
-    },
-  },
-  Object {
-    "command": "start-test",
-    "expected": "false",
-  },
-  Object {
-    "command": "close-test",
-    "generated": "false",
-    "status": Object {
-      "enum": "correct",
-      "human": "Juist",
-    },
-  },
-  Object {
-    "command": "start-test",
-    "expected": "false",
-  },
-  Object {
-    "command": "close-test",
-    "generated": "false",
-    "status": Object {
-      "enum": "correct",
-      "human": "Juist",
-    },
-  },
-  Object {
-    "command": "start-test",
-    "expected": "false",
-  },
-  Object {
-    "command": "close-test",
-    "generated": "false",
-    "status": Object {
-      "enum": "correct",
-      "human": "Juist",
-    },
-  },
-  Object {
-    "command": "start-test",
-    "expected": "false",
-  },
-  Object {
-    "command": "close-test",
-    "generated": "false",
-    "status": Object {
-      "enum": "correct",
-      "human": "Juist",
-    },
-  },
-  Object {
-    "command": "start-test",
-    "expected": "false",
-  },
-  Object {
-    "command": "close-test",
-    "generated": "false",
-    "status": Object {
-      "enum": "correct",
-      "human": "Juist",
-    },
-  },
-  Object {
-    "command": "start-test",
-    "expected": "false",
-  },
-  Object {
-    "command": "close-test",
-    "generated": "false",
-    "status": Object {
-      "enum": "correct",
-      "human": "Juist",
-    },
-  },
-  Object {
-    "command": "start-test",
-    "expected": "false",
-  },
-  Object {
-    "command": "close-test",
-    "generated": "false",
-    "status": Object {
-      "enum": "correct",
-      "human": "Juist",
-    },
-  },
-  Object {
-    "command": "start-test",
-    "expected": "false",
-  },
-  Object {
-    "command": "close-test",
-    "generated": "false",
-    "status": Object {
-      "enum": "correct",
-      "human": "Juist",
-    },
-  },
-  Object {
-    "command": "start-test",
-    "expected": "false",
-  },
-  Object {
-    "command": "close-test",
-    "generated": "false",
-    "status": Object {
-      "enum": "correct",
-      "human": "Juist",
-    },
-  },
-  Object {
-    "command": "start-test",
-    "expected": "false",
-  },
-  Object {
-    "command": "close-test",
-    "generated": "false",
-    "status": Object {
-      "enum": "correct",
-      "human": "Juist",
-    },
-  },
-  Object {
-    "command": "start-test",
-    "expected": "false",
-  },
-  Object {
-    "command": "close-test",
-    "generated": "false",
-    "status": Object {
-      "enum": "correct",
-      "human": "Juist",
-    },
-  },
-  Object {
-    "command": "start-test",
-    "expected": "false",
-  },
-  Object {
-    "command": "close-test",
-    "generated": "false",
-    "status": Object {
-      "enum": "correct",
-      "human": "Juist",
-    },
-  },
-  Object {
-    "command": "start-test",
-    "expected": "false",
-  },
-  Object {
-    "command": "close-test",
-    "generated": "false",
-    "status": Object {
-      "enum": "correct",
-      "human": "Juist",
-    },
-  },
-  Object {
-    "command": "start-test",
-    "expected": "false",
-  },
-  Object {
-    "command": "close-test",
-    "generated": "false",
-    "status": Object {
-      "enum": "correct",
-      "human": "Juist",
-    },
-  },
-  Object {
-    "command": "start-test",
-    "expected": "false",
-  },
-  Object {
-    "command": "close-test",
-    "generated": "false",
-    "status": Object {
-      "enum": "correct",
-      "human": "Juist",
-    },
-  },
-  Object {
-    "command": "start-test",
-    "expected": "false",
-  },
-  Object {
-    "command": "close-test",
-    "generated": "false",
-    "status": Object {
-      "enum": "correct",
-      "human": "Juist",
-    },
-  },
-  Object {
-    "command": "start-test",
-    "expected": "false",
-  },
-  Object {
-    "command": "close-test",
-    "generated": "false",
-    "status": Object {
-      "enum": "correct",
-      "human": "Juist",
-    },
-  },
-  Object {
-    "command": "start-test",
-    "expected": "false",
-  },
-  Object {
-    "command": "close-test",
-    "generated": "false",
-    "status": Object {
-      "enum": "correct",
-      "human": "Juist",
-    },
-  },
-  Object {
-    "command": "start-test",
-    "expected": "false",
-  },
-  Object {
-    "command": "close-test",
-    "generated": "false",
-    "status": Object {
-      "enum": "correct",
-      "human": "Juist",
+      "human": "Correct",
     },
   },
   Object {
     "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Vakje1 is niet veranderd",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "false",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "false",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Vakje2 is niet veranderd",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "false",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "false",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Vakje3 is niet veranderd",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "false",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "false",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Vakje4 is niet veranderd",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "false",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "false",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Vakje5 is niet veranderd",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "false",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "false",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Vakje6 is niet veranderd",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "false",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "false",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Vakje7 is niet veranderd",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "false",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "false",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Vakje8 is niet veranderd",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "false",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "false",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Vakje9 is niet veranderd",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "false",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "false",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Vakje10 is niet veranderd",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "false",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "false",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Vakje11 is niet veranderd",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "false",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "false",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Vakje12 is niet veranderd",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "false",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "false",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Vakje13 is niet veranderd",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "false",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "false",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Vakje14 is niet veranderd",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "false",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "false",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Vakje15 is niet veranderd",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "false",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "false",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Vakje16 is niet veranderd",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "false",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "false",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Vakje17 is niet veranderd",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "false",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "false",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Vakje18 is niet veranderd",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "false",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "false",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Vakje19 is niet veranderd",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "false",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "false",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Vakje20 is niet veranderd",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "false",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "false",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Vakje21 is niet veranderd",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "false",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "false",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Vakje22 is niet veranderd",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "false",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "false",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Vakje23 is niet veranderd",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "false",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "false",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Vakje24 is niet veranderd",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "false",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "false",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Vakje25 is niet veranderd",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "false",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "false",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Vakje26 is niet veranderd",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "false",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "false",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Vakje27 is niet veranderd",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "false",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "false",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Vakje28 is niet veranderd",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "false",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "false",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Vakje29 is niet veranderd",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "false",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "false",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Vakje30 is niet veranderd",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "false",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "false",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Vakje31 is niet veranderd",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "false",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "false",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Vakje32 is niet veranderd",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "false",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "false",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Vakje33 is niet veranderd",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "false",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "false",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Vakje34 is niet veranderd",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "false",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "false",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Vakje35 is niet veranderd",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "false",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "false",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "close-context",
+  },
+  Object {
+    "command": "close-tab",
+  },
+  Object {
+    "command": "start-tab",
+    "title": "Andere vakjes",
+  },
+  Object {
+    "command": "start-context",
   },
   Object {
     "command": "start-testcase",
@@ -474,6 +745,16 @@ Array [
     "command": "close-context",
   },
   Object {
+    "command": "close-tab",
+  },
+  Object {
+    "command": "close-context",
+  },
+  Object {
+    "command": "start-tab",
+    "title": "Tests",
+  },
+  Object {
     "command": "start-context",
   },
   Object {
@@ -481,17 +762,35 @@ Array [
     "description": "Het ruimteschip staat klaar",
   },
   Object {
-    "command": "close-testcase",
+    "command": "start-test",
+    "expected": "false",
   },
   Object {
-    "command": "start-testcase",
-    "description": "Druk op toets: 1",
+    "command": "close-test",
+    "generated": "false",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
   },
   Object {
     "command": "close-testcase",
   },
   Object {
     "command": "close-context",
+  },
+  Object {
+    "command": "start-context",
+  },
+  Object {
+    "command": "close-context",
+  },
+  Object {
+    "command": "close-tab",
+  },
+  Object {
+    "command": "start-tab",
+    "title": "Controle op kogels",
   },
   Object {
     "command": "start-context",
@@ -573,6 +872,19 @@ Array [
     "command": "close-testcase",
   },
   Object {
+    "command": "close-context",
+  },
+  Object {
+    "command": "close-tab",
+  },
+  Object {
+    "command": "start-tab",
+    "title": "Controle op brandstof",
+  },
+  Object {
+    "command": "start-context",
+  },
+  Object {
     "command": "start-testcase",
     "description": "Vakje20 bevat brandstof",
   },
@@ -650,6 +962,9 @@ Array [
   },
   Object {
     "command": "close-context",
+  },
+  Object {
+    "command": "close-tab",
   },
   Object {
     "command": "close-context",

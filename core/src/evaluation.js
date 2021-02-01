@@ -1,10 +1,9 @@
 // Neede for https://github.com/LLK/scratch-gui/issues/5025
-import "regenerator-runtime/runtime.js";
+import 'regenerator-runtime/runtime.js';
 
 import { searchFrames } from './log.js';
 import { numericEquals } from './utils.js';
 import Context from './context.js';
-import Deferred from './deferred.js';
 import Project from './project.js';
 
 let object;
@@ -16,7 +15,7 @@ if (typeof global === 'undefined') {
 
 /**
  * Expose the some API in the global namespace.
- * 
+ *
  * TODO: move these elsewhere.
  */
 function expose() {
@@ -110,16 +109,26 @@ class Evaluation {
    * Get the event scheduler.
    *
    * @return {SimulationEvent}
+   * @deprecated
    */
   get eventScheduling() {
     return this.context.simulationChain;
   }
-  
+
+  /**
+   * Get the event scheduler.
+   *
+   * @return {ScheduledEvent}
+   */
+  get scheduler() {
+    return this.context.event;
+  }
+
   /** @param {number} timeout */
   set actionTimeout(timeout) {
     this.context.actionTimeout = timeout;
   }
-  
+
   /** @return {number} */
   get actionTimeout() {
     return this.context.actionTimeout;
@@ -172,7 +181,7 @@ function defaultDuringExecution(evaluation) {
  * in this stage are in the category of checking the end state of the
  * execution: checking how the project reacted to the instructions
  * scheduled in the "duringExecution" step.
- * 
+ *
  * @callback AfterExecution
  * @param {Evaluation} evaluation - The judge object, providing the API.
  * @return {void} Nothing -> ignored.
@@ -185,22 +194,14 @@ function defaultAfterExecution(evaluation) {
 }
 
 async function loadTestplan(value) {
-  if (typeof window !== 'undefined') {
-    return {
-      /** @type {BeforeExecution} */
-      beforeExecution: window.beforeExecution || defaultBeforeExecution,
-      /** @type {DuringExecution} */
-      duringExecution: window.duringExecution || defaultDuringExecution,
-      /** @type {AfterExecution} */
-      afterExecution: window.afterExecution || defaultAfterExecution
-    };
-  } else {
-    // This does currently not work :(
-    // Since we use file://, the mime type is wrong in Chrome.
-    // See https://bugs.chromium.org/p/chromium/issues/detail?id=824651
-    //return await import(value);
-    return null;
-  }
+  return {
+    /** @type {BeforeExecution} */
+    beforeExecution: window.beforeExecution || defaultBeforeExecution,
+    /** @type {DuringExecution} */
+    duringExecution: window.duringExecution || defaultDuringExecution,
+    /** @type {AfterExecution} */
+    afterExecution: window.afterExecution || defaultAfterExecution
+  };
 }
 
 /**
@@ -238,6 +239,7 @@ export async function run(config) {
   // Run the events.
   context.output.startTestContext();
   await context.simulationChain.launch();
+  await context.event.run(context);
   await context.simulationEnd.promise;
   context.output.closeTestContext();
 
@@ -252,6 +254,3 @@ export async function run(config) {
 
 // Main function in the judge.
 object.run = run;
-
-// Small utility we need.
-object.Deferred = Deferred;

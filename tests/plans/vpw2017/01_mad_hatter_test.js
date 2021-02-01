@@ -33,22 +33,20 @@ function beforeExecution(template, submission, output) {
 /** @param {Evaluation} e */
 function duringExecution(e) {
   let firstHat = null;
-
-  e.eventScheduling
-    .log((log) => {
-      firstHat = log.sprites.getSprite('Hat');
+  
+  e.scheduler
+    .log(() => { firstHat = e.log.sprites.getSprite('Hat') })
+    .clickSprite('Hat')
+    .log(() => {
+      const secondHat = e.log.sprites.getSprite('Hat');
+      e.output.addTest('Hoed verandert bij klikken',
+        firstHat.currentCostume === secondHat.currentCostume,
+        false,
+        'De hoed moet veranderen wanneer er op geklikt wordt')
     })
-    .clickSprite({ spriteName: 'Hat', sync: true })
-    .test('Na 1 klik op de hoed', 'De hoed moet veranderen wanneer er op geklikt wordt', (log) => {
-      const secondHat = log.sprites.getSprite('Hat');
-      return firstHat.currentCostume !== secondHat.currentCostume;
-    })
-    .foreach(
+    .forEach(
       ['Hat', 'Stage', 'Nori', 'Hat', 'Hat', 'Hat', 'Hat', 'Stage', 'Nori', 'Nori', 'Hat', 'Hat', 'Hat'],
-      (index, target, anchor) => {
-        return anchor
-          .clickSprite({ spriteName: target, sync: true });
-      }
+      (event, hat) => event.clickSprite(hat)
     )
     .end();
 }

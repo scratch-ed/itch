@@ -20,117 +20,19 @@ Array [
   },
   Object {
     "command": "start-testcase",
-    "description": "Klik op sprite: Hat",
-  },
-  Object {
-    "command": "close-testcase",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "Na 1 klik op de hoed",
+    "description": "Hoed verandert bij klikken",
   },
   Object {
     "command": "start-test",
-    "expected": "true",
+    "expected": "false",
   },
   Object {
     "command": "close-test",
-    "generated": "true",
+    "generated": "false",
     "status": Object {
       "enum": "correct",
       "human": "Correct",
     },
-  },
-  Object {
-    "command": "close-testcase",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "Klik op sprite: Hat",
-  },
-  Object {
-    "command": "close-testcase",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "Klik op sprite: Stage",
-  },
-  Object {
-    "command": "close-testcase",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "Klik op sprite: Nori",
-  },
-  Object {
-    "command": "close-testcase",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "Klik op sprite: Hat",
-  },
-  Object {
-    "command": "close-testcase",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "Klik op sprite: Hat",
-  },
-  Object {
-    "command": "close-testcase",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "Klik op sprite: Hat",
-  },
-  Object {
-    "command": "close-testcase",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "Klik op sprite: Hat",
-  },
-  Object {
-    "command": "close-testcase",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "Klik op sprite: Stage",
-  },
-  Object {
-    "command": "close-testcase",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "Klik op sprite: Nori",
-  },
-  Object {
-    "command": "close-testcase",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "Klik op sprite: Nori",
-  },
-  Object {
-    "command": "close-testcase",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "Klik op sprite: Hat",
-  },
-  Object {
-    "command": "close-testcase",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "Klik op sprite: Hat",
-  },
-  Object {
-    "command": "close-testcase",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "Klik op sprite: Hat",
   },
   Object {
     "command": "close-testcase",
@@ -450,22 +352,15 @@ Array [
   },
   Object {
     "command": "start-test",
-    "expected": "true",
+    "expected": "false",
   },
   Object {
     "command": "close-test",
-    "generated": "true",
+    "generated": "false",
     "status": Object {
       "enum": "correct",
       "human": "Correct",
     },
-  },
-  Object {
-    "command": "close-testcase",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "Klik op sprite: Papegaai",
   },
   Object {
     "command": "close-testcase",
@@ -481,32 +376,23 @@ Array [
     "description": "De papegaai beweegt niet verticaal",
   },
   Object {
-    "command": "close-testcase",
+    "command": "start-test",
+    "expected": "true",
   },
   Object {
-    "command": "start-testcase",
-    "description": "De papegaai raakt de rand bij het veranderen van richting",
-  },
-  Object {
-    "command": "close-testcase",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "De papegaai vliegt horizontaal",
-  },
-  Object {
-    "command": "close-testcase",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "De papegaai raakt de rand bij het veranderen van richting",
+    "command": "close-test",
+    "generated": "true",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
   },
   Object {
     "command": "close-testcase",
   },
   Object {
     "command": "start-testcase",
-    "description": "De papegaai vliegt horizontaal",
+    "description": "De papegaai vliegt juist",
   },
   Object {
     "command": "close-testcase",
@@ -516,11 +402,35 @@ Array [
     "description": "De papegaai raakt de rand bij het veranderen van richting",
   },
   Object {
+    "command": "start-test",
+    "expected": "true",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "true",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
     "command": "close-testcase",
   },
   Object {
     "command": "start-testcase",
     "description": "De papegaai vliegt horizontaal",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "true",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "true",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
   },
   Object {
     "command": "close-testcase",
@@ -530,11 +440,35 @@ Array [
     "description": "De papegaai raakt de rand bij het veranderen van richting",
   },
   Object {
+    "command": "start-test",
+    "expected": "true",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "true",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
     "command": "close-testcase",
   },
   Object {
     "command": "start-testcase",
     "description": "De papegaai vliegt horizontaal",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "true",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "true",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
   },
   Object {
     "command": "close-testcase",
@@ -544,11 +478,35 @@ Array [
     "description": "De papegaai raakt de rand bij het veranderen van richting",
   },
   Object {
+    "command": "start-test",
+    "expected": "true",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "true",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
     "command": "close-testcase",
   },
   Object {
     "command": "start-testcase",
     "description": "De papegaai vliegt horizontaal",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "true",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "true",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
   },
   Object {
     "command": "close-testcase",
@@ -558,11 +516,35 @@ Array [
     "description": "De papegaai raakt de rand bij het veranderen van richting",
   },
   Object {
+    "command": "start-test",
+    "expected": "true",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "true",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
     "command": "close-testcase",
   },
   Object {
     "command": "start-testcase",
     "description": "De papegaai vliegt horizontaal",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "true",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "true",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
   },
   Object {
     "command": "close-testcase",
@@ -572,11 +554,35 @@ Array [
     "description": "De papegaai raakt de rand bij het veranderen van richting",
   },
   Object {
+    "command": "start-test",
+    "expected": "true",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "true",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
     "command": "close-testcase",
   },
   Object {
     "command": "start-testcase",
     "description": "De papegaai vliegt horizontaal",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "true",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "true",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
   },
   Object {
     "command": "close-testcase",
@@ -586,11 +592,152 @@ Array [
     "description": "De papegaai raakt de rand bij het veranderen van richting",
   },
   Object {
+    "command": "start-test",
+    "expected": "true",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "true",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
     "command": "close-testcase",
   },
   Object {
     "command": "start-testcase",
     "description": "De papegaai vliegt horizontaal",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "true",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "true",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "De papegaai raakt de rand bij het veranderen van richting",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "true",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "true",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "De papegaai vliegt horizontaal",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "true",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "true",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "De papegaai raakt de rand bij het veranderen van richting",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "true",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "true",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "De papegaai vliegt horizontaal",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "true",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "true",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "De papegaai raakt de rand bij het veranderen van richting",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "true",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "true",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "De papegaai vliegt horizontaal",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "true",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "true",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
   },
   Object {
     "command": "close-testcase",
@@ -600,11 +747,35 @@ Array [
     "description": "De papegaai veranderde minimum 2 keer van richting",
   },
   Object {
+    "command": "start-test",
+    "expected": "true",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "true",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
     "command": "close-testcase",
   },
   Object {
     "command": "start-testcase",
     "description": "Papegaai klappert met vleugels",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "true",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "true",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
   },
   Object {
     "command": "close-testcase",
@@ -614,11 +785,35 @@ Array [
     "description": "Gebruik van een lus",
   },
   Object {
+    "command": "start-test",
+    "expected": "true",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "true",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
     "command": "close-testcase",
   },
   Object {
     "command": "start-testcase",
     "description": "Correcte gebruik van de lus",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "true",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "true",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
   },
   Object {
     "command": "close-testcase",
@@ -816,13 +1011,6 @@ Array [
     "command": "start-context",
   },
   Object {
-    "command": "start-testcase",
-    "description": "Druk op toets:  ",
-  },
-  Object {
-    "command": "close-testcase",
-  },
-  Object {
     "command": "close-context",
   },
   Object {
@@ -878,22 +1066,15 @@ Array [
   },
   Object {
     "command": "start-test",
-    "expected": "true",
+    "expected": "false",
   },
   Object {
     "command": "close-test",
-    "generated": "true",
+    "generated": "false",
     "status": Object {
       "enum": "correct",
       "human": "Correct",
     },
-  },
-  Object {
-    "command": "close-testcase",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "Klik op sprite: Heks",
   },
   Object {
     "command": "close-testcase",
@@ -989,22 +1170,15 @@ Array [
   },
   Object {
     "command": "start-test",
-    "expected": "true",
+    "expected": "false",
   },
   Object {
     "command": "close-test",
-    "generated": "true",
+    "generated": "false",
     "status": Object {
       "enum": "correct",
       "human": "Correct",
     },
-  },
-  Object {
-    "command": "close-testcase",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "Klik op sprite: Heks",
   },
   Object {
     "command": "close-testcase",

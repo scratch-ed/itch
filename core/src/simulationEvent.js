@@ -21,6 +21,7 @@ import { Action } from './scratchThreads.js';
  * @param {number} delay
  *
  * @return {EventAction<D>}
+ * @deprecated
  */
 function delayedAction(data, delay) {
   return ((resolve, _reject) => {
@@ -32,6 +33,7 @@ function delayedAction(data, delay) {
 
 /**
  * Promise based scheduler for Scratch events.
+ * @deprecated
  */
 export default class SimulationEvent {
   /**

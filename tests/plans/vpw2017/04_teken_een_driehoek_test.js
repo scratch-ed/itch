@@ -3,8 +3,8 @@
 function duringExecution(e) {
   e.actionTimeout = 2000;
 
-  e.eventScheduling
-    .greenFlag({ sync: true })
+  e.scheduler
+    .greenFlag()
     .end();
 }
 

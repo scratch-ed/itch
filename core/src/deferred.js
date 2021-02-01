@@ -17,7 +17,7 @@ export default class Deferred {
       this.resolve = resolve;
       /**
        * Call to reject the underlying promise.
-       * @type {function(*): void}
+       * @type {function(Error): void}
        */
       this.reject = reject;
     });

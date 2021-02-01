@@ -17,35 +17,43 @@ function duringExecution(e) {
 
   const heksPositie = {}; // We slaan de positie van de heks op om op te testen tijdens de uitvoering
 
-  e.eventScheduling
-    .log((log) => {
-      heksPositie.x = log.sprites.getSprite('Heks').x; // De eerste positie van de heks wordt opgeslagen.
-      heksPositie.y = log.sprites.getSprite('Heks').y;
+  e.scheduler
+    .log(() => {
+      heksPositie.x = e.log.sprites.getSprite('Heks').x; // De eerste positie van de heks wordt opgeslagen.
+      heksPositie.y = e.log.sprites.getSprite('Heks').y;
     })
     .wait(500)
-    .test('De Heks beweegt niet voor de klik', 'De heks bewoog nog voor er op geklikt werd', (log) => {
-      const minX = log.getMinX('Heks');
-      const maxX = log.getMaxX('Heks');
-      const minY = log.getMinY('Heks');
-      const maxY = log.getMaxY('Heks');
-      return minX === maxX && minY === maxY;
+    .log(() => {
+      e.output.addTest('De Heks beweegt niet voor de klik',
+        false,
+        e.log.hasSpriteMoved('Heks'),
+        'De heks bewoog nog voor er op geklikt werd'
+      );
     })
-    .clickSprite({ spriteName: 'Heks', sync: false }) // De eerste klik laat heks starten met bewegen.
+    .clickSprite('Heks', false) // De eerste klik laat heks starten met bewegen.
     .wait(100)
-    .test('De heks is veranderd van positie', 'De heks is niet van positie veranderd na de klik', (log) => {
-      const heks = log.sprites.getSprite('Heks');
+    .log(() => {
+      const heks = e.log.sprites.getSprite('Heks');
       const heeftBewogen = heks.x !== heksPositie.x || heks.y !== heksPositie.y;
       heksPositie.x = heks.x;
       heksPositie.y = heks.y;
-      return heeftBewogen;
+      e.output.addTest('De heks is veranderd van positie',
+        true,
+        heeftBewogen,
+        'De heks is niet van positie veranderd na de klik'
+        )
     })
     .wait(1000) // wacht een seconde voor de volgende positie
-    .test('De heks is veranderd van positie', 'De heks is niet van positie veranderd na een seconde na de klik', (log) => {
-      const heks = log.sprites.getSprite('Heks');
+    .log(() => {
+      const heks = e.log.sprites.getSprite('Heks');
       const heeftBewogen = heks.x !== heksPositie.x || heks.y !== heksPositie.y;
       heksPositie.x = heks.x;
       heksPositie.y = heks.y;
-      return heeftBewogen;
+      e.output.addTest('De heks is veranderd van positie',
+        true,
+        heeftBewogen,
+        'De heks is niet van positie veranderd na de klik'
+      )
     })
     .end();
 }
