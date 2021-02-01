@@ -50,7 +50,6 @@
     "build": "webpack --progress",
     "docs": "jsdoc -c jsdoc.config.js",
     "lint": "eslint .",
-    "start": "webpack-dev-server",
-    "watch": "webpack --progress --colors --watch --watch-poll"
+    "watch": "webpack --progress --watch"
   }
 }
