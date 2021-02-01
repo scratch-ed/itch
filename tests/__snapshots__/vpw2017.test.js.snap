@@ -597,20 +597,6 @@ Array [
   },
   Object {
     "command": "start-testcase",
-    "description": "De papegaai raakt de rand bij het veranderen van richting",
-  },
-  Object {
-    "command": "close-testcase",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "De papegaai vliegt horizontaal",
-  },
-  Object {
-    "command": "close-testcase",
-  },
-  Object {
-    "command": "start-testcase",
     "description": "De papegaai veranderde minimum 2 keer van richting",
   },
   Object {
