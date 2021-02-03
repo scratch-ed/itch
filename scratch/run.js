@@ -1,13 +1,13 @@
-class Deferred {
+class Waiter {
   constructor() {
     /**
      * The promise. Use this to await completion.
-     * @type {Promise<R>}
+     * @type {Promise<any>}
      */
     this.promise = new Promise((resolve, reject) => {
       /**
        * Call to resolve the underlying promise.
-       * @type {function(R): void}
+       * @type {function(any): void}
        */
       this.resolve = resolve;
       /**
@@ -19,7 +19,7 @@ class Deferred {
   }
 }
 
-const submissionUpload = new Deferred();
+const submissionUpload = new Waiter();
 
 document.getElementById('file').addEventListener('change', e => {
   const reader = new FileReader();
@@ -30,7 +30,7 @@ document.getElementById('file').addEventListener('change', e => {
   reader.readAsArrayBuffer(thisFileInput.files[0]);
 });
 
-const templateUpload = new Deferred();
+const templateUpload = new Waiter();
 
 document.getElementById('template').addEventListener('change', e => {
   const reader = new FileReader();
