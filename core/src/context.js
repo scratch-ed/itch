@@ -148,12 +148,15 @@ export default class Context {
     });
 
     this.vm.runtime.on(Events.SCRATCH_SAY_OR_THINK, (target, type, text) => {
-      console.log(`${this.timestamp()}: say: ${text}`);
+      // Only save it when something is actually being said.
+      if (text !== "") {
+        console.log(`${this.timestamp()}: say: ${text} with ${type}`);
 
-      const event = new LogEvent(this, 'say', { text: text, target: target, type: type, sprite: target.sprite.name });
-      event.previousFrame = new LogFrame(this, 'say');
-      event.nextFrame = new LogFrame(this, 'sayEnd');
-      this.log.addEvent(event);
+        const event = new LogEvent(this, 'say', { text: text, target: target, type: type, sprite: target.sprite.name });
+        event.previousFrame = new LogFrame(this, 'say');
+        event.nextFrame = new LogFrame(this, 'sayEnd');
+        this.log.addEvent(event);
+      }
     });
 
     this.vm.runtime.on(Events.SCRATCH_QUESTION, (question) => {

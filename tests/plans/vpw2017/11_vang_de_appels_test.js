@@ -40,7 +40,7 @@ function duringExecution() {
     .range(0, 4000, 200, (index, anchor) => {
       console.log('Mouse will be', mouse);
       return anchor
-        .moveMouse(mouse)
+        .useMouse(mouse)
         .wait(200)
         .log((log) => {
           mouse.x = log.sprites.getSprite('Appel').x;
@@ -49,7 +49,7 @@ function duringExecution() {
     .range(0, 3000, 200, (index, anchor) => {
       console.log('Mouse will be', mouse);
       return anchor
-        .moveMouse(mouse)
+        .useMouse(mouse)
         .wait(200)
         .log((log) => {
           mouse.x = log.sprites.getSprite('Appel').x + 200;

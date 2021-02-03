@@ -155,8 +155,7 @@ class ClickSpriteAction extends ScheduledAction {
   }
 }
 
-// TODO: add support for other keys.
-class PressKeyAction extends ScheduledAction {
+class WhenPressKeyAction extends ScheduledAction {
   /**
    * @param {string} key
    */
@@ -205,12 +204,12 @@ class PressKeyAction extends ScheduledAction {
   }
 }
 
-class MouseMoveAction extends ScheduledAction {
+class MouseUseAction extends ScheduledAction {
   constructor(data) {
     super();
     this.data = data;
   }
-  
+
   execute(context, resolve) {
     this.data.x = this.data.x + 240;
     this.data.y = this.data.y + 180;
@@ -218,6 +217,57 @@ class MouseMoveAction extends ScheduledAction {
     this.data.canvasHeight = 360;
     context.vm.runtime.ioDevices.mouse.postData(this.data);
     resolve('Completed mouse movement');
+  }
+}
+
+class KeyUseAction extends ScheduledAction {
+  /**
+   * @param {string} key
+   * @param {boolean|number} down
+   * @param {number} delay
+   */
+  constructor(key, down, delay) {
+    super();
+    this.key = key;
+    this.down = down;
+    this.delay = delay;
+  }
+
+  execute(context, resolve) {
+    console.log(`Press ${this.key}: ${this.isDown()}`);
+    context.vm.postIOData('keyboard', {
+      key: this.key,
+      isDown: this.isDown(),
+    });
+
+    if (this.isDelayed()) {
+      setTimeout(() => {
+        console.log(`Release ${this.key}: false`)
+        context.vm.postIOData('keyboard', {
+          key: this.key,
+          isDown: false,
+        });
+        setTimeout(() => {
+          resolve('Completed delayed key movement');
+        }, this.delay);
+      }, this.down);
+    } else {
+      setTimeout(() => {
+        resolve('Completed key movement');
+      }, this.delay);
+    }
+  }
+
+  isDown() {
+    if (this.isDelayed()) {
+      return true;
+    } else {
+      return this.down;
+    }
+  }
+
+  isDelayed() {
+    return typeof this.down === 'number';
   }
 }
 
@@ -337,7 +387,7 @@ export default class ScheduledEvent {
    * If the current event is synchronous, the action is executed, after which
    * the next events are launched. If the event is asynchronous, the action is
    * executed, but the next events are launched immediately.
-   * 
+   *
    * You should not call this function; the framework takes care of it for you.
    *
    * @param  {Context} context
@@ -506,13 +556,23 @@ export default class ScheduledEvent {
   }
 
   /**
-   * Press a key.
+   * Simulate a key press.
+   *
+   * The difference between this event and the `useKey` event is similar
+   * to the difference between the "When () Key Pressed" block and the
+   * "Key () Pressed?" block.
+   *
+   * This event will activate all hats with the "When () Key Pressed"
+   * block. This means it simulates a full "key press", meaning pressing
+   * it down and letting go. It has no impact on the current key status,
+   * and will NOT trigger a `KEY_PRESSED` event.
    *
    * This event can be asynchronous. If synchronous, all blocks attached
    * to hats listening to the click event must be completed before the
    * event resolves. Otherwise it resolves immediately.
    *
-   * TODO: this only works with hats at this time.
+   * @see https://en.scratch-wiki.info/wiki/Key_()_Pressed%3F_(block)
+   * @see https://en.scratch-wiki.info/wiki/When_()_Key_Pressed_(Events_block)
    *
    * @param {string} key - The name of the key to press.
    * @param {boolean} sync - Synchronous or not, default true.
@@ -520,23 +580,84 @@ export default class ScheduledEvent {
    * @return {ScheduledEvent}
    */
   pressKey(key, sync = true, timeout = null) {
-    return this.constructNext(new PressKeyAction(key), sync, timeout);
+    return this.constructNext(new WhenPressKeyAction(key), sync, timeout);
   }
 
   /**
-   * Move the mouse.
+   * Use the keyboard.
+   *
+   * The difference between this event and the `pressKey` event is similar
+   * to the difference between the "When () Key Pressed" block and the
+   * "Key () Pressed?" block.
+   *
+   * This event will update the internal state of the keyboard. When you
+   * send this event, the key will be pressed down, and kept that way.
+   * As such, this key will trigger both "When () Key Pressed" blocks
+   * and return true for "Key () Pressed?" blocks.
+   *
+   * To make life easier, you can optionally pass a time, after which the
+   * key is lifted automatically.
+   *
+   * If no timeout is passed, the event is asynchronous. If a timeout is
+   * passed, the event resolves after the key has been lifted if synchronous.
+   *
+   * Due to the nature of the event, it is currently not possible to wait
+   * on completion of scripts with this event. This would mean basically
+   * running scripts to see if they are waiting on this press or not, which
+   * is not possible.
    * 
+   * Finally, since the event should at least be noticeable in the next step
+   * of the Scratch VM, by default a 10 ms waiting time is introduced after
+   * each key event (the delay). You can modify this delay by setting the last
+   * parameter. In most cases, it is not necessary to adjust this.
+   * 
+   * The time the key is pressed before it is released does not account for
+   * the delay: if  `down` is 50ms, the key will be lifted after 50 ms.
+   * 
+   * When using as a sync event, the total execution time will therefore be
+   * delay + down. If down is true or false, the execution time will be just
+   * the delay.
+   *
+   * The `useMouse` event is similar, but for the mouse.
+   *
+   * @see https://en.scratch-wiki.info/wiki/Key_()_Pressed%3F_(block)
+   * @see https://en.scratch-wiki.info/wiki/When_()_Key_Pressed_(Events_block)
+   *
+   * @param {string} key - The key to press.
+   * @param {number|boolean} down - If a boolean, the key event will be
+   *        passed as is. If a number, the key will first be set to down,
+   *        but then lifted after the given amount of ms. By default, this
+   *        is 10 ms.
+   * @param {boolean} sync - If the lifting of the key press should be async
+   *        or sync. When no automatic lifting is used, the event is always
+   *        async.
+   * @param {number} delay - The amount of time to wait after the last key
+   *        press. You can set this to less than 10, but you risk that your
+   *        key press will be undetected.
+   *
+   * @return {ScheduledEvent}
+   */
+  useKey(key, down= 10, sync = true, delay = 10) {
+    return this.constructNext(new KeyUseAction(key, down, delay), sync);
+  }
+
+  /**
+   * Use the mouse.
+   *
    * At the moment you can pass all data to the mouse event, and thus
    * also simulate clicks. This is not supported and will probably break
    * in weird ways.
-   * 
+   *
    * This event is synchronous: the event resolves after the mouse data
    * has been posted to the Scratch VM.
-   * 
+   *
+   * This updates the mouse data in the VM, and keeps it like that. E.g.
+   * if you move the mouse to x+5, y-5, it will stay there.
+   *
    * @param {Object} data
    * @return {ScheduledEvent}
    */
-  moveMouse(data) {
-    return this.constructNext(new MouseMoveAction(data), true, null);
+  useMouse(data) {
+    return this.constructNext(new MouseUseAction(data));
   }
 }

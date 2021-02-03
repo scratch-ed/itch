@@ -35,3 +35,11 @@ test('04.escape_the_cave', () => {
       expect(testStatuses(result)).allStatusesAre('correct');
     });
 });
+
+test('05.wolf_run', () => {
+  return runTest(`status/${expect.getState().currentTestName}`)
+    .then(result => {
+      expect(result).toMatchSnapshot();
+      expect(testStatuses(result)).allStatusesAre('correct');
+    });
+});
