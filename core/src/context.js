@@ -143,6 +143,8 @@ export default class Context {
       console.log(`${this.timestamp()}: run number: ${this.numberOfRun}`);
       this.numberOfRun++;
     });
+    
+    console.log("Events are ", this.vm.runtime.eventNames());
 
     this.vm.runtime.on(Events.SCRATCH_SAY_OR_THINK, (target, type, text) => {
       // Only save it when something is actually being said.

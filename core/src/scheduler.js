@@ -72,7 +72,7 @@ class EndAction extends ScheduledAction {
     context.vm.stopAll();
 
     resolve();
-    context.simulationEnd.resolve("done with simulation");
+    context.simulationEnd.resolve('done with simulation');
   }
 }
 
@@ -225,7 +225,7 @@ class KeyUseAction extends ScheduledAction {
 
     if (this.isDelayed()) {
       setTimeout(() => {
-        console.log(`Release ${this.key}: false`)
+        console.log(`Release ${this.key}: false`);
         context.vm.postIOData('keyboard', {
           key: this.key,
           isDown: false,
@@ -251,6 +251,43 @@ class KeyUseAction extends ScheduledAction {
 
   isDelayed() {
     return typeof this.down === 'number';
+  }
+}
+
+class SendBroadcastAction extends ScheduledAction {
+  /**
+   * @param {string} name - The name of the broadcast
+   */
+  constructor(name) {
+    super();
+    this.name = name;
+  }
+
+  execute(context, resolve) {
+    // Save the state of the sprite before the click event.
+    /** @type {Target} */
+    const target = context.vm.runtime.getTargetForStage();
+    const event = new LogEvent(context, 'broadcast', { target: target.getName() });
+    event.previousFrame = new LogFrame(context, 'broadcast');
+    context.log.addEvent(event);
+
+    const threads = context.vm.runtime.startHats('event_whenbroadcastreceived', {
+      BROADCAST_OPTION: this.name,
+    });
+
+    const action = new ThreadListener(context, threads);
+    context.threadListeners.push(action);
+
+    action.promise.then(() => {
+      console.log(`finished broadcast of ${this.name}`);
+      // save sprites state after click
+      event.nextFrame = new LogFrame(context, 'broadcastEnd');
+      resolve('resolve');
+    });
+  }
+
+  toString() {
+    return `${super.toString()} of ${this.name}`;
   }
 }
 
@@ -539,6 +576,28 @@ export default class ScheduledEvent {
   }
 
   /**
+   * Send a broadcast of the specified signal.
+   * 
+   * This event can be asynchronous. If synchronous, all blocks attached
+   * to hats listening to the given broadcast must be completed before
+   * the event resolves. Otherwise it resolves immeditaley.
+   * 
+   * If synchronous, resembles a "Broadcast () and Wait" block, otherwise
+   * resembles a "Broadcast ()" block.
+   * 
+   * @see https://en.scratch-wiki.info/wiki/Broadcast_()_(block)
+   * @see https://en.scratch-wiki.info/wiki/Broadcast_()_and_Wait_(block)
+   * 
+   * @param {string} broadcast - The name of the broadcast to send.
+   * @param {boolean} sync - Synchronous or not, default true.
+   * @param {number|null} timeout - How long to wait for synchronous events.
+   * @return {ScheduledEvent}
+   */
+  sendBroadcast(broadcast, sync = true, timeout = null) {
+    return this.constructNext(new SendBroadcastAction(broadcast), sync, timeout);
+  }
+
+  /**
    * Simulate a key press.
    *
    * The difference between this event and the `useKey` event is similar
@@ -588,15 +647,15 @@ export default class ScheduledEvent {
    * on completion of scripts with this event. This would mean basically
    * running scripts to see if they are waiting on this press or not, which
    * is not possible.
-   * 
+   *
    * Finally, since the event should at least be noticeable in the next step
    * of the Scratch VM, by default a 10 ms waiting time is introduced after
    * each key event (the delay). You can modify this delay by setting the last
    * parameter. In most cases, it is not necessary to adjust this.
-   * 
+   *
    * The time the key is pressed before it is released does not account for
    * the delay: if  `down` is 50ms, the key will be lifted after 50 ms.
-   * 
+   *
    * When using as a sync event, the total execution time will therefore be
    * delay + down. If down is true or false, the execution time will be just
    * the delay.
@@ -620,7 +679,7 @@ export default class ScheduledEvent {
    *
    * @return {ScheduledEvent}
    */
-  useKey(key, down= 10, sync = true, delay = 10) {
+  useKey(key, down = 10, sync = true, delay = 10) {
     return this.constructNext(new KeyUseAction(key, down, delay), sync);
   }
 
