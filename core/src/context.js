@@ -5,7 +5,6 @@ import AudioEngine from 'scratch-audio';
 import ScratchRender from 'scratch-render';
 
 import { Log, LogEvent, LogFrame } from './log.js';
-import SimulationEvent from './simulationEvent.js';
 import Deferred from './deferred.js';
 import { makeProxiedRenderer } from './renderer';
 import ResultManager from './output';
@@ -113,13 +112,11 @@ export default class Context {
      * @type {number}
      */
     this.actionTimeout = 5000;
-    this.activeActions = [];
     /**
-     * Control events.
-     * @type {SimulationEvent}
-     * @deprecated
+     * The listeners for the threads.
+     * @type {ThreadListener[]}
      */
-    this.simulationChain = new SimulationEvent(this, null, null);
+    this.threadListeners = [];
     
     /** @type {ScheduledEvent} */
     this.event = ScheduledEvent.create();
@@ -184,9 +181,9 @@ export default class Context {
 
     this.vm.runtime.on(Events.DONE_THREADS_UPDATE, (threads) => {
       for (const thread of threads) {
-        for (const action of this.activeActions) {
+        for (const action of this.threadListeners) {
           if (action.active) {
-            action.update(thread.topBlock);
+            action.update(thread);
           }
         }
       }
@@ -224,9 +221,7 @@ export default class Context {
       this.vm = new VirtualMachine();
     }
     await loadVm(this.vm, config.template, config.canvas);
-    const json = JSON.parse(this.vm.toJSON());
-    // this.vm.clear();
-    return json;
+    return JSON.parse(this.vm.toJSON());
   }
 
   /**

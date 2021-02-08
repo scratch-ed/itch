@@ -1,7 +1,7 @@
 /* Copyright (C) 2019 Ghent University - All Rights Reserved */
 /** @param {Evaluation} e */
 function duringExecution(e) {
-  e.eventScheduling
+  e.scheduler
     .greenFlag()
     .end();
 }

@@ -1,5 +1,5 @@
 import { LogEvent, LogFrame } from './log.js';
-import { Action } from './scratchThreads.js';
+import { ThreadListener } from './listener.js';
 
 class ScheduledAction {
   /**
@@ -72,7 +72,7 @@ class EndAction extends ScheduledAction {
     context.vm.stopAll();
 
     resolve();
-    context.simulationEnd.resolve();
+    context.simulationEnd.resolve("done with simulation");
   }
 }
 
@@ -85,14 +85,9 @@ class GreenFlagAction extends ScheduledAction {
 
     const list = context.vm.runtime.startHats('event_whenflagclicked');
 
-    const topBlocks = [];
-    for (const thread of list) {
-      topBlocks.push(thread.topBlock);
-    }
-
-    const action = new Action(context, topBlocks);
-    context.activeActions.push(action);
-    action.actionEnded.promise.then(() => {
+    const action = new ThreadListener(context, list);
+    context.threadListeners.push(action);
+    action.promise.then(() => {
       console.log(`finished greenFlag()`);
       event.nextFrame = new LogFrame(context, 'greenFlagEnd');
       resolve('green flag resolved');
@@ -134,15 +129,10 @@ class ClickSpriteAction extends ScheduledAction {
       list = context.vm.runtime.startHats('event_whenstageclicked', null, sprite);
     }
 
-    const topBlocks = [];
-    for (const thread of list) {
-      topBlocks.push(thread.topBlock);
-    }
+    const action = new ThreadListener(context, list);
+    context.threadListeners.push(action);
 
-    const action = new Action(context, topBlocks);
-    context.activeActions.push(action);
-
-    action.actionEnded.promise.then(() => {
+    action.promise.then(() => {
       console.log(`finished click on ${this.spriteName}`);
       // save sprites state after click
       event.nextFrame = new LogFrame(context, 'clickEnd');
@@ -184,18 +174,11 @@ class WhenPressKeyAction extends ScheduledAction {
       KEY_OPTION: 'any'
     });
 
-    const topBlocks = [];
-    for (const thread of list) {
-      topBlocks.push(thread.topBlock);
-    }
-    for (const thread of list2) {
-      topBlocks.push(thread.topBlock);
-    }
+    const threads = list.concat(list2);
+    const action = new ThreadListener(context, threads);
+    context.threadListeners.push(action);
 
-    const action = new Action(context, topBlocks);
-    context.activeActions.push(action);
-
-    action.actionEnded.promise.then(() => {
+    action.promise.then(() => {
       console.log(`finished keyPress on ${this.key}`);
       // save sprites state after click
       event.nextFrame = new LogFrame(context, 'keyEnd');

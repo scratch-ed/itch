@@ -63,16 +63,16 @@ function beforeExecution(template, submission, output) {
 /** @param {Evaluation} e */
 function duringExecution(e) {
   e.actionTimeout = 30000;
-  e.eventScheduling
-    .greenFlag({sync: false})
-    .wait(1000)
-    .test('Het ruimteschip staat klaar', 'Het ruimteschip mag niet bewegen voor er op 1 gedrukt wordt.',
-      (log) => {
-        console.log("Doing test!");
-        return !log.hasSpriteMoved('Ruimteschip');
-      })
-    .pressKey({ key: '1'})
-    .end();
+  // e.eventScheduling
+  //   .greenFlag({sync: false})
+  //   .wait(1000)
+  //   .test('Het ruimteschip staat klaar', 'Het ruimteschip mag niet bewegen voor er op 1 gedrukt wordt.',
+  //     (log) => {
+  //       console.log("Doing test!");
+  //       return !log.hasSpriteMoved('Ruimteschip');
+  //     })
+  //   .pressKey({ key: '1'})
+  //   .end();
 }
 
 /** @param {Evaluation} e */

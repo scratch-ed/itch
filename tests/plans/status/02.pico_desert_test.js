@@ -17,17 +17,17 @@ function duringExecution(e) {
   e.actionTimeout = 95000;
   
   // For now, manually do each level.
-  e.eventScheduling
-    .greenFlag({sync: true}) // Wait until the intro is done.
-    .wait(1000) // TODO: not needed?
-    .pressKeySecond({key: ' ', sync: true}) // Load first level
-    .wait(100) // Wait for now, since keySecond is not sync yet...
-    .log(log => {
-      console.log("AFTER PRESS...")
-    })
-    .pressKeySecond({key: 's', sync: true}) // This keeps pressing the button apparently.
-    .wait(90000)
-    .end();
+  // e.eventScheduling
+  //   .greenFlag({sync: true}) // Wait until the intro is done.
+  //   .wait(1000) // TODO: not needed?
+  //   .pressKeySecond({key: ' ', sync: true}) // Load first level
+  //   .wait(100) // Wait for now, since keySecond is not sync yet...
+  //   .log(log => {
+  //     console.log("AFTER PRESS...")
+  //   })
+  //   .pressKeySecond({key: 's', sync: true}) // This keeps pressing the button apparently.
+  //   .wait(90000)
+  //   .end();
 }
 
 /** @param {Evaluation} e */

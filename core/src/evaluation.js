@@ -108,16 +108,6 @@ class Evaluation {
   /**
    * Get the event scheduler.
    *
-   * @return {SimulationEvent}
-   * @deprecated
-   */
-  get eventScheduling() {
-    return this.context.simulationChain;
-  }
-
-  /**
-   * Get the event scheduler.
-   *
    * @return {ScheduledEvent}
    */
   get scheduler() {
@@ -172,7 +162,7 @@ function defaultBeforeExecution(template, submission, output) {
 // eslint-disable-next-line no-unused-vars
 function defaultDuringExecution(evaluation) {
   // pass
-  evaluation.eventScheduling.end();
+  evaluation.scheduler.end();
 }
 
 /**
@@ -238,7 +228,6 @@ export async function run(config) {
 
   // Run the events.
   context.output.startTestContext();
-  await context.simulationChain.launch();
   await context.event.run(context);
   await context.simulationEnd.promise;
   context.output.closeTestContext();

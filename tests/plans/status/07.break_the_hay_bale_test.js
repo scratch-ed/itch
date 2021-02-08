@@ -37,31 +37,31 @@ function duringExecution(e) {
   e.actionTimeout = 15000;
   let lastX = 0;
   let lastY = 0;
-  e.eventScheduling
-    .greenFlag({sync: false})
-    // .wait(1000)
-    // .test('No movement without key press', 'The paddle cannot move when not pressing keys', (log) => {
-    //   return !log.hasSpriteMoved('Paddle');
-    // })
-    .wait(8000)
-    .pressKey({ key: 'Left', sync: true })
-    .test('Paddle moves to left', 'The paddle must move to the left when the left key is pressed.', (log) => {
-      const minX = log.getMinX('Paddle');
-      const minY = log.getMinY('Paddle');
-      const maxX = log.getMaxX('Paddle');
-      const maxY = log.getMaxY('Paddle');
-      
-      // Also save the position for later.
-      const spr = log.sprites.getSprite('Paddle');
-      lastX = spr.x;
-      lastY = spr.y;
-      
-      return minX < maxX && numericEquals(minY, maxY);
-    })
-    .pressKey({ key: 'Right', sync: true })
-    .test('Paddle moves to right', 'The paddle must move to the right when the right key is pressed.', (log) => {
-      const spr = log.sprites.getSprite('Paddle');
-      return lastX < spr.x && numericEquals(lastY, spr.y);
-    })
-    .end();
+  // e.eventScheduling
+  //   .greenFlag({sync: false})
+  //   // .wait(1000)
+  //   // .test('No movement without key press', 'The paddle cannot move when not pressing keys', (log) => {
+  //   //   return !log.hasSpriteMoved('Paddle');
+  //   // })
+  //   .wait(8000)
+  //   .pressKey({ key: 'Left', sync: true })
+  //   .test('Paddle moves to left', 'The paddle must move to the left when the left key is pressed.', (log) => {
+  //     const minX = log.getMinX('Paddle');
+  //     const minY = log.getMinY('Paddle');
+  //     const maxX = log.getMaxX('Paddle');
+  //     const maxY = log.getMaxY('Paddle');
+  //    
+  //     // Also save the position for later.
+  //     const spr = log.sprites.getSprite('Paddle');
+  //     lastX = spr.x;
+  //     lastY = spr.y;
+  //    
+  //     return minX < maxX && numericEquals(minY, maxY);
+  //   })
+  //   .pressKey({ key: 'Right', sync: true })
+  //   .test('Paddle moves to right', 'The paddle must move to the right when the right key is pressed.', (log) => {
+  //     const spr = log.sprites.getSprite('Paddle');
+  //     return lastX < spr.x && numericEquals(lastY, spr.y);
+  //   })
+  //   .end();
 }

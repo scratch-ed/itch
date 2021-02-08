@@ -35,29 +35,29 @@ function duringExecution() {
 
   // TODO: would it be better to not set timings, but attach to the apple somehow.
 
-  scratch.eventScheduling
-    .greenFlag({ sync: false })
-    .range(0, 4000, 200, (index, anchor) => {
-      console.log('Mouse will be', mouse);
-      return anchor
-        .useMouse(mouse)
-        .wait(200)
-        .log((log) => {
-          mouse.x = log.sprites.getSprite('Appel').x;
-        });
-    })
-    .range(0, 3000, 200, (index, anchor) => {
-      console.log('Mouse will be', mouse);
-      return anchor
-        .useMouse(mouse)
-        .wait(200)
-        .log((log) => {
-          mouse.x = log.sprites.getSprite('Appel').x + 200;
-        });
-    })
-    .end();
-
-  scratch.start();
+  // scratch.eventScheduling
+  //   .greenFlag({ sync: false })
+  //   .range(0, 4000, 200, (index, anchor) => {
+  //     console.log('Mouse will be', mouse);
+  //     return anchor
+  //       .useMouse(mouse)
+  //       .wait(200)
+  //       .log((log) => {
+  //         mouse.x = log.sprites.getSprite('Appel').x;
+  //       });
+  //   })
+  //   .range(0, 3000, 200, (index, anchor) => {
+  //     console.log('Mouse will be', mouse);
+  //     return anchor
+  //       .useMouse(mouse)
+  //       .wait(200)
+  //       .log((log) => {
+  //         mouse.x = log.sprites.getSprite('Appel').x + 200;
+  //       });
+  //   })
+  //   .end();
+  //
+  // scratch.start();
 }
 
 function afterExecution() {
