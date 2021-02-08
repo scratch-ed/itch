@@ -1,5 +1,5 @@
 import { LogEvent, LogFrame } from './log.js';
-import { ThreadListener } from './listener.js';
+import { BroadcastListener, ThreadListener } from './listener.js';
 
 class ScheduledAction {
   /**
@@ -85,7 +85,7 @@ class GreenFlagAction extends ScheduledAction {
 
     const list = context.vm.runtime.startHats('event_whenflagclicked');
 
-    const action = new ThreadListener(context, list);
+    const action = new ThreadListener(list);
     context.threadListeners.push(action);
     action.promise.then(() => {
       console.log(`finished greenFlag()`);
@@ -129,7 +129,7 @@ class ClickSpriteAction extends ScheduledAction {
       list = context.vm.runtime.startHats('event_whenstageclicked', null, sprite);
     }
 
-    const action = new ThreadListener(context, list);
+    const action = new ThreadListener(list);
     context.threadListeners.push(action);
 
     action.promise.then(() => {
@@ -175,7 +175,7 @@ class WhenPressKeyAction extends ScheduledAction {
     });
 
     const threads = list.concat(list2);
-    const action = new ThreadListener(context, threads);
+    const action = new ThreadListener(threads);
     context.threadListeners.push(action);
 
     action.promise.then(() => {
@@ -275,7 +275,7 @@ class SendBroadcastAction extends ScheduledAction {
       BROADCAST_OPTION: this.name,
     });
 
-    const action = new ThreadListener(context, threads);
+    const action = new ThreadListener(threads);
     context.threadListeners.push(action);
 
     action.promise.then(() => {
@@ -288,6 +288,30 @@ class SendBroadcastAction extends ScheduledAction {
 
   toString() {
     return `${super.toString()} of ${this.name}`;
+  }
+}
+
+class WaitOnBroadcastAction extends ScheduledAction {
+  /**
+   * @param {string} name - Name of the broadcast.
+   */
+  constructor(name) {
+    super();
+    this.name = name;
+  }
+  
+  execute(context, resolve) {
+    const event = new LogEvent(context, 'broadcast_listener', { name: this.name });
+    event.previousFrame = new LogFrame(context, 'broadcast_listener');
+    context.log.addEvent(event);
+    
+    const listener = new BroadcastListener(this.name);
+    context.broadcastListeners.push(listener);
+    listener.promise.then(() => {
+      console.log("RECEIVED!")
+      event.nextFrame = new LogFrame(context, 'broadcastReceived');
+      resolve('broadcast received');
+    })
   }
 }
 
@@ -472,6 +496,22 @@ export default class ScheduledEvent {
   }
 
   /**
+   * Wait for a broadcast to be sent before proceeding.
+   * 
+   * As with all wait events, this event is always synchronous.
+   * 
+   * The event is logged with event type `broadcast_listener`.
+   * 
+   * @param {string} name - Name of the broadcast to wait on.
+   * @param {number|null} timeout - Max time to wait before aborting.
+   * 
+   * @return {ScheduledEvent}
+   */
+  waitForBroadcast(name, timeout = null) {
+    return this.constructNext(new WaitOnBroadcastAction(name), true, timeout);
+  }
+
+  /**
    * Schedule an event for each item in a list.
    *
    * This function is basically a wrapper around `reduce`. For each item in the list,
@@ -580,10 +620,12 @@ export default class ScheduledEvent {
    * 
    * This event can be asynchronous. If synchronous, all blocks attached
    * to hats listening to the given broadcast must be completed before
-   * the event resolves. Otherwise it resolves immeditaley.
+   * the event resolves. Otherwise it resolves immediately.
    * 
    * If synchronous, resembles a "Broadcast () and Wait" block, otherwise
    * resembles a "Broadcast ()" block.
+   * 
+   * The event is logged with event type `broadcast`.
    * 
    * @see https://en.scratch-wiki.info/wiki/Broadcast_()_(block)
    * @see https://en.scratch-wiki.info/wiki/Broadcast_()_and_Wait_(block)

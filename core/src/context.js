@@ -9,7 +9,7 @@ import Deferred from './deferred.js';
 import { makeProxiedRenderer } from './renderer';
 import ResultManager from './output';
 import ScheduledEvent from './scheduler.js';
-
+import { BroadcastListener } from './listener.js';
 
 const Events = {
   SCRATCH_PROJECT_START: 'PROJECT_START',
@@ -18,7 +18,8 @@ const Events = {
   SCRATCH_QUESTION: 'QUESTION',
   SCRATCH_ANSWER: 'ANSWER',
   // Custom events,
-  DONE_THREADS_UPDATE: 'DONE_THREADS_UPDATE'
+  DONE_THREADS_UPDATE: 'DONE_THREADS_UPDATE',
+  BEFORE_HATS_START: 'BEFORE_HATS_START'
 };
 
 /**
@@ -32,9 +33,24 @@ function wrapStep(vm) {
   vm.runtime._step = () => {
     const oldResult = oldFunction();
     if (vm.runtime._lastStepDoneThreads.length > 0) {
-      vm.runtime.emit('DONE_THREADS_UPDATE', vm.runtime._lastStepDoneThreads);
+      vm.runtime.emit(Events.DONE_THREADS_UPDATE, vm.runtime._lastStepDoneThreads);
     }
     return oldResult;
+  };
+}
+
+/**
+ * Wrap the start hats function to emit an event when this happens.
+ * @param {VirtualMachine} vm
+ */
+function wrapStartHats(vm) {
+  const oldFunction = vm.runtime.startHats.bind(vm.runtime);
+
+  vm.runtime.startHats = (requestedHatOpcode, optMatchFields, optTarget) => {
+    vm.runtime.emit(Events.BEFORE_HATS_START, {
+      requestedHatOpcode, optMatchFields, optTarget
+    });
+    return oldFunction(requestedHatOpcode, optMatchFields, optTarget);
   };
 }
 
@@ -60,6 +76,7 @@ async function loadVm(vm, project, canvas = null, context = null) {
   if (context !== null) {
     // Wrap the step function.
     wrapStep(vm);
+    wrapStartHats(vm);
   }
 
   // Load the project.
@@ -94,9 +111,9 @@ export default class Context {
      * @type {string[]}
      */
     this.answers = [];
-    
+
     this.providedAnswers = [];
-    
+
     /**
      * Resolves once the scratch files have been loaded.
      * @type {Deferred}
@@ -117,7 +134,13 @@ export default class Context {
      * @type {ThreadListener[]}
      */
     this.threadListeners = [];
-    
+
+    /**
+     * The listeners for the broadcasts.
+     * @type {BroadcastListener[]}
+     */
+    this.broadcastListeners = [];
+
     /** @type {ScheduledEvent} */
     this.event = ScheduledEvent.create();
     /**
@@ -143,12 +166,10 @@ export default class Context {
       console.log(`${this.timestamp()}: run number: ${this.numberOfRun}`);
       this.numberOfRun++;
     });
-    
-    console.log("Events are ", this.vm.runtime.eventNames());
 
     this.vm.runtime.on(Events.SCRATCH_SAY_OR_THINK, (target, type, text) => {
       // Only save it when something is actually being said.
-      if (text !== "") {
+      if (text !== '') {
         console.log(`${this.timestamp()}: say: ${text} with ${type}`);
 
         const event = new LogEvent(this, 'say', { text: text, target: target, type: type, sprite: target.sprite.name });
@@ -190,6 +211,17 @@ export default class Context {
         }
       }
     });
+
+    this.vm.runtime.on(Events.BEFORE_HATS_START, (opts) => {
+      if (opts.requestedHatOpcode === 'event_whenbroadcastreceived') {
+        this.broadcastListeners
+          .filter(l => l.active)
+          .forEach(l => l.update({
+            matchFields: opts.optMatchFields,
+            target: opts.optTarget
+          }));
+      }
+    });
   }
 
   /**
@@ -201,7 +233,7 @@ export default class Context {
     const blockId = this.vm.runtime.profiler.idByName('blockFunction');
 
     // eslint-disable-next-line no-unused-vars
-    this.vm.runtime.profiler.onFrame = ({id, _selfTime, _totalTime, arg}) => {
+    this.vm.runtime.profiler.onFrame = ({ id, _selfTime, _totalTime, arg }) => {
       if (id === blockId) {
         this.log.addFrame(this, arg);
       }
@@ -210,11 +242,11 @@ export default class Context {
 
   /**
    * Extract the project.json from a sb3 project.
-   * 
+   *
    * If you need the project JSON from the actual project you want to test,
    * it's more efficient to use `prepareVm`, since that will re-use the created
    * VM.
-   * 
+   *
    * @param {EvalConfig} config
    * @return {Promise<Object>}
    */
@@ -231,8 +263,8 @@ export default class Context {
    * the vmLoaded promise will be resolved.
    *
    * @param {EvalConfig} config
-   * 
-   * @return {Promise<Object>} The JSON representation of the 
+   *
+   * @return {Promise<Object>} The JSON representation of the
    */
   async prepareVm(config) {
     if (!this.vm) {
@@ -246,26 +278,26 @@ export default class Context {
     await loadVm(this.vm, config.submission, config.canvas, this);
     // Attach handlers
     this.attachEventHandles();
-    
+
     // Start the vm.
     this.vm.start();
-    
+
     // Enable profiling.
     this.createProfiler();
 
-    console.log("Loading is finished.");
+    console.log('Loading is finished.');
     this.vmLoaded.resolve();
-    
+
     return JSON.parse(this.vm.toJSON());
   }
-  
+
   prepareForExecution() {
     this.providedAnswers = this.answers.slice();
   }
 
   /**
    * Create a context with a fully prepared VM.
-   * 
+   *
    * @param {EvalConfig} config
    * @return {Promise<Context>}
    */

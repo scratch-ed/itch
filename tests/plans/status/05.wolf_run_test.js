@@ -9,13 +9,7 @@ function duringExecution(e) {
   // For now, manually do each level.
   e.scheduler
     .greenFlag(false) // Async, since it only ends when the thing is done.
-    .wait(4000) // Wait for start sequence to finish.
-    // TODO: wait for "start" signal instead.
-    .log(() => {
-      e.vm.runtime.addListener('KEY_PRESSED', k => {
-        console.log(`Listened to ${k}`);
-      })
-    })
+    .waitForBroadcast('start')
     .useKey('o', 50)
     .useKey('a', 50)
     .forEach(_.range(1, 50), e => {
