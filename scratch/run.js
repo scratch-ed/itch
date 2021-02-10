@@ -1,20 +1,7 @@
 class Waiter {
   constructor() {
-    /**
-     * The promise. Use this to await completion.
-     * @type {Promise<any>}
-     */
-    this.promise = new Promise((resolve, reject) => {
-      /**
-       * Call to resolve the underlying promise.
-       * @type {function(any): void}
-       */
-      this.resolve = resolve;
-      /**
-       * Call to reject the underlying promise.
-       * @type {function(*): void}
-       */
-      this.reject = reject;
+    this.prom = new Promise((resolve, _reject) => {
+      this.res = resolve;
     });
   }
 }
@@ -25,7 +12,7 @@ document.getElementById('file').addEventListener('change', e => {
   const reader = new FileReader();
   const thisFileInput = e.target;
   reader.onload = () => {
-    submissionUpload.resolve(reader.result);
+    submissionUpload.res(reader.result);
   };
   reader.readAsArrayBuffer(thisFileInput.files[0]);
 });
@@ -36,7 +23,7 @@ document.getElementById('template').addEventListener('change', e => {
   const reader = new FileReader();
   const thisFileInput = e.target;
   reader.onload = () => {
-    templateUpload.resolve(reader.result);
+    templateUpload.res(reader.result);
   };
   reader.readAsArrayBuffer(thisFileInput.files[0]);
 });
@@ -48,8 +35,8 @@ async function runTests(testplan) {
 
   /** @type {EvalConfig} */
   const config = {
-    submission: await submissionUpload.promise,
-    template: await templateUpload.promise,
+    submission: await submissionUpload.prom,
+    template: await templateUpload.prom,
     testplan: testplan,
     canvas: document.getElementById('scratch-stage')
   };

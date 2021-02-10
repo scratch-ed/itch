@@ -161,7 +161,6 @@ function defaultBeforeExecution(template, submission, output) {
 /** @param {Evaluation} evaluation */
 // eslint-disable-next-line no-unused-vars
 function defaultDuringExecution(evaluation) {
-  // pass
   evaluation.scheduler.end();
 }
 
