@@ -16,4 +16,4 @@ node_modules/
 .env.test
 
 core/dist
-config.js
+config.json
