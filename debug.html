@@ -1,0 +1,65 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Itch Debug</title>
+</head>
+<body>
+<h2>Itch Debug</h2>
+
+<canvas id="scratch-stage"></canvas>
+
+<h1>Output</h1>
+<div id="output">
+
+</div>
+
+<!-- Scratch libraries -->
+<!-- Scratch libraries -->
+<!-- Audio module -->
+<!-- Doesn't work :( -->
+<!--<script src="../node_modules/scratch-audio/dist.js"></script>-->
+<!-- Storage module -->
+<script src="node_modules/scratch-storage/dist/web/scratch-storage.js"></script>
+<!-- Stage rendering -->
+<script src="node_modules/scratch-render/dist/web/scratch-render.js"></script>
+<!-- SVG rendering -->
+<script src="node_modules/scratch-svg-renderer/dist/web/scratch-svg-renderer.js"></script>
+<!-- VM -->
+<script src="node_modules/scratch-vm/dist/web/scratch-vm.js"></script>
+
+<!-- Utils -->
+<script src="node_modules/lodash/lodash.min.js"></script>
+<script src="node_modules/itch-judge/dist/js/judge.browser.js"></script>
+
+<!-- Scratch Judge -->
+<script src="scratch/collector.js"></script>
+
+<!-- Test plan -->
+<script src="tests/plans/vpw2017/01_mad_hatter_test.js"></script>
+
+<script>
+  const submissionPath = 'tests/projects/vpw2017/01_mad_hatter.sb3';
+  window.handleOut = (r) => console.log(r);
+
+  const data = fetch(submissionPath)
+    .then(r => r.arrayBuffer())
+    .then(array => {
+      const config = {
+        submission: array,
+        template: array,
+        testplan: '',
+        canvas: document.getElementById('scratch-stage')
+      };
+
+      // Hook up the output visualizer.
+      init(document.getElementById('output'));
+
+      // Main function of the Itch judge, exposed by the evaluation module.
+      window.run(config);
+    });
+</script>
+
+</body>
+</html>
