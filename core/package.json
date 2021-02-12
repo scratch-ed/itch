@@ -22,8 +22,7 @@
     "scratch-render": "0.1.0-prerelease.20201113223804",
     "scratch-storage": "^1.3.3",
     "scratch-svg-renderer": "^0.2.0-prerelease.20210107222546",
-    "scratch-vm": "^0.2.0-prerelease.20201125065300",
-    "scratch4d-judge": "file:.."
+    "scratch-vm": "^0.2.0-prerelease.20201125065300"
   },
   "devDependencies": {
     "@babel/cli": "^7.12.10",

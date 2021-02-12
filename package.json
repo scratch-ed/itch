@@ -17,6 +17,7 @@
     "dotenv": "^8.2.0",
     "esdoc": "^1.1.0",
     "esdoc-standard-plugin": "^1.0.0",
+    "itch-judge": "file:./core",
     "jszip": "^3.2.1",
     "lodash": "^4.17.20",
     "puppeteer": "^5.5.0",
@@ -41,8 +42,10 @@
   "scripts": {
     "start": "npm --prefix ./core run build && node fileEval.js",
     "api": "npm --prefix ./api start",
-    "clean": "rm -rf ./node_modules && rm -rf ./core/node_modules",
-    "preinstall": "npm --prefix ./core install && npm --prefix ./api install",
+    "install:core": "cd ./core && npm install && cd ..",
+    "install:api": "cd ./api && npm install && cd ..",
+    "preinstall": "npm run install:core && npm run install:api",
+    "clean": "rm -rf ./node_modules && rm -rf ./core/node_modules && rm -rf ./api/node_modules",
     "test": "jest"
   },
   "prettier": {
@@ -62,8 +65,5 @@
     "tabWidth": 2,
     "trailingComma": "all",
     "useTabs": false
-  },
-  "workspaces": [
-    "core"
-  ]
+  }
 }
