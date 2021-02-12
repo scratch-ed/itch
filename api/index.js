@@ -7,6 +7,8 @@ const logger = require('morgan');
 const server = restify.createServer();
 logger.format('my-simple-format', ':method :url :status');
 
+server.pre(restify.plugins.pre.sanitizePath());
+
 server.pre(function (request, _, next) {
   request.log.info({ req: request.url }, 'REQUEST');
   next();
