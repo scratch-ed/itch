@@ -141,10 +141,6 @@ class Evaluation {
 /**
  * @type {BeforeExecution}
  */
-// eslint-disable-next-line no-unused-vars
-function defaultBeforeExecution(template, submission, output) {
-  // pass
-}
 
 /**
  * Function that is run just before the project is executed, allowing to
@@ -159,11 +155,6 @@ function defaultBeforeExecution(template, submission, output) {
  */
 
 /** @param {Evaluation} evaluation */
-// eslint-disable-next-line no-unused-vars
-function defaultDuringExecution(evaluation) {
-  evaluation.scheduler.end();
-}
-
 /**
  * Function that is run after the project has been executed. At this
  * point the log is filled, and available for inspection. Mosts tests
@@ -176,20 +167,14 @@ function defaultDuringExecution(evaluation) {
  * @return {void} Nothing -> ignored.
  */
 
-/** @type {AfterExecution} */
-// eslint-disable-next-line no-unused-vars
-function defaultAfterExecution(evaluation) {
-  // pass
-}
-
 async function loadTestplan(value) {
   return {
     /** @type {BeforeExecution} */
-    beforeExecution: window.beforeExecution || defaultBeforeExecution,
+    beforeExecution: window.beforeExecution,
     /** @type {DuringExecution} */
-    duringExecution: window.duringExecution || defaultDuringExecution,
+    duringExecution: window.duringExecution,
     /** @type {AfterExecution} */
-    afterExecution: window.afterExecution || defaultAfterExecution
+    afterExecution: window.afterExecution,
   };
 }
 
@@ -201,7 +186,6 @@ async function loadTestplan(value) {
  * @return {Promise<void>}
  */
 export async function run(config) {
-
   const context = new Context();
   const templateJson = await context.getProjectJson(config);
   const submissionJson = await context.prepareVm(config);
@@ -211,33 +195,46 @@ export async function run(config) {
   context.output.startTestContext();
 
   // Run the tests before the execution.
-  testplan.beforeExecution(new Project(templateJson), new Project(submissionJson), context.output);
-  context.output.closeTestContext();
 
-  const judge = new Evaluation(context);
-  expose();
+  if (beforeExecution) {
+    context.output.startTestContext();
+    testplan.beforeExecution(
+      new Project(templateJson),
+      new Project(submissionJson),
+      context.output,
+    );
+    context.output.closeTestContext();
+  }
 
-  await context.vmLoaded.promise;
+  if (testplan.duringExecution || testplan.afterExecution) {
+    const judge = new Evaluation(context);
+    expose();
 
-  // Schedule the commands for the duration.
-  testplan.duringExecution(judge);
+    await context.vmLoaded.promise;
 
-  // Prepare the context for execution.
-  context.prepareForExecution();
+    // Schedule the commands for the duration.
+    if (testplan.duringExecution) {
+      testplan.duringExecution(judge);
+    }
 
-  // Run the events.
-  context.output.startTestContext();
-  await context.event.run(context);
-  await context.simulationEnd.promise;
-  context.output.closeTestContext();
+    // Prepare the context for execution.
+    context.prepareForExecution();
 
-  // Do post-mortem tests.
-  context.output.startTestContext();
-  testplan.afterExecution(judge);
-  context.output.closeTestContext();
+    // Run the events.
+    context.output.startTestContext();
+    await context.event.run(context);
+    await context.simulationEnd.promise;
+    context.output.closeTestContext();
+
+    if (testplan.afterExecution) {
+      context.output.startTestContext();
+      testplan.afterExecution(judge);
+      context.output.closeTestContext();
+    }
+  }
 
   context.output.closeTestTab();
-  console.log('--- END OF EVALUATION ---');
+  console.log('STOPPED');
 }
 
 // Main function in the judge.
