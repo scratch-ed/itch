@@ -42,9 +42,6 @@ export default class ResultManager {
   }
 
   startTestContext() {
-    if (!this.hasOpenTab) {
-      this.startTestTab('Tests');
-    }
     this.out({ command: 'start-context' });
     this.hasOpenContext = true;
   }
@@ -122,7 +119,7 @@ export default class ResultManager {
     }
     this.closeJudge(false);
   }
-  
+
   closeJudge(accepted = undefined) {
     if (accepted !== null && accepted !== undefined) {
       this.out({ command: 'close-judgement' });
@@ -140,7 +137,7 @@ export default class ResultManager {
       });
     }
   }
-  
+
   annotate(row, column, text) {
     this.out({
       command: 'annotate',
@@ -162,7 +159,10 @@ export default class ResultManager {
         status = { enum: 'wrong', human: 'Fout' };
       }
     } else {
-      status = { enum: 'runtime error', human: 'Error: resultaat is undefined' };
+      status = {
+        enum: 'runtime error',
+        human: 'Error: resultaat is undefined',
+      };
     }
 
     if (correct != null) {
@@ -181,9 +181,9 @@ export default class ResultManager {
 
   /**
    * Add a complete testcase to the output.
-   * 
+   *
    * // TODO: change this output format to better use the Dodona format.
-   * 
+   *
    * @param {string} caseName - The name of the testcase.
    * @param {boolean} correct - If the testcase was successful or not.
    * @param {string} message - The message if wrong.
@@ -195,5 +195,4 @@ export default class ResultManager {
     }
     this.closeTestCase(correct);
   }
-
 }
