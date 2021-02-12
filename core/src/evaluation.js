@@ -34,6 +34,15 @@ function expose() {
  * @property {string} testplan - Location of the testplan.
  */
 
+const EvaluationStage = {
+  not_started: 0,
+  before: 1,
+  scheduling: 2,
+  executing: 3,
+  after: 4
+}
+
+
 /**
  * Entry point for the test plan API.
  *
@@ -52,12 +61,18 @@ class Evaluation {
      * @type {Context}
      */
     this.context = context;
+
+    /**
+     * Used to track the stage internally.
+     * @type {number}
+     * @protected
+     */
+    this.stage = EvaluationStage.not_started;
   }
 
   /**
    * Get access to the log.
    *
-   * @public
    * @return {Log} The log.
    */
   get log() {
@@ -68,7 +83,6 @@ class Evaluation {
    * Get access to the scratch VM. This should be considered read-only.
    * If you modify the VM, there are no guarantees it will keep working.
    *
-   * @public
    * @return {VirtualMachine}
    */
   get vm() {
@@ -78,7 +92,6 @@ class Evaluation {
   /**
    * Get the array of answers provided previously.
    *
-   * @public
    * @return {string[]}
    */
   get answers() {
@@ -88,7 +101,6 @@ class Evaluation {
   /**
    * Set the array of answers to provide to the submission.
    *
-   * @public
    * @param {string[]} answers
    */
   set answers(answers) {
@@ -98,7 +110,6 @@ class Evaluation {
   /**
    * Get the output manager.
    *
-   * @public
    * @return {ResultManager}
    */
   get output() {
@@ -116,12 +127,40 @@ class Evaluation {
 
   /** @param {number} timeout */
   set actionTimeout(timeout) {
+    this.assertBefore(EvaluationStage.scheduling, "actionTimeout");
     this.context.actionTimeout = timeout;
   }
 
   /** @return {number} */
   get actionTimeout() {
     return this.context.actionTimeout;
+  }
+
+  /**
+   * Set the acceleration factor for the test.
+   * @param {number} factor - The factor, e.g. 2 will double the speed.
+   */
+  set acceleration(factor) {
+    this.assertBefore(EvaluationStage.scheduling, "acceleration");
+    this.context.accelerationFactor = factor;
+  }
+
+  /**
+   * @return {number}
+   */
+  get acceleration() {
+    return this.context.accelerationFactor;
+  }
+
+  /**
+   * Check that we are before or on a given stage.
+   * @param {number} stage
+   * @param {string} func
+   */
+  assertBefore(stage, func) {
+    if (this.stage > stage) {
+      throw new Error(`The function ${func} cannot be used at this stage: it must be used earlier.`);
+    }
   }
 }
 
@@ -141,6 +180,10 @@ class Evaluation {
 /**
  * @type {BeforeExecution}
  */
+// eslint-disable-next-line no-unused-vars
+function defaultBeforeExecution(template, submission, output) {
+  // pass
+}
 
 /**
  * Function that is run just before the project is executed, allowing to
@@ -155,6 +198,11 @@ class Evaluation {
  */
 
 /** @param {Evaluation} evaluation */
+// eslint-disable-next-line no-unused-vars
+function defaultDuringExecution(evaluation) {
+  evaluation.scheduler.end();
+}
+
 /**
  * Function that is run after the project has been executed. At this
  * point the log is filled, and available for inspection. Mosts tests
@@ -167,14 +215,20 @@ class Evaluation {
  * @return {void} Nothing -> ignored.
  */
 
+/** @type {AfterExecution} */
+// eslint-disable-next-line no-unused-vars
+function defaultAfterExecution(evaluation) {
+  // pass
+}
+
 async function loadTestplan(value) {
   return {
     /** @type {BeforeExecution} */
-    beforeExecution: window.beforeExecution,
+    beforeExecution: window.beforeExecution || defaultBeforeExecution,
     /** @type {DuringExecution} */
-    duringExecution: window.duringExecution,
+    duringExecution: window.duringExecution || defaultDuringExecution,
     /** @type {AfterExecution} */
-    afterExecution: window.afterExecution,
+    afterExecution: window.afterExecution || defaultAfterExecution
   };
 }
 
@@ -186,6 +240,7 @@ async function loadTestplan(value) {
  * @return {Promise<void>}
  */
 export async function run(config) {
+
   const context = new Context();
   const templateJson = await context.getProjectJson(config);
   const submissionJson = await context.prepareVm(config);
@@ -193,48 +248,40 @@ export async function run(config) {
 
   context.output.startTestTab('Testen uit het testplan');
   context.output.startTestContext();
+  context.stage = EvaluationStage.before;
 
   // Run the tests before the execution.
+  testplan.beforeExecution(new Project(templateJson), new Project(submissionJson), context.output);
+  context.output.closeTestContext();
 
-  if (beforeExecution) {
-    context.output.startTestContext();
-    testplan.beforeExecution(
-      new Project(templateJson),
-      new Project(submissionJson),
-      context.output,
-    );
-    context.output.closeTestContext();
-  }
+  const judge = new Evaluation(context);
+  expose();
 
-  if (testplan.duringExecution || testplan.afterExecution) {
-    const judge = new Evaluation(context);
-    expose();
+  await context.vmLoaded.promise;
+  context.stage = EvaluationStage.scheduling;
 
-    await context.vmLoaded.promise;
+  // Schedule the commands for the duration.
+  testplan.duringExecution(judge);
 
-    // Schedule the commands for the duration.
-    if (testplan.duringExecution) {
-      testplan.duringExecution(judge);
-    }
+  context.stage = EvaluationStage.executing;
+  // Prepare the context for execution.
+  context.prepareForExecution();
 
-    // Prepare the context for execution.
-    context.prepareForExecution();
+  // Run the events.
+  context.output.startTestContext();
+  await context.event.run(context);
+  await context.simulationEnd.promise;
+  context.output.closeTestContext();
+  
+  context.stage = EvaluationStage.after;
 
-    // Run the events.
-    context.output.startTestContext();
-    await context.event.run(context);
-    await context.simulationEnd.promise;
-    context.output.closeTestContext();
-
-    if (testplan.afterExecution) {
-      context.output.startTestContext();
-      testplan.afterExecution(judge);
-      context.output.closeTestContext();
-    }
-  }
+  // Do post-mortem tests.
+  context.output.startTestContext();
+  testplan.afterExecution(judge);
+  context.output.closeTestContext();
 
   context.output.closeTestTab();
-  console.log('STOPPED');
+  console.log('--- END OF EVALUATION ---');
 }
 
 // Main function in the judge.

@@ -9,7 +9,6 @@ import Deferred from './deferred.js';
 import { makeProxiedRenderer } from './renderer';
 import ResultManager from './output';
 import ScheduledEvent from './scheduler.js';
-import { BroadcastListener } from './listener.js';
 
 const Events = {
   SCRATCH_PROJECT_START: 'PROJECT_START',
@@ -54,6 +53,17 @@ function wrapStartHats(vm) {
   };
 }
 
+/**
+ * Load the VM. The returned VM is completely prepared: listeners
+ * are attached, dependencies loaded and the project is loaded into
+ * the VM.
+ *
+ * @param {VirtualMachine} vm - The VM to load.
+ * @param {string|ArrayBuffer} project - The project to load.
+ * @param {HTMLCanvasElement|null} [canvas] - The canvas for the renderer.
+ * @param {Context} context - The context. The VM part of the context is not loaded yet.
+ * @return {Promise<VirtualMachine>} The virtual machine.
+ */
 async function loadVm(vm, project, canvas = null, context = null) {
   vm.setTurboMode(false);
 
@@ -147,6 +157,17 @@ export default class Context {
      * Output manager
      */
     this.output = new ResultManager();
+
+    /**
+     * The acceleration factor, used to speed up (or slow down)
+     * execution in the VM.
+     *
+     * There is a limit on how much you can increase this, since
+     * each step in the VM must still have time to run of course.
+     *
+     * @type {number}
+     */
+    this.accelerationFactor = 1;
   }
 
   /**
@@ -291,8 +312,80 @@ export default class Context {
     return JSON.parse(this.vm.toJSON());
   }
 
+  /**
+   * Prepare the VM for execution. This will prepare the answers for
+   * questions (if applicable) and instrument the VM to take the
+   * acceleration factor into account.
+   */
   prepareForExecution() {
     this.providedAnswers = this.answers.slice();
+
+    // Optimisation.
+    if (this.accelerationFactor === 1) {
+      return;
+    }
+    
+    // We need to instrument the VM.
+    // Changing the events is not necessary; this
+    // is handled by the event scheduler itself.
+    
+    // First, modify the step time.
+    // TODO: we don't want to include RUNTIME
+    const currentStepInterval = this.vm.runtime.constructor.THREAD_STEP_INTERVAL;
+    const newStepInterval = currentStepInterval / this.accelerationFactor;
+    
+    Object.defineProperty(this.vm.runtime.constructor, "THREAD_STEP_INTERVAL", {
+      value: newStepInterval
+    });
+    
+    // We also need to change various time stuff.
+    this.acceleratePrimitive('control_wait', 'DURATION');
+    this.acceleratePrimitive('looks_sayforsecs');
+    this.acceleratePrimitive('looks_thinkforsecs');
+    this.acceleratePrimitive('motion_glidesecstoxy');
+    this.acceleratePrimitive('motion_glideto');
+    
+    this.accelerateTimer();
+  }
+
+  /**
+   * Adjust the given argument for a given opcode to the acceleration factor.
+   *
+   * This is used to modify "time" constants to account for the acceleration factor.
+   * For example, if a condition is "wait for 10 seconds", but the acceleration factor
+   * is 2, we only want to wait for 5 seconds, not 10.
+   *
+   * @param {string} opcode - The opcode to accelerate.
+   * @param {string} argument - The argument to accelerate.
+   * 
+   * @private
+   */
+  acceleratePrimitive(opcode, argument= 'SECS') {
+    const original = this.vm.runtime.getOpcodeFunction(opcode);
+    this.vm.runtime._primitives[opcode] = (originalArgs, util) => {
+      // For safety, clone the arguments.
+      // But, todo: is this needed?
+      const args = { ...originalArgs };
+      args[argument] = args[argument] / this.accelerationFactor;
+      return original(args, util);
+    };
+  }
+
+  /**
+   * Adjust the given method on the given device to account for the
+   * acceleration factor.
+   * 
+   * This is mainly used to reverse accelerate the project timer.
+   * E.g. if the project timer is counts 10s for a project with
+   * acceleration factor 2, it should count 20s instead.
+   */
+  accelerateTimer() {
+    const device = this.vm.runtime.ioDevices.clock;
+    const original = device.projectTimer;
+    
+    device.projectTimer = () => {
+      return original.call(device) * this.accelerationFactor;
+    };
   }
 
   /**
