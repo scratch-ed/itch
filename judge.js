@@ -9,21 +9,20 @@ function toStdOut(output) {
   process.stdout.write(JSON.stringify(output));
 }
 
-//
-// Judge
-//
-
 class Judge {
   constructor(testFile, options = {}, outputStream = toStdOut) {
     // extract options
     this.time_limit = options.time_limit || 10000;
 
-    this.test_file = path.resolve(__dirname, testFile);
-    
+    this.test_file = options.fromApi
+      ? testFile
+      : path.resolve(__dirname, testFile);
+
     this.out = outputStream;
 
-    this.debug = options.debug || false;
-    this.visualise = options.visualise || false;
+    this.debug = !!options.debug;
+    this.visualise = !!options.visualise;
+    this.fromApi = !!options.fromApi;
   }
 
   async run(templateFile, submissionFile) {
@@ -64,15 +63,23 @@ class Judge {
     }
 
     await page.goto(`file://${url}`);
-    
+
     // Hook up the test output to stdout.
     await page.exposeFunction('handleOut', this.out);
     await page.exposeFunction('visualise', () => this.visualise);
-    
-    await page.addScriptTag({ url: this.test_file });
 
-    const sourceFileTemplate = path.resolve(__dirname, submissionFile);
-    const templateFileTemplate = path.resolve(__dirname, templateFile);
+    await page.addScriptTag({
+      ...(this.fromApi
+        ? { content: this.test_file.toString() }
+        : { url: this.test_file }),
+    });
+
+    const sourceFileTemplate = this.fromApi
+      ? submissionFile
+      : path.resolve(__dirname, submissionFile);
+    const templateFileTemplate = this.fromApi
+      ? templateFile
+      : path.resolve(__dirname, templateFile);
 
     // START JUDGE
     this.out({ command: 'start-judgement' });
@@ -83,7 +90,7 @@ class Judge {
     const templateHandle = await page.$('#template');
     await templateHandle.uploadFile(templateFileTemplate);
 
-    await page.setViewport({height: 1080, width: 960});
+    await page.setViewport({ height: 1080, width: 960 });
     await page.waitForTimeout(50);
 
     if (this.debug) {
@@ -93,12 +100,9 @@ class Judge {
       });
     }
 
-    await page.evaluate(
-      (testplan) => {
-        return runTests(testplan);
-      },
-      this.test_file
-    );
+    await page.evaluate((testplan) => {
+      return runTests(testplan);
+    }, this.test_file);
 
     if (!this.debug) {
       await browser.close();
