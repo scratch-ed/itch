@@ -25,8 +25,12 @@ function setupRoutes(server) {
 
     const pass = new PassThrough();
     pass.pipe(res);
+    
+    const plan = {
+      content: testplan.toString()
+    }
 
-    const judge = new Judge(testplan, { fromApi: true }, (judgeObject) => {
+    const judge = new Judge(plan, { fromApi: true }, (judgeObject) => {
       if (!ALLOWED_COMMANDS.includes(judgeObject.command)) {
         return;
       }

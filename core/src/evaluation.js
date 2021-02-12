@@ -31,7 +31,6 @@ function expose() {
  * @property {string|ArrayBuffer} submission - The submission sb3 data.
  * @property {string|ArrayBuffer} template - The template sb3 file.
  * @property {HTMLCanvasElement} canvas - The canvas for the renderer.
- * @property {string} testplan - Location of the testplan.
  */
 
 const EvaluationStage = {
@@ -41,7 +40,6 @@ const EvaluationStage = {
   executing: 3,
   after: 4
 }
-
 
 /**
  * Entry point for the test plan API.
@@ -176,15 +174,6 @@ class Evaluation {
  * @param {ResultManager} output - The output manager.
  * @return {void} Nothing -> ignored.
  */
-
-/**
- * @type {BeforeExecution}
- */
-// eslint-disable-next-line no-unused-vars
-function defaultBeforeExecution(template, submission, output) {
-  // pass
-}
-
 /**
  * Function that is run just before the project is executed, allowing to
  * schedule events, inputs and tests for during the execution. While you
@@ -196,13 +185,6 @@ function defaultBeforeExecution(template, submission, output) {
  * @param {Evaluation} evaluation - The judge object, providing the API.
  * @return {void} Nothing -> ignored.
  */
-
-/** @param {Evaluation} evaluation */
-// eslint-disable-next-line no-unused-vars
-function defaultDuringExecution(evaluation) {
-  evaluation.scheduler.end();
-}
-
 /**
  * Function that is run after the project has been executed. At this
  * point the log is filled, and available for inspection. Mosts tests
@@ -214,23 +196,6 @@ function defaultDuringExecution(evaluation) {
  * @param {Evaluation} evaluation - The judge object, providing the API.
  * @return {void} Nothing -> ignored.
  */
-
-/** @type {AfterExecution} */
-// eslint-disable-next-line no-unused-vars
-function defaultAfterExecution(evaluation) {
-  // pass
-}
-
-async function loadTestplan(value) {
-  return {
-    /** @type {BeforeExecution} */
-    beforeExecution: window.beforeExecution || defaultBeforeExecution,
-    /** @type {DuringExecution} */
-    duringExecution: window.duringExecution || defaultDuringExecution,
-    /** @type {AfterExecution} */
-    afterExecution: window.afterExecution || defaultAfterExecution
-  };
-}
 
 /**
  * Run the judge.
@@ -244,7 +209,14 @@ export async function run(config) {
   const context = new Context();
   const templateJson = await context.getProjectJson(config);
   const submissionJson = await context.prepareVm(config);
-  const testplan = await loadTestplan(config.testplan);
+  const testplan = {
+    /** @type {BeforeExecution} */
+    beforeExecution: window.beforeExecution || (() => {}),
+    /** @type {DuringExecution} */
+    duringExecution: window.duringExecution || (e => e.scheduler.end()),
+    /** @type {AfterExecution} */
+    afterExecution: window.afterExecution || (() => {})
+  };
 
   context.output.startTestTab('Testen uit het testplan');
   context.output.startTestContext();

@@ -9,20 +9,30 @@ function toStdOut(output) {
   process.stdout.write(JSON.stringify(output));
 }
 
+/**
+ * @typedef {Object} FrameAddScriptTagOptions
+ * @property {string} [url]
+ * @property {string} [content]
+ */
+
 class Judge {
-  constructor(testFile, options = {}, outputStream = toStdOut) {
+  /**
+   * Create a judge class.
+   * 
+   * @param {FrameAddScriptTagOptions} testplan
+   * @param {object} options
+   * @param {function(object):void} outputStream
+   */
+  constructor(testplan, options = {}, outputStream = toStdOut) {
     // extract options
     this.time_limit = options.time_limit || 10000;
 
-    this.test_file = options.fromApi
-      ? testFile
-      : path.resolve(__dirname, testFile);
+    this.testplan = testplan;
 
     this.out = outputStream;
 
-    this.debug = !!options.debug;
-    this.visualise = !!options.visualise;
-    this.fromApi = !!options.fromApi;
+    this.debug = options.debug;
+    this.visualise = options.visualise;
   }
 
   async run(templateFile, submissionFile) {
@@ -68,27 +78,16 @@ class Judge {
     await page.exposeFunction('handleOut', this.out);
     await page.exposeFunction('visualise', () => this.visualise);
 
-    await page.addScriptTag({
-      ...(this.fromApi
-        ? { content: this.test_file.toString() }
-        : { url: this.test_file }),
-    });
-
-    const sourceFileTemplate = this.fromApi
-      ? submissionFile
-      : path.resolve(__dirname, submissionFile);
-    const templateFileTemplate = this.fromApi
-      ? templateFile
-      : path.resolve(__dirname, templateFile);
+    await page.addScriptTag(this.testplan);
 
     // START JUDGE
     this.out({ command: 'start-judgement' });
 
     /** @type {ElementHandle} */
     const fileHandle = await page.$('#file');
-    await fileHandle.uploadFile(sourceFileTemplate);
+    await fileHandle.uploadFile(submissionFile);
     const templateHandle = await page.$('#template');
-    await templateHandle.uploadFile(templateFileTemplate);
+    await templateHandle.uploadFile(templateFile);
 
     await page.setViewport({ height: 1080, width: 960 });
     await page.waitForTimeout(50);
@@ -100,9 +99,9 @@ class Judge {
       });
     }
 
-    await page.evaluate((testplan) => {
-      return runTests(testplan);
-    }, this.test_file);
+    await page.evaluate(() => {
+      runTests();
+    });
 
     if (!this.debug) {
       await browser.close();

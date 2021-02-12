@@ -16,8 +16,12 @@ const {
   programming_language: programmingLanguage,
 } = config;
 
+const plan = {
+  url: path.resolve(__dirname, path.join(resourcesDir, config.plan))
+}
+
 // process tests
-const judge = new Judge(path.join(resourcesDir, config.plan), {
+const judge = new Judge(plan, {
   // convert time limit from seconds to millisecond and only consume
   // 90% of the available time in order to have some spare time to
   // generate the feedback on stdout
@@ -29,4 +33,4 @@ const judge = new Judge(path.join(resourcesDir, config.plan), {
 });
 
 // evaluate tests and output result to stdout
-judge.run(templateFile, sourceFile);
+judge.run(path.resolve(__dirname, templateFile), path.resolve(__dirname, sourceFile));
