@@ -31,8 +31,9 @@ class WaitEvent extends ScheduledAction {
     this.delay = delay;
   }
 
-  async execute(_context, resolve) {
-    setTimeout(() => { resolve('wait resolved'); }, this.delay);
+  async execute(context, resolve) {
+    const delay = context.accelerate(this.delay);
+    setTimeout(() => { resolve('wait resolved'); }, delay);
   }
 
   toString() {
@@ -222,6 +223,9 @@ class KeyUseAction extends ScheduledAction {
       key: this.key,
       isDown: this.isDown(),
     });
+    
+    const delay = context.accelerate(this.delay);
+    const accelDown = context.accelerate(this.down);
 
     if (this.isDelayed()) {
       setTimeout(() => {
@@ -232,12 +236,12 @@ class KeyUseAction extends ScheduledAction {
         });
         setTimeout(() => {
           resolve('Completed delayed key movement');
-        }, this.delay);
-      }, this.down);
+        }, delay);
+      }, accelDown);
     } else {
       setTimeout(() => {
         resolve('Completed key movement');
-      }, this.delay);
+      }, delay);
     }
   }
 
@@ -336,6 +340,17 @@ class WaitOnBroadcastAction extends ScheduledAction {
  * want this, you'll need to save the previous event manually.
  *
  * See the examples for details.
+ * 
+ * ### Timeouts & other times
+ * 
+ * Timeouts and other time params will be rescaled according to the global
+ * acceleration factor. You should not apply it yourself. For example, if
+ * you have an acceleration factor of 2, you should pass 10s to wait 5s.
+ * 
+ * You can manually change this by using the option `timeAcceleration`. If
+ * present, this will be used for all time-related acceleration. This allows
+ * you to set the timeouts slower or faster than the frame acceleration, since
+ * the frame acceleration is not always reached.
  *
  * ### Types of events
  *
@@ -446,10 +461,10 @@ export default class ScheduledEvent {
         this.nextEvents.forEach(e => e.run(context));
       }
     });
-    const time = this.timeout || context.actionTimeout;
+    const time = context.accelerate(this.timeout || context.actionTimeout);
     const timeout = new Promise((resolve, reject) => {
       setTimeout(() => {
-        reject(new Error(`timeout after ${time}`));
+        reject(new Error(`timeout after ${this.timeout || context.actionTimeout} (real: ${time})`));
       }, time);
     });
 

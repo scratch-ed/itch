@@ -151,6 +151,21 @@ class Evaluation {
   }
 
   /**
+   * Set the acceleration factor for the test's times.
+   * This will be used to set the timeouts for the scheduled events.
+   * 
+   * @param {number} factor - The factor, e.g. 2 will double the speed.
+   */
+  set timeAcceleration(factor) {
+    this.assertBefore(EvaluationStage.scheduling, "timeAcceleration");
+    this.context.timeAccelerationFactor = factor;
+  }
+  
+  get timeAcceleration() {
+    return this.context.timeAccelerationFactor;
+  }
+
+  /**
    * Check that we are before or on a given stage.
    * @param {number} stage
    * @param {string} func
@@ -237,7 +252,7 @@ export async function run(config) {
 
   context.stage = EvaluationStage.executing;
   // Prepare the context for execution.
-  context.prepareForExecution();
+  context.prepareAndRunVm();
 
   // Run the events.
   context.output.startTestContext();
