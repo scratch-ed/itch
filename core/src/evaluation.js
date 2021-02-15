@@ -140,14 +140,16 @@ class Evaluation {
    */
   set acceleration(factor) {
     this.assertBefore(EvaluationStage.scheduling, "acceleration");
-    this.context.accelerationFactor = factor;
+    this.context.accelerationFactor = { 
+      factor: factor
+    };
   }
 
   /**
    * @return {number}
    */
   get acceleration() {
-    return this.context.accelerationFactor;
+    return this.context.accelerationFactor.factor;
   }
 
   /**
@@ -158,11 +160,26 @@ class Evaluation {
    */
   set timeAcceleration(factor) {
     this.assertBefore(EvaluationStage.scheduling, "timeAcceleration");
-    this.context.timeAccelerationFactor = factor;
+    this.context.accelerationFactor.time = factor;
   }
   
   get timeAcceleration() {
-    return this.context.timeAccelerationFactor;
+    return this.context.accelerationFactor.time;
+  }
+
+  /**
+   * Set the acceleration factor for the event times.
+   * This will be used to set the timeouts for the scheduled events.
+   *
+   * @param {number} factor - The factor, e.g. 2 will double the speed.
+   */
+  set eventAcceleration(factor) {
+    this.assertBefore(EvaluationStage.scheduling, "eventAcceleration");
+    this.context.accelerationFactor.event = factor;
+  }
+
+  get eventAcceleration() {
+    return this.context.accelerationFactor.event;
   }
 
   /**

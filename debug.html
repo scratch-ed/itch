@@ -38,7 +38,7 @@
 
 <script>
   const configPath = 'config.json';
-  window.handleOut = (r) => console.log(r);
+  window.handleOut = (r) => console.debug(r);
   
   fetch(configPath)
   .then(r => r.json())

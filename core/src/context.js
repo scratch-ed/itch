@@ -29,19 +29,19 @@ const Events = {
 function wrapStep(vm) {
   const oldFunction = vm.runtime._step.bind(vm.runtime);
 
-  let time = Date.now();
+  // let time = Date.now();
   vm.runtime._step = () => {
     const oldResult = oldFunction();
     if (vm.runtime._lastStepDoneThreads.length > 0) {
       vm.runtime.emit(Events.DONE_THREADS_UPDATE, vm.runtime._lastStepDoneThreads);
     }
-    const newTime = Date.now();
-    if (time && newTime) {
-      console.log(`Step took ${newTime - time}`, {
-        currentStep: vm.runtime.currentStepTime
-      });
-    }
-    time = newTime;
+    // const newTime = Date.now();
+    // if (time && newTime) {
+    //   console.log(`Step took ${newTime - time}`, {
+    //     currentStep: vm.runtime.currentStepTime
+    //   });
+    // }
+    // time = newTime;
     return oldResult;
   };
 }
@@ -102,6 +102,13 @@ async function loadVm(vm, project, canvas = null, context = null) {
 
   return vm;
 }
+
+/**
+ * @typedef {object} Acceleration
+ * @property {number} factor - Main acceleration factor.
+ * @property {number} [time] - Scratch waiting times.
+ * @property {number} [event] - Scheduled events waiting time.
+ */
 
 /**
  * Contains common information and parameters for the
@@ -173,19 +180,11 @@ export default class Context {
      * There is a limit on how much you can increase this, since
      * each step in the VM must still have time to run of course.
      *
-     * @type {number}
+     * @type {Acceleration}
      */
-    this.accelerationFactor = 1;
-
-    /**
-     * The acceleration factor for times, e.g. how long you should
-     * wait for something. This is not always the same as the normal
-     * acceleration factor, but in most cases, you should not change 
-     * this.
-     * 
-     * @type {null|number}
-     */
-    this.timeAccelerationFactor = null;
+    this.accelerationFactor = {
+      factor: 1
+    }
   }
 
   /**
@@ -336,15 +335,14 @@ export default class Context {
     this.providedAnswers = this.answers.slice();
 
     // Optimisation.
-    if (this.accelerationFactor !== 1) {
+    if (this.accelerationFactor.time !== 1) {
       // We need to instrument the VM.
       // Changing the events is not necessary; this
       // is handled by the event scheduler itself.
 
       // First, modify the step time.
-      // TODO: we don't want to include RUNTIME
       const currentStepInterval = this.vm.runtime.constructor.THREAD_STEP_INTERVAL;
-      const newStepInterval = currentStepInterval / this.accelerationFactor;
+      const newStepInterval = currentStepInterval / this.accelerationFactor.factor;
 
       Object.defineProperty(this.vm.runtime.constructor, "THREAD_STEP_INTERVAL", {
         value: newStepInterval
@@ -378,11 +376,11 @@ export default class Context {
    */
   acceleratePrimitive(opcode, argument= 'SECS') {
     const original = this.vm.runtime.getOpcodeFunction(opcode);
+    const factor = this.accelerationFactor.time || this.accelerationFactor.factor;
     this.vm.runtime._primitives[opcode] = (originalArgs, util) => {
       // For safety, clone the arguments.
-      // But, todo: is this needed?
       const args = { ...originalArgs };
-      args[argument] = args[argument] / this.accelerationFactor;
+      args[argument] = args[argument] / factor;
       return original(args, util);
     };
   }
@@ -396,12 +394,7 @@ export default class Context {
    * acceleration factor 2, it should count 20s instead.
    */
   accelerateTimer() {
-    const factor = this.timeAccelerationFactor || this.accelerationFactor;
-    
-    if (factor === 1) {
-      return;
-    }
-    
+    const factor = this.accelerationFactor.time || this.accelerationFactor;
     const device = this.vm.runtime.ioDevices.clock;
     const original = device.projectTimer;
     
@@ -411,14 +404,13 @@ export default class Context {
   }
 
   /**
-   * Accelerate a certain number. This is intended for times;
-   * `timeAccelerationFactor` is used when available.
+   * Accelerate a certain number. This is intended for events.
    * 
    * @param {number|any} number - The number to accelerate. All non-numbers are returned as is.
    * @return {number|any}
    */
-  accelerate(number) {
-    const factor = this.timeAccelerationFactor || this.accelerationFactor;
+  accelerateEvent(number) {
+    const factor = this.accelerationFactor.event || this.accelerationFactor.factor;
     if (factor === 1 || typeof number !== 'number') {
       return number;
     }

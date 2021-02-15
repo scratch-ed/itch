@@ -32,7 +32,7 @@ class WaitEvent extends ScheduledAction {
   }
 
   async execute(context, resolve) {
-    const delay = context.accelerate(this.delay);
+    const delay = context.accelerateEvent(this.delay);
     setTimeout(() => { resolve('wait resolved'); }, delay);
   }
 
@@ -224,8 +224,8 @@ class KeyUseAction extends ScheduledAction {
       isDown: this.isDown(),
     });
     
-    const delay = context.accelerate(this.delay);
-    const accelDown = context.accelerate(this.down);
+    const delay = context.accelerateEvent(this.delay);
+    const accelDown = context.accelerateEvent(this.down);
 
     if (this.isDelayed()) {
       setTimeout(() => {
@@ -426,7 +426,7 @@ export default class ScheduledEvent {
    * Create the initial event.
    *
    * @return {ScheduledEvent}
-   * @protected
+   * @package
    */
   static create() {
     return new ScheduledEvent(new InitialAction());
@@ -461,7 +461,7 @@ export default class ScheduledEvent {
         this.nextEvents.forEach(e => e.run(context));
       }
     });
-    const time = context.accelerate(this.timeout || context.actionTimeout);
+    const time = context.accelerateEvent(this.timeout || context.actionTimeout);
     const timeout = new Promise((resolve, reject) => {
       setTimeout(() => {
         reject(new Error(`timeout after ${this.timeout || context.actionTimeout} (real: ${time})`));
