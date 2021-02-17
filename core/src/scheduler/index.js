@@ -1,26 +1,10 @@
-import { LogEvent, LogFrame } from './log.js';
-import { BroadcastListener, ThreadListener } from './listener.js';
-
-class ScheduledAction {
-  /**
-   * Execute the action. This should do what the action is supposed to do,
-   * but should not concern itself with scheduling details.
-   *
-   * This method should be "sync": the resolve callback must be called when
-   * the event is done, async or not. The framework will take care of the
-   * async/sync scheduling.
-   *
-   * @param {Context} _context - The context.
-   * @param {function(T):void} _resolve - Mark the action as done.
-   */
-  execute(_context, _resolve) {
-    throw new Error('You must implement and execution action.');
-  }
-
-  toString() {
-    return this.constructor.name;
-  }
-}
+import { LogEvent, LogFrame } from '../log.js';
+import { BroadcastListener, ThreadListener } from '../listener.js';
+import { ScheduledAction } from './action.js';
+import { GreenFlagAction } from './green-flag.js';
+import { CallbackAction } from './callback.js';
+import { ClickSpriteAction } from './click.js';
+import { KeyUseAction, MouseUseAction, WhenPressKeyAction } from './io.js';
 
 class WaitEvent extends ScheduledAction {
   /**
@@ -41,22 +25,6 @@ class WaitEvent extends ScheduledAction {
   }
 }
 
-class CallbackAction extends ScheduledAction {
-  /**
-   * @param {function} callback
-   */
-  constructor(callback) {
-    super();
-    this.callback = callback;
-  }
-
-  execute(context, resolve) {
-    context.log.addFrame(context, 'manual_logging');
-    this.callback();
-    resolve();
-  }
-}
-
 class InitialAction extends CallbackAction {
   constructor() {
     super(() => {});
@@ -74,187 +42,6 @@ class EndAction extends ScheduledAction {
 
     resolve();
     context.simulationEnd.resolve('done with simulation');
-  }
-}
-
-class GreenFlagAction extends ScheduledAction {
-  execute(context, resolve) {
-
-    const event = new LogEvent(context, 'greenFlag');
-    event.previousFrame = new LogFrame(context, 'greenFlag');
-    context.log.addEvent(event);
-
-    const list = context.vm.runtime.startHats('event_whenflagclicked');
-
-    const action = new ThreadListener(list);
-    context.threadListeners.push(action);
-    action.promise.then(() => {
-      console.log(`finished greenFlag()`);
-      event.nextFrame = new LogFrame(context, 'greenFlagEnd');
-      resolve('green flag resolved');
-    });
-  }
-}
-
-const STAGE = 'Stage';
-
-class ClickSpriteAction extends ScheduledAction {
-  /**
-   * @param {string} spriteName
-   */
-  constructor(spriteName) {
-    super();
-    this.spriteName = spriteName;
-  }
-
-  execute(context, resolve) {
-    // Get the sprite
-    /** @type {Target} */
-    let sprite;
-    if (this.spriteName !== STAGE) {
-      sprite = context.vm.runtime.getSpriteTargetByName(this.spriteName);
-    } else {
-      sprite = context.vm.runtime.getTargetForStage();
-    }
-
-    // Save the state of the sprite before the click event.
-    const event = new LogEvent(context, 'click', { target: this.spriteName });
-    event.previousFrame = new LogFrame(context, 'click');
-    context.log.addEvent(event);
-
-    // Simulate mouse click by explicitly triggering click event on the target
-    let list;
-    if (this.spriteName !== STAGE) {
-      list = context.vm.runtime.startHats('event_whenthisspriteclicked', null, sprite);
-    } else {
-      list = context.vm.runtime.startHats('event_whenstageclicked', null, sprite);
-    }
-
-    const action = new ThreadListener(list);
-    context.threadListeners.push(action);
-
-    action.promise.then(() => {
-      console.log(`finished click on ${this.spriteName}`);
-      // save sprites state after click
-      event.nextFrame = new LogFrame(context, 'clickEnd');
-      resolve('sync resolve');
-    });
-  }
-
-  toString() {
-    return `${super.toString()} on ${this.sprite}`;
-  }
-}
-
-class WhenPressKeyAction extends ScheduledAction {
-  /**
-   * @param {string} key
-   */
-  constructor(key) {
-    super();
-    this.key = key;
-  }
-
-  execute(context, resolve) {
-    // Save sprites state before key press.
-    const event = new LogEvent(context, 'key', { key: this.key });
-    event.previousFrame = new LogFrame(context, 'key');
-    context.log.addEvent(event);
-
-    const scratchKey = context.vm.runtime.ioDevices.keyboard._keyStringToScratchKey(this.key);
-
-    if (scratchKey === '') {
-      throw new Error(`Unknown key press: '${this.key}'`);
-    }
-
-    const list = context.vm.runtime.startHats('event_whenkeypressed', {
-      KEY_OPTION: scratchKey
-    });
-
-    const list2 = context.vm.runtime.startHats('event_whenkeypressed', {
-      KEY_OPTION: 'any'
-    });
-
-    const threads = list.concat(list2);
-    const action = new ThreadListener(threads);
-    context.threadListeners.push(action);
-
-    action.promise.then(() => {
-      console.log(`finished keyPress on ${this.key}`);
-      // save sprites state after click
-      event.nextFrame = new LogFrame(context, 'keyEnd');
-      resolve('sync resolve');
-    });
-  }
-}
-
-class MouseUseAction extends ScheduledAction {
-  constructor(data) {
-    super();
-    this.data = data;
-  }
-
-  execute(context, resolve) {
-    this.data.x = this.data.x + 240;
-    this.data.y = this.data.y + 180;
-    this.data.canvasWidth = 480;
-    this.data.canvasHeight = 360;
-    context.vm.runtime.ioDevices.mouse.postData(this.data);
-    resolve('Completed mouse movement');
-  }
-}
-
-class KeyUseAction extends ScheduledAction {
-  /**
-   * @param {string} key
-   * @param {boolean|number} down
-   * @param {number} delay
-   */
-  constructor(key, down, delay) {
-    super();
-    this.key = key;
-    this.down = down;
-    this.delay = delay;
-  }
-
-  execute(context, resolve) {
-    console.log(`Press ${this.key}: ${this.isDown()}`);
-    context.vm.postIOData('keyboard', {
-      key: this.key,
-      isDown: this.isDown(),
-    });
-    
-    const delay = context.accelerateEvent(this.delay);
-    const accelDown = context.accelerateEvent(this.down);
-
-    if (this.isDelayed()) {
-      setTimeout(() => {
-        console.log(`Release ${this.key}: false`);
-        context.vm.postIOData('keyboard', {
-          key: this.key,
-          isDown: false,
-        });
-        setTimeout(() => {
-          resolve('Completed delayed key movement');
-        }, delay);
-      }, accelDown);
-    } else {
-      setTimeout(() => {
-        resolve('Completed key movement');
-      }, delay);
-    }
-  }
-
-  isDown() {
-    if (this.isDelayed()) {
-      return true;
-    } else {
-      return this.down;
-    }
-  }
-
-  isDelayed() {
-    return typeof this.down === 'number';
   }
 }
 
@@ -394,7 +181,7 @@ class WaitOnBroadcastAction extends ScheduledAction {
  * event.newEvent();
  * event.newEvent();
  */
-export default class ScheduledEvent {
+export class ScheduledEvent {
 
   /**
    * Create a new event.
@@ -590,7 +377,8 @@ export default class ScheduledEvent {
    * called with the log (already containing the new frame).
    *
    * For example, you can add a test or a debug statement in the
-   * callback.
+   * callback. Other uses include checking the position or state
+   * of sprites.
    *
    * @param {function} callback
    * @return {ScheduledEvent}

@@ -8,7 +8,7 @@ import { Log, LogEvent, LogFrame } from './log.js';
 import Deferred from './deferred.js';
 import { makeProxiedRenderer } from './renderer';
 import ResultManager from './output';
-import ScheduledEvent from './scheduler.js';
+import { ScheduledEvent } from './scheduler/index.js';
 
 const Events = {
   SCRATCH_PROJECT_START: 'PROJECT_START',
