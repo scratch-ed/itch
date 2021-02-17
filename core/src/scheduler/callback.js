@@ -15,6 +15,6 @@ export class CallbackAction extends ScheduledAction {
   execute(context, resolve) {
     context.log.addFrame(context, 'manual_logging');
     this.callback();
-    resolve();
+    resolve(`finished ${this}`);
   }
 }

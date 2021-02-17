@@ -39,7 +39,7 @@ export class WhenPressKeyAction extends ScheduledAction {
       console.log(`finished keyPress on ${this.key}`);
       // save sprites state after click
       event.nextFrame = new LogFrame(context, 'keyEnd');
-      resolve('sync resolve');
+      resolve(`finished ${this}`);
     });
   }
 }
@@ -56,7 +56,7 @@ export class MouseUseAction extends ScheduledAction {
     this.data.canvasWidth = 480;
     this.data.canvasHeight = 360;
     context.vm.runtime.ioDevices.mouse.postData(this.data);
-    resolve('Completed mouse movement');
+    resolve(`finished ${this}`);
   }
 }
 
@@ -74,7 +74,6 @@ export class KeyUseAction extends ScheduledAction {
   }
 
   execute(context, resolve) {
-    console.log(`Press ${this.key}: ${this.isDown()}`);
     context.vm.postIOData('keyboard', {
       key: this.key,
       isDown: this.isDown(),
@@ -85,18 +84,17 @@ export class KeyUseAction extends ScheduledAction {
 
     if (this.isDelayed()) {
       setTimeout(() => {
-        console.log(`Release ${this.key}: false`);
         context.vm.postIOData('keyboard', {
           key: this.key,
           isDown: false,
         });
         setTimeout(() => {
-          resolve('Completed delayed key movement');
+          resolve(`finished delayed ${this}`);
         }, delay);
       }, accelDown);
     } else {
       setTimeout(() => {
-        resolve('Completed key movement');
+        resolve(`finished ${this}`);
       }, delay);
     }
   }

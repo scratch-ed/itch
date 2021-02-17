@@ -4,6 +4,7 @@
  * @param {Project} submission - The submission project.
  * @param {ResultManager} output - The output manager.
  */
+
 function beforeExecution(template, submission, output) {
   // Check that all grid squares have not been changed.
   const squares = Array.from(Array(36).keys()).map(i => `Vakje${i}`);
@@ -35,7 +36,7 @@ function duringExecution(e) {
   e.actionTimeout = 30000;
   e.acceleration = 10;
   e.eventAcceleration = 1;
-  e.scheduler
+  const event = e.scheduler
     .greenFlag(false)
     .wait(1000)
     .log(() => {
@@ -45,9 +46,17 @@ function duringExecution(e) {
         e.log.hasSpriteMoved('Ruimteschip'),
         'Het ruimteschip mag niet bewegen voor er op 1 gedrukt wordt.'
       )
-    })
-    .pressKey('1')
+    });
+  // We now fork the schedule:
+  // One track presses the key and waits for it to end,
+  // While the other does tests.
+  event.pressKey('1')
     .end();
+  event.wait(sprite('Ruimteschip').toMove(1000))
+    .log(() => {
+      // The spaceship must have moved, so add a correct test.
+      e.output.addTest('Ruimteschip bewoog', true, true, 'Het ruimteschip heeft bewogen.')
+    })
 }
 
 /** @param {Evaluation} e */

@@ -5,6 +5,7 @@ import { searchFrames } from './log.js';
 import { numericEquals } from './utils.js';
 import Context from './context.js';
 import Project from './project.js';
+import { delay, broadcast, sprite } from './scheduler/index.js';
 
 let object;
 if (typeof global === 'undefined') {
@@ -21,6 +22,9 @@ if (typeof global === 'undefined') {
 function expose() {
   object.numericEquals = numericEquals;
   object.searchFrames = searchFrames;
+  object.sprite = sprite;
+  object.broadcast = broadcast;
+  object.delay = delay;
 }
 
 /**

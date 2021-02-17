@@ -46,7 +46,7 @@ export class ClickSpriteAction extends ScheduledAction {
       console.log(`finished click on ${this.spriteName}`);
       // save sprites state after click
       event.nextFrame = new LogFrame(context, 'clickEnd');
-      resolve('sync resolve');
+      resolve(`finished ${this}`);
     });
   }
 

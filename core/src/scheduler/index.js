@@ -1,29 +1,12 @@
-import { LogEvent, LogFrame } from '../log.js';
-import { BroadcastListener, ThreadListener } from '../listener.js';
-import { ScheduledAction } from './action.js';
 import { GreenFlagAction } from './green-flag.js';
 import { CallbackAction } from './callback.js';
 import { ClickSpriteAction } from './click.js';
 import { KeyUseAction, MouseUseAction, WhenPressKeyAction } from './io.js';
+import { SendBroadcastAction } from './broadcast.js';
+import { EndAction } from './end.js';
+import { delay } from './wait.js';
 
-class WaitEvent extends ScheduledAction {
-  /**
-   * @param {number} delay
-   */
-  constructor(delay) {
-    super();
-    this.delay = delay;
-  }
-
-  async execute(context, resolve) {
-    const delay = context.accelerateEvent(this.delay);
-    setTimeout(() => { resolve('wait resolved'); }, delay);
-  }
-
-  toString() {
-    return `${super.toString()} for ${this.delay}`;
-  }
-}
+export { delay, broadcast, sprite } from './wait.js';
 
 class InitialAction extends CallbackAction {
   constructor() {
@@ -31,80 +14,11 @@ class InitialAction extends CallbackAction {
   }
 }
 
-class EndAction extends ScheduledAction {
-  execute(context, resolve) {
-    for (const event of context.log.events.list) {
-      if (event.nextFrame == null) {
-        event.nextFrame = new LogFrame(context, 'programEnd');
-      }
-    }
-    context.vm.stopAll();
-
-    resolve();
-    context.simulationEnd.resolve('done with simulation');
-  }
-}
-
-class SendBroadcastAction extends ScheduledAction {
-  /**
-   * @param {string} name - The name of the broadcast
-   */
-  constructor(name) {
-    super();
-    this.name = name;
-  }
-
-  execute(context, resolve) {
-    // Save the state of the sprite before the click event.
-    /** @type {Target} */
-    const target = context.vm.runtime.getTargetForStage();
-    const event = new LogEvent(context, 'broadcast', { target: target.getName() });
-    event.previousFrame = new LogFrame(context, 'broadcast');
-    context.log.addEvent(event);
-
-    const threads = context.vm.runtime.startHats('event_whenbroadcastreceived', {
-      BROADCAST_OPTION: this.name,
-    });
-
-    const action = new ThreadListener(threads);
-    context.threadListeners.push(action);
-
-    action.promise.then(() => {
-      console.log(`finished broadcast of ${this.name}`);
-      // save sprites state after click
-      event.nextFrame = new LogFrame(context, 'broadcastEnd');
-      resolve('resolve');
-    });
-  }
-
-  toString() {
-    return `${super.toString()} of ${this.name}`;
-  }
-}
-
-class WaitOnBroadcastAction extends ScheduledAction {
-  /**
-   * @param {string} name - Name of the broadcast.
-   */
-  constructor(name) {
-    super();
-    this.name = name;
-  }
-  
-  execute(context, resolve) {
-    const event = new LogEvent(context, 'broadcast_listener', { name: this.name });
-    event.previousFrame = new LogFrame(context, 'broadcast_listener');
-    context.log.addEvent(event);
-    
-    const listener = new BroadcastListener(this.name);
-    context.broadcastListeners.push(listener);
-    listener.promise.then(() => {
-      console.log("RECEIVED!")
-      event.nextFrame = new LogFrame(context, 'broadcastReceived');
-      resolve('broadcast received');
-    })
-  }
-}
+/**
+ * @typedef {Object} WaitCondition
+ * @property {ScheduledAction} action - The action.
+ * @property {number|null} timeout - How long to wait.
+ */
 
 /**
  * The Scratch scheduler: allows scheduling events that
@@ -127,13 +41,13 @@ class WaitOnBroadcastAction extends ScheduledAction {
  * want this, you'll need to save the previous event manually.
  *
  * See the examples for details.
- * 
+ *
  * ### Timeouts & other times
- * 
+ *
  * Timeouts and other time params will be rescaled according to the global
  * acceleration factor. You should not apply it yourself. For example, if
  * you have an acceleration factor of 2, you should pass 10s to wait 5s.
- * 
+ *
  * You can manually change this by using the option `timeAcceleration`. If
  * present, this will be used for all time-related acceleration. This allows
  * you to set the timeouts slower or faster than the frame acceleration, since
@@ -241,6 +155,7 @@ export class ScheduledEvent {
    * @package
    */
   run(context) {
+    const time = this.sync ? context.accelerateEvent(this.timeout || context.actionTimeout) : 0;
     const action = new Promise((resolve, _reject) => {
       this.action.execute(context, resolve);
       // Schedule next events if we don't wait.
@@ -248,17 +163,23 @@ export class ScheduledEvent {
         this.nextEvents.forEach(e => e.run(context));
       }
     });
-    const time = context.accelerateEvent(this.timeout || context.actionTimeout);
     const timeout = new Promise((resolve, reject) => {
       setTimeout(() => {
-        reject(new Error(`timeout after ${this.timeout || context.actionTimeout} (real: ${time})`));
+        if (this.sync) {
+          // If this is a sync event, error after the timeout.
+          reject(new Error(`timeout after ${this.timeout || context.actionTimeout} (real: ${time}) from ${this.action.toString()}`));
+        } else {
+          // If an async event, ignore the timeout.
+          resolve(`Forced resolve ${this.toString()} due to async timeout (timeout was ${time})`);
+        }
       }, time);
     });
 
     // This will take the result from the first promise to resolve, which
     // will be either the result or the timeout if something went wrong.
     // Note that async events cannot timeout.
-    return Promise.race([action, timeout]).then(() => {
+    return Promise.race([action, timeout]).then((v) => {
+      console.log(`resolved: ${v}`);
       // If we had to wait, schedule the events now.
       if (this.sync) {
         this.nextEvents.forEach(e => e.run(context));
@@ -287,30 +208,30 @@ export class ScheduledEvent {
   }
 
   /**
-   * Wait delay amount of ms before proceeding with the next event.
-   * This event is always synchronous.
+   * Wait for a certain condition before proceeding with the events.
    *
-   * @param {number} delay - How long we should wait in ms.
+   * The basic most basic way to use this is to pass a number as argument.
+   * In that case you will wait a number of ms before proceeding.
+   *
+   * The second option is to pass a `WaitCondition`. You can obtain one of those
+   * using the following global functions:
+   *
+   * - {@link sprite}
+   * - {@link delay} (passing a number to this function is equivalent to using this)
+   * - {@link broadcast}
+   *
+   * Wait events are always synchronous. If you want to do something while waiting,
+   * you need to fork the event scheduling.
+   *
+   * @param {number|WaitCondition} param - How long we should wait in ms.
    * @return {ScheduledEvent}
    */
-  wait(delay) {
-    return this.constructNext(new WaitEvent(delay), true, delay + 10);
-  }
-
-  /**
-   * Wait for a broadcast to be sent before proceeding.
-   * 
-   * As with all wait events, this event is always synchronous.
-   * 
-   * The event is logged with event type `broadcast_listener`.
-   * 
-   * @param {string} name - Name of the broadcast to wait on.
-   * @param {number|null} timeout - Max time to wait before aborting.
-   * 
-   * @return {ScheduledEvent}
-   */
-  waitForBroadcast(name, timeout = null) {
-    return this.constructNext(new WaitOnBroadcastAction(name), true, timeout);
+  wait(param) {
+    if (typeof param === 'number') {
+      param = delay(param);
+    }
+    const { action, timeout } = param;
+    return this.constructNext(action, true, timeout);
   }
 
   /**
@@ -420,19 +341,19 @@ export class ScheduledEvent {
 
   /**
    * Send a broadcast of the specified signal.
-   * 
+   *
    * This event can be asynchronous. If synchronous, all blocks attached
    * to hats listening to the given broadcast must be completed before
    * the event resolves. Otherwise it resolves immediately.
-   * 
+   *
    * If synchronous, resembles a "Broadcast () and Wait" block, otherwise
    * resembles a "Broadcast ()" block.
-   * 
+   *
    * The event is logged with event type `broadcast`.
-   * 
+   *
    * @see https://en.scratch-wiki.info/wiki/Broadcast_()_(block)
    * @see https://en.scratch-wiki.info/wiki/Broadcast_()_and_Wait_(block)
-   * 
+   *
    * @param {string} broadcast - The name of the broadcast to send.
    * @param {boolean} sync - Synchronous or not, default true.
    * @param {number|null} timeout - How long to wait for synchronous events.

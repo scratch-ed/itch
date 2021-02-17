@@ -17,9 +17,8 @@ export class GreenFlagAction extends ScheduledAction {
     const action = new ThreadListener(list);
     context.threadListeners.push(action);
     action.promise.then(() => {
-      console.log(`finished greenFlag()`);
       event.nextFrame = new LogFrame(context, 'greenFlagEnd');
-      resolve('green flag resolved');
+      resolve(`finished ${this}`);
     });
   }
 }
