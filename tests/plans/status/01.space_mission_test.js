@@ -64,7 +64,6 @@ function afterExecution(e) {
   
   const sprites = e.log.sprites;
   
-  // TODO: what is the actual problem statement here, ie. what should be tested?
   // Check that the crates are on the correct positions.
   
   // Sprites that need 'kogels'
@@ -86,5 +85,15 @@ function afterExecution(e) {
       `${fuelTile.name} moet brandstof bevatten`
       )
   }
+  e.output.closeTestTab();
+  
+  // Check the "code quality"
+  e.output.startTestTab("Kwaliteit van de code");
+  e.output.addTest(
+    "Je gebruikt een lus",
+    true,
+    e.log.blocks.containsLoop(),
+    "Je code is niet verkeerd, maar je gebruikt meerdere malen hetzelfde blokje. Gebruik hiervoor een lus."
+    )
   e.output.closeTestTab();
 }
