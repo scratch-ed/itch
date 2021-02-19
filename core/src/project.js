@@ -164,4 +164,22 @@ export default class Project {
   sprites() {
     return this.json.targets;
   }
+
+  /**
+   * 
+   * @param name
+   * @return {null|{variable: Sb3Variable, target: Sb3Target}}
+   */
+  getVariable(name) {
+    for (const target of this.json.targets) {
+      for (const variable of Object.keys(target.variables)) {
+        /** @type {Sb3Variable} */
+        const varObject = target.variables[variable];
+        if (varObject.name === name) {
+          return { target, variable: varObject };
+        }
+      }
+    }
+    return null;
+  }
 }

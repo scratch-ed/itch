@@ -1,6 +1,8 @@
 import last from 'lodash/last';
+import first from 'lodash/first';
+import isEqual from 'lodash/isEqual';
 import { containsBlock, containsLoop, countExecutions } from './blocks';
-import { findSquares, findTriangles, mergeLines, dist, distSq } from './lines';
+import { dist, distSq, findSquares, findTriangles, mergeLines } from './lines';
 
 /**
  * Our own version of a variable. Basically a copy of a {@link Variable}.
@@ -38,8 +40,6 @@ export class LoggedSprite {
     this.tempo = target.tempo;
     this.draggable = target.draggable;
     this.volume = target.volume;
-    // TODO: remove variables above.
-    this.properties = target.toJSON();
     this.time = target.runtime.currentMSecs;
     this.type = target.type;
 
@@ -86,6 +86,15 @@ export class LoggedSprite {
    */
   touches(name) {
     return this.touchingSprites.find(ts => ts.name === name).value;
+  }
+
+  getVariable(name) {
+    for (const variable of this.variables) {
+      if (variable.name === name) {
+        return variable;
+      }
+    }
+    return null;
   }
 }
 
@@ -267,7 +276,7 @@ export class LogBlocks {
 // TODO: review
 export class LogEvent {
   /**
-   * 
+   *
    * @param {Context} context
    * @param type
    * @param data
@@ -349,10 +358,29 @@ class Blocks {
 export class Log {
 
   constructor() {
+    /** @type LogFrame[] */
     this.frames = [];
     this.events = new Events();
     this.renderer = new LogRenderer();
     this.blocks = new Blocks();
+  }
+
+  /**
+   * Get the first saved frame.
+   *
+   * @return {LogFrame|undefined}
+   */
+  get initial() {
+    return first(this.frames);
+  }
+
+  /**
+   * Get the current frame, i.e. the last saved frame.
+   *
+   * @return {LogFrame|undefined}
+   */
+  get current() {
+    return last(this.frames);
   }
 
   /**
@@ -374,7 +402,7 @@ export class Log {
     // not needed
   }
 
-  /** 
+  /**
    * @return {LogFrame} return final state of sprites
    */
   get sprites() {
@@ -414,6 +442,15 @@ export class Log {
         }
       }
     }
+  }
+
+  getVariables(variableName, spriteName = 'Stage', frames = this.frames) {
+    return frames.map(frame => frame.getSprite(spriteName))
+      .map(sprite => sprite.getVariable(variableName))
+      .map(variable => variable.value)
+      .filter((item, pos, arr) => {
+        return pos === 0 || !isEqual(item, arr[pos - 1]);
+      });
   }
 
   getStartSprites() {
@@ -565,21 +602,28 @@ export class Log {
 
   }
 
+  /**
+   * Get all logged locations of a sprite.
+   *
+   * The locations are consecutively unique: if a sprite hasn't moved between
+   * two logged frames, only one position will be included.
+   *
+   * @param {string} sprite - The name of the sprite.
+   * @param {LogFrame[]} frames - The frames to search. Defaults to all frames.
+   * @return {{x:Number, y:Number}[]} The positions.
+   */
+  getSpritePositions(sprite, frames = this.frames) {
+    return frames
+      .map(frame => frame.getSprite(sprite))
+      .map(sprite => { return { x: sprite.x, y: sprite.y }; })
+      .filter((item, pos, arr) => {
+        return pos === 0 || !isEqual(item, arr[pos - 1]);
+      });
+  }
+
+  /** @deprecated Use getSpritePositions */
   getSpriteLocations(spriteName, frames = this.frames) {
-    const places = [];
-    let lastX = 0;
-    let lastY = 0;
-    let first = true;
-    for (const frame of frames) {
-      const sprite = frame.getSprite(spriteName);
-      if (lastX !== sprite.x || lastY !== sprite.y || first) {
-        lastX = sprite.x;
-        lastY = sprite.y;
-        places.push({ x: lastX, y: lastY });
-        first = false;
-      }
-    }
-    return places;
+    return this.getSpritePositions(spriteName, frames);
   }
 
   // RENDERER RELATED

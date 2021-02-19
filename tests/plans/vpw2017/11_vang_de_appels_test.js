@@ -1,82 +1,134 @@
 /* Copyright (C) 2019 Ghent University - All Rights Reserved */
-let spriteName = '';
-let variableName = '';
 
-function beforeExecution(templateJSON, submission) {
-  // Controleer of het ingediende project van de leerling een sprite heeft met als naam 'Heks'
-  if (!submission.containsSprite('Appel')) {
-    addError('De sprite met als naam Appel werd niet teruggevonden in het project');
-  }
-  if (!submission.containsSprite('Kom')) {
-    addError('De sprite met als naam Kom werd niet teruggevonden in het project');
-  }
+let scoreVariable = null;
 
-  // Check if a variable exists
-  let i = 0;
-  for (const target of submission.targets) {
-    for (const property in target.variables) {
-      if (target.variables.hasOwnProperty(property)) {
-        i++;
-        spriteName = target.name;
-        variableName = target.variables[property][0];
-      }
-    }
-  }
+/**
+ * Controleer op welke manier de leerling het startproject heeft aangepast
+ *
+ * @param {Project} template - The template project.
+ * @param {Project} submission - The submission project.
+ * @param {ResultManager} output - The output manager.
+ */
+function beforeExecution(template, submission, output) {
+  // Controleer of er aan de sprites geprutst is.
+  output.addTest('Niet geprutst met ingebouwde sprites',
+    false,
+    template.hasAddedSprites(submission) || template.hasRemovedSprites(submission),
+    'Er is iets veranderd aan de ingebouwde sprites, waar je niets moet aan veranderen.'
+  );
 
-  if (i !== 1) {
-    addError('Er moet exact 1 variabele bestaan');
-  }
+  // Controleer of de variable 'score' bestaat.
+  scoreVariable = submission.getVariable('Score');
+
+  output.addTest('De variable Score moet bestaan',
+    true,
+    scoreVariable !== null,
+    'Er moet één variable Score zijn.'
+  );
 }
 
-function duringExecution() {
-  actionTimeout = 10000;
+/** @param {Evaluation} e */
+function duringExecution(e) {
+  e.actionTimeout = 10000;
+  e.acceleration = 10;
 
   const mouse = { x: 0, y: 0 };
 
-  // TODO: would it be better to not set timings, but attach to the apple somehow.
+  function mousePosition() {
+    const appel = e.log.sprites.getSprite('Appel').x;
+    if (appel + 200 >= 240) {
+      return appel - 200;
+    } else {
+      return appel + 200;
+    }
+  }
 
-  // scratch.eventScheduling
-  //   .greenFlag({ sync: false })
-  //   .range(0, 4000, 200, (index, anchor) => {
-  //     console.log('Mouse will be', mouse);
-  //     return anchor
-  //       .useMouse(mouse)
-  //       .wait(200)
-  //       .log((log) => {
-  //         mouse.x = log.sprites.getSprite('Appel').x;
-  //       });
-  //   })
-  //   .range(0, 3000, 200, (index, anchor) => {
-  //     console.log('Mouse will be', mouse);
-  //     return anchor
-  //       .useMouse(mouse)
-  //       .wait(200)
-  //       .log((log) => {
-  //         mouse.x = log.sprites.getSprite('Appel').x + 200;
-  //       });
-  //   })
-  //   .end();
-  //
-  // scratch.start();
+  e.scheduler
+    .greenFlag(false)
+    .wait(sprite('Appel').toMove())
+    .log(() => {
+      // After the apple has moved, the score should have been set to zero.
+      e.output.addTest(
+        'Score moet starten op 0',
+        '0',
+        e.log.getVariableValue(scoreVariable.variable.name, scoreVariable.target.name),
+        'De score moet beginnen op 0.'
+      );
+      const sprite = e.log.sprites.getSprite('Kom');
+      e.output.addTest(
+        'Kom moet starten op 0, -150',
+        [0, -150],
+        [sprite.x, sprite.y],
+        'De score moet beginnen op 0.'
+      );
+    })
+    .log(() => {
+      mouse.x = e.log.sprites.getSprite('Appel').x;
+    })
+    .forEach(_.range(0, 10), (ev) => {
+      return ev
+        .useMouse(mouse)
+        .wait(sprite('Appel').toTouch('Kom'))
+        .log(() => {
+          mouse.x = e.log.sprites.getSprite('Appel').x;
+        });
+    })
+    .log(() => {
+      mouse.x = mousePosition();
+    })
+    .forEach(_.range(0, 10), (ev) => {
+      // We need to move the bowl out of the way.
+      return ev.useMouse(mouse)
+        .wait(sprite('Appel').toReach(null, 120))
+        .log(() => {
+          mouse.x = mousePosition();
+        });
+    })
+    .end();
 }
 
-function afterExecution() {
-  let oldScore = 0;
-  let newScore = 0;
-  let oldFrame = log.frames.list[0];
-  for (const frame of log.frames.list) {
-    newScore = log.getVariableValue(variableName, spriteName, frame);
-    if (newScore > oldScore) {
-      // De score is verhoogd, controleer of sprites elkaar raakten in de vorige frame
-      console.log(oldFrame, frame);
-      oldScore = newScore;
+/** @param {Evaluation} e */
+function afterExecution(e) {
+
+  // Check that the apples spawn on top, and in a random position.
+  // We need 20 positions with y = 180, and at least 18 different x positions.
+  // TODO: is 15 too lax?
+  const locations = e.log.getSpritePositions('Appel');
+  const top = locations.filter(location => location.y === 180).length;
+  e.output.addTest(
+    'Appels komen bovenaan tevoorschijn',
+    19,
+    top
+  );
+
+  const random = new Set(locations.map(location => location.x)).size;
+  e.output.addTest('Appels komen op willekeurige positie',
+    true,
+    random >= 18
+  );
+
+  // Check end score.
+  const end = e.log.current.getSprite('Stage').getVariable('Score');
+  e.output.addTest(
+    'Eindscore',
+    10,
+    end.value,
+    'De score moet eindigen op 20',
+  );
+
+  const variables = e.log.getVariables('Score');
+  const increases = variables.every((e, i, a) => {
+    if (i > 0) { 
+      return e > a[i - 1]; 
+    } else { 
+      return true; 
     }
-    oldFrame = frame;
-  }
-  console.log('---');
-  for (const frame of log.frames.list) {
-    if (log.doSpritesOverlap('Appel', 'Kom', frame)) {
-      console.log(frame);
-    }
-  }
+  });
+  
+  e.output.addTest(
+    'Score stijgt',
+    true,
+    increases,
+    "De score moet stijgen met één"
+  );
 }

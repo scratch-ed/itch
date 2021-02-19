@@ -1,13 +1,15 @@
 import isEqual from 'lodash/isEqual';
 
 export class Sb3Variable {
-  constructor(data) {
+  constructor(id, data) {
     /**
      * Name of the variable.
      * @type {string}
      */
-    this.name = data.name;
-    this.value = data.value;
+    this.name = data[0];
+    this.value = data[1];
+    /** @type {string} */
+    this.id = id;
   }
 }
 
@@ -104,7 +106,7 @@ export class Sb3Target {
      */
     this.variables = {};
     for (const variable of Object.keys(data.variables || {})) {
-      this.variables[variable] = new Sb3Variable(data.variables[variable]);
+      this.variables[variable] = new Sb3Variable(variable, data.variables[variable]);
     }
     /**
      * An object associating IDs with arrays representing lists whose first element is the list's name followed by the list as an array.

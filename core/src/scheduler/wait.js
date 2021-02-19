@@ -53,8 +53,8 @@ class WaitForSpriteAction extends ScheduledAction {
 class WaitForSpritePositionAction extends ScheduledAction {
   /**
    * @param {string} name
-   * @param {number} x
-   * @param {number} y
+   * @param {number|null} x
+   * @param {number|null} y
    */
   constructor(name, x, y) {
     super();
@@ -69,7 +69,7 @@ class WaitForSpritePositionAction extends ScheduledAction {
       throw new Error(`Sprite ${this.name} was not found in the runtime.`);
     }
     const callback = (target) => {
-      if (numericEquals(target.x, this.x) && numericEquals(target.y, this.y)) {
+      if ((this.x === null || numericEquals(target.x, this.x)) && (this.y === null || numericEquals(target.y, this.y))) {
         sprite.removeListener('TARGET_MOVED', callback);
         resolve(`finished ${this}`);
       }
@@ -159,13 +159,16 @@ export class SpriteCondition {
   /**
    * Wait for a sprite to reach a certain position.
    *
-   * @param {number} x
-   * @param {number} y
+   * @param {number|null} x - Null if irrelevant
+   * @param {number|null} y - Null if irrelevant
    * @param {number|null} timeout - Optional timeout.
    *
    * @return {WaitCondition}
    */
   toReach(x, y, timeout = null) {
+    if (x === null && y === null) {
+      console.warn("Both positions in wait condition are wildcard. A mistake?");
+    }
     return {
       action: new WaitForSpritePositionAction(this.name, x, y),
       timeout: timeout

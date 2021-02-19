@@ -1,8 +1,8 @@
 {
   "resources": "tests",
-  "template": "tests/projects/status/01.space_mission.sb3",
-  "source": "tests/projects/status/01.space_mission.sb3",
-  "plan": "plans/status/01.space_mission_test.js",
+  "template": "tests/projects/vpw2017/11_vang_de_appels.sb3",
+  "source": "tests/projects/vpw2017/11_vang_de_appels.sb3",
+  "plan": "plans/vpw2017/11_vang_de_appels_test.js",
   "time_limit": 20000,
   "memory_limit": 5000000,
   "natural_language": "nl",

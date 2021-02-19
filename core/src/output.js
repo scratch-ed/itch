@@ -1,3 +1,5 @@
+import isEqual from 'lodash/isEqual';
+
 /**
  * Handle outputting. By default, all output is sent to stderr.
  */
@@ -152,7 +154,7 @@ export default class ResultManager {
     this.startTestCase(testName);
     this.startTest(expected);
     if (generated !== undefined) {
-      if (generated === expected) {
+      if (isEqual(generated, expected)) {
         status = { enum: 'correct', human: 'Correct' };
       } else {
         this.addMessage(message);
