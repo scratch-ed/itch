@@ -100,7 +100,7 @@ class Judge {
     }
 
     await page.evaluate(() => {
-      runTests();
+      return runTests();
     });
 
     if (!this.debug) {

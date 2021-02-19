@@ -1,8 +1,9 @@
 /* Copyright (C) 2020 Ghent University - All Rights Reserved */
 const { Judge } = require('../judge');
+const path = require('path');
 
 const defaultConfig = {
-  resources: 'tests/',
+  resources: '.',
   timeLimit: 10000,
   memoryLimit: 5000000,
   natural_language: 'nl',
@@ -20,13 +21,15 @@ const defaultConfig = {
  */
 async function runTest(projectName, testName = null, configuration = {}) {
   const config = { ...configuration, ...defaultConfig };
-  const sourceFile = `${config.resources}/projects/${projectName}.sb3`;
-  const planFile = `${config.resources}/plans/${testName || projectName}_test.js`;
+  const sourceFile = path.resolve(__dirname, `${config.resources}/projects/${projectName}.sb3`);
+  const planFile = path.resolve(__dirname, `${config.resources}/plans/${testName || projectName}_test.js`);
 
   const results = [];
   const collector = output => results.push(output);
 
-  const judge = new Judge(planFile, {
+  const judge = new Judge({
+    url: planFile
+  }, {
     ...config,
     source: sourceFile
   }, collector);
