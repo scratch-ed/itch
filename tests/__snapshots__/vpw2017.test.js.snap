@@ -1659,6 +1659,25 @@ Array [
   },
   Object {
     "command": "start-testcase",
+    "description": "Appelsnelheid",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "true",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "true",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
     "description": "Eindscore",
   },
   Object {

@@ -106,6 +106,21 @@ function afterExecution(e) {
     true,
     random >= 18
   );
+  
+  // Check the speed of the apples.
+  // For every position, either the y is 180 or it is 5 less than the previous frame.
+  const speed = locations.every((value, index, arr) => {
+    if (value.y === 180 || index === 0) {
+      return true;
+    };
+    return value.y === arr[index - 1].y - 5;
+  });
+  e.output.addTest(
+    'Appelsnelheid',
+    true,
+    speed,
+    'De snelheid van de appel is 5',
+  );
 
   // Check end score.
   const end = e.log.current.getSprite('Stage').getVariable('Score');

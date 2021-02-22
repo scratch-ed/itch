@@ -95,7 +95,6 @@ test('09_flauw_mopje', () => {
 //         .then(result => expect(result).toMatchSnapshot());
 // })
 
-// TODO: no assertions at the moment
 test("11_vang_de_appels", () => {
     return runTest(`vpw2017/${expect.getState().currentTestName}`)
         .then(result => { 
