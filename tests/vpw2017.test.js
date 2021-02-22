@@ -96,10 +96,13 @@ test('09_flauw_mopje', () => {
 // })
 
 // TODO: no assertions at the moment
-// test("11_vang_de_appels", () => {
-//     return runTest(`vpw2017/${expect.getState().currentTestName}`)
-//         .then(result => expect(result).toMatchSnapshot());
-// })
+test("11_vang_de_appels", () => {
+    return runTest(`vpw2017/${expect.getState().currentTestName}`)
+        .then(result => { 
+          expect(result).toMatchSnapshot();
+          expect(result).minimumCommands('close-testcase', 8);
+        });
+})
 
 // TODO: no tests at the moment
 // There is currently no test code for this exercise.

@@ -1519,6 +1519,194 @@ Array [
 ]
 `;
 
+exports[`11_vang_de_appels 1`] = `
+Array [
+  Object {
+    "command": "start-judgement",
+  },
+  Object {
+    "command": "start-tab",
+    "title": "Testen uit het testplan",
+  },
+  Object {
+    "command": "start-context",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Niet geprutst met ingebouwde sprites",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "false",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "false",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "De variable Score moet bestaan",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "true",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "true",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "close-context",
+  },
+  Object {
+    "command": "start-context",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Score moet starten op 0",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "0",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "0",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Kom moet starten op 0, -150",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "0,-150",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "0,-150",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "close-context",
+  },
+  Object {
+    "command": "start-context",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Appels komen bovenaan tevoorschijn",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "19",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "19",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Appels komen op willekeurige positie",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "true",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "true",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Eindscore",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "10",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "10",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Score stijgt",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "true",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "true",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "close-context",
+  },
+  Object {
+    "command": "close-tab",
+  },
+  Object {
+    "command": "close-judgement",
+  },
+]
+`;
+
 exports[`13_cijfersom 1`] = `
 Array [
   Object {
