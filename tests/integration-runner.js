@@ -27,9 +27,7 @@ async function runTest(projectName, testName = null, configuration = {}) {
   const results = [];
   const collector = output => results.push(output);
 
-  const judge = new Judge({
-    url: planFile
-  }, {
+  const judge = new Judge(planFile, {
     ...config,
     source: sourceFile
   }, collector);

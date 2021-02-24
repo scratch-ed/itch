@@ -46,7 +46,8 @@
     "install:api": "cd ./api && npm install && cd ..",
     "preinstall": "npm run install:core && npm run install:api",
     "clean": "rm -rf ./node_modules && rm -rf ./core/node_modules && rm -rf ./api/node_modules",
-    "test": "jest"
+    "build": "npm --prefix ./core run build",
+    "test": "jest tests"
   },
   "prettier": {
     "arrowParens": "always",
