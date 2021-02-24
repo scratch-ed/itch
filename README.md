@@ -21,7 +21,17 @@ module.exports = {
   debug: true, // if this is true, puppeteer will open a new window
   visualise: true,
 };
+```
 
+
+Then, execute these commands:
+
+```bash
+# This installs the dependencies for the core package and the root package
+npm install
+
+# This starts the judge with the config defined in config.js
+npm start
 ```
 
 ## Docker
@@ -37,18 +47,6 @@ Or, without any setup at all with `docker-compose`
 
 ```bash
 docker-compose up
-```
-
-
-
-Then, execute these commands:
-
-```bash
-# This installs the dependencies for the core package and the root package
-npm install
-
-# This starts the judge with the config defined in config.js
-npm start
 ```
 
 ## Troubleshooting
