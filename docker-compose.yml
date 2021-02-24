@@ -1,0 +1,11 @@
+version: '3.3'
+services:
+  judge:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - PUPPETEER_BROWSER_PATH=/usr/bin/google-chrome
+        - PORT=8000
+    ports:
+      - 8000:8000
