@@ -24,6 +24,21 @@ module.exports = {
 
 ```
 
+## Docker
+
+The judge also supports some docker config if you're in a hurry. These docker commands start a judge service, with an endpoint exposed on port 8000.
+
+```bash
+docker build --build-arg PORT=8000 -t judge . # Build judge image
+docker run --publish 8000:8000 judge # runs the image
+```
+
+Or, without any setup at all with `docker-compose`
+
+```bash
+docker-compose up
+```
+
 
 
 Then, execute these commands:
