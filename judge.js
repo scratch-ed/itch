@@ -24,7 +24,7 @@ class Judge {
    * @param {function(object):void} outputStream
    */
   constructor(testplan, options = {}, outputStream = toStdOut) {
-    // extract options
+    this.fromApi = options.fromApi;
     this.time_limit = options.time_limit || 10000;
 
     this.testplan = testplan;
@@ -79,7 +79,7 @@ class Judge {
     await page.exposeFunction('visualise', () => this.visualise);
 
     await page.addScriptTag({
-      ...(this.fromApi ? { content: this.test_file } : { url: this.test_file }),
+      ...(this.fromApi ? { content: this.testplan } : { url: this.testplan }),
     });
 
     const sourceFileTemplate = this.fromApi
