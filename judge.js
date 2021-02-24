@@ -18,7 +18,7 @@ function toStdOut(output) {
 class Judge {
   /**
    * Create a judge class.
-   * 
+   *
    * @param {FrameAddScriptTagOptions} testplan
    * @param {object} options
    * @param {function(object):void} outputStream
@@ -78,16 +78,25 @@ class Judge {
     await page.exposeFunction('handleOut', this.out);
     await page.exposeFunction('visualise', () => this.visualise);
 
-    await page.addScriptTag(this.testplan);
+    await page.addScriptTag({
+      ...(this.fromApi ? { content: this.test_file } : { url: this.test_file }),
+    });
+
+    const sourceFileTemplate = this.fromApi
+      ? submissionFile
+      : path.resolve(__dirname, submissionFile);
+    const templateFileTemplate = this.fromApi
+      ? templateFile
+      : path.resolve(__dirname, templateFile);
 
     // START JUDGE
     this.out({ command: 'start-judgement' });
 
     /** @type {ElementHandle} */
     const fileHandle = await page.$('#file');
-    await fileHandle.uploadFile(submissionFile);
+    await fileHandle.uploadFile(sourceFileTemplate);
     const templateHandle = await page.$('#template');
-    await templateHandle.uploadFile(templateFile);
+    await templateHandle.uploadFile(templateFileTemplate);
 
     await page.setViewport({ height: 1080, width: 960 });
     await page.waitForTimeout(50);

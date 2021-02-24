@@ -25,19 +25,53 @@ function setupRoutes(server) {
 
     const pass = new PassThrough();
     pass.pipe(res);
-    
-    const plan = {
-      content: testplan.toString()
-    }
 
-    const judge = new Judge(plan, { fromApi: true }, (judgeObject) => {
-      if (!ALLOWED_COMMANDS.includes(judgeObject.command)) {
-        return;
-      }
+    let tab = {
+      title: '',
+      testCases: [],
+    };
+    let testCase = {
+      description: '',
+      status: {},
+    };
 
-      pass.write(JSON.stringify(judgeObject));
-      pass.resume();
-    });
+    const judge = new Judge(
+      testplan,
+      { fromApi: true, debug: false },
+      (judgeObject) => {
+        if (!ALLOWED_COMMANDS.includes(judgeObject.command)) {
+          return;
+        }
+
+        // create new tab with title
+        if (judgeObject.command === COMMANDS.START_TAB) {
+          tab.title = judgeObject.title;
+        }
+
+        // write tab to stream and create new
+        if (judgeObject.command === COMMANDS.CLOSE_TAB) {
+          pass.write(`${JSON.stringify(tab)};`);
+          pass.resume();
+          tab = { title: '', testCases: [] };
+        }
+
+        // creation of a new testcase
+        if (judgeObject.command === COMMANDS.START_TESTCASE) {
+          testCase.description = judgeObject.description;
+        }
+
+        // add the status object
+        if (judgeObject.command === COMMANDS.CLOSE_TEST) {
+          testCase.status = judgeObject.status;
+        }
+
+        // push the testcase in the tab
+        if (judgeObject.command === COMMANDS.CLOSE_TESTCASE) {
+          tab.testCases.push(testCase);
+          testCase = {};
+        }
+      },
+    );
 
     await judge.run(templateFile.path, testFile.path);
 
