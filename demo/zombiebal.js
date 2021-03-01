@@ -13,6 +13,19 @@ function beforeExecution(template, submission, output) {
     'Er is iets veranderd aan de ingebouwde sprites, waar je niets moet aan veranderen.'
   );
   output.closeTestTab();
+  
+  output.startTestTab("Controle op blokjes");
+  output.addTest(
+    'Oneindige lus gebruikt bij Rob',
+    true,
+    submission.sprite('Rob').hasBlock('control_forever')
+  )
+  output.addTest(
+    'Oneindige lus gebruikt bij Roy',
+    true,
+    submission.sprite('Roy').hasBlock('control_forever')
+  )
+  output.closeTestTab();
 }
 
 /**
@@ -41,6 +54,11 @@ function testSprite(events, data, e) {
       // We can't know how many steps will be set.
       e.output.startTestCase(`${name} beweegt omlaag`);
       e.output.addOneTest(
+        180,
+        sprite.direction,
+        `${name} moet omlaag gericht zijn.`
+      )
+      e.output.addOneTest(
         true,
         sprite.y < originalPosition.y,
         `Als op ${down} gedrukt wordt, moet ${name} 10 stappen omlaag zetten.`
@@ -66,6 +84,11 @@ function testSprite(events, data, e) {
         sprite.y > latestPosition.y,
         `Als op ${up} gedrukt wordt, moet ${name} 10 stappen omhoog zetten.`
       );
+      e.output.addOneTest(
+        0,
+        sprite.direction,
+        `${name} moet omhoog gericht zijn.`
+      )
       e.output.addOneTest(
         originalPosition.x,
         sprite.x,
@@ -168,7 +191,7 @@ function testTon(events, e) {
 /** @param {Evaluation} e */
 function duringExecution(e) {
   e.actionTimeout = 300000;
-  // e.acceleration = 10;
+  e.acceleration = 1;
   // e.eventAcceleration = 1;
 
   const originalEvents = e.scheduler
