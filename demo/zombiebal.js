@@ -19,12 +19,28 @@ function beforeExecution(template, submission, output) {
     'Oneindige lus gebruikt bij Rob',
     true,
     submission.sprite('Rob').hasBlock('control_forever')
-  )
+  );
   output.addTest(
     'Oneindige lus gebruikt bij Roy',
     true,
     submission.sprite('Roy').hasBlock('control_forever')
-  )
+  );
+  
+  // Check the ton.
+  const ton = submission.sprite('Ton');
+  const callIndex = ton.blocks.findIndex(block => { 
+    return block.opcode === 'procedures_call' && block.calledProcedureName === 'Richt naar Roy of Rob'; 
+  });
+  const loopIndex = ton.blocks.findIndex(block =>{
+    return block.opcode === 'control_repeat_until'
+  });
+  output.addTest(
+    'Ton richt naar spelers',
+    true,
+    callIndex < loopIndex,
+    'De ton moet eerst naar Roy of Rob gericht worden.'
+  );
+  
   output.closeTestTab();
 }
 
@@ -173,10 +189,10 @@ function testTon(events, e) {
       const ton = e.vm.runtime.getSpriteTargetByName('Ton');
       const sprite = e.vm.runtime.getSpriteTargetByName(touchedSprite);
       let newY;
-      if (ton.y > 110) {
-        newY = ton.y - 100;
+      if (ton.y > 70) {
+        newY = ton.y - 150;
       } else {
-        newY = ton.y + 100;
+        newY = ton.y + 150;
       }
       sprite.setXY(sprite.x, newY);
       loser = touchedSprite;
