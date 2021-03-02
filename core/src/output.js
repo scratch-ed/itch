@@ -150,8 +150,13 @@ export default class ResultManager {
   }
 
   addTest(testName, expected, generated, message, correct = null) {
-    let status;
     this.startTestCase(testName);
+    this.addOneTest(expected, generated, message, correct);
+    this.closeTestCase();
+  }
+
+  addOneTest(expected, generated, message, correct = null) {
+    let status;
     this.startTest(expected);
     if (generated !== undefined) {
       if (isEqual(generated, expected)) {
@@ -178,7 +183,6 @@ export default class ResultManager {
     }
 
     this.closeTest(generated, status);
-    this.closeTestCase();
   }
 
   /**

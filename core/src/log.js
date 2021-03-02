@@ -121,18 +121,16 @@ export class LogFrame {
   constructor(context, block) {
     /**
      * The timestamp of the frame.
-     * TODO: investigate using currentMSecs instead.
+     *
      * @type {number}
      */
     this.time = context.timestamp();
 
     /**
-     * The name of the block that triggerd this frame.
+     * The name of the block that triggered this frame.
      * @type {string}
      */
     this.block = block;
-    // TODO: what is this used for.
-    this.type = block;
 
     /**
      * The targets saved at this moment in the VM.

@@ -14,27 +14,132 @@ export class Sb3Variable {
 }
 
 /**
- * @typedef Sb3List
+ * @typedef {object} Sb3Mutation
+ * @property {string} tagName
+ * @property {Array} children
+ * @property {string} proccode
+ * @property {string} argymentids
+ */
+
+/**
+ * @typedef {object} Sb3List
  * @property {string} name
  * @property {Array} list
  */
 
-/**
- * The block format used in project serialisation.
- *
- * @see https://en.scratch-wiki.info/wiki/Scratch_File_Format#Blocks
- *
- * @typedef {Object} Sb3Block
- * @property {string} opcode - A string naming the block.
- * @property {string|null} next - The ID of the following block or null.
- * @property {string|null} parent - If the block is a stack block and is preceded, this is
- *              the ID of the preceding block. If the block is the first
- *              stack block in a C mouth, this is the ID of the C block.
- *              If the block is an input to another block, this is the
- *              ID of that other block. Otherwise it is null.
- * @property {boolean} shadow - True if this is a shadow and false otherwise.
- * @property {boolean} topLevel - False if the block has a parent and true otherwise.
- */
+export class Sb3Block {
+  constructor(id, data) {
+    /** @type {string} */
+    this.id = id;
+    /**
+     * A string naming the block. The opcode of a "core" block may be found in the
+     * Scratch source code here or here for shadows, and the opcode of an extension's
+     * block may be found in the extension's source code.
+     * 
+     * @type {string}
+     */
+    this.opcode = data.opcode;
+    /**
+     * The ID of the following block or `null`.
+     * 
+     * @type {?string}
+     */
+    this.next = data.next;
+    /**
+     * If the block is a stack block and is preceded, this is the ID of the preceding
+     * block. If the block is the first stack block in a C mouth, this is the ID of
+     * the C block. If the block is an input to another block, this is the ID of
+     * that other block. Otherwise it is null.
+     * 
+     * @type {?string}
+     */
+    this.parent = data.parent;
+
+    /**
+     * An object associating names with arrays representing inputs into which
+     * reporters may be dropped and C mouths. The first element of each array
+     * is 1 if the input is a shadow, 2 if there is no shadow, and 3 if there
+     * is a shadow but it is obscured by the input. The second is either the
+     * ID of the input or an array representing it as described below. If 
+     * there is an obscured shadow, the third element is its ID or an array
+     * representing it.
+     * 
+     * @type {Object.<string,Array>}
+     */
+    this.inputs = data.inputs;
+
+    /**
+     * An object associating names with arrays representing fields. The first
+     * element of each array is the field's value which may be followed by an ID.
+     * 
+     * @type {Object.<string,Array>}
+     */
+    this.fields = data.fields;
+
+    /**
+     * True if this is a shadow and false otherwise.
+     * 
+     * A shadow is a constant expression in a block input which can be replaced
+     * by a reporter; Scratch internally considers these to be blocks although they
+     * are not usually thought of as such.
+     * 
+     * This means that a shadow is basically the place holder of some variable in blocks
+     * while they are in the toolbox.
+     * 
+     * @see https://groups.google.com/g/blockly/c/bXe4iEaVSao
+     * @type {boolean}
+     */
+    this.shadow = data.shadow;
+
+    /**
+     * False if the block has a parent and true otherwise.
+     * 
+     * @type {boolean}
+     */
+    this.topLevel = data.topLevel;
+
+    /**
+     * ID of the comment if the block has a comment.
+     * 
+     * @type {?string}
+     */
+    this.comment = data.comment;
+
+    /**
+     * X coordinate in the code area if top-level.
+     * @type {?number}
+     */
+    this.x = data.x;
+
+    /**
+     * Y coordinate in the code area if top-level.
+     * 
+     * @type {?number}
+     */
+    this.y = data.y;
+
+    /**
+     * Mutation data if a mutation.
+     * 
+     * @type {Sb3Mutation}
+     */
+    this.mutation = data.mutation;
+  }
+
+  /**
+   * Get the procedure name of the procedure being called.
+   * If the block is not a procedure call, an error will be thrown.
+   * 
+   * @return {string}
+   */
+  get calledProcedureName() {
+    if (this.opcode !== 'procedures_call') {
+      throw new Error("Cannot get called procedure name from non procedure call.");
+    }
+    
+    return this.mutation.proccode;
+  }
+}
 
 /**
  * @see https://en.scratch-wiki.info/wiki/Scratch_File_Format#Comments
@@ -120,9 +225,13 @@ export class Sb3Target {
     this.broadcasts = data.broadcasts || {};
     /**
      * An object associating IDs with blocks.
-     * @type {Object.<string, Sb3Block>}
+     * @type {Sb3Block[]}
      */
-    this.blocks = data.blocks || {};
+    this.blocks = [];
+    for (const [key, value] of Object.entries(data.blocks)) {
+      this.blocks.push(new Sb3Block(key, value));
+    }
+    
     /**
      * An object associating IDs with comments.
      * @type {Object.<string, Sb3Comment>}
@@ -185,14 +294,7 @@ export class Sb3Target {
    * @return {boolean}
    */
   hasBlock(opcode) {
-    let found = null;
-    for (const key of Object.keys(this.blocks)) {
-      if (this.blocks[key].opcode === opcode) {
-        found = this.blocks[key];
-        break;
-      }
-    }
-    return found !== null;
+    return this.blocks.some(block => block.opcode === opcode);
   }
 
   /**

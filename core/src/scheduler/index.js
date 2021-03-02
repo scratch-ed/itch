@@ -415,7 +415,7 @@ export class ScheduledEvent {
    * is not possible.
    *
    * Finally, since the event should at least be noticeable in the next step
-   * of the Scratch VM, by default a 10 ms waiting time is introduced after
+   * of the Scratch VM, by default a 20 ms waiting time is introduced after
    * each key event (the delay). You can modify this delay by setting the last
    * parameter. In most cases, it is not necessary to adjust this.
    *
@@ -445,7 +445,7 @@ export class ScheduledEvent {
    *
    * @return {ScheduledEvent}
    */
-  useKey(key, down = 10, sync = true, delay = 10) {
+  useKey(key, down = 60, sync = true, delay = 20) {
     return this.constructNext(new KeyUseAction(key, down, delay), sync);
   }
 

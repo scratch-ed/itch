@@ -1,6 +1,8 @@
+import castArray from 'lodash/castArray';
 import { ScheduledAction } from './action.js';
 import { LogEvent, LogFrame } from '../log.js';
 import { BroadcastListener } from '../listener.js';
+import { castCallback } from '../utils.js';
 
 class WaitEvent extends ScheduledAction {
   /**
@@ -53,14 +55,12 @@ class WaitForSpriteAction extends ScheduledAction {
 class WaitForSpritePositionAction extends ScheduledAction {
   /**
    * @param {string} name
-   * @param {number|null} x
-   * @param {number|null} y
+   * @param {function(x:number,y:number):boolean} callback
    */
-  constructor(name, x, y) {
+  constructor(name, callback) {
     super();
     this.name = name;
-    this.x = x;
-    this.y = y;
+    this.callback = callback;
   }
 
   execute(context, resolve) {
@@ -69,7 +69,7 @@ class WaitForSpritePositionAction extends ScheduledAction {
       throw new Error(`Sprite ${this.name} was not found in the runtime.`);
     }
     const callback = (target) => {
-      if ((this.x === null || numericEquals(target.x, this.x)) && (this.y === null || numericEquals(target.y, this.y))) {
+      if (this.callback(target.x, target.y)) {
         sprite.removeListener('TARGET_MOVED', callback);
         resolve(`finished ${this}`);
       }
@@ -78,19 +78,19 @@ class WaitForSpritePositionAction extends ScheduledAction {
   }
 
   toString() {
-    return `Wait for sprite ${this.name} to reach ${this.x}, ${this.y}`;
+    return `Wait for sprite ${this.name} to reach one of ${this.positions}`;
   }
 }
 
 class WaitForSpriteTouchAction extends ScheduledAction {
   /**
    * @param {string} name
-   * @param {string} target
+   * @param {function():string[]|string} paramCallback
    */
-  constructor(name, target) {
+  constructor(name, paramCallback) {
     super();
     this.name = name;
-    this.target = target;
+    this.paramCallback = paramCallback;
   }
 
   execute(context, resolve) {
@@ -98,17 +98,22 @@ class WaitForSpriteTouchAction extends ScheduledAction {
     if (!sprite) {
       throw new Error(`Sprite ${this.name} was not found in the runtime.`);
     }
+    this.targets = castArray(this.paramCallback());
     const callback = (target) => {
-      if (target.isTouchingObject(this.target)) {
-        sprite.removeListener('TARGET_MOVED', callback);
-        resolve(`finished ${this}`);
+      for (const goal of this.targets) {
+        console.log("Checking...", goal);
+        if (target.isTouchingObject(goal)) {
+          sprite.removeListener('TARGET_MOVED', callback);
+          resolve(`finished ${this}`);
+          return;
+        }
       }
     };
     sprite.addListener('TARGET_MOVED', callback);
   }
 
   toString() {
-    return `Wait for sprite ${this.name} to touch ${this.target}`;
+    return `Wait for sprite ${this.name} to touch one of ${this.paramCallback()}`;
   }
 }
 
@@ -158,19 +163,38 @@ export class SpriteCondition {
 
   /**
    * Wait for a sprite to reach a certain position.
+   * 
+   * You can pass one position or a list of positions. If a list, the sprite
+   * needs to reach one of the locations. For each location, you can leave either x or y
+   * as null, which will be interpreted as a wildcard. A position object with both x and y
+   * as null is considered an error.
+   * 
+   * Alternatively, you can pass a callback that will receive the position (x,y) of the sprite.
+   * It must return true if the position is considered reached.
+   * 
+   * The callback can be used to test things like "is the sprite.x > 170?".
    *
-   * @param {number|null} x - Null if irrelevant
-   * @param {number|null} y - Null if irrelevant
+   * @param {{x:number|null,y:number|null}[]|{x:number|null,y:number|null}|function(x:number,y:number):boolean} positions - The positions.
    * @param {number|null} timeout - Optional timeout.
    *
    * @return {WaitCondition}
    */
-  toReach(x, y, timeout = null) {
-    if (x === null && y === null) {
-      console.warn("Both positions in wait condition are wildcard. A mistake?");
+  toReach(positions, timeout = null) {
+    let callback;
+    if (typeof positions !== 'function') {
+      callback = (x, y) => {
+        return castArray(positions).some(pos => {
+          if (pos.x === null && pos.y === null) {
+            console.warn("Both positions in wait condition are wildcard. A mistake?");
+          }
+          return (pos.x === null || numericEquals(x, pos.x)) && (pos.y === null || numericEquals(y, pos.y));
+        });
+      }
+    } else {
+      callback = positions;
     }
     return {
-      action: new WaitForSpritePositionAction(this.name, x, y),
+      action: new WaitForSpritePositionAction(this.name, callback),
       timeout: timeout
     };
   }
@@ -178,14 +202,15 @@ export class SpriteCondition {
   /**
    * Wait for a sprite to touch another sprite.
    *
-   * @param {string} target - Name of the sprite.
+   * @param {string|string[]|function():string[]|string} targets - Name of the sprite.
    * @param {number|null} timeout - Optional timeout.
    *
    * @return {WaitCondition}
    */
-  toTouch(target, timeout = null) {
+  toTouch(targets, timeout = null) {
+    const callback = castCallback(targets);
     return {
-      action: new WaitForSpriteTouchAction(this.name, target),
+      action: new WaitForSpriteTouchAction(this.name, callback),
       timeout: timeout
     };
   }
@@ -198,7 +223,7 @@ export class SpriteCondition {
    * @return {WaitCondition}
    */
   toTouchEdge(timeout = null) {
-    return this.toTouch('_egde_', timeout);
+    return this.toTouch('_edge_', timeout);
   }
 
   /**

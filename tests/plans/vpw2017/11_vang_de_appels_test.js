@@ -79,7 +79,7 @@ function duringExecution(e) {
     .forEach(_.range(0, 10), (ev) => {
       // We need to move the bowl out of the way.
       return ev.useMouse(mouse)
-        .wait(sprite('Appel').toReach(null, 120))
+        .wait(sprite('Appel').toReach({x: null, y: 120}))
         .log(() => {
           mouse.x = mousePosition();
         });

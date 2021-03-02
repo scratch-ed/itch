@@ -20,12 +20,12 @@ class Processor {
       this.case = message.description;
     } else if (command === 'close-test') {
       const expected = this.stack.pop();
-      const actual = message.actual;
+      const actual = message.generated;
       const status = message.status.enum;
       if (status === 'correct') {
         this.smallLog(`✅`, this.case);
       } else {
-        this.error(`❌ expected ${expected}, got ${actual}.`);
+        this.error(`❌ expected ${expected.expected}, got ${actual}.`);
       }
     } else if (command.startsWith('close')) {
       this.stack.pop();
