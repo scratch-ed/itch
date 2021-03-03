@@ -7,7 +7,6 @@ require('dotenv').config();
 const { Judge } = require('./judge.js');
 
 const {
-  resources: resourcesDir,
   source: sourceFile,
   template: templateFile,
   time_limit: timeLimit,
@@ -16,9 +15,7 @@ const {
   programming_language: programmingLanguage,
 } = config;
 
-const plan = {
-  url: path.resolve(__dirname, path.join(resourcesDir, config.plan))
-}
+const plan = path.resolve(__dirname, config.plan);
 
 // process tests
 const judge = new Judge(plan, {
@@ -29,7 +26,7 @@ const judge = new Judge(plan, {
   memory_limit: memoryLimit,
   natural_language: naturalLanguage,
   programming_language: programmingLanguage,
-  debug: config.debug,
+  debug: config.debug
 });
 
 // evaluate tests and output result to stdout

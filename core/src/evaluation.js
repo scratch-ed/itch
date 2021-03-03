@@ -6,6 +6,7 @@ import { numericEquals } from './utils.js';
 import Context from './context.js';
 import Project from './project.js';
 import { delay, broadcast, sprite } from './scheduler/index.js';
+import { TabLevel } from './testplan.js';
 
 let object;
 if (typeof global === 'undefined') {
@@ -53,17 +54,12 @@ const EvaluationStage = {
  *
  * While possible, you should limit yourself to the function
  */
-class Evaluation {
+class Evaluation extends TabLevel {
   /**
    * @param {Context} context
    */
   constructor(context) {
-    /**
-     * @private
-     * @type {Context}
-     */
-    this.context = context;
-
+    super(context);
     /**
      * Used to track the stage internally.
      * @type {number}
@@ -207,7 +203,7 @@ class Evaluation {
  * @callback BeforeExecution
  * @param {Project} template - The template project.
  * @param {Project} submission - The submission project.
- * @param {ResultManager} output - The output manager.
+ * @param {Evaluation} output - The output manager.
  * @return {void} Nothing -> ignored.
  */
 /**
@@ -255,14 +251,13 @@ export async function run(config) {
   };
 
   context.output.startTestTab('Testen uit het testplan');
-  context.output.startTestContext();
   context.stage = EvaluationStage.before;
 
-  // Run the tests before the execution.
-  testplan.beforeExecution(new Project(templateJson), new Project(submissionJson), context.output);
-  context.output.closeTestContext();
-
   const judge = new Evaluation(context);
+
+  // Run the tests before the execution.
+  testplan.beforeExecution(new Project(templateJson), new Project(submissionJson), judge);
+  
   expose();
 
   await context.vmLoaded.promise;
@@ -276,17 +271,13 @@ export async function run(config) {
   context.prepareAndRunVm();
 
   // Run the events.
-  context.output.startTestContext();
   await context.event.run(context);
   await context.simulationEnd.promise;
-  context.output.closeTestContext();
   
   context.stage = EvaluationStage.after;
 
   // Do post-mortem tests.
-  context.output.startTestContext();
   testplan.afterExecution(judge);
-  context.output.closeTestContext();
 
   context.output.closeTestTab();
   console.log('--- END OF EVALUATION ---');

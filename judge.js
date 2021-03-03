@@ -92,7 +92,6 @@ class Judge {
     // START JUDGE
     this.out({ command: 'start-judgement' });
 
-    /** @type {ElementHandle} */
     const fileHandle = await page.$('#file');
     await fileHandle.uploadFile(sourceFileTemplate);
     const templateHandle = await page.$('#template');

@@ -11,19 +11,7 @@ Array [
   },
   Object {
     "command": "start-context",
-  },
-  Object {
-    "command": "close-context",
-  },
-  Object {
-    "command": "close-tab",
-  },
-  Object {
-    "command": "start-tab",
-    "title": "Controle op vakjes",
-  },
-  Object {
-    "command": "start-context",
+    "description": "Controle op vakjes",
   },
   Object {
     "command": "start-testcase",
@@ -713,14 +701,8 @@ Array [
     "command": "close-context",
   },
   Object {
-    "command": "close-tab",
-  },
-  Object {
-    "command": "start-tab",
-    "title": "Andere vakjes",
-  },
-  Object {
     "command": "start-context",
+    "description": "Andere vakjes",
   },
   Object {
     "command": "start-testcase",
@@ -745,13 +727,8 @@ Array [
     "command": "close-context",
   },
   Object {
-    "command": "close-tab",
-  },
-  Object {
-    "command": "close-context",
-  },
-  Object {
     "command": "start-context",
+    "description": "Startpositie ruimteschip",
   },
   Object {
     "command": "start-testcase",
@@ -796,10 +773,7 @@ Array [
   },
   Object {
     "command": "start-context",
-  },
-  Object {
-    "command": "start-tab",
-    "title": "Controle op kogels",
+    "description": "Controle op kogels",
   },
   Object {
     "command": "start-testcase",
@@ -881,14 +855,8 @@ Array [
     "command": "close-context",
   },
   Object {
-    "command": "close-tab",
-  },
-  Object {
-    "command": "start-tab",
-    "title": "Controle op brandstof",
-  },
-  Object {
     "command": "start-context",
+    "description": "Controle op brandstof",
   },
   Object {
     "command": "start-testcase",
@@ -970,14 +938,8 @@ Array [
     "command": "close-context",
   },
   Object {
-    "command": "close-tab",
-  },
-  Object {
-    "command": "start-tab",
-    "title": "Kwaliteit van de code",
-  },
-  Object {
     "command": "start-context",
+    "description": "Kwaliteit van de code",
   },
   Object {
     "command": "start-testcase",
@@ -997,12 +959,6 @@ Array [
   },
   Object {
     "command": "close-testcase",
-  },
-  Object {
-    "command": "close-context",
-  },
-  Object {
-    "command": "close-tab",
   },
   Object {
     "command": "close-context",

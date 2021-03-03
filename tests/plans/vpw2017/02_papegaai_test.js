@@ -3,12 +3,13 @@
 /**
  * @param {Project} template - The template project.
  * @param {Project} submission - The submission project.
- * @param {ResultManager} output - The output manager.
+ * @param {Evaluation} output - The output manager.
  */
 function beforeExecution(template, submission, output) {
   if (!submission.containsSprite('Papegaai')) {
     output.addError('Er moet een sprite met de naam Papegaai bestaan in het project!');
   }
+  
 }
 
 /** @param {Evaluation} e */

@@ -7,11 +7,11 @@ let scoreVariable = null;
  *
  * @param {Project} template - The template project.
  * @param {Project} submission - The submission project.
- * @param {ResultManager} output - The output manager.
+ * @param {Evaluation} e - The output manager.
  */
-function beforeExecution(template, submission, output) {
+function beforeExecution(template, submission, e) {
   // Controleer of er aan de sprites geprutst is.
-  output.addTest('Niet geprutst met ingebouwde sprites',
+  e.output.addTest('Niet geprutst met ingebouwde sprites',
     false,
     template.hasAddedSprites(submission) || template.hasRemovedSprites(submission),
     'Er is iets veranderd aan de ingebouwde sprites, waar je niets moet aan veranderen.'
@@ -20,7 +20,7 @@ function beforeExecution(template, submission, output) {
   // Controleer of de variable 'score' bestaat.
   scoreVariable = submission.getVariable('Score');
 
-  output.addTest('De variable Score moet bestaan',
+  e.output.addTest('De variable Score moet bestaan',
     true,
     scoreVariable !== null,
     'Er moet één variable Score zijn.'

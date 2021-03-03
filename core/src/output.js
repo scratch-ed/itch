@@ -2,6 +2,8 @@ import isEqual from 'lodash/isEqual';
 
 /**
  * Handle outputting. By default, all output is sent to stderr.
+ * 
+ * @private
  */
 function toOutput(output) {
   if (typeof window.handleOut !== 'undefined') {
@@ -12,7 +14,25 @@ function toOutput(output) {
 }
 
 /**
- * Manage the pout
+ * Manages the output for the Dodona-inspired format.
+ * 
+ * While this class is exposed in testplans, in most cases
+ * you should use the high-level testplan API instead of this one.
+ * 
+ * ### Dodona format
+ * 
+ * Some more information on the Dodona format. The format is a partial format.
+ * The judge basically sends updates to the test result state via commands, e.g.
+ * "start testcase X", "start test Y", "close testcase X", etc.
+ * 
+ * For ease of use, the result manager will automatically open higher levels when
+ * opening lower levels. For example, if you open a testcase without opening a
+ * context first, the result manager will do so for you. Previous levels are also
+ * closed when appropriate. For example, when starting a new tab, all previous tabs
+ * will be closed.
+ * 
+ * There is one exception: a test. If an open test is detected, an error will be thrown,
+ * as the result manager has no way of knowing if the test is successful or not.
  */
 export default class ResultManager {
   constructor() {
@@ -43,8 +63,12 @@ export default class ResultManager {
     this.hasOpenTab = false;
   }
 
-  startTestContext() {
-    this.out({ command: 'start-context' });
+  startTestContext(description = null) {
+    if (description) {
+      this.out({ command: 'start-context', description: description });
+    } else {
+      this.out({ command: 'start-context' });
+    }
     this.hasOpenContext = true;
   }
 
@@ -58,7 +82,7 @@ export default class ResultManager {
 
   startTestCase(description) {
     if (!this.hasOpenContext) {
-      this.startTestContext();
+      this.startTestContext(description);
     }
     if (this.hasOpenCase) {
       this.closeTestCase(true);
@@ -105,6 +129,7 @@ export default class ResultManager {
     this.hasOpenTest = false;
   }
 
+  /** @deprecated */
   addError(error) {
     this.addMessage(error);
     if (this.hasOpenTest) {
@@ -149,12 +174,14 @@ export default class ResultManager {
     });
   }
 
+  /** @deprecated */
   addTest(testName, expected, generated, message, correct = null) {
     this.startTestCase(testName);
     this.addOneTest(expected, generated, message, correct);
     this.closeTestCase();
   }
 
+  /** @deprecated */
   addOneTest(expected, generated, message, correct = null) {
     let status;
     this.startTest(expected);
@@ -193,6 +220,7 @@ export default class ResultManager {
    * @param {string} caseName - The name of the testcase.
    * @param {boolean} correct - If the testcase was successful or not.
    * @param {string} message - The message if wrong.
+   * @deprecated
    */
   addCase(caseName, correct, message = 'Verkeerd') {
     this.startTestCase(caseName);

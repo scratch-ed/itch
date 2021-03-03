@@ -11,16 +11,11 @@ Array [
   },
   Object {
     "command": "start-context",
-  },
-  Object {
-    "command": "close-context",
-  },
-  Object {
-    "command": "start-context",
+    "description": "Controle op sprites",
   },
   Object {
     "command": "start-testcase",
-    "description": "Hoed verandert bij klikken",
+    "description": "Toegevoegde sprites",
   },
   Object {
     "command": "start-test",
@@ -38,10 +33,111 @@ Array [
     "command": "close-testcase",
   },
   Object {
+    "command": "start-testcase",
+    "description": "Verwijderde sprites",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "false",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "false",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Gewijzigde costumes",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "false",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "false",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "start-test",
+    "expected": "false",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "false",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "start-test",
+    "expected": "false",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "false",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Code van Nori",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "true",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "true",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
     "command": "close-context",
   },
   Object {
     "command": "start-context",
+    "description": "Hoed verandert bij klikken",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Hoed verandert bij klikken",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "2",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "1",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
   },
   Object {
     "command": "start-testcase",
@@ -339,12 +435,7 @@ Array [
   },
   Object {
     "command": "start-context",
-  },
-  Object {
-    "command": "close-context",
-  },
-  Object {
-    "command": "start-context",
+    "description": "De papegaai heeft nog niet bewogen",
   },
   Object {
     "command": "start-testcase",
@@ -364,12 +455,6 @@ Array [
   },
   Object {
     "command": "close-testcase",
-  },
-  Object {
-    "command": "close-context",
-  },
-  Object {
-    "command": "start-context",
   },
   Object {
     "command": "start-testcase",
@@ -841,18 +926,7 @@ Array [
   },
   Object {
     "command": "start-context",
-  },
-  Object {
-    "command": "close-context",
-  },
-  Object {
-    "command": "start-context",
-  },
-  Object {
-    "command": "close-context",
-  },
-  Object {
-    "command": "start-context",
+    "description": "Aantal vierkanten",
   },
   Object {
     "command": "start-testcase",
@@ -910,18 +984,7 @@ Array [
   },
   Object {
     "command": "start-context",
-  },
-  Object {
-    "command": "close-context",
-  },
-  Object {
-    "command": "start-context",
-  },
-  Object {
-    "command": "close-context",
-  },
-  Object {
-    "command": "start-context",
+    "description": "Aantal driehoeken",
   },
   Object {
     "command": "start-testcase",
@@ -960,18 +1023,7 @@ Array [
   },
   Object {
     "command": "start-context",
-  },
-  Object {
-    "command": "close-context",
-  },
-  Object {
-    "command": "start-context",
-  },
-  Object {
-    "command": "close-context",
-  },
-  Object {
-    "command": "start-context",
+    "description": "De pen werkt gebruikt",
   },
   Object {
     "command": "start-testcase",
@@ -1003,18 +1055,7 @@ Array [
   },
   Object {
     "command": "start-context",
-  },
-  Object {
-    "command": "close-context",
-  },
-  Object {
-    "command": "start-context",
-  },
-  Object {
-    "command": "close-context",
-  },
-  Object {
-    "command": "start-context",
+    "description": "De kat raakt de voetbal",
   },
   Object {
     "command": "start-testcase",
@@ -1053,12 +1094,7 @@ Array [
   },
   Object {
     "command": "start-context",
-  },
-  Object {
-    "command": "close-context",
-  },
-  Object {
-    "command": "start-context",
+    "description": "De Heks beweegt niet voor de klik",
   },
   Object {
     "command": "start-testcase",
@@ -1078,12 +1114,6 @@ Array [
   },
   Object {
     "command": "close-testcase",
-  },
-  Object {
-    "command": "close-context",
-  },
-  Object {
-    "command": "start-context",
   },
   Object {
     "command": "start-testcase",
@@ -1157,12 +1187,7 @@ Array [
   },
   Object {
     "command": "start-context",
-  },
-  Object {
-    "command": "close-context",
-  },
-  Object {
-    "command": "start-context",
+    "description": "De Heks beweegt niet voor de klik",
   },
   Object {
     "command": "start-testcase",
@@ -1222,12 +1247,6 @@ Array [
     "command": "close-testcase",
   },
   Object {
-    "command": "close-context",
-  },
-  Object {
-    "command": "start-context",
-  },
-  Object {
     "command": "start-testcase",
     "description": "Gebruik van een lus",
   },
@@ -1264,18 +1283,7 @@ Array [
   },
   Object {
     "command": "start-context",
-  },
-  Object {
-    "command": "close-context",
-  },
-  Object {
-    "command": "start-context",
-  },
-  Object {
-    "command": "close-context",
-  },
-  Object {
-    "command": "start-context",
+    "description": "Devin stelt zich voor",
   },
   Object {
     "command": "start-testcase",
@@ -1364,18 +1372,7 @@ Array [
   },
   Object {
     "command": "start-context",
-  },
-  Object {
-    "command": "close-context",
-  },
-  Object {
-    "command": "start-context",
-  },
-  Object {
-    "command": "close-context",
-  },
-  Object {
-    "command": "start-context",
+    "description": "Bericht nummer 0 komt van de Kat",
   },
   Object {
     "command": "start-testcase",
@@ -1530,6 +1527,7 @@ Array [
   },
   Object {
     "command": "start-context",
+    "description": "Niet geprutst met ingebouwde sprites",
   },
   Object {
     "command": "start-testcase",
@@ -1570,12 +1568,6 @@ Array [
     "command": "close-testcase",
   },
   Object {
-    "command": "close-context",
-  },
-  Object {
-    "command": "start-context",
-  },
-  Object {
     "command": "start-testcase",
     "description": "Score moet starten op 0",
   },
@@ -1612,12 +1604,6 @@ Array [
   },
   Object {
     "command": "close-testcase",
-  },
-  Object {
-    "command": "close-context",
-  },
-  Object {
-    "command": "start-context",
   },
   Object {
     "command": "start-testcase",
@@ -1737,12 +1723,7 @@ Array [
   },
   Object {
     "command": "start-context",
-  },
-  Object {
-    "command": "close-context",
-  },
-  Object {
-    "command": "start-context",
+    "description": "De berekening van cijfersom 2586",
   },
   Object {
     "command": "start-testcase",
@@ -1805,12 +1786,6 @@ Array [
     "command": "close-context",
   },
   Object {
-    "command": "start-context",
-  },
-  Object {
-    "command": "close-context",
-  },
-  Object {
     "command": "close-tab",
   },
   Object {
@@ -1830,18 +1805,7 @@ Array [
   },
   Object {
     "command": "start-context",
-  },
-  Object {
-    "command": "close-context",
-  },
-  Object {
-    "command": "start-context",
-  },
-  Object {
-    "command": "close-context",
-  },
-  Object {
-    "command": "start-context",
+    "description": "Squares were detected",
   },
   Object {
     "command": "start-testcase",

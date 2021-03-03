@@ -173,8 +173,10 @@ export class SpriteCondition {
    * It must return true if the position is considered reached.
    * 
    * The callback can be used to test things like "is the sprite.x > 170?".
+   * 
+   * {Array<{x:number|null,y:number|null}>|{x:number|null,y:number|null}|function(x:number,y:number):boolean}
    *
-   * @param {{x:number|null,y:number|null}[]|{x:number|null,y:number|null}|function(x:number,y:number):boolean} positions - The positions.
+   * @param {any} positions - The positions.
    * @param {number|null} timeout - Optional timeout.
    *
    * @return {WaitCondition}

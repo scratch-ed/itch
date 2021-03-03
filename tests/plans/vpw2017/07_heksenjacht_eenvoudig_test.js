@@ -2,12 +2,12 @@
 /**
  * @param {Project} template
  * @param {Project} submission
- * @param {ResultManager} output
+ * @param {Evaluation} e
  */
-function beforeExecution(template, submission, output) {
+function beforeExecution(template, submission, e) {
   // Controleer of het ingediende project van de leerling een sprite heeft met als naam 'Heks'
   if (!submission.containsSprite('Heks')) {
-    output.addError('De sprite met als naam Heks werd niet teruggevonden in het project');
+    e.output.addError('De sprite met als naam Heks werd niet teruggevonden in het project');
   }
 }
 

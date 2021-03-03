@@ -608,7 +608,7 @@ export class Log {
    *
    * @param {string} sprite - The name of the sprite.
    * @param {LogFrame[]} frames - The frames to search. Defaults to all frames.
-   * @return {{x:Number, y:Number}[]} The positions.
+   * @return {Array<{x:Number, y:Number}>} The positions.
    */
   getSpritePositions(sprite, frames = this.frames) {
     return frames

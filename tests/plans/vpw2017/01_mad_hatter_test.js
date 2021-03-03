@@ -5,29 +5,28 @@
  *
  * @param {Project} template - The template project.
  * @param {Project} submission - The submission project.
- * @param {ResultManager} output - The output manager.
+ * @param {Evaluation} output - The output manager.
  */
 function beforeExecution(template, submission, output) {
-  if (template.hasAddedSprites(submission)) {
-    output.addError('Er zijn sprites toegevoegd aan het startproject!');
-  }
-
-  if (template.hasRemovedSprites(submission)) {
-    output.addError('Er zijn sprites verwijderd uit het startproject!');
-  }
-
-  for (const target of submission.sprites()) {
-    if (template.hasChangedCostumes(submission, target.name)) {
-      output.addError(`De kostuums van de sprite met naam ${target.name} zijn gewijzigd!`);
-    }
-
-    // Controleer of er geen code-blokken toegevoegd zijn aan Nori (indien vermeld in de opgave)
-    if (target.name === 'Nori') {
-      if (!_.isEmpty(target.blocks)) {
-        output.addError('De code blokken werden toegevoegd aan Nori en niet aan de hoed!');
+  output.describe("Controle op sprites", l => {
+    l.test('Toegevoegde sprites', l => {
+      l.expect(template.hasAddedSprites(submission)).toBe(false);
+    });
+    l.test('Verwijderde sprites', l => {
+      l.expect(template.hasRemovedSprites(submission)).toBe(false);
+    });
+    l.test('Gewijzigde costumes', l => {
+      for (const target of submission.sprites()) {
+        l.expect(template.hasChangedCostumes(submission, target.name)).toBe(false);
       }
-    }
-  }
+    });
+    l.test('Code van Nori', l => {
+      const nori = submission.sprite('Nori');
+      l.expect(_.isEmpty(nori.blocks))
+        .withError('De codeblokken werden toegevoegd aan Nori en niet aan de hoed!')
+        .toBe(true);
+    });
+  });
 }
 
 /** @param {Evaluation} e */
@@ -39,10 +38,9 @@ function duringExecution(e) {
     .clickSprite('Hat')
     .log(() => {
       const secondHat = e.log.sprites.getSprite('Hat');
-      e.output.addTest('Hoed verandert bij klikken',
-        firstHat.currentCostume === secondHat.currentCostume,
-        false,
-        'De hoed moet veranderen wanneer er op geklikt wordt')
+      e.test('Hoed verandert bij klikken', l => {
+        l.expect(firstHat.currentCostume).toNotBe(secondHat.currentCostume);
+      });
     })
     .forEach(
       ['Hat', 'Stage', 'Nori', 'Hat', 'Hat', 'Hat', 'Hat', 'Stage', 'Nori', 'Nori', 'Hat', 'Hat', 'Hat'],

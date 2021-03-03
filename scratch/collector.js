@@ -14,29 +14,33 @@ class Processor {
       this.stack.push(message);
     }
 
-    if (command === 'start-tab') {
-      this.output(' '.repeat(this.indent()) + `Tab: ${message.title}`);
+    if (command === 'start-context') {
+      this.output(`<h2>${message.description || 'Context'}</h2>`);
     } else if (command === 'start-testcase') {
       this.case = message.description;
+      this.caseTests = [];
+    } else if (command === "start-test") {
+      this.currentTest = message;
     } else if (command === 'close-test') {
-      const expected = this.stack.pop();
+      const expected = this.currentTest;
       const actual = message.generated;
       const status = message.status.enum;
-      if (status === 'correct') {
-        this.smallLog(`✅`, this.case);
-      } else {
-        this.error(`❌ expected ${expected.expected}, got ${actual}.`);
-      }
+      this.caseTests.push({
+        expected: expected,
+        actual: actual,
+        status: status
+      });
+    } else if (command === "close-testcase") {
+      const content = this.caseTests.map(test => {
+        return `${test.status === 'correct' ? '✅' : '❌'} Expected ${test.expected.expected}, got: ${test.actual}\n`;
+      });
+      const allCorrect = this.caseTests.every(test => test.status === 'correct');
+      this.output(`<span title="${this.case}\n${content}">${allCorrect ? '✅' : '❌'}</span>`);
     } else if (command.startsWith('close')) {
       this.stack.pop();
     } else if (command === 'append-message') {
       this.output(`Message: ${message.message}`);
     }
-
-  }
-
-  indent() {
-    return this.stack.length;
   }
 
   output(res) {
@@ -51,19 +55,9 @@ class Processor {
     this.element.innerHTML += this.prepareHtml(res);
   }
 
-  smallLog(res, t) {
-    let h = '';
-    if (this.isFirstTest) {
-      h = `<span style="margin-left: ${this.indent() * 5}px"></span>`;
-    }
-    h += `<span title="${t}">${res}</span>`;
-    this.element.innerHTML += h;
-  }
-
   /** @param {string} html */
   prepareHtml(html) {
-    const h = html.trim();
-    return `<div style="margin-left: ${this.indent() * 5}px">${h}</div>`;
+    return html;
   }
 }
 
