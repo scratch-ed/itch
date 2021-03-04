@@ -427,6 +427,10 @@ export class ScheduledEvent {
    * the delay.
    *
    * The `useMouse` event is similar, but for the mouse.
+   * 
+   * This event is logged with event type 'useKey'. The event saves the state
+   * before the key press. The next frame of the event is saved after the delay
+   * has been completed or before the key is lifted.
    *
    * @see https://en.scratch-wiki.info/wiki/Key_()_Pressed%3F_(block)
    * @see https://en.scratch-wiki.info/wiki/When_()_Key_Pressed_(Events_block)
@@ -467,5 +471,43 @@ export class ScheduledEvent {
    */
   useMouse(data) {
     return this.constructNext(new MouseUseAction(data));
+  }
+
+  /**
+   * A utility function that allows to run a function to schedule events.
+   * 
+   * This function is mainly intended to allow better organisation of code
+   * when writing test plans. The callback will be executed with the current
+   * event as argument and is expected to return the next anchor event.
+   * 
+   * 
+   * @example
+   * // without this function
+   * function scheduleStuff(e) {
+   *   return e.wait(10);
+   * }
+   * 
+   * function duringExecution(e) {
+   *   let events = e.scheduler.wait(10);
+   *   events = scheduleStuff(events);
+   * }
+   *
+   * @example
+   * // with this function
+   * function scheduleStuff(e) {
+   *   return e.wait(10);
+   * }
+   *
+   * function duringExecution(e) {
+   *   e.scheduler
+   *    .wait(10)
+   *    .run(scheduleStuff);
+   * }
+   * 
+   * @param {function(e:ScheduledEvent):ScheduledEvent} provider
+   * @return {ScheduledEvent}
+   */
+  with(provider) {
+    return provider(this);
   }
 }

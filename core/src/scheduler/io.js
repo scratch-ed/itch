@@ -74,6 +74,14 @@ export class KeyUseAction extends ScheduledAction {
   }
 
   execute(context, resolve) {
+    const event = new LogEvent(context, 'useKey', {
+      key: this.key,
+      down: this.down,
+      delay: this.delay
+    });
+    event.previousFrame = new LogFrame(context, 'event');
+    context.log.addEvent(event);
+    
     context.vm.postIOData('keyboard', {
       key: this.key,
       isDown: this.isDown(),
@@ -84,6 +92,7 @@ export class KeyUseAction extends ScheduledAction {
 
     if (this.isDelayed()) {
       setTimeout(() => {
+        event.nextFrame = new LogFrame(context, 'event');
         context.vm.postIOData('keyboard', {
           key: this.key,
           isDown: false,
@@ -94,6 +103,7 @@ export class KeyUseAction extends ScheduledAction {
       }, accelDown);
     } else {
       setTimeout(() => {
+        event.nextFrame = new LogFrame(context, 'event');
         resolve(`finished ${this}`);
       }, delay);
     }

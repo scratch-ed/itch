@@ -117,6 +117,37 @@ class WaitForSpriteTouchAction extends ScheduledAction {
   }
 }
 
+class WaitForSpriteNotTouchAction extends ScheduledAction {
+  /**
+   * @param {string} name
+   * @param {function():string} paramCallback
+   */
+  constructor(name, paramCallback) {
+    super();
+    this.name = name;
+    this.paramCallback = paramCallback;
+  }
+
+  execute(context, resolve) {
+    const sprite = context.vm.runtime.getSpriteTargetByName(this.name);
+    if (!sprite) {
+      throw new Error(`Sprite ${this.name} was not found in the runtime.`);
+    }
+    this.target = this.paramCallback();
+    const callback = (target) => {
+      if (!target.isTouchingObject(this.target)) {
+        sprite.removeListener('TARGET_MOVED', callback);
+        resolve(`finished ${this}`);
+      }
+    };
+    sprite.addListener('TARGET_MOVED', callback);
+  }
+
+  toString() {
+    return `Wait for sprite ${this.name} to not touch ${this.target}`;
+  }
+}
+
 class WaitOnBroadcastAction extends ScheduledAction {
   /**
    * @param {string} name - Name of the broadcast.
@@ -215,6 +246,21 @@ export class SpriteCondition {
       action: new WaitForSpriteTouchAction(this.name, callback),
       timeout: timeout
     };
+  }
+
+  /**
+   * Wait for a sprite to not touch another sprite.
+   * 
+   * @param {string|function():string} target
+   * @param {?number} timeout
+   * @return {WaitCondition}
+   */
+  toNotTouch(target, timeout = null) {
+    const callback = castCallback(target);
+    return {
+      action: new WaitForSpriteNotTouchAction(this.name, callback),
+      timeout: timeout
+    }
   }
 
   /**
