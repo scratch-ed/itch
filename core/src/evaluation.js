@@ -183,6 +183,16 @@ class Evaluation extends TabLevel {
   }
 
   /**
+   * Enables or disabled turbo mode.
+   * 
+   * @param {boolean} enabled
+   */
+  // eslint-disable-next-line accessor-pairs
+  set turboMode(enabled) {
+    this.context.vm.setTurboMode(enabled);
+  }
+
+  /**
    * Check that we are before or on a given stage.
    * @param {number} stage
    * @param {string} func
