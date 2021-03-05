@@ -68,9 +68,13 @@ class WaitForSpritePositionAction extends ScheduledAction {
     if (!sprite) {
       throw new Error(`Sprite ${this.name} was not found in the runtime.`);
     }
+    const event = new LogEvent(context, 'waitForSpritePosition')
+    event.previousFrame = new LogFrame(context, 'event');
+    context.log.addEvent(event);
     const callback = (target) => {
       if (this.callback(target.x, target.y)) {
         sprite.removeListener('TARGET_MOVED', callback);
+        event.nextFrame = new LogFrame(context, 'event');
         resolve(`finished ${this}`);
       }
     };
@@ -99,11 +103,18 @@ class WaitForSpriteTouchAction extends ScheduledAction {
       throw new Error(`Sprite ${this.name} was not found in the runtime.`);
     }
     this.targets = castArray(this.paramCallback());
+    const event = new LogEvent(context, 'waitForSpriteTouch', {
+      targets: this.targets,
+      sprite: this.name
+    });
+    event.previousFrame = new LogFrame(context, 'event');
+    context.log.addEvent(event);
     const callback = (target) => {
       for (const goal of this.targets) {
         console.log("Checking...", goal);
         if (target.isTouchingObject(goal)) {
           sprite.removeListener('TARGET_MOVED', callback);
+          event.nextFrame = new LogFrame(context, 'event');
           resolve(`finished ${this}`);
           return;
         }
@@ -134,9 +145,16 @@ class WaitForSpriteNotTouchAction extends ScheduledAction {
       throw new Error(`Sprite ${this.name} was not found in the runtime.`);
     }
     this.target = this.paramCallback();
+    const event = new LogEvent(context, 'waitForSpriteNotTouch', {
+      target: this.target,
+      sprite: this.name
+    });
+    event.previousFrame = new LogFrame(context, 'event');
+    context.log.addEvent(event);
     const callback = (target) => {
       if (!target.isTouchingObject(this.target)) {
         sprite.removeListener('TARGET_MOVED', callback);
+        event.nextFrame = new LogFrame(context, 'event');
         resolve(`finished ${this}`);
       }
     };
@@ -205,6 +223,10 @@ export class SpriteCondition {
    * 
    * The callback can be used to test things like "is the sprite.x > 170?".
    * 
+   * This event is logged with event type `waitForSpritePosition`. The previous frame
+   * is taken at the start of the wait. The next frame is taken when the condition has been
+   * completed.
+   * 
    * {Array<{x:number|null,y:number|null}>|{x:number|null,y:number|null}|function(x:number,y:number):boolean}
    *
    * @param {any} positions - The positions.
@@ -234,6 +256,10 @@ export class SpriteCondition {
 
   /**
    * Wait for a sprite to touch another sprite.
+   * 
+   * This event is logged with event type `waitForSpriteTouch`. The previous frame
+   * is taken at the start of the wait. The next frame is taken when the condition has been
+   * completed.
    *
    * @param {string|string[]|function():string[]|string} targets - Name of the sprite.
    * @param {number|null} timeout - Optional timeout.

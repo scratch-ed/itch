@@ -5,6 +5,7 @@ import { KeyUseAction, MouseUseAction, WhenPressKeyAction } from './io.js';
 import { SendBroadcastAction } from './broadcast.js';
 import { EndAction, JoinAction } from './end.js';
 import { delay } from './wait.js';
+import { TrackSpriteAction } from './track.js';
 
 export { delay, broadcast, sprite } from './wait.js';
 
@@ -306,6 +307,10 @@ export class ScheduledEvent {
    */
   log(callback = () => {}) {
     return this.constructNext(new CallbackAction(callback));
+  }
+  
+  track(sprite) {
+    return this.constructNext(new TrackSpriteAction(sprite));
   }
 
   /**

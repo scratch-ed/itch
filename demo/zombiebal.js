@@ -193,8 +193,9 @@ function testTon(events, e) {
 /** @param {Evaluation} e */
 function duringExecution(e) {
   e.actionTimeout = 300000;
-  e.acceleration = 1;
-  // e.eventAcceleration = 1;
+  e.acceleration = 10;
+  e.eventAcceleration = 1;
+  e.timeAcceleration = 1;
 
   const originalEvents = e.scheduler
     .greenFlag(false)

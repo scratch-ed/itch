@@ -139,6 +139,10 @@ export class Sb3Block {
     
     return this.mutation.proccode;
   }
+  
+  toString() {
+    return `Block ${this.id} (${this.opcode})`
+  }
 }
 
 /**

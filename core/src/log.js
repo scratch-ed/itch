@@ -118,7 +118,7 @@ export class LogFrame {
    * @param {Context} context - The scratch virtual machine.
    * @param {string} block - The block that triggered the fame saving.
    */
-  constructor(context, block) {
+  constructor(context, block, data = {}) {
     /**
      * The timestamp of the frame.
      *
@@ -330,6 +330,10 @@ class Events {
   
   find(a) {
     return this.list.find(a);
+  }
+  
+  findIndex(a) {
+    return this.list.findIndex(a);
   }
 }
 
