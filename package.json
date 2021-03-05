@@ -25,7 +25,7 @@
     "scratch-render": "0.1.0-prerelease.20201113223804",
     "scratch-storage": "^1.3.3",
     "scratch-svg-renderer": "^0.2.0-prerelease.20210225205629",
-    "scratch-vm": "^0.2.0-prerelease.20210303111759"
+    "scratch-vm": "^0.2.0-prerelease.20210304112722"
   },
   "devDependencies": {
     "eslint": "^7.21.0",
