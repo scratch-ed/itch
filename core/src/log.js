@@ -284,7 +284,9 @@ export class LogEvent {
     this.type = type;
     this.data = data;
 
+    /** @type {?LogFrame} */
     this.nextFrame = null;
+    /** @type {?LogFrame} */
     this.previousFrame = null;
   }
 
@@ -324,6 +326,10 @@ class Events {
       }
     }
     return filtered;
+  }
+  
+  find(a) {
+    return this.list.find(a);
   }
 }
 

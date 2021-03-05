@@ -32,10 +32,11 @@ class Processor {
       });
     } else if (command === "close-testcase") {
       const content = this.caseTests.map(test => {
-        return `${test.status === 'correct' ? '✅' : '❌'} Expected ${test.expected.expected}, got: ${test.actual}\n`;
+        return `${test.status === 'correct' ? '✅' : '❌'} Expected ${test.expected.expected}, got: ${test.actual}`;
       });
+      const merged = content.join("\n");
       const allCorrect = this.caseTests.every(test => test.status === 'correct');
-      this.output(`<span title="${this.case}\n${content}">${allCorrect ? '✅' : '❌'}</span>`);
+      this.output(`<span title="${this.case}\n${merged}">${allCorrect ? '✅' : '❌'}</span>`);
     } else if (command.startsWith('close')) {
       this.stack.pop();
     } else if (command === 'append-message') {

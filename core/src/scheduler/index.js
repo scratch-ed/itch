@@ -3,7 +3,7 @@ import { CallbackAction } from './callback.js';
 import { ClickSpriteAction } from './click.js';
 import { KeyUseAction, MouseUseAction, WhenPressKeyAction } from './io.js';
 import { SendBroadcastAction } from './broadcast.js';
-import { EndAction } from './end.js';
+import { EndAction, JoinAction } from './end.js';
 import { delay } from './wait.js';
 
 export { delay, broadcast, sprite } from './wait.js';
@@ -110,7 +110,7 @@ export class ScheduledEvent {
    * @private
    */
   constructor(action, sync = true, timeout = null) {
-    /** @private */
+    /** @package */
     this.action = action;
     /** @private */
     this.sync = sync;
@@ -509,5 +509,22 @@ export class ScheduledEvent {
    */
   with(provider) {
     return provider(this);
+  }
+
+  /**
+   * Joins the scheduled event threads, ie. waits until
+   * all events are resolved. This could be considered the
+   * opposite of "forking" the threads.
+   * 
+   * Technically speaking, this will add an event on the first
+   * event as anchor, which will only resolve if all other events
+   * are resolved.
+   * 
+   * @param {ScheduledEvent[]} events
+   * @param {?number} timeout
+   * @return {ScheduledEvent}
+   */
+  join(events, timeout = null) {
+    return this.constructNext(new JoinAction(events), true, timeout);
   }
 }
