@@ -24,8 +24,8 @@
  */
 import isEqual from 'lodash/isEqual';
 
-const CORRECT = { enum: 'correct', human: 'Correct' };
-const WRONG = { enum: 'wrong', human: 'Wrong' };
+export const CORRECT = { enum: 'correct', human: 'Correct' };
+export const WRONG = { enum: 'wrong', human: 'Wrong' };
 
 class GenericMatcher {
   constructor(context, actual, message = undefined) {

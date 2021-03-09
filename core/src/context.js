@@ -174,6 +174,11 @@ export default class Context {
     this.output = new ResultManager();
 
     /**
+     * @type {null|Error}
+     */
+    this.error = null;
+
+    /**
      * The acceleration factor, used to speed up (or slow down)
      * execution in the VM.
      *

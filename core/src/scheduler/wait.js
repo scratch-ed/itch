@@ -201,12 +201,14 @@ export class SpriteCondition {
    * Wait for a sprite to move.
    *
    * @param {number|null} timeout - Optional timeout.
+   * @param {string|null} message
    * @return {WaitCondition}
    */
-  toMove(timeout = null) {
+  toMove(timeout = null, message = null) {
     return {
       action: new WaitForSpriteAction(this.name),
-      timeout: timeout
+      timeout: timeout,
+      message: message
     };
   }
 
@@ -231,10 +233,11 @@ export class SpriteCondition {
    *
    * @param {any} positions - The positions.
    * @param {number|null} timeout - Optional timeout.
+   * @param {string|null} message - Optional message
    *
    * @return {WaitCondition}
    */
-  toReach(positions, timeout = null) {
+  toReach(positions, timeout = null, message = null) {
     let callback;
     if (typeof positions !== 'function') {
       callback = (x, y) => {
@@ -250,7 +253,8 @@ export class SpriteCondition {
     }
     return {
       action: new WaitForSpritePositionAction(this.name, callback),
-      timeout: timeout
+      timeout: timeout,
+      message: message
     };
   }
 
@@ -263,14 +267,16 @@ export class SpriteCondition {
    *
    * @param {string|string[]|function():string[]|string} targets - Name of the sprite.
    * @param {number|null} timeout - Optional timeout.
+   * @param {string|null} message - Optional message
    *
    * @return {WaitCondition}
    */
-  toTouch(targets, timeout = null) {
+  toTouch(targets, timeout = null, message = null) {
     const callback = castCallback(targets);
     return {
       action: new WaitForSpriteTouchAction(this.name, callback),
-      timeout: timeout
+      timeout: timeout,
+      message: message
     };
   }
 
@@ -279,13 +285,15 @@ export class SpriteCondition {
    * 
    * @param {string|function():string} target
    * @param {?number} timeout
+   * @param {string|null} message - Optional message
    * @return {WaitCondition}
    */
-  toNotTouch(target, timeout = null) {
+  toNotTouch(target, timeout = null, message = null) {
     const callback = castCallback(target);
     return {
       action: new WaitForSpriteNotTouchAction(this.name, callback),
-      timeout: timeout
+      timeout: timeout,
+      message: message
     }
   }
 
@@ -293,11 +301,12 @@ export class SpriteCondition {
    * Wait for a sprite to touch the edge of the stage.
    *
    * @param {number|null} timeout - Optional timeout.
+   * @param {string|null} message - Optional message
    *
    * @return {WaitCondition}
    */
-  toTouchEdge(timeout = null) {
-    return this.toTouch('_edge_', timeout);
+  toTouchEdge(timeout = null, message = null) {
+    return this.toTouch('_edge_', timeout, message);
   }
 
   /**
@@ -307,11 +316,12 @@ export class SpriteCondition {
    * fork the event stream.
    *
    * @param {number|null} timeout - Optional timeout.
+   * @param {string|null} message - Optional message
    *
    * @return {WaitCondition}
    */
-  toTouchMouse(timeout = null) {
-    return this.toTouch('_mouse_', timeout);
+  toTouchMouse(timeout = null, message = null) {
+    return this.toTouch('_mouse_', timeout, message);
   }
 }
 

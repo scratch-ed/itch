@@ -40,7 +40,7 @@ class Processor {
     } else if (command.startsWith('close')) {
       this.stack.pop();
     } else if (command === 'append-message') {
-      this.output(`Message: ${message.message}`);
+      this.output(`<br>Message: ${message.message}`);
     }
   }
 

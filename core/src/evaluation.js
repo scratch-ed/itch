@@ -181,6 +181,10 @@ class Evaluation extends TabLevel {
   get eventAcceleration() {
     return this.context.accelerationFactor.event;
   }
+  
+  get runError() {
+    return this.context.error;
+  }
 
   /**
    * Enables or disabled turbo mode.

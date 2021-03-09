@@ -6,6 +6,7 @@ import { SendBroadcastAction } from './broadcast.js';
 import { EndAction, JoinAction } from './end.js';
 import { delay } from './wait.js';
 import { TrackSpriteAction } from './track.js';
+import { CORRECT, WRONG } from '../testplan.js';
 
 export { delay, broadcast, sprite } from './wait.js';
 
@@ -15,10 +16,14 @@ class InitialAction extends CallbackAction {
   }
 }
 
+class TestError extends Error {
+}
+
 /**
  * @typedef {Object} WaitCondition
  * @property {ScheduledAction} action - The action.
  * @property {number|null} timeout - How long to wait.
+ * @property {message|null} message
  */
 
 /**
@@ -106,17 +111,20 @@ export class ScheduledEvent {
    *
    * @param {ScheduledAction} action - The action to execute on this event.
    * @param {boolean} sync - The data for the event.
-   * @param {number | null} timeout - How to long to wait before resolving.
+   * @param {number|null} timeout - How to long to wait before resolving.
+   * @param {string} timeoutMessage - 
    *
    * @private
    */
-  constructor(action, sync = true, timeout = null) {
+  constructor(action, sync = true, timeout = null, timeoutMessage = null) {
     /** @package */
     this.action = action;
     /** @private */
     this.sync = sync;
     /** @private */
     this.timeout = timeout;
+    /** @private */
+    this.timeoutMessage = timeoutMessage;
     /**
      * @private
      * @type {ScheduledEvent[]}
@@ -168,7 +176,12 @@ export class ScheduledEvent {
       setTimeout(() => {
         if (this.sync) {
           // If this is a sync event, error after the timeout.
-          reject(new Error(`timeout after ${this.timeout || context.actionTimeout} (real: ${time}) from ${this.action.toString()}`));
+          if (this.timeoutMessage) {
+            reject(new TestError(this.timeoutMessage));
+          } else {
+            reject(new Error(`timeout after ${this.timeout || context.actionTimeout} (real: ${time}) from ${this.action.toString()}`));
+          }
+          
         } else {
           // If an async event, ignore the timeout.
           resolve(`Forced resolve ${this.toString()} due to async timeout (timeout was ${time})`);
@@ -181,15 +194,26 @@ export class ScheduledEvent {
     // Note that async events cannot timeout.
     return Promise.race([action, timeout]).then((v) => {
       console.log(`resolved: ${v}`);
+      if (this.timeoutMessage) {
+        context.output.startTest(true);
+        context.output.closeTest(true, CORRECT);
+      }
       // If we had to wait, schedule the events now.
       if (this.sync) {
         this.nextEvents.forEach(e => e.run(context));
       }
     }, (reason) => {
-      console.error(reason);
-      context.vm.stopAll();
-      context.output.addError('Time limit exceeded?');
-      context.output.addError(reason.toString());
+      if (reason instanceof TestError) {
+        context.output.startTest(true);
+        context.output.closeTest(false, WRONG);
+        context.output.addMessage(reason.message);
+      } else {
+        context.output.addError('Time limit exceeded?');
+        context.output.addError(reason.toString());
+      }
+      context.error = reason;
+      const action = new EndAction();
+      action.execute(context, () => {});
     });
   }
 
@@ -198,12 +222,13 @@ export class ScheduledEvent {
    *
    * @param {ScheduledAction} action
    * @param {boolean} sync
-   * @param {number|null} timeout
+   * @param {?number} timeout
+   * @param {?string} message
    * @return {ScheduledEvent}
    * @private
    */
-  constructNext(action, sync = true, timeout = null) {
-    const event = new this.constructor(action, sync, timeout);
+  constructNext(action, sync = true, timeout = null, message = null) {
+    const event = new this.constructor(action, sync, timeout, message);
     this.nextEvents.push(event);
     return event;
   }
@@ -231,8 +256,8 @@ export class ScheduledEvent {
     if (typeof param === 'number') {
       param = delay(param);
     }
-    const { action, timeout } = param;
-    return this.constructNext(action, true, timeout);
+    const { action, timeout, message } = param;
+    return this.constructNext(action, true, timeout, message);
   }
 
   /**
