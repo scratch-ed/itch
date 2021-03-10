@@ -85,7 +85,7 @@ export default class ResultManager {
       this.startTestContext(description);
     }
     if (this.hasOpenCase) {
-      this.closeTestCase(true);
+      this.closeTestCase();
     }
     this.out({ command: 'start-testcase', description: description });
     this.hasOpenCase = true;

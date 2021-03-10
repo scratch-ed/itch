@@ -7,6 +7,7 @@ import { EndAction, JoinAction } from './end.js';
 import { delay } from './wait.js';
 import { TrackSpriteAction } from './track.js';
 import { CORRECT, WRONG } from '../testplan.js';
+import { castCallback } from '../utils.js';
 
 export { delay, broadcast, sprite } from './wait.js';
 
@@ -23,7 +24,7 @@ class TestError extends Error {
  * @typedef {Object} WaitCondition
  * @property {ScheduledAction} action - The action.
  * @property {number|null} timeout - How long to wait.
- * @property {message|null} message
+ * @property {?string|function():?string} message
  */
 
 /**
@@ -112,7 +113,7 @@ export class ScheduledEvent {
    * @param {ScheduledAction} action - The action to execute on this event.
    * @param {boolean} sync - The data for the event.
    * @param {number|null} timeout - How to long to wait before resolving.
-   * @param {string} timeoutMessage - 
+   * @param {?string|function():?string} timeoutMessage - 
    *
    * @private
    */
@@ -124,7 +125,7 @@ export class ScheduledEvent {
     /** @private */
     this.timeout = timeout;
     /** @private */
-    this.timeoutMessage = timeoutMessage;
+    this.timeoutMessage = castCallback(timeoutMessage);
     /**
      * @private
      * @type {ScheduledEvent[]}
@@ -176,8 +177,9 @@ export class ScheduledEvent {
       setTimeout(() => {
         if (this.sync) {
           // If this is a sync event, error after the timeout.
-          if (this.timeoutMessage) {
-            reject(new TestError(this.timeoutMessage));
+          const timeoutMessage = this.timeoutMessage();
+          if (timeoutMessage) {
+            reject(new TestError(timeoutMessage));
           } else {
             reject(new Error(`timeout after ${this.timeout || context.actionTimeout} (real: ${time}) from ${this.action.toString()}`));
           }
@@ -194,7 +196,8 @@ export class ScheduledEvent {
     // Note that async events cannot timeout.
     return Promise.race([action, timeout]).then((v) => {
       console.log(`resolved: ${v}`);
-      if (this.timeoutMessage) {
+      const timeoutMessage = this.timeoutMessage();
+      if (timeoutMessage) {
         context.output.startTest(true);
         context.output.closeTest(true, CORRECT);
       }
@@ -223,7 +226,7 @@ export class ScheduledEvent {
    * @param {ScheduledAction} action
    * @param {boolean} sync
    * @param {?number} timeout
-   * @param {?string} message
+   * @param {?string|function():?string} message
    * @return {ScheduledEvent}
    * @private
    */

@@ -18,8 +18,9 @@ export function numericEquals(float1, float2, epsilon = 0.0001) {
  * If the argument is a function, return it.
  * Otherwise, returns a function that returns the value.
  * 
- * @param functionOrObject
- * @return {any}
+ * @template T
+ * @param {function():T|T|null} functionOrObject
+ * @return {function():T}
  */
 export function castCallback(functionOrObject) {
   if (typeof functionOrObject === 'function') {

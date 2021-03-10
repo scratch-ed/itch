@@ -120,7 +120,9 @@ function testTon(events, e) {
   // move the sprite to that position.
   return events
     .log(() => {
+      e.vm.runtime.getSpriteTargetByName('Ton').setXY(0, 0);
       e.output.startTestContext('Testen voor ton');
+      e.output.startTestCase('De ton gaat naar één van de spelers');
     })
     .wait(sprite('Ton').toReach(
       (x, _y) => x > 60 || x < -60,
@@ -146,47 +148,62 @@ function testTon(events, e) {
         throw new Error(`Could not find target Ton`);
       }
       sprite.setXY(sprite.x, ton.y);
+      e.output.startTestCase(`De ton raakt ${touchedSprite}`);
     })
-    // TODO: this should also be a test somehow.
-    .wait(sprite('Ton').toTouch(() => touchedSprite))
+    .wait(sprite('Ton').toTouch(
+      () => touchedSprite,
+      1000,
+      () => `Ton moet ${touchedSprite} raken`)
+    )
     .log(() => {
-      e.test(`Ton raakt ${touchedSprite}`, l => {
-        l.accept();
-      });
+      e.output.startTestCase('De ton gaat naar de overkant');
     })
-    .wait(sprite('Ton').toReach((x, y) => limit(x, y)))
+    .wait(sprite('Ton').toReach(
+      (x, y) => limit(x, y),
+      1000,
+      'De ton moet naar de overkant gaan'
+    ))
     .log(() => {
       const ton = e.vm.runtime.getSpriteTargetByName('Ton');
       const sprite = e.vm.runtime.getSpriteTargetByName(secondSprite);
       sprite.setXY(sprite.x, ton.y);
+      e.output.startTestCase(`Ton raakt ${secondSprite}`);
     })
-    .wait(sprite('Ton').toTouch(() => secondSprite))
+    .wait(sprite('Ton').toTouch(
+      () => secondSprite,
+      1000,
+      () => `De ton moet ${secondSprite} raken`
+    ))
     .log(() => {
-      e.test(`Ton raakt ${secondSprite}`, l => {
-        l.accept();
-      });
+      e.output.startTestCase(`Ton gaat naar ${touchedSprite}`);
     })
     .forEach(_.range(4), (ev) => {
       // Wait until we get to the next one.
       return ev.wait(sprite('Ton').toReach(
         (x, y) => limitSecond(x, y),
-        2000, 'De ton moet een van de spelers raken.'
+        1000,
+        () => `De ton moet naar ${touchedSprite} gaan`
       ))
         .log(() => {
           const ton = e.vm.runtime.getSpriteTargetByName('Ton');
           const sprite = e.vm.runtime.getSpriteTargetByName(touchedSprite);
           sprite.setXY(sprite.x, ton.y);
+          e.output.startTestCase(`Ton raakt ${touchedSprite}`);
         })
         .wait(sprite('Ton').toTouch(() => touchedSprite))
         .log(() => {
-          e.test(`Ton raakt ${touchedSprite}`, l => {
-            l.accept();
-          });
           [secondSprite, touchedSprite] = [touchedSprite, secondSprite];
           [limitSecond, limit] = [limit, limitSecond];
         });
     })
-    .wait(sprite('Ton').toReach((x, y) => limitSecond(x, y)))
+    .log(() => {
+      e.output.startTestCase(`Ton gaat naar doel van ${touchedSprite}`)
+    })
+    .wait(sprite('Ton').toReach(
+      (x, y) => limitSecond(x, y),
+      1000,
+      () => `De ton moet naar het doel van ${touchedSprite} gaan`
+      ))
     .log(() => {
       // Move the sprite away from the ton to make the game stop.
       const ton = e.vm.runtime.getSpriteTargetByName('Ton');
@@ -200,33 +217,48 @@ function testTon(events, e) {
       sprite.setXY(sprite.x, newY);
       loser = touchedSprite;
       winner = secondSprite;
-      e.output.closeTestContext();
+      e.output.startTestCase(`Ton gaat naar ${loser}'s Doel`)
     })
-    .wait(sprite('Ton').toTouch(() => `${loser}'s Doel`))
-    .wait(2000);
+    .wait(sprite('Ton').toTouch(
+      () => `${loser}'s Doel`,
+      1000,
+      () => `De ton moet ${loser}'s Doel raken`
+      ))
+    .wait(2000)
+    .log(() => {
+      e.output.closeTestContext();
+    });
 }
 
 /** @param {Evaluation} e */
 function duringExecution(e) {
   e.actionTimeout = 5000;
-  e.acceleration = 10;
+  e.acceleration = 1;
   e.eventAcceleration = 1;
   e.timeAcceleration = 1;
 
-  e.scheduler
-    .greenFlag(false)
-    .wait(5000)
-    // We cannot do these concurrently, since the key presses will be mixed then.
+  // The events are as follows:
+  // 1. start an async green flag
+  // 2. At the same time:
+  // 3. Wait 5 s for the ton
+  // 4. do the sprite tests
+  // 5. join and do the ton tests
+  const events = e.scheduler.greenFlag(false);
+  const waitEvent = events.wait(5000);
+  const spriteEvents = events
+    .wait(10) // Ensure the green flag is done.
     .pipe(ev => testSprite(ev, { name: 'Roy', up: 'q', down: 'w' }, e))
-    .pipe(ev => testSprite(ev, { name: 'Rob', up: 'j', down: 'n' }, e))
+    .pipe(ev => testSprite(ev, { name: 'Rob', up: 'j', down: 'n' }, e));
+
+  waitEvent.join([spriteEvents])
     .pipe(ev => testTon(ev, e))
     .end();
 }
 
 /** @param {Evaluation} e */
 function afterExecution(e) {
-  console.log(e.runError);
   const sayEvents = e.log.events.filter({ type: 'say' });
+  console.log(sayEvents);
   const data = _.last(sayEvents).data;
   e.test(`De ton zegt ${winner} scoort!`, l => {
     l.expect(data.text)

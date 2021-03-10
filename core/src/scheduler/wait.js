@@ -201,7 +201,7 @@ export class SpriteCondition {
    * Wait for a sprite to move.
    *
    * @param {number|null} timeout - Optional timeout.
-   * @param {string|null} message
+   * @param {?string|function():?string} message
    * @return {WaitCondition}
    */
   toMove(timeout = null, message = null) {
@@ -233,7 +233,7 @@ export class SpriteCondition {
    *
    * @param {any} positions - The positions.
    * @param {number|null} timeout - Optional timeout.
-   * @param {string|null} message - Optional message
+   * @param {?string|function():?string} message - Optional message
    *
    * @return {WaitCondition}
    */
@@ -267,7 +267,7 @@ export class SpriteCondition {
    *
    * @param {string|string[]|function():string[]|string} targets - Name of the sprite.
    * @param {number|null} timeout - Optional timeout.
-   * @param {string|null} message - Optional message
+   * @param {?string|function():?string} message - Optional message
    *
    * @return {WaitCondition}
    */
@@ -285,7 +285,7 @@ export class SpriteCondition {
    * 
    * @param {string|function():string} target
    * @param {?number} timeout
-   * @param {string|null} message - Optional message
+   * @param {?string|function():?string} message - Optional message
    * @return {WaitCondition}
    */
   toNotTouch(target, timeout = null, message = null) {
@@ -301,7 +301,7 @@ export class SpriteCondition {
    * Wait for a sprite to touch the edge of the stage.
    *
    * @param {number|null} timeout - Optional timeout.
-   * @param {string|null} message - Optional message
+   * @param {?string|function():?string} message - Optional message
    *
    * @return {WaitCondition}
    */
@@ -316,7 +316,7 @@ export class SpriteCondition {
    * fork the event stream.
    *
    * @param {number|null} timeout - Optional timeout.
-   * @param {string|null} message - Optional message
+   * @param {?string|function():?string} message - Optional message
    *
    * @return {WaitCondition}
    */
