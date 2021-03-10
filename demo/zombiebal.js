@@ -10,18 +10,18 @@ function beforeExecution(template, submission, e) {
     l.test('Niet geprutst met andere sprites', l => {
       l.expect(template.hasAddedSprites(submission)).toBe(false);
       l.expect(template.hasRemovedSprites(submission)).toBe(false);
-    })
+    });
   });
-  
-  e.describe("Statische controles op blokjes", l => {
+
+  e.describe('Statische controles op blokjes', l => {
     l.test('Oneindige lus gebruikt bij Rob', l => {
       l.expect(submission.sprite('Rob').hasBlock('control_forever'))
-        .withError("Bij Rob moet je het blokje 'oneindige lus' gebruiken")
+        .withError('Bij Rob moet je het blokje \'oneindige lus\' gebruiken')
         .toBe(true);
     });
     l.test('Oneindige lus gebruikt bij Roy', l => {
       l.expect(submission.sprite('Roy').hasBlock('control_forever'))
-        .withError("Bij Roy moet je het blokje 'oneindige lus' gebruiken")
+        .withError('Bij Roy moet je het blokje \'oneindige lus\' gebruiken')
         .toBe(true);
     });
 
@@ -30,13 +30,13 @@ function beforeExecution(template, submission, e) {
     const callIndex = ton.blocks.findIndex(block => {
       return block.opcode === 'procedures_call' && block.calledProcedureName === 'Richt naar Roy of Rob';
     });
-    const loopIndex = ton.blocks.findIndex(block =>{
-      return block.opcode === 'control_repeat_until'
+    const loopIndex = ton.blocks.findIndex(block => {
+      return block.opcode === 'control_repeat_until';
     });
-    
+
     l.test('Ton richt naar spelers', l => {
       l.expect(callIndex < loopIndex || !loopIndex)
-        .withError("De ton moet zich eerst naar één van de spelers richten voor ze beweegt.")
+        .withError('De ton moet zich eerst naar één van de spelers richten voor ze beweegt.')
         .toBe(true);
     });
   });
@@ -115,18 +115,18 @@ function testTon(events, e) {
   let secondSprite;
   let limit;
   let limitSecond;
-  
+
   // Wait until the ton is at the right position, and then
   // move the sprite to that position.
-  events
+  return events
     .log(() => {
-      e.output.startTestContext("Testen voor ton");
+      e.output.startTestContext('Testen voor ton');
     })
     .wait(sprite('Ton').toReach(
-    (x, _y) => x > 60 || x < -60,
-    2000,
-    "De ton moet een van de spelers raken."
-  )).log(() => {
+      (x, _y) => x > 60 || x < -60,
+      2000,
+      'De ton moet een van de spelers raken.'
+    )).log(() => {
       const ton = e.vm.runtime.getSpriteTargetByName('Ton');
       let sprite;
       if (ton.x < 0) {
@@ -170,7 +170,7 @@ function testTon(events, e) {
       // Wait until we get to the next one.
       return ev.wait(sprite('Ton').toReach(
         (x, y) => limitSecond(x, y),
-        2000, "De ton moet een van de spelers raken."
+        2000, 'De ton moet een van de spelers raken.'
       ))
         .log(() => {
           const ton = e.vm.runtime.getSpriteTargetByName('Ton');
@@ -184,7 +184,7 @@ function testTon(events, e) {
           });
           [secondSprite, touchedSprite] = [touchedSprite, secondSprite];
           [limitSecond, limit] = [limit, limitSecond];
-        })
+        });
     })
     .wait(sprite('Ton').toReach((x, y) => limitSecond(x, y)))
     .log(() => {
@@ -203,8 +203,7 @@ function testTon(events, e) {
       e.output.closeTestContext();
     })
     .wait(sprite('Ton').toTouch(() => `${loser}'s Doel`))
-    .wait(2000)
-    .end();
+    .wait(2000);
 }
 
 /** @param {Evaluation} e */
@@ -214,15 +213,14 @@ function duringExecution(e) {
   e.eventAcceleration = 1;
   e.timeAcceleration = 1;
 
-  const originalEvents = e.scheduler
+  e.scheduler
     .greenFlag(false)
-    .wait(5000); // Wait on start of the game.
-
-  // We cannot do these concurrently, since the key presses will be mixed then.
-  const events = testSprite(originalEvents, { name: 'Roy', up: 'q', down: 'w' }, e);
-  const ev2 = testSprite(events, { name: 'Rob', up: 'j', down: 'n' }, e);
-  
-  testTon(ev2, e);
+    .wait(5000)
+    // We cannot do these concurrently, since the key presses will be mixed then.
+    .pipe(ev => testSprite(ev, { name: 'Roy', up: 'q', down: 'w' }, e))
+    .pipe(ev => testSprite(ev, { name: 'Rob', up: 'j', down: 'n' }, e))
+    .pipe(ev => testTon(ev, e))
+    .end();
 }
 
 /** @param {Evaluation} e */

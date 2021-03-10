@@ -537,7 +537,7 @@ export class ScheduledEvent {
    * @param {function(e:ScheduledEvent):ScheduledEvent} provider
    * @return {ScheduledEvent}
    */
-  with(provider) {
+  pipe(provider) {
     return provider(this);
   }
 
