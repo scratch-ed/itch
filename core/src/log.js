@@ -3,6 +3,7 @@ import first from 'lodash/first';
 import isEqual from 'lodash/isEqual';
 import { containsBlock, containsLoop, countExecutions } from './blocks';
 import { dist, distSq, findSquares, findTriangles, mergeLines } from './lines';
+import { uniq, uniqBy } from 'lodash/array.js';
 
 /**
  * Our own version of a variable. Basically a copy of a {@link Variable}.
@@ -75,6 +76,17 @@ export class LoggedSprite {
     // Get blocks.
     this.blocks = target.blocks._blocks;
     this.scriptes = target.blocks.getScripts();
+  }
+
+
+  /**
+   * Check if this sprite contains a block with the given opcode.
+   *
+   * @param {string} opcode
+   * @return {boolean}
+   */
+  hasBlock(opcode) {
+    return Object.values(this.blocks).some(block => block.opcode === opcode);
   }
 
   /**
@@ -627,6 +639,12 @@ export class Log {
       .filter((item, pos, arr) => {
         return pos === 0 || !isEqual(item, arr[pos - 1]);
       });
+  }
+  
+  getSprites(sprite, frames = this.frames, mapper = (s) => s) {
+    const sprites =  frames.map(frame => frame.getSprite(sprite))
+      .map(mapper);
+    return uniq(sprites);
   }
 
   /** @deprecated Use getSpritePositions */

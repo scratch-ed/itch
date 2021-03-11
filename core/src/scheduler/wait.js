@@ -265,7 +265,7 @@ export class SpriteCondition {
    * is taken at the start of the wait. The next frame is taken when the condition has been
    * completed.
    *
-   * @param {string|string[]|function():string[]|string} targets - Name of the sprite.
+   * @param {string|string[]|function():string[]|function():string} targets - Name of the sprite.
    * @param {number|null} timeout - Optional timeout.
    * @param {?string|function():?string} message - Optional message
    *

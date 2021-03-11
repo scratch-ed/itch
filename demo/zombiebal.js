@@ -12,34 +12,6 @@ function beforeExecution(template, submission, e) {
       l.expect(template.hasRemovedSprites(submission)).toBe(false);
     });
   });
-
-  e.describe('Statische controles op blokjes', l => {
-    l.test('Oneindige lus gebruikt bij Rob', l => {
-      l.expect(submission.sprite('Rob').hasBlock('control_forever'))
-        .withError('Bij Rob moet je het blokje \'oneindige lus\' gebruiken')
-        .toBe(true);
-    });
-    l.test('Oneindige lus gebruikt bij Roy', l => {
-      l.expect(submission.sprite('Roy').hasBlock('control_forever'))
-        .withError('Bij Roy moet je het blokje \'oneindige lus\' gebruiken')
-        .toBe(true);
-    });
-
-    // Check the ton.
-    const ton = submission.sprite('Ton');
-    const callIndex = ton.blocks.findIndex(block => {
-      return block.opcode === 'procedures_call' && block.calledProcedureName === 'Richt naar Roy of Rob';
-    });
-    const loopIndex = ton.blocks.findIndex(block => {
-      return block.opcode === 'control_repeat_until';
-    });
-
-    l.test('Ton richt naar spelers', l => {
-      l.expect(callIndex < loopIndex || !loopIndex)
-        .withError('De ton moet zich eerst naar één van de spelers richten voor ze beweegt.')
-        .toBe(true);
-    });
-  });
 }
 
 /**
@@ -61,6 +33,11 @@ function testSprite(events, data, e) {
         y: sprite.y
       };
       latestPosition = originalPosition;
+      e.test(`Oneindige lus gebruikt bij ${name}`, l => {
+        l.expect(sprite.hasBlock('control_forever'))
+          .withError(`Bij ${name} moet je het blokje 'oneindige lus' gebruiken`)
+          .toBe(true);
+      });
     })
     .useKey(down)
     .log(() => {
@@ -197,13 +174,13 @@ function testTon(events, e) {
         });
     })
     .log(() => {
-      e.output.startTestCase(`Ton gaat naar doel van ${touchedSprite}`)
+      e.output.startTestCase(`Ton gaat naar doel van ${touchedSprite}`);
     })
     .wait(sprite('Ton').toReach(
       (x, y) => limitSecond(x, y),
       1000,
       () => `De ton moet naar het doel van ${touchedSprite} gaan`
-      ))
+    ))
     .log(() => {
       // Move the sprite away from the ton to make the game stop.
       const ton = e.vm.runtime.getSpriteTargetByName('Ton');
@@ -217,23 +194,20 @@ function testTon(events, e) {
       sprite.setXY(sprite.x, newY);
       loser = touchedSprite;
       winner = secondSprite;
-      e.output.startTestCase(`Ton gaat naar ${loser}'s Doel`)
+      e.output.startTestCase(`Ton gaat naar ${loser}'s Doel`);
     })
     .wait(sprite('Ton').toTouch(
       () => `${loser}'s Doel`,
       1000,
       () => `De ton moet ${loser}'s Doel raken`
-      ))
-    .wait(2000)
-    .log(() => {
-      e.output.closeTestContext();
-    });
+    ))
+    .wait(2000);
 }
 
 /** @param {Evaluation} e */
 function duringExecution(e) {
   e.actionTimeout = 5000;
-  e.acceleration = 1;
+  e.acceleration = 10;
   e.eventAcceleration = 1;
   e.timeAcceleration = 1;
 
@@ -243,7 +217,10 @@ function duringExecution(e) {
   // 3. Wait 5 s for the ton
   // 4. do the sprite tests
   // 5. join and do the ton tests
-  const events = e.scheduler.greenFlag(false);
+  const events = e.scheduler
+    .track('Rob')
+    .track('Roy')
+    .greenFlag(false);
   const waitEvent = events.wait(5000);
   const spriteEvents = events
     .wait(10) // Ensure the green flag is done.
@@ -265,4 +242,6 @@ function afterExecution(e) {
       .withError(`De ton zegt niet wie wint.`)
       .toBe(`${winner} scoort!`);
   });
+
+  e.output.closeTestContext();
 }
