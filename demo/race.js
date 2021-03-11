@@ -11,7 +11,6 @@ function beforeExecution(template, submission, e) {
       const fromSubmission = submission.sprite('Mini Geel');
       // Check hat
       const templateStartIndex = fromTemplate.blocks.findIndex(b => b.opcode === 'event_whenflagclicked');
-     
       const submissionStartIndex = fromSubmission.blocks.findIndex(b => b.opcode === 'event_whenflagclicked');
       const templateBlocks = fromTemplate.blocks.slice(templateStartIndex, templateStartIndex + 6);
       const submissionBlocks = fromTemplate.blocks.slice(submissionStartIndex, submissionStartIndex + 6);
@@ -89,7 +88,6 @@ const BLUE = {
  * @param {Evaluation} evaluation
  * */
 function yellowCar(evaluation, e, keys, name) {
-  
   // Go down, up, right, left during one second.
   return e
     .track(name)
@@ -243,8 +241,21 @@ function afterExecution(e) {
 
       const normalSpeed = normalDistance / normalTime;
       const grassSpeed = grassDistance / grassTime;
-      const relative = normalSpeed / grassSpeed;
       l.expect(normalSpeed > grassSpeed).toBe(true);
+    });
+  });
+  e.describe("Rots werkt", l => {
+    l.test("Rots verplaatst terug naar start", l => {
+      const events = e.log.events.list.filter(ev => ev.type === "waitForSpriteTouch" && ev.data.sprite === 'Mini Geel');
+      const event = events.find(ev => ev.data.targets[0] === "Rots");
+      const frame = e.log.frames.find(f => f.time > event.nextFrame.time && f.block === 'update_Mini Geel');
+      const sprite = frame.getSprite('Mini Geel');
+      l.expect(sprite.x < -150 && sprite.x > -200)
+        .withError("Na het aanraken van de rots moet de Mini Geel terug naar de startpositie")
+        .toBe(true);
+      l.expect(sprite.y > 150)
+        .withError("Na het aanraken van de rots moet de Mini Geel terug naar de startpositie")
+        .toBe(true);
     });
   });
 }
