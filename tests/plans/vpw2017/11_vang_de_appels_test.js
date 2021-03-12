@@ -92,9 +92,9 @@ function afterExecution(e) {
   const top = locations.filter(location => location.y === 180).length;
 
   e.test('Appels komen bovenaan tevoorschijn', l => {
-    l.expect(top)
+    l.expect(top >= 20)
       .withError('Appels komen bovenaan tevoorschijn')
-      .toBe(22);
+      .toBe(true);
   });
 
   const random = new Set(locations.map(location => location.x)).size;
@@ -120,9 +120,9 @@ function afterExecution(e) {
   // Check end score.
   const end = e.log.current.getSprite('Stage').getVariable('Score');
   e.test('Eindscore', l => {
-    l.expect(end.value)
+    l.expect(end.value >= 10)
       .withError('De score moet eindigen op 10')
-      .toBe(10);
+      .toBe(true);
   });
 
   const variables = e.log.getVariables('Score');

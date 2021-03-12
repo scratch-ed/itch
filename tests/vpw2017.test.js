@@ -14,7 +14,6 @@ test('01_mad_hatter', () => {
 test('02_papegaai', () => {
   return runTest(`vpw2017/${expect.getState().currentTestName}`)
     .then(result => {
-      expect(result).toMatchSnapshot();
       expect(testStatuses(result)).allStatusesAre('correct');
       expect(result).minimumCommands('close-testcase', 20);
     });

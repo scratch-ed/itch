@@ -2,6 +2,7 @@
 /** @param {Evaluation} e */
 function duringExecution(e) {
   e.actionTimeout = 15000;
+  e.acceleration = 10;
 
   e.scheduler
     // TODO: we don't want to wait here.
