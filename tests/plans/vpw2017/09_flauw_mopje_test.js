@@ -23,7 +23,15 @@ function afterExecution(e) {
   ];
   console.log(sayEvents);
   for (let i = 0; i < berichten.length; i++) {
-    e.output.addCase(`Bericht nummer ${i} komt van de ${sprekers[i]}`, sayEvents[i].data.sprite === sprekers[i], `Spreker ${i} moet de ${sprekers[i]} zijn!`);
-    e.output.addTest(`Correcte text in bericht nummer ${i}`, berichten[i], sayEvents[i].data.text, 'De tekst in de tekstballon is verkeerd');
+    e.test(`Bericht nummer ${i} komt van de ${sprekers[i]}`, l => {
+      l.expect(sayEvents[i].data.sprite)
+        .withError(`Spreker ${i} moet de ${sprekers[i]} zijn!`)
+        .toBe(sprekers[i]);
+    });
+    e.test(`Correcte text in bericht nummer ${i}`, l => {
+      l.expect(sayEvents[i].data.text)
+        .withError('De tekst in de tekstballon is verkeerd')
+        .toBe(berichten[i]);
+    });
   }
 }

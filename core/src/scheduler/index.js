@@ -6,7 +6,6 @@ import { SendBroadcastAction } from './broadcast.js';
 import { EndAction, JoinAction } from './end.js';
 import { delay } from './wait.js';
 import { TrackSpriteAction } from './track.js';
-import { CORRECT, WRONG } from '../testplan.js';
 import { castCallback } from '../utils.js';
 
 export { delay, broadcast, sprite } from './wait.js';
@@ -17,14 +16,17 @@ class InitialAction extends CallbackAction {
   }
 }
 
-class TestError extends Error {
+/**
+ * Used to indicate an event timed out.
+ */
+class TimeoutError extends Error {
+
 }
 
 /**
  * @typedef {Object} WaitCondition
  * @property {ScheduledAction} action - The action.
  * @property {number|null} timeout - How long to wait.
- * @property {?string|function():?string} message
  */
 
 /**
@@ -112,25 +114,33 @@ export class ScheduledEvent {
    *
    * @param {ScheduledAction} action - The action to execute on this event.
    * @param {boolean} sync - The data for the event.
-   * @param {number|null} timeout - How to long to wait before resolving.
-   * @param {?string|function():?string} timeoutMessage - 
+   * @param {?number} timeout - How to long to wait before resolving.
    *
    * @private
    */
-  constructor(action, sync = true, timeout = null, timeoutMessage = null) {
+  constructor(action, sync = true, timeout = null) {
     /** @package */
     this.action = action;
     /** @private */
     this.sync = sync;
     /** @private */
     this.timeout = timeout;
-    /** @private */
-    this.timeoutMessage = castCallback(timeoutMessage);
     /**
      * @private
      * @type {ScheduledEvent[]}
      */
     this.nextEvents = [];
+
+    /**
+     * @type {null|function(Context)}
+     * @private
+     */
+    this.onResolve = null;
+    /**
+     * @type {null|function(Context):?boolean}
+     * @private
+     */
+    this.onTimeout = null;
   }
 
   /**
@@ -165,28 +175,18 @@ export class ScheduledEvent {
    * @package
    */
   run(context) {
-    const time = this.sync ? context.accelerateEvent(this.timeout || context.actionTimeout) : 0;
+    console.debug(`Running actions ${this.action.toString()}`);
     const action = new Promise((resolve, _reject) => {
+      console.debug(`Executing actions ${this.action.toString()}`);
       this.action.execute(context, resolve);
-      // Schedule next events if we don't wait.
-      if (!this.sync) {
-        this.nextEvents.forEach(e => e.run(context));
-      }
     });
     const timeout = new Promise((resolve, reject) => {
+      const time = context.accelerateEvent(this.timeout || context.actionTimeout) || 0;
       setTimeout(() => {
         if (this.sync) {
-          // If this is a sync event, error after the timeout.
-          const timeoutMessage = this.timeoutMessage();
-          if (timeoutMessage) {
-            reject(new TestError(timeoutMessage));
-          } else {
-            reject(new Error(`timeout after ${this.timeout || context.actionTimeout} (real: ${time}) from ${this.action.toString()}`));
-          }
-          
+          reject(new TimeoutError(`timeout after ${this.timeout || context.actionTimeout} (real: ${time}) from ${this.action.toString()}`));
         } else {
-          // If an async event, ignore the timeout.
-          resolve(`Forced resolve ${this.toString()} due to async timeout (timeout was ${time})`);
+          resolve(`Ignoring timeout for async event ${this.action.toString()}.`);
         }
       }, time);
     });
@@ -194,44 +194,66 @@ export class ScheduledEvent {
     // This will take the result from the first promise to resolve, which
     // will be either the result or the timeout if something went wrong.
     // Note that async events cannot timeout.
-    return Promise.race([action, timeout]).then((v) => {
-      console.log(`resolved: ${v}`);
-      const timeoutMessage = this.timeoutMessage();
-      if (timeoutMessage) {
-        context.output.startTest(true);
-        context.output.closeTest(true, CORRECT);
-      }
-      // If we had to wait, schedule the events now.
-      if (this.sync) {
+    return Promise.race([action, timeout])
+      .then((v) => {
+        console.debug(`resolved action ${this.action.toString()}: ${v}`);
+
+        if (this.onResolve) {
+          this.onResolve(context);
+        }
+
+        // Schedule the next event. This will work for both sync & async events:
+        // - For sync events this callback is reached either if the event resolves.
+        //   If it times out, we don't schedule next events.
+        // - For async events, the resolve of the timeout promise resolves immediately,
+        //   we reach this immediately.
         this.nextEvents.forEach(e => e.run(context));
-      }
-    }, (reason) => {
-      if (reason instanceof TestError) {
-        context.output.startTest(true);
-        context.output.closeTest(false, WRONG);
-        context.output.addMessage(reason.message);
-      } else {
-        context.output.addError('Time limit exceeded?');
-        context.output.addError(reason.toString());
-      }
-      context.error = reason;
-      const action = new EndAction();
-      action.execute(context, () => {});
-    });
+
+      }, (reason) => {
+        console.debug(`Rejected actions ${this.action.toString()}`);
+        if (reason instanceof TimeoutError) {
+          let escalate = true;
+          if (this.onTimeout) {
+            const result = this.onTimeout(context);
+            escalate = typeof result === 'undefined' || !result;
+          }
+
+          // If there was no callback, or the callback requested we handle the error
+          // escalate the status and stop the judgement.
+          if (escalate) {
+            console.warn(reason);
+            context.output.escalateStatus({
+              human: 'Tijdslimiet overschreden',
+              enum: 'time limit exceeded'
+            });
+            context.output.closeJudgement(false);
+          }
+        } else {
+          console.error('Unexpected error:', reason);
+          context.output.escalateStatus({
+            human: 'Fout bij uitvoeren testplan.',
+            enum: 'runtime error'
+          });
+          context.output.appendMessage(reason);
+          context.output.closeJudgement(false);
+        }
+
+        // Finish executing, ensuring we stop.
+        context.terminate();
+      });
   }
 
   /**
    * Create and schedule a new event.
    *
-   * @param {ScheduledAction} action
-   * @param {boolean} sync
-   * @param {?number} timeout
-   * @param {?string|function():?string} message
+   * @param {ScheduledAction} action - What to execute.
+   * @param {boolean} sync - If the event is sync.
+   * @param {?number} timeout - Optional timeout.
    * @return {ScheduledEvent}
    * @private
    */
-  constructNext(action, sync = true, timeout = null, message = null) {
-    const event = new this.constructor(action, sync, timeout, message);
+  constructNext(action, sync = true, timeout = null) {
+    const event = new this.constructor(action, sync, timeout);
     this.nextEvents.push(event);
     return event;
   }
@@ -259,8 +281,8 @@ export class ScheduledEvent {
     if (typeof param === 'number') {
       param = delay(param);
     }
-    const { action, timeout, message } = param;
-    return this.constructNext(action, true, timeout, message);
+    const { action, timeout } = param;
+    return this.constructNext(action, true, timeout);
   }
 
   /**
@@ -336,7 +358,7 @@ export class ScheduledEvent {
   log(callback = () => {}) {
     return this.constructNext(new CallbackAction(callback));
   }
-  
+
   track(sprite) {
     return this.constructNext(new TrackSpriteAction(sprite));
   }
@@ -460,7 +482,7 @@ export class ScheduledEvent {
    * the delay.
    *
    * The `useMouse` event is similar, but for the mouse.
-   * 
+   *
    * This event is logged with event type 'useKey'. The event saves the state
    * before the key press. The next frame of the event is saved after the delay
    * has been completed or before the key is lifted.
@@ -508,18 +530,18 @@ export class ScheduledEvent {
 
   /**
    * A utility function that allows to run a function to schedule events.
-   * 
+   *
    * This function is mainly intended to allow better organisation of code
    * when writing test plans. The callback will be executed with the current
    * event as argument and is expected to return the next anchor event.
-   * 
-   * 
+   *
+   *
    * @example
    * // without this function
    * function scheduleStuff(e) {
    *   return e.wait(10);
    * }
-   * 
+   *
    * function duringExecution(e) {
    *   let events = e.scheduler.wait(10);
    *   events = scheduleStuff(events);
@@ -536,7 +558,7 @@ export class ScheduledEvent {
    *    .wait(10)
    *    .run(scheduleStuff);
    * }
-   * 
+   *
    * @param {function(e:ScheduledEvent):ScheduledEvent} provider
    * @return {ScheduledEvent}
    */
@@ -548,16 +570,86 @@ export class ScheduledEvent {
    * Joins the scheduled event threads, ie. waits until
    * all events are resolved. This could be considered the
    * opposite of "forking" the threads.
-   * 
+   *
    * Technically speaking, this will add an event on the first
    * event as anchor, which will only resolve if all other events
    * are resolved.
-   * 
+   *
    * @param {ScheduledEvent[]} events
    * @param {?number} timeout
    * @return {ScheduledEvent}
    */
   join(events, timeout = null) {
     return this.constructNext(new JoinAction(events), true, timeout);
+  }
+
+  /**
+   * Add a callback to the current event that will be called if the event is successfully
+   * resolved.
+   *
+   * As always, synchronous events are resolved after the event is done, while asynchronous
+   * events are immediately resolved.
+   *
+   * If an event errors, the callback will not be called.
+   *
+   * Calling this function multiple times on the same event will discard previous
+   * calls.
+   *
+   * @param {function(Context)} callback
+   * @return {ScheduledEvent}
+   */
+  resolved(callback) {
+    this.onResolve = callback;
+    return this;
+  }
+
+  /**
+   * Add a callback to the current event that will be called if the event times out.
+   *
+   * As always, only synchronous events can time out.
+   *
+   * If an event errors, the callback will not be called.
+   *
+   * Calling this function multiple times on the same event will discard previous
+   * calls.
+   *
+   * @param {function(Context)} callback
+   * @return {ScheduledEvent}
+   */
+  timedOut(callback) {
+    this.onTimeout = callback;
+    return this;
+  }
+
+  /**
+   * Allow to use the event as a test. If successful,
+   * the event will be reported as a passing test with the message.
+   * Otherwise it will be a failing test with the message.
+   *
+   * @param {string|function():string} [error]
+   * @param {string|function():string} [success]
+   */
+  asTest(error = undefined, success = undefined) {
+    error = castCallback(error);
+    success = castCallback(success);
+
+    this.resolved((context) => {
+      context.output.startTest(true);
+      const message = success();
+      if (message) {
+        context.output.appendMessage(message);
+      }
+      context.output.closeTest(true, true);
+    });
+    this.timedOut((context) => {
+      context.output.startTest(true);
+      const message = error();
+      if (message) {
+        context.output.appendMessage(message);
+      }
+      context.output.closeTest(false, false);
+    });
+
+    return this;
   }
 }

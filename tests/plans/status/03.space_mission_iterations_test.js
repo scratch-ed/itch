@@ -16,7 +16,7 @@ function beforeExecution(template, submission, output) {
       return !a.equals(b);
     });
     if (gen) {
-      output.addMessage('Er is iets veranderd aan de ingebouwde sprites, waar je niets mag aan veranderen.');
+      output.appendMessage('Er is iets veranderd aan de ingebouwde sprites, waar je niets mag aan veranderen.');
       status = {enum: "wrong", human: "Verkeerd"}
     } else {
       status = {enum: "correct", human: "Juist"}

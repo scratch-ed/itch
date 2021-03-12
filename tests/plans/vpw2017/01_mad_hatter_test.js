@@ -8,7 +8,7 @@
  * @param {Evaluation} output - The output manager.
  */
 function beforeExecution(template, submission, output) {
-  output.describe("Controle op sprites", l => {
+  output.describe('Controle op sprites', l => {
     l.test('Toegevoegde sprites', l => {
       l.expect(template.hasAddedSprites(submission)).toBe(false);
     });
@@ -32,9 +32,9 @@ function beforeExecution(template, submission, output) {
 /** @param {Evaluation} e */
 function duringExecution(e) {
   let firstHat = null;
-  
+
   e.scheduler
-    .log(() => { firstHat = e.log.sprites.getSprite('Hat') })
+    .log(() => { firstHat = e.log.sprites.getSprite('Hat'); })
     .clickSprite('Hat')
     .log(() => {
       const secondHat = e.log.sprites.getSprite('Hat');
@@ -51,32 +51,44 @@ function duringExecution(e) {
 
 /** @param {Evaluation} e */
 function afterExecution(e) {
+
   const numberOfCostumes = e.log.getNumberOfCostumes('Hat');
+  
+  e.describe('Testen voor de Hoed', l => {
+    l.test('Kostuums van de hoed', l => {
+      l.expect(numberOfCostumes > 1)
+        .withError('De hoed moet meer dan 1 kostuum hebben')
+        .toBe(true);
+    });
 
-  // De sprite 'Hat' moet meer dan 1 kostuum bevatten.
-  const hasMoreThanOneCostume = (numberOfCostumes > 1);
-  if (!hasMoreThanOneCostume) {
-    e.output.addCase('Kostuums van de hoed', hasMoreThanOneCostume, 'De hoed moet meer dan 1 kostuum hebben');
-    return;
-  }
+    l.test('Klikken op de hoed', l => {
+      // De hoed mag enkel van kostuum veranderen als er op de hoed geklikt wordt.
+      const clicks = e.log.events.filter({ type: 'click' });
+      for (const click of clicks) {
+        const costumeNrBefore = click.getPreviousFrame().getSprite(click.data.target).currentCostume;
+        const costumeNrAfter = click.getNextFrame().getSprite(click.data.target).currentCostume;
 
-  // De hoed mag enkel van kostuum veranderen als er op de hoed geklikt wordt.
-  const clicks = e.log.events.filter({ type: 'click' });
-  for (const click of clicks) {
-    const costumeNrBefore = click.getPreviousFrame().getSprite(click.data.target).currentCostume;
-    const costumeNrAfter = click.getNextFrame().getSprite(click.data.target).currentCostume;
+        // Indien er op de hoed wordt geklikt
+        if (click.data.target === 'Hat') {
+          const correctCostumeNr = (costumeNrBefore + 1) % numberOfCostumes;
+          l.expect(costumeNrAfter)
+            .withError('Na 1 klik op de sprite met naam \'Hat\' moet het volgende kostuum getoond worden.')
+            .toBe(correctCostumeNr);
+        }
+        // Indien er op een andere sprite wordt geklikt
+        else {
+          l.expect(costumeNrAfter)
+            .withError('Na 1 klik niet op de sprite met naam \'Hat\' moet het kostuum gelijk blijven.')
+            .toBe(costumeNrBefore);
+        }
+      }
+    });
 
-    // Indien er op de hoed wordt geklikt
-    if (click.data.target === 'Hat') {
-      const correctCostumeNr = (costumeNrBefore + 1) % numberOfCostumes;
-      e.output.addTest('Kostuum na 1 klik', correctCostumeNr, costumeNrAfter, 'Na 1 klik op de sprite met naam \'Hat\' moet het volgende kostuum getoond worden.');
-    }
-    // Indien er op een andere sprite wordt geklikt
-    else {
-      e.output.addTest('Kostuum na 1 klik', costumeNrBefore, costumeNrAfter, 'Na 1 klik niet op de sprite met naam \'Hat\' moet het kostuum gelijk blijven.');
-    }
-  }
-
-  // Het gebruik van het blok 'looks_costume' is aan te raden.
-  e.output.addCase('De correcte blokken werden gebruikt', e.log.blocks.containsBlock('looks_nextcostume'), 'Gebruik het blok looks_nextcostume om gemakkelijk het volgende kostuum van de sprite weer te geven.');
+    // Het gebruik van het blok 'looks_costume' is aan te raden.
+    l.test('Correcte blokken', l => {
+      l.expect(e.log.blocks.containsBlock('looks_nextcostume'))
+        .withError('Gebruik het blok looks_nextcostume om gemakkelijk het volgende kostuum van de sprite weer te geven.')
+        .toBe(true);
+    });
+  });
 }

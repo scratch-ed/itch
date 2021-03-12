@@ -19,7 +19,7 @@ export function numericEquals(float1, float2, epsilon = 0.0001) {
  * Otherwise, returns a function that returns the value.
  * 
  * @template T
- * @param {function():T|T|null} functionOrObject
+ * @param {T|null|undefined|function():T} functionOrObject
  * @return {function():T}
  */
 export function castCallback(functionOrObject) {

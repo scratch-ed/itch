@@ -10,21 +10,20 @@ let scoreVariable = null;
  * @param {Evaluation} e - The output manager.
  */
 function beforeExecution(template, submission, e) {
-  // Controleer of er aan de sprites geprutst is.
-  e.output.addTest('Niet geprutst met ingebouwde sprites',
-    false,
-    template.hasAddedSprites(submission) || template.hasRemovedSprites(submission),
-    'Er is iets veranderd aan de ingebouwde sprites, waar je niets moet aan veranderen.'
-  );
+  e.describe('Andere vakjes', l => {
+    // Controleer of er aan de sprites geprutst is.
+    l.test('Niet geprutst met andere sprites', l => {
+      l.expect(template.hasAddedSprites(submission) || template.hasRemovedSprites(submission)).toBe(false);
+    });
 
-  // Controleer of de variable 'score' bestaat.
-  scoreVariable = submission.getVariable('Score');
-
-  e.output.addTest('De variable Score moet bestaan',
-    true,
-    scoreVariable !== null,
-    'Er moet één variable Score zijn.'
-  );
+    // Controleer of de variable 'score' bestaat.
+    scoreVariable = submission.getVariable('Score');
+    l.test('De variable Score moet bestaan', l => {
+      l.expect(scoreVariable)
+        .withError('Er moet één variable Score zijn.')
+        .toNotBe(null);
+    });
+  });
 }
 
 /** @param {Evaluation} e */
@@ -48,19 +47,15 @@ function duringExecution(e) {
     .wait(sprite('Appel').toMove())
     .log(() => {
       // After the apple has moved, the score should have been set to zero.
-      e.output.addTest(
-        'Score moet starten op 0',
-        '0',
-        e.log.getVariableValue(scoreVariable.variable.name, scoreVariable.target.name),
-        'De score moet beginnen op 0.'
-      );
+      e.test('Score moet starten op 0', l => {
+        l.expect(e.log.getVariableValue(scoreVariable.variable.name, scoreVariable.target.name))
+          .toBe('0');
+      });
       const sprite = e.log.sprites.getSprite('Kom');
-      e.output.addTest(
-        'Kom moet starten op 0, -150',
-        [0, -150],
-        [sprite.x, sprite.y],
-        'De score moet beginnen op 0.'
-      );
+      e.test('Kom moet starten op 0, -150', l => {
+        l.expect([sprite.x, sprite.y])
+          .toBe([0, -150]);
+      });
     })
     .log(() => {
       mouse.x = e.log.sprites.getSprite('Appel').x;
@@ -95,41 +90,40 @@ function afterExecution(e) {
   // TODO: is 15 too lax?
   const locations = e.log.getSpritePositions('Appel');
   const top = locations.filter(location => location.y === 180).length;
-  e.output.addTest(
-    'Appels komen bovenaan tevoorschijn',
-    19,
-    top
-  );
+
+  e.test('Appels komen bovenaan tevoorschijn', l => {
+    l.expect(top)
+      .withError('Appels komen bovenaan tevoorschijn')
+      .toBe(22);
+  });
 
   const random = new Set(locations.map(location => location.x)).size;
-  e.output.addTest('Appels komen op willekeurige positie',
-    true,
-    random >= 18
-  );
+
+  e.test('Appels komen op willekeurige positie', l => {
+    l.expect(random >= 18)
+      .toBe(true);
+  });
   
   // Check the speed of the apples.
   // For every position, either the y is 180 or it is 5 less than the previous frame.
   const speed = locations.every((value, index, arr) => {
     if (value.y === 180 || index === 0) {
       return true;
-    };
+    }
     return value.y === arr[index - 1].y - 5;
   });
-  e.output.addTest(
-    'Appelsnelheid',
-    true,
-    speed,
-    'De snelheid van de appel is 5',
-  );
+  e.test('Appelsnelheid', l => {
+    l.expect(speed)
+      .toBe(true);
+  });
 
   // Check end score.
   const end = e.log.current.getSprite('Stage').getVariable('Score');
-  e.output.addTest(
-    'Eindscore',
-    10,
-    end.value,
-    'De score moet eindigen op 20',
-  );
+  e.test('Eindscore', l => {
+    l.expect(end.value)
+      .withError('De score moet eindigen op 10')
+      .toBe(10);
+  });
 
   const variables = e.log.getVariables('Score');
   const increases = variables.every((e, i, a) => {
@@ -140,10 +134,9 @@ function afterExecution(e) {
     }
   });
   
-  e.output.addTest(
-    'Score stijgt',
-    true,
-    increases,
-    "De score moet stijgen met één"
-  );
+  e.test('Score stijgt', l => {
+    l.expect(increases)
+      .withError("De score moet stijgen met één")
+      .toBe(true);
+  });
 }

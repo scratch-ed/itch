@@ -11,12 +11,16 @@ function duringExecution(e) {
 /** @param {Evaluation} e */
 function afterExecution(e) {
   // Er moet minimum 1 driehoek getekend worden
-  e.output.addCase('Aantal driehoeken',
-    e.log.getTriangles().length <= 1,
-    'Er minder dan 1 driehoek getekend');
+  e.test('Aantal driehoeken', l => {
+    l.expect(e.log.getTriangles().length >= 1)
+      .withError('Er minder dan 1 driehoek getekend')
+      .toBe(true);
+  });
 
   // Er werd gebruik gemaakt van de pen
-  e.output.addCase('De pen werd gebruikt',
-    e.log.blocks.containsBlock('pen_penDown'),
-    'Het blok pen_down werd niet gebruikt in de code');
+  e.test('De pen werd gebruikt', l => {
+    l.expect(e.log.blocks.containsBlock('pen_penDown'))
+      .withError('Het blok pen_down werd niet gebruikt in de code')
+      .toBe(true);
+  });
 }

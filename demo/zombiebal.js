@@ -26,7 +26,7 @@ function testSprite(events, data, e) {
   // First do the checks on the Roy sprite.
   return events
     .log(() => {
-      e.output.startTestContext(`Testen voor ${name}`);
+      e.output.startContext(`Testen voor ${name}`);
       const sprite = e.log.current.getSprite(name);
       originalPosition = {
         x: sprite.x,
@@ -76,7 +76,7 @@ function testSprite(events, data, e) {
           .withError(`${name} mag niet horizontaal bewegen.`)
           .toBe(originalPosition.x);
       });
-      e.output.closeTestContext();
+      e.output.closeContext();
     });
 }
 
@@ -98,14 +98,12 @@ function testTon(events, e) {
   return events
     .log(() => {
       e.vm.runtime.getSpriteTargetByName('Ton').setXY(0, 0);
-      e.output.startTestContext('Testen voor ton');
-      e.output.startTestCase('De ton gaat naar één van de spelers');
+      e.output.startContext('Testen voor ton');
+      e.output.startTestcase('De ton gaat naar één van de spelers');
     })
-    .wait(sprite('Ton').toReach(
-      (x, _y) => x > 60 || x < -60,
-      2000,
-      'De ton moet een van de spelers raken.'
-    )).log(() => {
+    .wait(sprite('Ton').toReach((x, _y) => x > 60 || x < -60, 2000))
+    .asTest('De ton moet een van de spelers raken.')
+    .log(() => {
       const ton = e.vm.runtime.getSpriteTargetByName('Ton');
       let sprite;
       if (ton.x < 0) {
@@ -125,7 +123,7 @@ function testTon(events, e) {
         throw new Error(`Could not find target Ton`);
       }
       sprite.setXY(sprite.x, ton.y);
-      e.output.startTestCase(`De ton raakt ${touchedSprite}`);
+      e.output.startTestcase(`De ton raakt ${touchedSprite}`);
     })
     .wait(sprite('Ton').toTouch(
       () => touchedSprite,
@@ -133,7 +131,7 @@ function testTon(events, e) {
       () => `Ton moet ${touchedSprite} raken`)
     )
     .log(() => {
-      e.output.startTestCase('De ton gaat naar de overkant');
+      e.output.startTestcase('De ton gaat naar de overkant');
     })
     .wait(sprite('Ton').toReach(
       (x, y) => limit(x, y),
@@ -144,7 +142,7 @@ function testTon(events, e) {
       const ton = e.vm.runtime.getSpriteTargetByName('Ton');
       const sprite = e.vm.runtime.getSpriteTargetByName(secondSprite);
       sprite.setXY(sprite.x, ton.y);
-      e.output.startTestCase(`Ton raakt ${secondSprite}`);
+      e.output.startTestcase(`Ton raakt ${secondSprite}`);
     })
     .wait(sprite('Ton').toTouch(
       () => secondSprite,
@@ -152,7 +150,7 @@ function testTon(events, e) {
       () => `De ton moet ${secondSprite} raken`
     ))
     .log(() => {
-      e.output.startTestCase(`Ton gaat naar ${touchedSprite}`);
+      e.output.startTestcase(`Ton gaat naar ${touchedSprite}`);
     })
     .forEach(_.range(4), (ev) => {
       // Wait until we get to the next one.
@@ -165,7 +163,7 @@ function testTon(events, e) {
           const ton = e.vm.runtime.getSpriteTargetByName('Ton');
           const sprite = e.vm.runtime.getSpriteTargetByName(touchedSprite);
           sprite.setXY(sprite.x, ton.y);
-          e.output.startTestCase(`Ton raakt ${touchedSprite}`);
+          e.output.startTestcase(`Ton raakt ${touchedSprite}`);
         })
         .wait(sprite('Ton').toTouch(() => touchedSprite))
         .log(() => {
@@ -174,7 +172,7 @@ function testTon(events, e) {
         });
     })
     .log(() => {
-      e.output.startTestCase(`Ton gaat naar doel van ${touchedSprite}`);
+      e.output.startTestcase(`Ton gaat naar doel van ${touchedSprite}`);
     })
     .wait(sprite('Ton').toReach(
       (x, y) => limitSecond(x, y),
@@ -194,7 +192,7 @@ function testTon(events, e) {
       sprite.setXY(sprite.x, newY);
       loser = touchedSprite;
       winner = secondSprite;
-      e.output.startTestCase(`Ton gaat naar ${loser}'s Doel`);
+      e.output.startTestcase(`Ton gaat naar ${loser}'s Doel`);
     })
     .wait(sprite('Ton').toTouch(
       () => `${loser}'s Doel`,
@@ -243,5 +241,5 @@ function afterExecution(e) {
       .toBe(`${winner} scoort!`);
   });
 
-  e.output.closeTestContext();
+  e.output.closeContext();
 }

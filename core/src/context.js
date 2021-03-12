@@ -9,6 +9,7 @@ import Deferred from './deferred.js';
 import { makeProxiedRenderer } from './renderer';
 import ResultManager from './output';
 import { ScheduledEvent } from './scheduler/index.js';
+import { EndAction } from './scheduler/end.js';
 
 const Events = {
   SCRATCH_PROJECT_START: 'PROJECT_START',
@@ -172,11 +173,6 @@ export default class Context {
      * Output manager
      */
     this.output = new ResultManager();
-
-    /**
-     * @type {null|Error}
-     */
-    this.error = null;
 
     /**
      * The acceleration factor, used to speed up (or slow down)
@@ -423,6 +419,11 @@ export default class Context {
       return number;
     }
     return number / factor;
+  }
+  
+  terminate() {
+    const action = new EndAction();
+    action.execute(this, () => {});
   }
 
   /**

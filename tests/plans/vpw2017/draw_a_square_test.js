@@ -10,20 +10,33 @@ function duringExecution(e) {
 function afterExecution(e) {
   const squares = e.log.getSquares();
 
-  e.output.addCase('Squares were detected', squares.length >= 1, 'No squares were detected on the stage.');
+  e.test('Squares were detected', l => {
+    l.expect(squares.length >= 1)
+      .withError('No squares were detected on the stage.')
+      .toBe(true);
+  });
 
   if (squares.length === 0) {
-    e.output.addError('No squares were detected on the stage. Further tests are not evaluated!');
+    e.output.escalateStatus({ human: 'Verkeerd', enum: 'wrong' });
+    e.output.closeJudgement(false);
     return;
   }
 
   for (const square of squares) {
-    e.output.addTest('Sides have length 200', 200, square.length, 'The detected square does not have sides with length 200.');
+    e.test('Sides have length 200', l => {
+      l.expect(square.length)
+        .withError('The detected square does not have sides with length 200.')
+        .toBe(200);
+    });
   }
 
-  e.output.addCase('the Pen extension is used', e.log.blocks.containsBlock('pen_penDown'), 'The Pen extension was not used in this exercise.');
+  e.test('The Pen extension is used', l => {
+    l.expect(e.log.blocks.containsBlock('pen_penDown'))
+      .withError('The Pen extension was not used in this exercise.')
+      .toBe(true);
+  });
 
   if (!e.log.blocks.containsLoop()) {
-    e.output.addMessage('You could improve your solution by using a "repeat"-block.');
+    e.output.appendMessage('You could improve your solution by using a "repeat"-block.');
   }
 }

@@ -37,86 +37,82 @@ class Judge {
 
   async run(templateFile, submissionFile) {
     let browser;
-    if (this.debug) {
-      browser = await puppeteer.launch({
-        ...(process.env.PUPPETEER_BROWSER_PATH && {
-          executablePath: process.env.PUPPETEER_BROWSER_PATH,
-        }),
-        headless: false,
-        devtools: true,
-        args: [
-          '--no-sandbox',
-          '--disable-setuid-sandbox',
-          '--disable-dev-shm-usage',
-          '--disable-web-security',
-        ],
+    try {
+      if (this.debug) {
+        browser = await puppeteer.launch({
+          ...(process.env.PUPPETEER_BROWSER_PATH && {
+            executablePath: process.env.PUPPETEER_BROWSER_PATH,
+          }),
+          headless: false,
+          devtools: true,
+          args: [
+            '--no-sandbox',
+            '--disable-setuid-sandbox',
+            '--disable-dev-shm-usage',
+            '--disable-web-security',
+          ],
+        });
+      } else {
+        browser = await puppeteer.launch({
+          ...(process.env.PUPPETEER_BROWSER_PATH && {
+            executablePath: process.env.PUPPETEER_BROWSER_PATH,
+          }),
+          args: [
+            '--no-sandbox',
+            '--disable-setuid-sandbox',
+            '--disable-dev-shm-usage',
+            '--disable-web-security',
+          ],
+        });
+      }
+
+      /** @type {Page} */
+      const page = await browser.newPage();
+
+      if (this.debug) {
+        page.on('console', (msg) => console.debug('PAGE LOG:', msg.text()));
+      }
+
+      await page.goto(`file://${url}`);
+
+      // Hook up the test output to stdout.
+      await page.exposeFunction('handleOut', this.out);
+      await page.exposeFunction('visualise', () => this.visualise);
+
+      await page.addScriptTag({
+        ...(this.fromApi ? { content: this.testplan } : { url: this.testplan }),
       });
-    } else {
-      browser = await puppeteer.launch({
-        ...(process.env.PUPPETEER_BROWSER_PATH && {
-          executablePath: process.env.PUPPETEER_BROWSER_PATH,
-        }),
-        args: [
-          '--no-sandbox',
-          '--disable-setuid-sandbox',
-          '--disable-dev-shm-usage',
-          '--disable-web-security',
-        ],
-      });
-    }
 
-    /** @type {Page} */
-    const page = await browser.newPage();
+      const sourceFileTemplate = this.fromApi
+        ? submissionFile
+        : path.resolve(__dirname, submissionFile);
+      const templateFileTemplate = this.fromApi
+        ? templateFile
+        : path.resolve(__dirname, templateFile);
 
-    if (this.debug) {
-      page.on('console', (msg) => console.debug('PAGE LOG:', msg.text()));
-    }
+      const fileHandle = await page.$('#file');
+      await fileHandle.uploadFile(sourceFileTemplate);
+      const templateHandle = await page.$('#template');
+      await templateHandle.uploadFile(templateFileTemplate);
 
-    await page.goto(`file://${url}`);
+      await page.setViewport({ height: 1080, width: 960 });
+      await page.waitForTimeout(50);
 
-    // Hook up the test output to stdout.
-    await page.exposeFunction('handleOut', this.out);
-    await page.exposeFunction('visualise', () => this.visualise);
+      if (this.debug) {
+        await page.evaluate(() => {
+          // eslint-disable-next-line no-debugger
+          debugger;
+        });
+      }
 
-    await page.addScriptTag({
-      ...(this.fromApi ? { content: this.testplan } : { url: this.testplan }),
-    });
-
-    const sourceFileTemplate = this.fromApi
-      ? submissionFile
-      : path.resolve(__dirname, submissionFile);
-    const templateFileTemplate = this.fromApi
-      ? templateFile
-      : path.resolve(__dirname, templateFile);
-
-    // START JUDGE
-    this.out({ command: 'start-judgement' });
-
-    const fileHandle = await page.$('#file');
-    await fileHandle.uploadFile(sourceFileTemplate);
-    const templateHandle = await page.$('#template');
-    await templateHandle.uploadFile(templateFileTemplate);
-
-    await page.setViewport({ height: 1080, width: 960 });
-    await page.waitForTimeout(50);
-
-    if (this.debug) {
       await page.evaluate(() => {
-        // eslint-disable-next-line no-debugger
-        debugger;
+        return runTests();
       });
+    } finally {
+      if (!this.debug) {
+        await browser.close();
+      }
     }
-
-    await page.evaluate(() => {
-      return runTests();
-    });
-
-    if (!this.debug) {
-      await browser.close();
-    }
-
-    // END JUDGE
-    this.out({ command: 'close-judgement' });
   }
 }
 

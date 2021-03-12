@@ -6,9 +6,11 @@
  */
 function beforeExecution(template, submission, e) {
   // Controleer of het ingediende project van de leerling een sprite heeft met als naam 'Heks'
-  if (!submission.containsSprite('Heks')) {
-    e.output.addError('De sprite met als naam Heks werd niet teruggevonden in het project');
-  }
+  e.test('Heks bestaat', l => {
+    l.expect(submission.containsSprite('Heks'))
+      .withError('De sprite met als naam Heks werd niet teruggevonden in het project')
+      .toBe(true);
+  });
 }
 
 /** @param {Evaluation} e */
@@ -24,11 +26,11 @@ function duringExecution(e) {
     })
     .wait(500)
     .log(() => {
-      e.output.addTest('De Heks beweegt niet voor de klik',
-        false,
-        e.log.hasSpriteMoved('Heks'),
-        'De heks bewoog nog voor er op geklikt werd'
-      );
+      e.test('De Heks beweegt niet voor de klik', l => {
+        l.expect(e.log.hasSpriteMoved('Heks'))
+          .withError('De heks bewoog nog voor er op geklikt werd')
+          .toBe(false);
+      });
     })
     .clickSprite('Heks', false) // De eerste klik laat heks starten met bewegen.
     .wait(100)
@@ -37,11 +39,11 @@ function duringExecution(e) {
       const heeftBewogen = heks.x !== heksPositie.x || heks.y !== heksPositie.y;
       heksPositie.x = heks.x;
       heksPositie.y = heks.y;
-      e.output.addTest('De heks is veranderd van positie',
-        true,
-        heeftBewogen,
-        'De heks is niet van positie veranderd na de klik'
-        )
+      e.test('De heks is veranderd van positie', l => {
+        l.expect(heeftBewogen)
+          .withError('De heks is niet van positie veranderd na de klik')
+          .toBe(true);
+      });
     })
     .wait(1000) // wacht een seconde voor de volgende positie
     .log(() => {
@@ -49,11 +51,11 @@ function duringExecution(e) {
       const heeftBewogen = heks.x !== heksPositie.x || heks.y !== heksPositie.y;
       heksPositie.x = heks.x;
       heksPositie.y = heks.y;
-      e.output.addTest('De heks is veranderd van positie',
-        true,
-        heeftBewogen,
-        'De heks is niet van positie veranderd na de klik'
-      )
+      e.test('De heks is veranderd van positie', l => {
+        l.expect(heeftBewogen)
+          .withError('De heks is niet van positie veranderd na de klik')
+          .toBe(true);
+      });
     })
     .end();
 }
@@ -61,12 +63,18 @@ function duringExecution(e) {
 /** @param {Evaluation} e */
 function afterExecution(e) {
   // Gebruik best een lus om elke seconde de heks te verplaatsen
-  e.output.addCase('Gebruik van een lus',
-    e.log.blocks.containsBlock('control_forever'),
-    'Er werd geen herhalingslus gebruikt');
-
-  // De code in de lus wordt minstens 2 keer herhaald
-  e.output.addCase('Correcte gebruik van de lus',
-    e.log.blocks.numberOfExecutions('control_forever') >= 2,
-    'De code in de lus werd minder dan 2 keer herhaald');
+  e.describe('Blokjes', l => {
+    l.test('Gebruik van een lus', l => {
+      // Gebruik best een lus de papegaai te bewegen en van kostuum te veranderen.
+      l.expect(e.log.blocks.containsLoop())
+        .withError('Er werd geen herhalingslus gebruikt')
+        .toBe(true);
+    });
+    // De code in de lus wordt minstens 2 keer herhaald
+    l.test('Correcte gebruik van de lus', l => {
+      l.expect(e.log.blocks.numberOfExecutions('control_forever') >= 2)
+        .withError('De code in de lus werd minder dan 2 keer herhaald')
+        .toBe(true);
+    });
+  });
 }

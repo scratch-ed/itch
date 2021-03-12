@@ -11,8 +11,10 @@ function duringExecution(e) {
 /** @param {Evaluation} e */
 function afterExecution(e) {
   // Er werkt gebruik gemaakt van de pen
-  e.output.addCase('De pen werkt gebruikt',
-    e.log.blocks.containsBlock('pen_penDown'),
-    'Het blok pen_Down werd niet gebruikt in de code'
-  );
+  // Er werd gebruik gemaakt van de pen
+  e.test('De pen werd gebruikt', l => {
+    l.expect(e.log.blocks.containsBlock('pen_penDown'))
+      .withError('Het blok pen_down werd niet gebruikt in de code')
+      .toBe(true);
+  });
 }

@@ -2,18 +2,18 @@
  * @file This file contains the testplan API, i.e. most of the stuff
  * you use when writing a test plan. This API is inspired by Jest, so
  * if you are familiar, it should be fairly easy to pick up.
- * 
+ *
  * ## Structure
  *
  * Itch provides 4 levels of groupings for tests:
- * 
+ *
  * 1. `tab`
  * 2. `describe`
  * 3. `test`
  * 4. `expect`
- * 
+ *
  * When starting from the bottom, we begin simple:
- * 
+ *
  * 1. The `expect` is used to compare two values. It does not have a name itself,
  *    but you can provide a custom error message. This is only shown when the
  *    assertion fails. (The values are always passed as well).
@@ -23,89 +23,100 @@
  * 4. The `tab` groups a bunch of `describe` statements. These are mainly for UI purposes.
  */
 import isEqual from 'lodash/isEqual';
-
-export const CORRECT = { enum: 'correct', human: 'Correct' };
-export const WRONG = { enum: 'wrong', human: 'Wrong' };
+import { CORRECT, WRONG } from './output.js';
+import { castCallback } from './utils.js';
 
 class GenericMatcher {
-  constructor(context, actual, message = undefined) {
+  constructor(context, actual) {
+    /** @type {Context} */
     this.context = context;
     this.actual = actual;
-    this.message = message;
+    /** @type {function(any, any):string} */
+    this.errorMessage = null;
+    /** @type {function(any, any):string} */
+    this.successMessage = null;
   }
 
   /**
    * Post the result.
-   * 
+   *
    * @param {boolean} accepted - If the property satisfies the condition.
-   * @param {string} message - Default error message.
-   * 
+   * @param {string} [errorMessage] - Default error message.
+   * @param {string} [successMessage] - Optional success message.
+   *
    * @private
    */
-  out(accepted, message) {
+  out(accepted, errorMessage = undefined, successMessage = undefined) {
     this.context.output.startTest(this.expected);
-    let status;
+    const status = accepted ? CORRECT : WRONG;
+
     if (accepted) {
-      status = CORRECT;
+      const message = this.successMessage ?
+        this.successMessage(this.expected, this.actual) : successMessage;
+      if (message) {
+        this.context.output.appendMessage(message);
+      }
     } else {
-      status = WRONG;
-    }
-    this.context.output.closeTest(this.actual, status);
-    if (!accepted) {
-      if (this.message) {
-        let finalMessage;
-        if (typeof this.message === 'function') {
-          finalMessage = this.message(this.actual, this.expected);
-        } else {
-          finalMessage = this.message;
-        }
-        this.context.output.addMessage(finalMessage);
-      } else {
-        this.context.output.addMessage(message);
+      const message = this.errorMessage ? this.errorMessage(this.expected, this.actual) : errorMessage;
+      if (message) {
+        this.context.output.appendMessage(message);
       }
     }
+
+    this.context.output.closeTest(this.actual, accepted, status);
   }
 
   /**
-   * Allows setting an error message in a fluent way.
-   * 
-   * @param {string|function(actual:any,expected:any):string} message
-   * 
+   * Allows setting an error message.
+   *
+   * @param {string|function(any,any):string} message
+   *
    * @return {GenericMatcher}
    */
   withError(message) {
-    this.message = message;
+    this.errorMessage = castCallback(message);
+    return this;
+  }
+
+  /**
+   * Allows setting an error message.
+   *
+   * @param {string|function(any,any):string} message
+   *
+   * @return {GenericMatcher}
+   */
+  withSuccess(message) {
+    this.successMessage = castCallback(message);
     return this;
   }
 
   /**
    * Compares two values for equality.
-   * 
+   *
    * Most types of objects should be supported:
-   * 
+   *
    * - If both values are numbers, `numericEquals` is used, which supports floats.
    * - Otherwise, the `isEqual` function from lodash is used. Quoting their docs:
-   *   
+   *
    *   > This method supports comparing arrays, array buffers, booleans,
    *   > date objects, error objects, maps, numbers, `Object` objects, regexes,
    *   > sets, strings, symbols, and typed arrays. `Object` objects are compared
    *   > by their own, not inherited, enumerable properties. Functions and DOM
    *   > nodes are **not** supported.
-   *   
-   * 
+   *
+   *
    * @param expected
    */
   toBe(expected) {
     this.expected = expected;
     if (typeof this.actual === 'number' && typeof expected === 'number') {
       this.out(numericEquals(this.actual, expected),
-        `Expected ${expected.toString()} but got ${this.actual.toString()}`);
+        `Expected ${expected?.toString()} but got ${this.actual?.toString()}`);
     } else {
       this.out(isEqual(this.actual, expected),
-        `Expected ${expected.toString()} but got ${this.actual.toString()}`);
+        `Expected ${expected?.toString()} but got ${this.actual?.toString()}`);
     }
   }
-
 
   /**
    * Compares two values for equality.
@@ -128,10 +139,10 @@ class GenericMatcher {
     this.expected = expected;
     if (typeof this.actual === 'number' && typeof expected === 'number') {
       this.out(!numericEquals(this.actual, expected),
-        `Expected ${expected.toString()} but got ${this.actual.toString()}`);
+        `Expected ${expected?.toString()} but got ${this.actual?.toString()}`);
     } else {
       this.out(!isEqual(this.actual, expected),
-        `Expected ${expected.toString()} but got ${this.actual.toString()}`);
+        `Expected ${expected?.toString()} but got ${this.actual?.toString()}`);
     }
   }
 }
@@ -151,12 +162,11 @@ class ExpectLevel {
    * You can optionally provide a custom error message.
    *
    * @param {*} value
-   * @param {string} [errorMessage]
    *
    * @return {GenericMatcher}
    */
-  expect(value, errorMessage = undefined) {
-    return new GenericMatcher(this.context, value, errorMessage);
+  expect(value) {
+    return new GenericMatcher(this.context, value);
   }
 
   /**
@@ -164,7 +174,7 @@ class ExpectLevel {
    */
   accept() {
     this.context.output.startTest(true);
-    this.context.output.closeTest(true, CORRECT);
+    this.context.output.closeTest(true, true);
   }
 }
 
@@ -176,7 +186,7 @@ class TestLevel {
   constructor(context) {
     this.context = context;
   }
-  
+
   /**
    * Check some properties as part of the same test.
    *
@@ -198,9 +208,9 @@ class TestLevel {
    * @param {function(out:ExpectLevel)} block
    */
   test(name, block) {
-    this.context.output.startTestCase(name);
+    this.context.output.startTestcase(name);
     block(new ExpectLevel(this.context));
-    this.context.output.closeTestCase();
+    this.context.output.closeTestcase();
   }
 }
 
@@ -210,17 +220,13 @@ class DescribeLevel extends TestLevel {
    *
    * This level results in a `context` in the output format.
    *
-   * @param {string|function} name - Either the name or the function.
+   * @param {string} name - Either the name or the function.
    * @param {function(TestLevel)} block - The function if a name is passed.
    */
-  describe(name, block = undefined) {
-    if (typeof name === 'string') {
-      this.context.output.startTestContext(name);
-    } else {
-      this.context.output.startTestContext();
-    }
+  describe(name= undefined, block = undefined) {
+    this.context.output.startContext(name);
     block(this);
-    this.context.output.closeTestContext();
+    this.context.output.closeContext();
   }
 }
 
@@ -234,8 +240,8 @@ export class TabLevel extends DescribeLevel {
    * @param {function(DescribeLevel)} block
    */
   tab(name, block) {
-    this.context.output.startTestTab(name);
+    this.context.output.startTab(name);
     block(this);
-    this.context.output.closeTestTab();
+    this.context.output.closeTab();
   }
 }

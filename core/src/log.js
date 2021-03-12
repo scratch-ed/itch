@@ -209,10 +209,10 @@ export class LogFrame {
 /**
  * Search for frames with the given constraints.
  *
- * @param {Frame[]} frames - Frames to search.
+ * @param {LogFrame[]} frames - Frames to search.
  * @param {Constraints} constraints - Values to filter on.
  *
- * @return {Frame[]} A new instance of this array with the filtered values.
+ * @return {LogFrame[]} A new instance of this array with the filtered values.
  */
 export function searchFrames(frames, constraints) {
   const before = constraints.before || last(frames).time;

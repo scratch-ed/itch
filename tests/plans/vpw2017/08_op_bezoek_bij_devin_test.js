@@ -11,10 +11,20 @@ function duringExecution(e) {
 /** @param {Evaluation} e */
 function afterExecution(e) {
   // Controleer de tekst van de drie tekstballonnen
-  e.output.addTest('Devin stelt zich voor', 'Hallo, ik ben Devin.', e.log.renderer.responses[0], 'Er wordt foute tekst weergegeven in de tekstballon');
-  e.output.addTest('Devin vraagt je naam', 'Wat is jouw naam?', e.log.renderer.responses[1], 'Er wordt foute tekst weergegeven in de tekstballon');
-  e.output.addTest('Devin zegt hallo', `Hallo, ${e.answers[0]}`, e.log.renderer.responses[2], 'Er wordt foute tekst weergegeven in de tekstballon');
+  e.test('Devin stelt zich voor', l => {
+    l.expect(e.log.renderer.responses[0]).toBe('Hallo, ik ben Devin.');
+  });
+  e.test('Devin vraagt je naam', l => {
+    l.expect(e.log.renderer.responses[1]).toBe('Wat is jouw naam?');
+  });
+  e.test('Devin zegt hallo', l => {
+    l.expect(e.log.renderer.responses[2]).toBe(`Hallo, ${e.answers[0]}`);
+  });
 
   // Controleer of de eerste tekstballon 2 seconden wordt weergegeven
-  e.output.addCase('Devin stelt zich minstens 2 seconden lang voor', e.log.getSkinDuration('Hallo, ik ben Devin.') >= 2000, 'De eerste tekstballon moet minimum 2 seconden getoond worden.');
+  e.test('Devin stelt zich minstens 2 seconden lang voor', l => {
+    l.expect(e.log.getSkinDuration('Hallo, ik ben Devin.') >= 2000)
+      .withError('De eerste tekstballon moet minimum 2 seconden getoond worden.')
+      .toBe(true);
+  });
 }

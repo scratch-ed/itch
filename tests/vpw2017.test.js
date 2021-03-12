@@ -1,7 +1,7 @@
 /* Copyright (C) 2020 Ghent University - All Rights Reserved */
 const { runTest, testStatuses } = require('./integration-runner');
 
-jest.setTimeout(2000000);
+jest.setTimeout(50000);
 
 test('01_mad_hatter', () => {
   return runTest(`vpw2017/${expect.getState().currentTestName}`)
@@ -69,7 +69,7 @@ test('07_heksenjacht', () => {
     .then(result => {
       expect(result).toMatchSnapshot();
       expect(testStatuses(result)).onlyStatusesIs('correct');
-      expect(result).minimumCommands('close-testcase', 8);
+      expect(result).minimumCommands('close-testcase', 7);
     });
 });
 
@@ -95,13 +95,13 @@ test('09_flauw_mopje', () => {
 //         .then(result => expect(result).toMatchSnapshot());
 // })
 
-test("11_vang_de_appels", () => {
-    return runTest(`vpw2017/${expect.getState().currentTestName}`)
-        .then(result => { 
-          expect(result).toMatchSnapshot();
-          expect(result).minimumCommands('close-testcase', 8);
-        });
-})
+test('11_vang_de_appels', () => {
+  return runTest(`vpw2017/${expect.getState().currentTestName}`)
+    .then(result => {
+      expect(result).toMatchSnapshot();
+      expect(result).minimumCommands('close-testcase', 8);
+    });
+});
 
 // TODO: no tests at the moment
 // There is currently no test code for this exercise.

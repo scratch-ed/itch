@@ -14,7 +14,9 @@ function duringExecution(e) {
           for (let i = 0; i < getal.length; i++) {
             som += parseInt(getal[i]);
           }
-          e.output.addTest(`De berekening van cijfersom ${getal}`, som.toString(), response, 'De cijfersom werd niet correct berekend');
+          e.test(`De berekening van cijfersom ${getal}`, l => {
+            l.expect(response).toBe(som.toString());
+          });
         });
     })
     .end();
