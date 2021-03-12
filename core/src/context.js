@@ -261,9 +261,6 @@ export default class Context {
           }));
       }
     });
-    this.vm.runtime.on('TARGETS_UPDATE', (opts) => {
-      console.log(opts);
-    })
   }
 
   /**

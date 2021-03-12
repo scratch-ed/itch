@@ -97,8 +97,8 @@ test('09_flauw_mopje', () => {
 test('11_vang_de_appels', () => {
   return runTest(`vpw2017/${expect.getState().currentTestName}`)
     .then(result => {
-      expect(result).toMatchSnapshot();
-      expect(result).minimumCommands('close-testcase', 8);
+      expect(result).minimumCommands('close-test', 8);
+      expect(testStatuses(result)).allStatusesAre('correct');
     });
 });
 

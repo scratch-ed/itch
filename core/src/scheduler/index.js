@@ -175,18 +175,18 @@ export class ScheduledEvent {
    * @package
    */
   run(context) {
-    console.debug(`Running actions ${this.action.toString()}`);
+    console.debug(`${context.timestamp()}: Running actions ${this.action.toString()}`);
     const action = new Promise((resolve, _reject) => {
-      console.debug(`Executing actions ${this.action.toString()}`);
+      console.debug(`${context.timestamp()}: Executing actions ${this.action.toString()}`);
       this.action.execute(context, resolve);
     });
     const timeout = new Promise((resolve, reject) => {
-      const time = context.accelerateEvent(this.timeout || context.actionTimeout) || 0;
+      const time = this.sync ? context.accelerateEvent(this.timeout || context.actionTimeout) : 0;
       setTimeout(() => {
         if (this.sync) {
-          reject(new TimeoutError(`timeout after ${this.timeout || context.actionTimeout} (real: ${time}) from ${this.action.toString()}`));
+          reject(new TimeoutError(`${context.timestamp()}: timeout after ${this.timeout || context.actionTimeout} (real: ${time}) from ${this.action.toString()}`));
         } else {
-          resolve(`Ignoring timeout for async event ${this.action.toString()}.`);
+          resolve(`${context.timestamp()}: Ignoring timeout for async event ${this.action.toString()}.`);
         }
       }, time);
     });
@@ -196,7 +196,7 @@ export class ScheduledEvent {
     // Note that async events cannot timeout.
     return Promise.race([action, timeout])
       .then((v) => {
-        console.debug(`resolved action ${this.action.toString()}: ${v}`);
+        console.debug(`${context.timestamp()}: resolved action ${this.action.toString()}: ${v}`);
 
         if (this.onResolve) {
           this.onResolve(context);
@@ -210,7 +210,7 @@ export class ScheduledEvent {
         this.nextEvents.forEach(e => e.run(context));
 
       }, (reason) => {
-        console.debug(`Rejected actions ${this.action.toString()}`);
+        console.debug(`${context.timestamp()}: Rejected actions ${this.action.toString()}`);
         if (reason instanceof TimeoutError) {
           let escalate = true;
           if (this.onTimeout) {

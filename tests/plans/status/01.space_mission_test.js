@@ -35,7 +35,7 @@ function duringExecution(e) {
     .greenFlag(false)
     .wait(1000)
     .log(() => {
-      e.output.startTestContext("Startpositie ruimteschip");
+      e.output.startContext("Startpositie ruimteschip");
       e.test('Het ruimteschip staat klaar', l => {
         l.expect(e.log.hasSpriteMoved('Ruimteschip'))
           .withError('Het ruimteschip mag niet bewegen voor er op 1 gedrukt wordt.')
@@ -52,7 +52,7 @@ function duringExecution(e) {
       e.test('Ruimteschip bewoog', l => {
         l.accept();
       });
-      e.output.closeTestContext();
+      e.output.closeContext();
     });
 }
 

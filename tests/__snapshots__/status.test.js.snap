@@ -22,6 +22,7 @@ Array [
     "expected": "false",
   },
   Object {
+    "accepted": true,
     "command": "close-test",
     "generated": "false",
     "status": Object {
@@ -41,6 +42,7 @@ Array [
     "expected": "false",
   },
   Object {
+    "accepted": true,
     "command": "close-test",
     "generated": "false",
     "status": Object {
@@ -60,6 +62,7 @@ Array [
     "expected": "false",
   },
   Object {
+    "accepted": true,
     "command": "close-test",
     "generated": "false",
     "status": Object {
@@ -79,6 +82,7 @@ Array [
     "expected": "false",
   },
   Object {
+    "accepted": true,
     "command": "close-test",
     "generated": "false",
     "status": Object {
@@ -98,6 +102,7 @@ Array [
     "expected": "false",
   },
   Object {
+    "accepted": true,
     "command": "close-test",
     "generated": "false",
     "status": Object {
@@ -117,6 +122,7 @@ Array [
     "expected": "false",
   },
   Object {
+    "accepted": true,
     "command": "close-test",
     "generated": "false",
     "status": Object {
@@ -136,6 +142,7 @@ Array [
     "expected": "false",
   },
   Object {
+    "accepted": true,
     "command": "close-test",
     "generated": "false",
     "status": Object {
@@ -155,6 +162,7 @@ Array [
     "expected": "false",
   },
   Object {
+    "accepted": true,
     "command": "close-test",
     "generated": "false",
     "status": Object {
@@ -174,6 +182,7 @@ Array [
     "expected": "false",
   },
   Object {
+    "accepted": true,
     "command": "close-test",
     "generated": "false",
     "status": Object {
@@ -193,6 +202,7 @@ Array [
     "expected": "false",
   },
   Object {
+    "accepted": true,
     "command": "close-test",
     "generated": "false",
     "status": Object {
@@ -212,6 +222,7 @@ Array [
     "expected": "false",
   },
   Object {
+    "accepted": true,
     "command": "close-test",
     "generated": "false",
     "status": Object {
@@ -231,6 +242,7 @@ Array [
     "expected": "false",
   },
   Object {
+    "accepted": true,
     "command": "close-test",
     "generated": "false",
     "status": Object {
@@ -250,6 +262,7 @@ Array [
     "expected": "false",
   },
   Object {
+    "accepted": true,
     "command": "close-test",
     "generated": "false",
     "status": Object {
@@ -269,6 +282,7 @@ Array [
     "expected": "false",
   },
   Object {
+    "accepted": true,
     "command": "close-test",
     "generated": "false",
     "status": Object {
@@ -288,6 +302,7 @@ Array [
     "expected": "false",
   },
   Object {
+    "accepted": true,
     "command": "close-test",
     "generated": "false",
     "status": Object {
@@ -307,6 +322,7 @@ Array [
     "expected": "false",
   },
   Object {
+    "accepted": true,
     "command": "close-test",
     "generated": "false",
     "status": Object {
@@ -326,6 +342,7 @@ Array [
     "expected": "false",
   },
   Object {
+    "accepted": true,
     "command": "close-test",
     "generated": "false",
     "status": Object {
@@ -345,6 +362,7 @@ Array [
     "expected": "false",
   },
   Object {
+    "accepted": true,
     "command": "close-test",
     "generated": "false",
     "status": Object {
@@ -364,6 +382,7 @@ Array [
     "expected": "false",
   },
   Object {
+    "accepted": true,
     "command": "close-test",
     "generated": "false",
     "status": Object {
@@ -383,6 +402,7 @@ Array [
     "expected": "false",
   },
   Object {
+    "accepted": true,
     "command": "close-test",
     "generated": "false",
     "status": Object {
@@ -402,6 +422,7 @@ Array [
     "expected": "false",
   },
   Object {
+    "accepted": true,
     "command": "close-test",
     "generated": "false",
     "status": Object {
@@ -421,6 +442,7 @@ Array [
     "expected": "false",
   },
   Object {
+    "accepted": true,
     "command": "close-test",
     "generated": "false",
     "status": Object {
@@ -440,6 +462,7 @@ Array [
     "expected": "false",
   },
   Object {
+    "accepted": true,
     "command": "close-test",
     "generated": "false",
     "status": Object {
@@ -459,6 +482,7 @@ Array [
     "expected": "false",
   },
   Object {
+    "accepted": true,
     "command": "close-test",
     "generated": "false",
     "status": Object {
@@ -478,6 +502,7 @@ Array [
     "expected": "false",
   },
   Object {
+    "accepted": true,
     "command": "close-test",
     "generated": "false",
     "status": Object {
@@ -497,6 +522,7 @@ Array [
     "expected": "false",
   },
   Object {
+    "accepted": true,
     "command": "close-test",
     "generated": "false",
     "status": Object {
@@ -516,6 +542,7 @@ Array [
     "expected": "false",
   },
   Object {
+    "accepted": true,
     "command": "close-test",
     "generated": "false",
     "status": Object {
@@ -535,6 +562,7 @@ Array [
     "expected": "false",
   },
   Object {
+    "accepted": true,
     "command": "close-test",
     "generated": "false",
     "status": Object {
@@ -554,6 +582,7 @@ Array [
     "expected": "false",
   },
   Object {
+    "accepted": true,
     "command": "close-test",
     "generated": "false",
     "status": Object {
@@ -573,6 +602,7 @@ Array [
     "expected": "false",
   },
   Object {
+    "accepted": true,
     "command": "close-test",
     "generated": "false",
     "status": Object {
@@ -592,6 +622,7 @@ Array [
     "expected": "false",
   },
   Object {
+    "accepted": true,
     "command": "close-test",
     "generated": "false",
     "status": Object {
@@ -611,6 +642,7 @@ Array [
     "expected": "false",
   },
   Object {
+    "accepted": true,
     "command": "close-test",
     "generated": "false",
     "status": Object {
@@ -630,6 +662,7 @@ Array [
     "expected": "false",
   },
   Object {
+    "accepted": true,
     "command": "close-test",
     "generated": "false",
     "status": Object {
@@ -649,6 +682,7 @@ Array [
     "expected": "false",
   },
   Object {
+    "accepted": true,
     "command": "close-test",
     "generated": "false",
     "status": Object {
@@ -668,6 +702,7 @@ Array [
     "expected": "false",
   },
   Object {
+    "accepted": true,
     "command": "close-test",
     "generated": "false",
     "status": Object {
@@ -687,6 +722,7 @@ Array [
     "expected": "false",
   },
   Object {
+    "accepted": true,
     "command": "close-test",
     "generated": "false",
     "status": Object {
@@ -713,6 +749,7 @@ Array [
     "expected": "false",
   },
   Object {
+    "accepted": true,
     "command": "close-test",
     "generated": "false",
     "status": Object {
@@ -739,6 +776,7 @@ Array [
     "expected": "false",
   },
   Object {
+    "accepted": true,
     "command": "close-test",
     "generated": "false",
     "status": Object {
@@ -758,6 +796,7 @@ Array [
     "expected": "true",
   },
   Object {
+    "accepted": true,
     "command": "close-test",
     "generated": "true",
     "status": Object {
@@ -784,6 +823,7 @@ Array [
     "expected": "kogels",
   },
   Object {
+    "accepted": true,
     "command": "close-test",
     "generated": "kogels",
     "status": Object {
@@ -803,6 +843,7 @@ Array [
     "expected": "kogels",
   },
   Object {
+    "accepted": true,
     "command": "close-test",
     "generated": "kogels",
     "status": Object {
@@ -822,6 +863,7 @@ Array [
     "expected": "kogels",
   },
   Object {
+    "accepted": true,
     "command": "close-test",
     "generated": "kogels",
     "status": Object {
@@ -841,6 +883,7 @@ Array [
     "expected": "kogels",
   },
   Object {
+    "accepted": true,
     "command": "close-test",
     "generated": "kogels",
     "status": Object {
@@ -867,6 +910,7 @@ Array [
     "expected": "brandstof",
   },
   Object {
+    "accepted": true,
     "command": "close-test",
     "generated": "brandstof",
     "status": Object {
@@ -886,6 +930,7 @@ Array [
     "expected": "brandstof",
   },
   Object {
+    "accepted": true,
     "command": "close-test",
     "generated": "brandstof",
     "status": Object {
@@ -905,6 +950,7 @@ Array [
     "expected": "brandstof",
   },
   Object {
+    "accepted": true,
     "command": "close-test",
     "generated": "brandstof",
     "status": Object {
@@ -924,6 +970,7 @@ Array [
     "expected": "brandstof",
   },
   Object {
+    "accepted": true,
     "command": "close-test",
     "generated": "brandstof",
     "status": Object {
@@ -950,6 +997,7 @@ Array [
     "expected": "true",
   },
   Object {
+    "accepted": true,
     "command": "close-test",
     "generated": "true",
     "status": Object {
