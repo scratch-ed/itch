@@ -626,16 +626,20 @@ export class ScheduledEvent {
    * the event will be reported as a passing test with the message.
    * Otherwise it will be a failing test with the message.
    *
-   * @param {string|function():string} [error]
-   * @param {string|function():string} [success]
+   * @param {{correct:string|function():string, wrong:string|function():string}} [messages]
+   * 
+   * @return {ScheduledEvent}
    */
-  asTest(error = undefined, success = undefined) {
-    error = castCallback(error);
-    success = castCallback(success);
+  asTest(messages) {
+    
+    const wrapped = {
+      correct: castCallback(messages?.correct),
+      wrong: castCallback(messages?.wrong)
+    }
 
     this.resolved((context) => {
       context.output.startTest(true);
-      const message = success();
+      const message = wrapped.success();
       if (message) {
         context.output.appendMessage(message);
       }
@@ -643,7 +647,7 @@ export class ScheduledEvent {
     });
     this.timedOut((context) => {
       context.output.startTest(true);
-      const message = error();
+      const message = wrapped.wrong();
       if (message) {
         context.output.appendMessage(message);
       }
