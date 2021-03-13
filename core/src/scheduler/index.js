@@ -626,7 +626,7 @@ export class ScheduledEvent {
    * the event will be reported as a passing test with the message.
    * Otherwise it will be a failing test with the message.
    *
-   * @param {{correct:string|function():string, wrong:string|function():string}} [messages]
+   * @param {{[correct]:string|function():string, [wrong]:string|function():string}} [messages]
    * 
    * @return {ScheduledEvent}
    */
@@ -639,7 +639,7 @@ export class ScheduledEvent {
 
     this.resolved((context) => {
       context.output.startTest(true);
-      const message = wrapped.success();
+      const message = wrapped.correct();
       if (message) {
         context.output.appendMessage(message);
       }

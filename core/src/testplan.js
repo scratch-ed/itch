@@ -72,6 +72,7 @@ class GenericMatcher {
    * @param {string|function(any,any):string} message
    *
    * @return {GenericMatcher}
+   * @deprecated
    */
   withError(message) {
     this.errorMessage = castCallback(message);
@@ -84,9 +85,23 @@ class GenericMatcher {
    * @param {string|function(any,any):string} message
    *
    * @return {GenericMatcher}
+   * @deprecated
    */
   withSuccess(message) {
     this.successMessage = castCallback(message);
+    return this;
+  }
+
+  /**
+   * Combines withSuccess & withError
+   * 
+   * @param {{[correct]:string|function():string, [wrong]:string|function():string}} messages
+   * 
+   * @return {GenericMatcher}
+   */
+  with(messages) {
+    this.successMessage = castCallback(messages.correct);
+    this.errorMessage = castCallback(messages.wrong);
     return this;
   }
 

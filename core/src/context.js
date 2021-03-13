@@ -171,6 +171,7 @@ export default class Context {
     this.event = ScheduledEvent.create();
     /**
      * Output manager
+     * @type {ResultManager}
      */
     this.output = new ResultManager();
 
