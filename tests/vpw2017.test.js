@@ -15,7 +15,7 @@ test('02_papegaai', () => {
   return runTest(`vpw2017/${expect.getState().currentTestName}`)
     .then(result => {
       expect(testStatuses(result)).allStatusesAre('correct');
-      expect(result).minimumCommands('close-testcase', 20);
+      expect(result).minimumCommands('close-testcase', 10);
     });
 });
 

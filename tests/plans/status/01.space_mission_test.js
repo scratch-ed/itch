@@ -29,8 +29,6 @@ function beforeExecution(template, submission, output) {
 /** @param {Evaluation} e */
 function duringExecution(e) {
   e.actionTimeout = 30000;
-  e.acceleration = 10;
-  e.eventAcceleration = 1;
   const event = e.scheduler
     .greenFlag(false)
     .wait(1000)
@@ -38,7 +36,9 @@ function duringExecution(e) {
       e.output.startContext("Startpositie ruimteschip");
       e.test('Het ruimteschip staat klaar', l => {
         l.expect(e.log.hasSpriteMoved('Ruimteschip'))
-          .withError('Het ruimteschip mag niet bewegen voor er op 1 gedrukt wordt.')
+          .with({
+            wrong: 'Het ruimteschip mag niet bewegen voor er op 1 gedrukt wordt.'
+          })
           .toBe(false);
       });
     });

@@ -20,7 +20,9 @@ function beforeExecution(template, submission, e) {
     scoreVariable = submission.getVariable('Score');
     l.test('De variable Score moet bestaan', l => {
       l.expect(scoreVariable)
-        .withError('Er moet één variable Score zijn.')
+        .with({
+          wrong: 'Er moet één variable Score zijn.'
+        })
         .toNotBe(null);
     });
   });
@@ -92,8 +94,10 @@ function afterExecution(e) {
   const top = locations.filter(location => location.y === 180).length;
 
   e.test('Appels komen bovenaan tevoorschijn', l => {
-    l.expect(top >= 20)
-      .withError('Appels komen bovenaan tevoorschijn')
+    l.expect(top >= 10)
+      .with({
+        wrong: 'Appels komen bovenaan tevoorschijn'
+      })
       .toBe(true);
   });
 
@@ -121,7 +125,9 @@ function afterExecution(e) {
   const end = e.log.current.getSprite('Stage').getVariable('Score');
   e.test('Eindscore', l => {
     l.expect(end.value >= 10)
-      .withError('De score moet eindigen op 10')
+      .with({
+        wrong: 'De score moet eindigen op 10'
+      })
       .toBe(true);
   });
 
@@ -136,7 +142,9 @@ function afterExecution(e) {
   
   e.test('Score stijgt', l => {
     l.expect(increases)
-      .withError("De score moet stijgen met één")
+      .with({
+        wrong: "De score moet stijgen met één"
+      })
       .toBe(true);
   });
 }
