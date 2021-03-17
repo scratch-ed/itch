@@ -267,7 +267,6 @@ export async function run(config) {
   };
   
   context.output.startJudgement();
-  context.output.startTab('Testen uit het testplan');
   context.stage = EvaluationStage.before;
 
   const judge = new Evaluation(context);
@@ -296,7 +295,6 @@ export async function run(config) {
   // Do post-mortem tests.
   testplan.afterExecution(judge);
 
-  context.output.closeTab();
   context.output.closeJudgement();
   console.log('--- END OF EVALUATION ---');
 }

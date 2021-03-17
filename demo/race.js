@@ -189,6 +189,8 @@ function yellowCar(evaluation, e, keys, name) {
     .wait(1000);
 }
 
+let blueStart = 0;
+
 /** @param {Evaluation} e */
 function duringExecution(e) {
   e.actionTimeout = 300000;
@@ -196,7 +198,10 @@ function duringExecution(e) {
 
   const green = e.scheduler
     .greenFlag(false);
-  const yellow = yellowCar(e, green, YELLOW, 'Mini Geel');
+  const yellow = yellowCar(e, green, YELLOW, 'Mini Geel')
+    .log(() => {
+      blueStart = e.context.timestamp();
+    });
   const blue = yellowCar(e, yellow, BLUE, 'Mini Blauw');
 
   // blue.join([yellow])
@@ -204,50 +209,48 @@ function duringExecution(e) {
   blue.end();
 }
 
-/** @param {Evaluation} e */
-function afterExecution(e) {
-
+/**
+ * @param {Evaluation} e
+ * @param {string} car
+ * @param {number} start
+ * @param {{down:string,up:string,left:string,right:string}} keys
+ */
+function checkCar(e, car, start, keys) {
+  e.output.startTab(`Testen voor ${car}`);
   e.describe('Bewegen', l => {
     l.test('Omlaag werkt', l => {
       const event = e.log.events.find(ev => {
-        return ev.type === 'useKey' && ev.data.key === 'Down';
+        return ev.time > start && ev.type === 'useKey' && ev.data.key === keys.down;
       });
-      const before = event.previousFrame.getSprite('Mini Geel');
-      const after = event.nextFrame.getSprite('Mini Geel');
+      const before = event.previousFrame.getSprite(car);
+      const after = event.nextFrame.getSprite(car);
       l.expect(after.x).toBe(before.x);
       l.expect(after.y < before.y).toBe(true);
-
-      // Check the direction.
-      // First, get all frames that happened here.
-      // let frames = e.log.frames.filter(f => event.previousFrame.time <= f.time && f.time <= event.nextFrame.time && f.block === 'update_Mini Geel');
-      // // There might be too many frames, so only start when we actually pressed the key.
-      // const startIndex = frames.findIndex(f => f.block === 'sensing_keypressed');
-      // debugger;
     });
     l.test('Omhoog werkt', l => {
       const event = e.log.events.find(ev => {
-        return ev.type === 'useKey' && ev.data.key === 'Up';
+        return ev.time > start && ev.type === 'useKey' && ev.data.key === keys.up;
       });
-      const before = event.previousFrame.getSprite('Mini Geel');
-      const after = event.nextFrame.getSprite('Mini Geel');
+      const before = event.previousFrame.getSprite(car);
+      const after = event.nextFrame.getSprite(car);
       l.expect(after.x).toBe(before.x);
       l.expect(after.y > before.y).toBe(true);
     });
     l.test('Rechts werkt', l => {
       const event = e.log.events.find(ev => {
-        return ev.type === 'useKey' && ev.data.key === 'Right';
+        return ev.time > start && ev.type === 'useKey' && ev.data.key === keys.right;
       });
-      const before = event.previousFrame.getSprite('Mini Geel');
-      const after = event.nextFrame.getSprite('Mini Geel');
+      const before = event.previousFrame.getSprite(car);
+      const after = event.nextFrame.getSprite(car);
       l.expect(after.y).toBe(before.y);
       l.expect(after.x > before.x).toBe(true);
     });
     l.test('Links werkt', l => {
       const event = e.log.events.find(ev => {
-        return ev.type === 'useKey' && ev.data.key === 'Left';
+        return ev.time > start && ev.type === 'useKey' && ev.data.key === keys.left;
       });
-      const before = event.previousFrame.getSprite('Mini Geel');
-      const after = event.nextFrame.getSprite('Mini Geel');
+      const before = event.previousFrame.getSprite(car);
+      const after = event.nextFrame.getSprite(car);
       l.expect(after.y).toBe(before.y);
       l.expect(after.x < before.x).toBe(true);
     });
@@ -256,16 +259,16 @@ function afterExecution(e) {
     l.test('Trager op gras', l => {
 
       const normalStartFrame = e.log.events
-        .find(ev => ev.type === 'waitForSpriteNotTouch' && ev.data.sprite === 'Mini Geel')
+        .find(ev => ev.time > start && ev.type === 'waitForSpriteNotTouch' && ev.data.sprite === car)
         .nextFrame;
-      const switchIndex = e.log.events.findIndex(ev => ev.type === 'waitForSpriteTouch' && ev.data.sprite === 'Mini Geel');
+      const switchIndex = e.log.events.findIndex(ev => ev.time > start && ev.type === 'waitForSpriteTouch' && ev.data.sprite === car);
       const switchFrame = e.log.events.list[switchIndex].nextFrame;
       const grassEndFrame = e.log.events
-        .find((ev, ind) => ev.type === 'waitForSpriteNotTouch' && ev.data.sprite === 'Mini Geel' && ind > switchIndex)
+        .find((ev, ind) => ev.time > start && ev.type === 'waitForSpriteNotTouch' && ev.data.sprite === car && ind > switchIndex)
         .nextFrame;
-      const normalStartSprite = normalStartFrame.getSprite('Mini Geel');
-      const switchSprite = switchFrame.getSprite('Mini Geel');
-      const grassEndSprite = grassEndFrame.getSprite('Mini Geel');
+      const normalStartSprite = normalStartFrame.getSprite(car);
+      const switchSprite = switchFrame.getSprite(car);
+      const grassEndSprite = grassEndFrame.getSprite(car);
 
       const normalDistance = Math.abs(switchSprite.y - normalStartSprite.y);
       const normalTime = (switchFrame.time - normalStartFrame.time) / e.acceleration;
@@ -280,49 +283,57 @@ function afterExecution(e) {
   });
   e.describe('Rots werkt', l => {
     l.test('Rots verplaatst terug naar start', l => {
-      const events = e.log.events.list.filter(ev => ev.type === 'waitForSpriteTouch' && ev.data.sprite === 'Mini Geel');
+      const events = e.log.events.list.filter(ev => ev.time > start && ev.type === 'waitForSpriteTouch' && ev.data.sprite === car);
       const event = events.find(ev => ev.data.targets[0] === 'Rots');
-      const frame = e.log.frames.find(f => f.time > event.nextFrame.time && f.block === 'update_Mini Geel');
-      const sprite = frame.getSprite('Mini Geel');
+      const frame = e.log.frames.find(f => f.time > event.nextFrame.time && f.block === `update_${car}`);
+      const sprite = frame.getSprite(car);
       l.expect(sprite.x < -150 && sprite.x > -200)
         .with({
-          wrong: 'Na het aanraken van de rots moet de Mini Geel terug naar de startpositie'
+          wrong: `Na het aanraken van de rots moet ${car} terug naar de startpositie`
         })
         .toBe(true);
       l.expect(sprite.y > 150)
         .with({
-          wrong: 'Na het aanraken van de rots moet de Mini Geel terug naar de startpositie'
+          wrong: `Na het aanraken van de rots moet ${car} terug naar de startpositie`
         })
         .toBe(true);
     });
   });
   e.describe('Bliksem werkt', l => {
-    const events = e.log.events.list.filter(ev => ev.type === 'waitForSpriteTouch' && ev.data.sprite === 'Mini Geel');
+    const events = e.log.events.list.filter(ev => ev.time > start && ev.type === 'waitForSpriteTouch' && ev.data.sprite === car);
     const event = events.find(ev => ev.data.targets[0] === 'Bliksem');
     const frames = e.log.frames.filter(f => f.time > event.nextFrame.time - e.context.accelerateEvent(50)
       && f.time < event.nextFrame.time + e.context.accelerateEvent(800)
-      && f.block === 'update_Mini Geel');
+      && f.block === `update_${car}`);
     l.test('Bliksem verplaatst naar ergens anders', l => {
       // First hide the car, then put it somewhere else.
       // The somewhere else is defined as not within a certain distance to the lightning.
       const lightPosition = frames[0].getSprite('Bliksem');
-      const afterPosition = frames[frames.length - 1].getSprite('Mini Geel');
+      const afterPosition = frames[frames.length - 1].getSprite( car);
       const distance = Math.sqrt(distSq({ x: lightPosition.x, y: lightPosition.y }, { x: afterPosition.x, y: afterPosition.y }));
       l.expect(distance > 50)
         .with({
-          wrong: "Mini Geel moet verder van de bliksem komen"
+          wrong: `${car} moet verder van de bliksem komen`
         })
         .toBe(true);
     });
   });
   e.describe('Vat werkt', l => {
-    const events = e.log.events.list.filter(ev => ev.type === 'waitForSpriteTouch' && ev.data.sprite === 'Mini Geel');
+    const events = e.log.events.list.filter(ev => ev.time > start && ev.type === 'waitForSpriteTouch' && ev.data.sprite === car);
     const event = events.find(ev => ev.data.targets[0] === 'Vat');
-    const frames = e.log.frames.filter(f => f.time > event.nextFrame.time&& f.block === 'update_Mini Geel');
-    const positions = e.log.getSpritePositions('Mini Geel', frames);
-    l.test("Mini Geel gaat naar willekeurige posities", l => {
+    const frames = e.log.frames.filter(f => f.time > event.nextFrame.time&& f.block === `update_${car}`);
+    const positions = e.log.getSpritePositions(car, frames);
+    l.test(`${car} gaat naar willekeurige posities`, l => {
       l.expect(positions.length > 1)
         .toBe(true);
     });
   });
+  e.output.closeTab();
+}
+
+/** @param {Evaluation} e */
+function afterExecution(e) {
+  
+  checkCar(e, 'Mini Geel', 0, YELLOW);
+  checkCar(e, 'Mini Blauw', blueStart, BLUE);
 }

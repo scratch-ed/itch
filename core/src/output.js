@@ -154,7 +154,7 @@ export default class ResultManager {
       this.closeContext();
     }
     if (!this.hasOpenTab) {
-      this.startTab(description || 'Tab');
+      this.startTab('Testen uit het testplan');
     }
     this.out({ command: 'start-context', description: description });
     this.hasOpenContext = true;

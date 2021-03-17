@@ -14,8 +14,10 @@ class Processor {
       this.stack.push(message);
     }
 
-    if (command === 'start-context') {
-      this.output(`<h2>${message.description || 'Context'}</h2>`);
+    if (command === 'start-tab') {
+      this.output(`<h2>${message.title || 'Tabblad'}</h2>`);
+    } else if (command === 'start-context') {
+      this.output(`<h3>${message.description || 'Context'}</h3>`);
     } else if (command === 'start-testcase') {
       this.case = message.description;
       this.caseTests = [];
