@@ -82,7 +82,7 @@ class WaitForSpritePositionAction extends ScheduledAction {
   }
 
   toString() {
-    return `Wait for sprite ${this.name} to reach one of ${this.positions}`;
+    return `Wait for sprite ${this.name} to reach one of ${this.callback}`;
   }
 }
 
@@ -124,7 +124,7 @@ class WaitForSpriteTouchAction extends ScheduledAction {
   }
 
   toString() {
-    return `Wait for sprite ${this.name} to touch one of ${this.paramCallback()}`;
+    return `Wait for sprite ${this.name} to touch one of ${this.targets}`;
   }
 }
 
@@ -162,7 +162,7 @@ class WaitForSpriteNotTouchAction extends ScheduledAction {
   }
 
   toString() {
-    return `Wait for sprite ${this.name} to not touch ${this.target}`;
+    return `Wait for sprite ${this.name} to not touch ${this.target || this.paramCallback}`;
   }
 }
 
@@ -358,6 +358,6 @@ export function broadcast(name, timeout = null) {
 export function delay(delay) {
   return {
     action: new WaitEvent(delay),
-    timeout: delay + 10
+    timeout: delay + 100
   };
 }

@@ -4,6 +4,7 @@
  * @param {Project} submission - The submission project.
  * @param {Evaluation} e - The output manager.
  */
+
 function beforeExecution(template, submission, e) {
   e.describe('Controle op bestaande code', l => {
     l.test('Mini Geel', l => {
@@ -83,8 +84,8 @@ const BLUE = {
   right: 'd'
 };
 
-/** 
- * @param {ScheduledEvent} e 
+/**
+ * @param {ScheduledEvent} e
  * @param {Evaluation} evaluation
  * */
 function yellowCar(evaluation, e, keys, name) {
@@ -142,6 +143,7 @@ function yellowCar(evaluation, e, keys, name) {
     .useKey(keys.right, true)
     .wait(sprite(name).toTouch('Rots'))
     .useKey(keys.right, false)
+    .wait(1000)
     .useKey(keys.down, true)
     // Go down until we are off the gras.
     .wait(sprite(name).toReach((_x, y) => y < 70))
@@ -152,8 +154,39 @@ function yellowCar(evaluation, e, keys, name) {
     .useKey(keys.down, false)
     .useKey(keys.right, true)
     .wait(sprite(name).toTouch('Bliksem'))
+    .useKey(keys.right, false)
+    .wait(1000) // Give it some time.
+    .log(() => {
+      // Move the car manually, since we don't know where it will have ended up.
+      const car = evaluation.context.vm.runtime.getSpriteTargetByName(name);
+      car.setXY(90, 150);
+    })
+    .useKey(keys.right, true)
     .wait(sprite(name).toTouch('Eindmeet'))
-    .useKey(keys.right, false);
+    .useKey(keys.right, false)
+    // Reset to start position
+    .greenFlag(false)
+    // Drive to ton
+    .useKey(keys.down, true)
+    .wait(sprite(name).toReach((_x, y) => y < 70))
+    .useKey(keys.right, true)
+    .wait(sprite(name).toReach((x, y) => x >= -105 && y <= 25))
+    .useKey(keys.right, false)
+    .wait(sprite(name).toReach((_x, y) => y <= -130))
+    .useKey(keys.down, false)
+    .useKey(keys.right, true)
+    .wait(sprite(name).toReach((x, _y) => x >= 170))
+    .useKey(keys.right, false)
+    .useKey(keys.up, true)
+    .wait(sprite(name).toReach((_x, y) => y >= -10))
+    .useKey(keys.up, false)
+    .useKey(keys.left, true)
+    .wait(sprite(name).toReach((x, _y) => x <= 15))
+    .useKey(keys.left, false)
+    .useKey(keys.up, true)
+    .wait(sprite(name).toTouch('Vat'))
+    .useKey(keys.up, false)
+    .wait(1000);
 }
 
 /** @param {Evaluation} e */
@@ -164,16 +197,17 @@ function duringExecution(e) {
   const green = e.scheduler
     .greenFlag(false);
   const yellow = yellowCar(e, green, YELLOW, 'Mini Geel');
-  
+  const blue = yellowCar(e, yellow, BLUE, 'Mini Blauw');
+
   // blue.join([yellow])
   //   .end();
-  yellow.end();
+  blue.end();
 }
 
 /** @param {Evaluation} e */
 function afterExecution(e) {
-  
-  e.describe("Bewegen", l => {
+
+  e.describe('Bewegen', l => {
     l.test('Omlaag werkt', l => {
       const event = e.log.events.find(ev => {
         return ev.type === 'useKey' && ev.data.key === 'Down';
@@ -182,7 +216,7 @@ function afterExecution(e) {
       const after = event.nextFrame.getSprite('Mini Geel');
       l.expect(after.x).toBe(before.x);
       l.expect(after.y < before.y).toBe(true);
-      
+
       // Check the direction.
       // First, get all frames that happened here.
       // let frames = e.log.frames.filter(f => event.previousFrame.time <= f.time && f.time <= event.nextFrame.time && f.block === 'update_Mini Geel');
@@ -218,9 +252,9 @@ function afterExecution(e) {
       l.expect(after.x < before.x).toBe(true);
     });
   });
-  e.describe("Gras", l => {
-    l.test("Trager op gras", l => {
-      
+  e.describe('Gras', l => {
+    l.test('Trager op gras', l => {
+
       const normalStartFrame = e.log.events
         .find(ev => ev.type === 'waitForSpriteNotTouch' && ev.data.sprite === 'Mini Geel')
         .nextFrame;
@@ -232,10 +266,10 @@ function afterExecution(e) {
       const normalStartSprite = normalStartFrame.getSprite('Mini Geel');
       const switchSprite = switchFrame.getSprite('Mini Geel');
       const grassEndSprite = grassEndFrame.getSprite('Mini Geel');
-      
+
       const normalDistance = Math.abs(switchSprite.y - normalStartSprite.y);
       const normalTime = (switchFrame.time - normalStartFrame.time) / e.acceleration;
-      
+
       const grassDistance = Math.abs(grassEndSprite.y - switchSprite.y);
       const grassTime = (grassEndFrame.time - switchFrame.time) / e.acceleration;
 
@@ -244,17 +278,50 @@ function afterExecution(e) {
       l.expect(normalSpeed > grassSpeed).toBe(true);
     });
   });
-  e.describe("Rots werkt", l => {
-    l.test("Rots verplaatst terug naar start", l => {
-      const events = e.log.events.list.filter(ev => ev.type === "waitForSpriteTouch" && ev.data.sprite === 'Mini Geel');
-      const event = events.find(ev => ev.data.targets[0] === "Rots");
+  e.describe('Rots werkt', l => {
+    l.test('Rots verplaatst terug naar start', l => {
+      const events = e.log.events.list.filter(ev => ev.type === 'waitForSpriteTouch' && ev.data.sprite === 'Mini Geel');
+      const event = events.find(ev => ev.data.targets[0] === 'Rots');
       const frame = e.log.frames.find(f => f.time > event.nextFrame.time && f.block === 'update_Mini Geel');
       const sprite = frame.getSprite('Mini Geel');
       l.expect(sprite.x < -150 && sprite.x > -200)
-        .withError("Na het aanraken van de rots moet de Mini Geel terug naar de startpositie")
+        .with({
+          wrong: 'Na het aanraken van de rots moet de Mini Geel terug naar de startpositie'
+        })
         .toBe(true);
       l.expect(sprite.y > 150)
-        .withError("Na het aanraken van de rots moet de Mini Geel terug naar de startpositie")
+        .with({
+          wrong: 'Na het aanraken van de rots moet de Mini Geel terug naar de startpositie'
+        })
+        .toBe(true);
+    });
+  });
+  e.describe('Bliksem werkt', l => {
+    const events = e.log.events.list.filter(ev => ev.type === 'waitForSpriteTouch' && ev.data.sprite === 'Mini Geel');
+    const event = events.find(ev => ev.data.targets[0] === 'Bliksem');
+    const frames = e.log.frames.filter(f => f.time > event.nextFrame.time - e.context.accelerateEvent(50)
+      && f.time < event.nextFrame.time + e.context.accelerateEvent(800)
+      && f.block === 'update_Mini Geel');
+    l.test('Bliksem verplaatst naar ergens anders', l => {
+      // First hide the car, then put it somewhere else.
+      // The somewhere else is defined as not within a certain distance to the lightning.
+      const lightPosition = frames[0].getSprite('Bliksem');
+      const afterPosition = frames[frames.length - 1].getSprite('Mini Geel');
+      const distance = Math.sqrt(distSq({ x: lightPosition.x, y: lightPosition.y }, { x: afterPosition.x, y: afterPosition.y }));
+      l.expect(distance > 50)
+        .with({
+          wrong: "Mini Geel moet verder van de bliksem komen"
+        })
+        .toBe(true);
+    });
+  });
+  e.describe('Vat werkt', l => {
+    const events = e.log.events.list.filter(ev => ev.type === 'waitForSpriteTouch' && ev.data.sprite === 'Mini Geel');
+    const event = events.find(ev => ev.data.targets[0] === 'Vat');
+    const frames = e.log.frames.filter(f => f.time > event.nextFrame.time&& f.block === 'update_Mini Geel');
+    const positions = e.log.getSpritePositions('Mini Geel', frames);
+    l.test("Mini Geel gaat naar willekeurige posities", l => {
+      l.expect(positions.length > 1)
         .toBe(true);
     });
   });

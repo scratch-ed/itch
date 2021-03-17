@@ -7,6 +7,7 @@ import Context from './context.js';
 import Project from './project.js';
 import { delay, broadcast, sprite } from './scheduler/index.js';
 import { TabLevel } from './testplan.js';
+import { distSq } from './lines.js';
 
 let object;
 if (typeof global === 'undefined') {
@@ -26,6 +27,7 @@ function expose() {
   object.sprite = sprite;
   object.broadcast = broadcast;
   object.delay = delay;
+  object.distSq = distSq;
 }
 
 /**
