@@ -87,11 +87,14 @@ const BLUE = {
 /**
  * @param {ScheduledEvent} e
  * @param {Evaluation} evaluation
+ * @param {string} name
+ * @param {{down:string,up:string,left:string,right:string}} keys
  * */
 function yellowCar(evaluation, e, keys, name) {
   // Go down, up, right, left during one second.
   return e
     .track(name)
+    .track('Bliksem')
     .useKey(keys.down, 500)
     .useKey(keys.up, 500)
     .useKey(keys.right, 500)
@@ -257,7 +260,6 @@ function checkCar(e, car, start, keys) {
   });
   e.describe('Gras', l => {
     l.test('Trager op gras', l => {
-
       const normalStartFrame = e.log.events
         .find(ev => ev.time > start && ev.type === 'waitForSpriteNotTouch' && ev.data.sprite === car)
         .nextFrame;
@@ -317,11 +319,18 @@ function checkCar(e, car, start, keys) {
         })
         .toBe(true);
     });
+    // The lightning must hide soon
+    const lightningFrames = e.log.frames.filter(f => f.time > event.nextFrame.time && f.time < event.nextFrame.time + e.context.accelerateEvent(1000));
+    const visibilities = e.log.getSprites('Bliksem', lightningFrames, s => s.visible);
+    l.test('Bliksem gaat weg', l => {
+      l.expect(visibilities.length > 1 && visibilities.includes(false))
+        .toBe(true);
+    });
   });
   e.describe('Vat werkt', l => {
     const events = e.log.events.list.filter(ev => ev.time > start && ev.type === 'waitForSpriteTouch' && ev.data.sprite === car);
     const event = events.find(ev => ev.data.targets[0] === 'Vat');
-    const frames = e.log.frames.filter(f => f.time > event.nextFrame.time&& f.block === `update_${car}`);
+    const frames = e.log.frames.filter(f => f.time > event.nextFrame.time && f.block === `update_${car}`);
     const positions = e.log.getSpritePositions(car, frames);
     l.test(`${car} gaat naar willekeurige posities`, l => {
       l.expect(positions.length > 1)
