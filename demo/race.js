@@ -285,18 +285,18 @@ function checkCar(e, car, start, keys) {
     l.test('Rots verplaatst terug naar start', l => {
       const events = e.log.events.list.filter(ev => ev.time > start && ev.type === 'waitForSpriteTouch' && ev.data.sprite === car);
       const event = events.find(ev => ev.data.targets[0] === 'Rots');
-      const frame = e.log.frames.find(f => f.time > event.nextFrame.time && f.block === `update_${car}`);
-      const sprite = frame.getSprite(car);
-      l.expect(sprite.x < -150 && sprite.x > -200)
+      // The car must wait a bit, so in one of the next frames (0.5s), we must be moved to the start position.
+      const moveFrame = e.log.frames
+        .filter(f => f.time > event.nextFrame.time && f.time < event.nextFrame.time + e.context.accelerateEvent(500) && f.block === `update_${car}`)
+        .find(f => {
+          const sprite = f.getSprite(car);
+          return sprite.x > -200 && sprite.x < -150 && sprite.y > 150; 
+        });
+      l.expect(moveFrame)
         .with({
           wrong: `Na het aanraken van de rots moet ${car} terug naar de startpositie`
         })
-        .toBe(true);
-      l.expect(sprite.y > 150)
-        .with({
-          wrong: `Na het aanraken van de rots moet ${car} terug naar de startpositie`
-        })
-        .toBe(true);
+        .toNotBe(undefined);
     });
   });
   e.describe('Bliksem werkt', l => {
