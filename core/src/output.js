@@ -82,8 +82,8 @@ export default class ResultManager {
       console.warn('Attempting to close judgement while none is open. Ignoring.');
       return;
     }
-    if (this.hasOpenContext) {
-      this.closeContext();
+    if (this.hasOpenTab) {
+      this.closeTab();
     }
 
     if (typeof accepted === 'undefined') {
