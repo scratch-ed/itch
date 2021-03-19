@@ -26,6 +26,10 @@ import isEqual from 'lodash/isEqual';
 import { CORRECT, WRONG } from './output.js';
 import { castCallback } from './utils.js';
 
+export class FatalErrorException extends Error {
+  
+}
+
 class GenericMatcher {
   constructor(context, actual) {
     /** @type {Context} */
@@ -35,6 +39,8 @@ class GenericMatcher {
     this.errorMessage = null;
     /** @type {function(any, any):string} */
     this.successMessage = null;
+    /** @type {boolean} */
+    this.terminate = false;
   }
 
   /**
@@ -64,6 +70,10 @@ class GenericMatcher {
     }
 
     this.context.output.closeTest(this.actual, accepted, status);
+    
+    if (!accepted && this.terminate) {
+      throw new FatalErrorException();
+    }
   }
 
   /**
@@ -102,6 +112,16 @@ class GenericMatcher {
   with(messages) {
     this.successMessage = castCallback(messages.correct);
     this.errorMessage = castCallback(messages.wrong);
+    return this;
+  }
+
+  /**
+   * Mark this test as fatal: if it fails, the testplan will stop.
+   * 
+   * @return {GenericMatcher}
+   */
+  fatal() {
+    this.terminate = true;
     return this;
   }
 

@@ -6,7 +6,7 @@ import { numericEquals } from './utils.js';
 import Context from './context.js';
 import Project from './project.js';
 import { delay, broadcast, sprite } from './scheduler/index.js';
-import { TabLevel } from './testplan.js';
+import { TabLevel, FatalErrorException } from './testplan.js';
 import { distSq } from './lines.js';
 
 let object;
@@ -270,30 +270,41 @@ export async function run(config) {
   context.stage = EvaluationStage.before;
 
   const judge = new Evaluation(context);
-
-  // Run the tests before the execution.
-  testplan.beforeExecution(new Project(templateJson), new Project(submissionJson), judge);
   
-  expose();
+  try {
 
-  await context.vmLoaded.promise;
-  context.stage = EvaluationStage.scheduling;
+    // Run the tests before the execution.
+    testplan.beforeExecution(new Project(templateJson), new Project(submissionJson), judge);
 
-  // Schedule the commands for the duration.
-  testplan.duringExecution(judge);
+    expose();
 
-  context.stage = EvaluationStage.executing;
-  // Prepare the context for execution.
-  context.prepareAndRunVm();
+    await context.vmLoaded.promise;
+    context.stage = EvaluationStage.scheduling;
 
-  // Run the events.
-  await context.event.run(context);
-  await context.simulationEnd.promise;
-  
-  context.stage = EvaluationStage.after;
+    // Schedule the commands for the duration.
+    testplan.duringExecution(judge);
 
-  // Do post-mortem tests.
-  testplan.afterExecution(judge);
+    context.stage = EvaluationStage.executing;
+    // Prepare the context for execution.
+    context.prepareAndRunVm();
+
+    // Run the events.
+    await context.event.run(context);
+    await context.simulationEnd.promise;
+
+    context.stage = EvaluationStage.after;
+
+    // Do post-mortem tests.
+    testplan.afterExecution(judge);
+
+  } catch (e) {
+    if (!(e instanceof FatalErrorException)) {
+      throw e;
+    } else {
+      console.warn("Stopping tests due to fatal test not passing.");
+      console.warn(e);
+    }
+  }
 
   context.output.closeJudgement();
   console.log('--- END OF EVALUATION ---');

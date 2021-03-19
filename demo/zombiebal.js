@@ -17,6 +17,7 @@ function beforeExecution(template, submission, e) {
         .with({
           wrong: "Oei, er zijn sprites verwijderd van het project."
         })
+        .fatal()
         .toBe(false);
     });
   });
