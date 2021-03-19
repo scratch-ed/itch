@@ -8,8 +8,16 @@
 function beforeExecution(template, submission, e) {
   e.describe('Basiscontroles', l => {
     l.test('Niet geprutst met andere sprites', l => {
-      l.expect(template.hasAddedSprites(submission)).toBe(false);
-      l.expect(template.hasRemovedSprites(submission)).toBe(false);
+      // l.expect(template.hasAddedSprites(submission))
+      //   .with({
+      //     wrong: "Oei, er zijn sprites toegevoegd aan het project."
+      //   })
+      //   .toBe(false);
+      l.expect(template.hasRemovedSprites(submission))
+        .with({
+          wrong: "Oei, er zijn sprites verwijderd van het project."
+        })
+        .toBe(false);
     });
   });
 }
@@ -36,8 +44,8 @@ function testSprite(events, data, e) {
       e.test(`Oneindige lus gebruikt bij ${name}`, l => {
         l.expect(sprite.hasBlock('control_forever'))
           .with({
-            correct: `Goed bezig! ${name} kan al heel het spelletje lang code uitvoeren.`,
-            wrong: `${name} kan nog niet heel het spelletje lang bewegen, zorg ervoor dat je een oneindige lus gebruikt.`
+            correct: () => `Goed bezig! ${name} kan al heel het spelletje lang code uitvoeren.`,
+            wrong: () => `${name} kan nog niet heel het spelletje lang bewegen, zorg ervoor dat je een oneindige lus gebruikt.`
           })
           .toBe(true);
       });
@@ -178,8 +186,8 @@ function testTon(events, e) {
       // Wait until we get to the next one.
       return ev.wait(sprite('Ton').toReach((x, y) => limitSecond(x, y), 1000))
         .asTest({
-          correct: `Goed bezig! De ton weerkaatst naar ${touchedSprite}`,
-          wrong: `De toen moet weerkaatsen naar ${touchedSprite}`
+          correct: () => `Goed bezig! De ton weerkaatst naar ${touchedSprite}`,
+          wrong: () => `De toen moet weerkaatsen naar ${touchedSprite}`
         })
         .log(() => {
           const ton = e.vm.runtime.getSpriteTargetByName('Ton');
@@ -256,9 +264,9 @@ function duringExecution(e) {
 function afterExecution(e) {
   const sayEvents = e.log.events.filter({ type: 'say' });
   console.log(sayEvents);
-  const data = _.last(sayEvents).data;
+  const data = _.last(sayEvents)?.data;
   e.test(`De ton zegt ${winner} scoort!`, l => {
-    l.expect(data.text)
+    l.expect(data?.text)
       .with({
         correct: "Proficiat! De ton zegt wie er wint.",
         wrong: "Oei, de ton zegt nog niet wie wint."
