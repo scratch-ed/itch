@@ -215,13 +215,7 @@ function testTon(events, e) {
       // Move the sprite away from the ton to make the game stop.
       const ton = e.vm.runtime.getSpriteTargetByName('Ton');
       const sprite = e.vm.runtime.getSpriteTargetByName(touchedSprite);
-      let newY;
-      if (ton.y > 70) {
-        newY = ton.y - 150;
-      } else {
-        newY = ton.y + 150;
-      }
-      sprite.setXY(sprite.x, newY);
+      sprite.setXY(0, -ton.y);
       loser = touchedSprite;
       winner = secondSprite;
       e.output.startTestcase(`Ton gaat naar ${loser}'s Doel`);
