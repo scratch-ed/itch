@@ -13,9 +13,10 @@ function beforeExecution(template, submission, e) {
       //     wrong: "Oei, er zijn sprites toegevoegd aan het project."
       //   })
       //   .toBe(false);
+      const sprites = template.sprites().map(s => s.name);
       l.expect(template.hasRemovedSprites(submission))
         .with({
-          wrong: "Oei, er zijn sprites verwijderd van het project."
+          wrong: `Oei, er zijn sprites verwijderd van het project. Er moeten volgende sprites zijn: ${sprites.join(', ')}.`
         })
         .fatal()
         .toBe(false);
