@@ -168,7 +168,7 @@ function testTon(events, e) {
     .wait(sprite('Ton').toReach((x, y) => limit(x, y), 1000))
     .asTest({
       correct: 'Goed bezig! De ton weerkaatst.',
-      wrong: 'De toen moet weerkaatsen.'
+      wrong: 'De ton moet weerkaatsen.'
     })
     .log(() => {
       const ton = e.vm.runtime.getSpriteTargetByName('Ton');
