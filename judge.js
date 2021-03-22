@@ -109,10 +109,17 @@ class Judge {
       await page.evaluate(() => {
         return runTests();
       });
+
+      // await page.screenshot({
+      //   path: "./screenshot.jpg",
+      //   type: "jpeg",
+      //   fullPage: true
+      // });
     } finally {
       if (!this.debug) {
         await browser.close();
       }
+      
     }
   }
 }

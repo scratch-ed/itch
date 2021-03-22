@@ -8,11 +8,6 @@
 function beforeExecution(template, submission, e) {
   e.describe('Basiscontroles', l => {
     l.test('Niet geprutst met andere sprites', l => {
-      // l.expect(template.hasAddedSprites(submission))
-      //   .with({
-      //     wrong: "Oei, er zijn sprites toegevoegd aan het project."
-      //   })
-      //   .toBe(false);
       const sprites = template.sprites().map(s => s.name);
       l.expect(template.hasRemovedSprites(submission))
         .with({
@@ -46,8 +41,8 @@ function testSprite(events, data, e) {
       e.test(`Oneindige lus gebruikt bij ${name}`, l => {
         l.expect(sprite.hasBlock('control_forever'))
           .with({
-            correct: () => `Goed bezig! ${name} kan al heel het spelletje lang code uitvoeren.`,
-            wrong: () => `${name} kan nog niet heel het spelletje lang bewegen, zorg ervoor dat je een oneindige lus gebruikt.`
+            correct: `Goed bezig! ${name} kan al heel het spelletje lang code uitvoeren.`,
+            wrong: `${name} kan nog niet heel het spelletje lang bewegen, zorg ervoor dat je een oneindige lus gebruikt.`
           })
           .toBe(true);
       });
@@ -130,7 +125,7 @@ function testTon(events, e) {
       e.output.startContext('Testen voor ton');
       e.output.startTestcase('De ton gaat naar één van de spelers');
     })
-    .wait(sprite('Ton').toReach((x, _y) => x > 60 || x < -60, 2000))
+    .wait(sprite('Ton').toReach((x, _y) => x > 60 || x < -60, 3000))
     .asTest({
       correct: 'Super! De ton kan bewegen.',
       wrong: 'Oei, de ton kan nog niet bewegen.'
@@ -157,7 +152,7 @@ function testTon(events, e) {
       sprite.setXY(sprite.x, ton.y);
       e.output.startTestcase(`De ton raakt ${touchedSprite}`);
     })
-    .wait(sprite('Ton').toTouch(() => touchedSprite, 1000))
+    .wait(sprite('Ton').toTouch(() => touchedSprite, 3000))
     .asTest({
       correct: () => `Super! ${touchedSprite} schopt tegen de ton.`,
       wrong: () => `Als de ton ${touchedSprite} raakt, moet ${touchedSprite} tegen de ton schoppen.`
@@ -165,7 +160,7 @@ function testTon(events, e) {
     .log(() => {
       e.output.startTestcase('De ton gaat naar de overkant');
     })
-    .wait(sprite('Ton').toReach((x, y) => limit(x, y), 1000))
+    .wait(sprite('Ton').toReach((x, y) => limit(x, y), 3000))
     .asTest({
       correct: 'Goed bezig! De ton weerkaatst.',
       wrong: 'De ton moet weerkaatsen.'
@@ -176,7 +171,7 @@ function testTon(events, e) {
       sprite.setXY(sprite.x, ton.y);
       e.output.startTestcase(`Ton raakt ${secondSprite}`);
     })
-    .wait(sprite('Ton').toTouch(() => secondSprite, 1000))
+    .wait(sprite('Ton').toTouch(() => secondSprite, 3000))
     .asTest({
       correct: () => `Super! ${secondSprite} schopt tegen de ton.`,
       wrong: () => `Als de ton ${secondSprite} raakt, moet ${secondSprite} tegen de ton schoppen.`
@@ -186,7 +181,7 @@ function testTon(events, e) {
     })
     .forEach(_.range(4), (ev) => {
       // Wait until we get to the next one.
-      return ev.wait(sprite('Ton').toReach((x, y) => limitSecond(x, y), 1000))
+      return ev.wait(sprite('Ton').toReach((x, y) => limitSecond(x, y), 3000))
         .asTest({
           correct: () => `Goed bezig! De ton weerkaatst naar ${touchedSprite}`,
           wrong: () => `De toen moet weerkaatsen naar ${touchedSprite}`
@@ -205,22 +200,21 @@ function testTon(events, e) {
     })
     .log(() => {
       e.output.startTestcase(`Ton gaat naar doel van ${touchedSprite}`);
+      /** @type {RenderedTarget} */
+      const sprite = e.vm.runtime.getSpriteTargetByName(touchedSprite);
+      sprite.setVisible(false);
     })
-    .wait(sprite('Ton').toReach((x, y) => limitSecond(x, y), 1000))
+    .wait(sprite('Ton').toReach((x, y) => limitSecond(x, y), 3000))
     .asTest({
       correct: () => `Goed bezig! De ton raakt het doel van ${touchedSprite}.`,
       wrong: () => `De ton moet het doel van ${touchedSprite} raken.`
     })
     .log(() => {
-      // Move the sprite away from the ton to make the game stop.
-      const ton = e.vm.runtime.getSpriteTargetByName('Ton');
-      const sprite = e.vm.runtime.getSpriteTargetByName(touchedSprite);
-      sprite.setXY(0, -ton.y);
       loser = touchedSprite;
       winner = secondSprite;
       e.output.startTestcase(`Ton gaat naar ${loser}'s Doel`);
     })
-    .wait(sprite('Ton').toTouch(() => `${loser}'s Doel`, 1000))
+    .wait(sprite('Ton').toTouch(() => `${loser}'s Doel`, 3000))
     .asTest({
       correct: () => `Goed bezig! De ton raakt het doel van ${loser}.`,
       wrong: () => `De ton moet het doel van ${loser} raken.`
@@ -230,10 +224,10 @@ function testTon(events, e) {
 
 /** @param {Evaluation} e */
 function duringExecution(e) {
-  e.actionTimeout = 5000;
+  e.actionTimeout = 10000;
   e.acceleration = 10;
-  e.eventAcceleration = 1;
-  e.timeAcceleration = 1;
+  e.eventAcceleration = 5;
+  e.timeAcceleration = 5;
 
   // The events are as follows:
   // 1. start an async green flag
