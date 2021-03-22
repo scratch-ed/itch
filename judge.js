@@ -6,7 +6,7 @@ const url = path.resolve(__dirname, 'scratch/scratch-test-environment.html');
 const puppeteer = require('puppeteer');
 
 function toStdOut(output) {
-  process.stdout.write(JSON.stringify(output));
+  process.stdout.write(`${JSON.stringify(output)}\n`);
 }
 
 /**
@@ -25,6 +25,7 @@ class Judge {
    */
   constructor(testplan, options = {}, outputStream = toStdOut) {
     this.fromApi = options.fromApi;
+
     this.time_limit = options.time_limit || 10000;
 
     this.testplan = testplan;
