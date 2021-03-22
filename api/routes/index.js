@@ -14,6 +14,10 @@ const ALLOWED_COMMANDS = [
   COMMANDS.CLOSE_TEST,
   COMMANDS.CLOSE_TESTCASE,
   COMMANDS.CLOSE_TAB,
+  COMMANDS.START_CONTEXT,
+  COMMANDS.CLOSE_CONTEXT,
+  COMMANDS.APPEND_MESSAGE,
+  COMMANDS.ESCALATE_STATUS,
 ];
 
 function setupRoutes(server) {
@@ -26,7 +30,7 @@ function setupRoutes(server) {
     const pass = new PassThrough();
     pass.pipe(res);
 
-    let tab = {
+    let context = {
       title: '',
       testCases: [],
     };
@@ -43,16 +47,23 @@ function setupRoutes(server) {
           return;
         }
 
-        // create new tab with title
-        if (judgeObject.command === COMMANDS.START_TAB) {
-          tab.title = judgeObject.title;
+        if (
+          judgeObject.command === COMMANDS.ESCALATE_STATUS &&
+          judgeObject.status.enum === 'runtime error'
+        ) {
+          pass.end();
         }
 
-        // write tab to stream and create new
-        if (judgeObject.command === COMMANDS.CLOSE_TAB) {
-          pass.write(`${JSON.stringify(tab)};`);
+        // create new context with title
+        if (judgeObject.command === COMMANDS.START_CONTEXT) {
+          context.title = judgeObject.description;
+        }
+
+        // write context to stream and create new
+        if (judgeObject.command === COMMANDS.CLOSE_CONTEXT) {
+          pass.write(`${JSON.stringify(context)};`);
           pass.resume();
-          tab = { title: '', testCases: [] };
+          context = { title: '', testCases: [] };
         }
 
         // creation of a new testcase
@@ -60,23 +71,36 @@ function setupRoutes(server) {
           testCase.description = judgeObject.description;
         }
 
-        // add the status object
-        if (judgeObject.command === COMMANDS.CLOSE_TEST) {
-          testCase.status = judgeObject.status;
+        if (judgeObject.command === COMMANDS.APPEND_MESSAGE) {
+          testCase.message = judgeObject.message;
         }
 
-        // push the testcase in the tab
+        // add the status object
+        if (judgeObject.command === COMMANDS.CLOSE_TEST) {
+          // if a subtest was previously false, show that one
+          const isPreviousSubtestCorrect = testCase.status?.enum !== 'wrong';
+
+          testCase.status = isPreviousSubtestCorrect
+            ? judgeObject.status
+            : testCase.status;
+        }
+
+        // push the testcase in the context
         if (judgeObject.command === COMMANDS.CLOSE_TESTCASE) {
-          tab.testCases.push(testCase);
+          context.testCases.push(testCase);
           testCase = {};
         }
       },
     );
 
-    await judge.run(templateFile.path, testFile.path);
+    try {
+      await judge.run(templateFile.path, testFile.path);
+    } catch (err) {
+      console.error(err);
+    }
 
-    pass.end();
     next();
+    pass.end();
   });
 }
 
