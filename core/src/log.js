@@ -314,16 +314,20 @@ export class LogEvent {
 class Events {
   constructor() {
     this.list = [];
+    /** @deprecated */
     this.length = 0;
+    /** @deprecated */
     this.lastTime = 0;
   }
 
+  /** @deprecated */
   push(event) {
     this.list.push(event);
     this.length++;
     this.lastTime = event.time;
   }
 
+  /** @deprecated */
   filter(arg) {
     const type = arg.type || 'all';
     const before = arg.before || this.lastTime;
@@ -339,11 +343,13 @@ class Events {
     }
     return filtered;
   }
-  
+
+  /** @deprecated */
   find(a) {
     return this.list.find(a);
   }
-  
+
+  /** @deprecated */
   findIndex(a) {
     return this.list.findIndex(a);
   }
