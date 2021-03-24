@@ -47,42 +47,13 @@ function testSprite(events, data, e) {
           .toBe(true);
       });
     })
-    .useKey(down)
-    .log(() => {
-      const sprite = e.log.current.getSprite(name);
-      // We can't know how many steps will be set.
-      e.test(`${name} moet omlaag gericht zijn`, l => {
-        l.expect(sprite.direction)
-          .with({
-            correct: `Goed zo! ${name} richt zich naar omlaag wanneer je op ‘${down}’ drukt.`,
-            wrong: `Als op ${down} gedrukt wordt, dan moet ${name} zich naar omlaag richten.`
-          })
-          .toBe(180);
-      });
-      e.test(`${name} beweegt omlaag`, l => {
-        l.expect(sprite.y < originalPosition.y)
-          .with({
-            correct: `Joepie! ${name} kan naar beneden bewegen`,
-            wrong: `Als op ${down} gedrukt wordt, dan moet ${name} 10 stappen omlaag zetten.`
-          })
-          .toBe(true);
-        l.expect(sprite.x)
-          .with({
-            wrong: `Als op ${down} gedrukt wordt, dan moet ${name} 10 stappen omlaag zetten, maar niet horizontaal verplaatsen.`
-          })
-          .toBe(originalPosition.x);
-      });
-      latestPosition = {
-        x: sprite.x,
-        y: sprite.y
-      };
-    })
+
     .useKey(up)
     .log(() => {
       const sprite = e.log.current.getSprite(name);
       // We can't know how many steps will be set.
       e.test(`${name} beweegt omhoog`, l => {
-        l.expect(sprite.y > latestPosition.y)
+        l.expect(sprite.y > originalPosition.y)
           .with({
             correct: `Joepie! ${name} kan naar boven bewegen`,
             wrong: `Als op ${up} gedrukt wordt, dan moet ${name} 10 stappen omhoog zetten.`
@@ -97,6 +68,36 @@ function testSprite(events, data, e) {
         l.expect(sprite.x)
           .with({
             wrong: `Als op ${up} gedrukt wordt, dan moet ${name} 10 stappen omhoog zetten, maar niet horizontaal verplaatsen.`
+          })
+          .toBe(originalPosition.x);
+      });
+      latestPosition = {
+        x: sprite.x,
+        y: sprite.y
+      };
+    })
+    .useKey(down)
+    .log(() => {
+      const sprite = e.log.current.getSprite(name);
+      // We can't know how many steps will be set.
+      e.test(`${name} moet omlaag gericht zijn`, l => {
+        l.expect(sprite.direction)
+          .with({
+            correct: `Goed zo! ${name} richt zich naar omlaag wanneer je op ‘${down}’ drukt.`,
+            wrong: `Als op ${down} gedrukt wordt, dan moet ${name} zich naar omlaag richten.`
+          })
+          .toBe(180);
+      });
+      e.test(`${name} beweegt omlaag`, l => {
+        l.expect(sprite.y < latestPosition.y)
+          .with({
+            correct: `Joepie! ${name} kan naar beneden bewegen`,
+            wrong: `Als op ${down} gedrukt wordt, dan moet ${name} 10 stappen omlaag zetten.`
+          })
+          .toBe(true);
+        l.expect(sprite.x)
+          .with({
+            wrong: `Als op ${down} gedrukt wordt, dan moet ${name} 10 stappen omlaag zetten, maar niet horizontaal verplaatsen.`
           })
           .toBe(originalPosition.x);
       });
@@ -258,8 +259,8 @@ function afterExecution(e) {
   e.test(`De ton zegt ${winner} scoort!`, l => {
     l.expect(data?.text)
       .with({
-        correct: "Proficiat! De ton zegt wie er wint.",
-        wrong: "Oei, de ton zegt nog niet wie wint."
+        correct: 'Proficiat! De ton zegt wie er wint.',
+        wrong: 'Oei, de ton zegt nog niet wie wint.'
       })
       .toBe(`${winner} scoort!`);
   });
