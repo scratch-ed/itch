@@ -122,11 +122,18 @@ function testTon(events, e) {
   // move the sprite to that position.
   return events
     .log(() => {
-      e.vm.runtime.getSpriteTargetByName('Ton').setXY(0, 0);
       e.output.startContext('Testen voor ton');
+    })
+    .wait(sprite('Ton').toMove(4000))
+    .asTest({
+      correct: 'Super! De ton kan bewegen.',
+      wrong: 'Oei, de ton kan nog niet bewegen.'
+    })
+    .log(() => {
+      e.vm.runtime.getSpriteTargetByName('Ton').setXY(0, 0);
       e.output.startTestcase('De ton gaat naar één van de spelers');
     })
-    .wait(sprite('Ton').toReach((x, _y) => x > 60 || x < -60, 3000))
+    .wait(sprite('Ton').toReach((x, _y) => x > 60 || x < -60, 2000))
     .asTest({
       correct: 'Super! De ton kan bewegen.',
       wrong: 'Oei, de ton kan nog niet bewegen.'
@@ -153,7 +160,7 @@ function testTon(events, e) {
       sprite.setXY(sprite.x, ton.y);
       e.output.startTestcase(`De ton raakt ${touchedSprite}`);
     })
-    .wait(sprite('Ton').toTouch(() => touchedSprite, 3000))
+    .wait(sprite('Ton').toTouch(() => touchedSprite, 2000))
     .asTest({
       correct: () => `Super! ${touchedSprite} schopt tegen de ton.`,
       wrong: () => `Als de ton ${touchedSprite} raakt, moet ${touchedSprite} tegen de ton schoppen.`
@@ -161,7 +168,7 @@ function testTon(events, e) {
     .log(() => {
       e.output.startTestcase('De ton gaat naar de overkant');
     })
-    .wait(sprite('Ton').toReach((x, y) => limit(x, y), 3000))
+    .wait(sprite('Ton').toReach((x, y) => limit(x, y), 2000))
     .asTest({
       correct: 'Goed bezig! De ton weerkaatst.',
       wrong: 'De ton moet weerkaatsen.'
@@ -172,7 +179,7 @@ function testTon(events, e) {
       sprite.setXY(sprite.x, ton.y);
       e.output.startTestcase(`Ton raakt ${secondSprite}`);
     })
-    .wait(sprite('Ton').toTouch(() => secondSprite, 3000))
+    .wait(sprite('Ton').toTouch(() => secondSprite, 2000))
     .asTest({
       correct: () => `Super! ${secondSprite} schopt tegen de ton.`,
       wrong: () => `Als de ton ${secondSprite} raakt, moet ${secondSprite} tegen de ton schoppen.`
@@ -182,7 +189,7 @@ function testTon(events, e) {
     })
     .forEach(_.range(4), (ev) => {
       // Wait until we get to the next one.
-      return ev.wait(sprite('Ton').toReach((x, y) => limitSecond(x, y), 3000))
+      return ev.wait(sprite('Ton').toReach((x, y) => limitSecond(x, y), 2000))
         .asTest({
           correct: () => `Goed bezig! De ton weerkaatst naar ${touchedSprite}`,
           wrong: () => `De toen moet weerkaatsen naar ${touchedSprite}`
@@ -205,7 +212,7 @@ function testTon(events, e) {
       const sprite = e.vm.runtime.getSpriteTargetByName(touchedSprite);
       sprite.setVisible(false);
     })
-    .wait(sprite('Ton').toReach((x, y) => limitSecond(x, y), 3000))
+    .wait(sprite('Ton').toReach((x, y) => limitSecond(x, y), 2000))
     .asTest({
       correct: () => `Goed bezig! De ton raakt het doel van ${touchedSprite}.`,
       wrong: () => `De ton moet het doel van ${touchedSprite} raken.`
@@ -215,20 +222,19 @@ function testTon(events, e) {
       winner = secondSprite;
       e.output.startTestcase(`Ton gaat naar ${loser}'s Doel`);
     })
-    .wait(sprite('Ton').toTouch(() => `${loser}'s Doel`, 3000))
+    .wait(sprite('Ton').toTouch(() => `${loser}'s Doel`, 2000))
     .asTest({
       correct: () => `Goed bezig! De ton raakt het doel van ${loser}.`,
       wrong: () => `De ton moet het doel van ${loser} raken.`
     })
-    .wait(2000);
+    .wait(1000);
 }
 
 /** @param {Evaluation} e */
 function duringExecution(e) {
   e.actionTimeout = 10000;
   e.acceleration = 10;
-  e.eventAcceleration = 5;
-  e.timeAcceleration = 5;
+  e.eventAcceleration = 1;
 
   // The events are as follows:
   // 1. start an async green flag
@@ -240,13 +246,12 @@ function duringExecution(e) {
     .track('Rob')
     .track('Roy')
     .greenFlag(false);
-  const waitEvent = events.wait(5000);
   const spriteEvents = events
     .wait(10) // Ensure the green flag is done.
     .pipe(ev => testSprite(ev, { name: 'Roy', up: 'q', down: 'w' }, e))
     .pipe(ev => testSprite(ev, { name: 'Rob', up: 'j', down: 'n' }, e));
 
-  waitEvent.join([spriteEvents])
+  events.join([spriteEvents])
     .pipe(ev => testTon(ev, e))
     .end();
 }

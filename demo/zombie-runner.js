@@ -17,7 +17,7 @@ const fs = require('fs');
 async function run(configuration = {}) {
   const config = { ...configuration, ...defaultConfig };
   const sourceFile = path.resolve(__dirname, './Zombiebal-solution.sb3');
-  const templateFile = path.resolve(__dirname, './Zombiebal-template.sb3');
+  const templateFile = path.resolve(__dirname, './Zombiebal-solution.sb3');
   const planFile = path.resolve(__dirname, `./zombiebal.js`);
 
   const results = [];
