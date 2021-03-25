@@ -1,22 +1,19 @@
 /**
- * @parem {string} sprite
+ * @param {string} sprite
+ * @param {Project} template
+ * @param {Project} submission
  * @param {ExpectLevel} l
  */
 function checkStartCarConditions(sprite, template, submission, l) {
   const fromTemplate = template.sprite(sprite);
   const fromSubmission = submission.sprite(sprite);
+  l.expect(fromSubmission).toNotBe(null);
   // Check hat
   const templateStartIndex = fromTemplate.blocks.findIndex(b => b.opcode === 'event_whenflagclicked');
   const submissionStartIndex = fromSubmission.blocks.findIndex(b => b.opcode === 'event_whenflagclicked');
   const templateBlocks = fromTemplate.blocks.slice(templateStartIndex, templateStartIndex + 6);
   const submissionBlocks = fromTemplate.blocks.slice(submissionStartIndex, submissionStartIndex + 6);
   l.expect(submissionBlocks).toBe(templateBlocks);
-  // Check function definition
-  const templateStartIndex2 = fromTemplate.blocks.findIndex(b => b.opcode === 'procedures_definition');
-  const submissionStartIndex2 = fromSubmission.blocks.findIndex(b => b.opcode === 'procedures_definition');
-  const templateBlocks2 = fromTemplate.blocks.slice(templateStartIndex2, templateStartIndex2 + 6);
-  const submissionBlocks2 = fromTemplate.blocks.slice(submissionStartIndex2, submissionStartIndex2 + 6);
-  l.expect(submissionBlocks2).toBe(templateBlocks2);
 }
 
 /**
@@ -34,31 +31,39 @@ function beforeExecution(template, submission, e) {
       checkStartCarConditions('Mini Blauw', template, submission, l);
     });
     l.test('Boom', l => {
-      l.expect(submission.sprite('Boom').blocks).toBe(template.sprite('Boom').blocks);
+      l.expect(submission.sprite('Boom')).toNotBe(null);
+      l.expect(submission.sprite('Boom')?.blocks).toBe(template.sprite('Boom').blocks);
     });
     l.test('Rots', l => {
-      l.expect(submission.sprite('Rots').blocks).toBe(template.sprite('Rots').blocks);
+      l.expect(submission.sprite('Rots')).toNotBe(null);
+      l.expect(submission.sprite('Rots')?.blocks).toBe(template.sprite('Rots').blocks);
     });
     l.test('Bliksem', l => {
+      l.expect(submission.sprite('Bliksem')).toNotBe(null);
       const fromTemplate = template.sprite('Bliksem');
       const fromSubmission = submission.sprite('Bliksem');
+      l.expect(fromSubmission).toNotBe(null);
       // Check hat
       const templateStartIndex = fromTemplate.blocks.findIndex(b => b.opcode === 'event_whenflagclicked');
-      const submissionStartIndex = fromSubmission.blocks.findIndex(b => b.opcode === 'event_whenflagclicked');
+      const submissionStartIndex = fromSubmission?.blocks?.findIndex(b => b.opcode === 'event_whenflagclicked');
       const templateBlocks = fromTemplate.blocks.slice(templateStartIndex, templateStartIndex + 4);
       const submissionBlocks = fromTemplate.blocks.slice(submissionStartIndex, submissionStartIndex + 4);
       l.expect(submissionBlocks).toBe(templateBlocks);
     });
     l.test('Vat', l => {
+      l.expect(submission.sprite('Vat')).toNotBe(null);
       l.expect(submission.sprite('Vat').blocks).toBe(template.sprite('Vat').blocks);
     });
     l.test('Eindmeet', l => {
+      l.expect(submission.sprite('Eindmeet')).toNotBe(null);
       l.expect(submission.sprite('Eindmeet').blocks).toBe(template.sprite('Eindmeet').blocks);
     });
     l.test('Schaap', l => {
+      l.expect(submission.sprite('Schaap')).toNotBe(null);
       l.expect(submission.sprite('Schaap').blocks).toBe(template.sprite('Schaap').blocks);
     });
     l.test('Gras', l => {
+      l.expect(submission.sprite('Gras')).toNotBe(null);
       l.expect(submission.sprite('Gras').blocks).toBe(template.sprite('Gras').blocks);
     });
   });
@@ -108,8 +113,8 @@ function testCar(e, event, keys, name) {
         });
         const before = event.previousFrame.getSprite(name);
         const after = event.nextFrame.getSprite(name);
-        l.expect(after.x).toBe(before.x);
-        l.expect(after.y < before.y).toBe(true);
+        l.expect(after.y < before.y && numericEquals(after.x, before.x))
+          .toBe(true);
       });
     })
     .useKey(keys.up, 500)
@@ -120,8 +125,8 @@ function testCar(e, event, keys, name) {
         });
         const before = event.previousFrame.getSprite(name);
         const after = event.nextFrame.getSprite(name);
-        l.expect(after.x).toBe(before.x);
-        l.expect(after.y > before.y).toBe(true);
+        l.expect(after.y > before.y && numericEquals(after.x, before.x))
+          .toBe(true);
       });
     })
     .useKey(keys.right, 500)
@@ -132,8 +137,8 @@ function testCar(e, event, keys, name) {
         });
         const before = event.previousFrame.getSprite(name);
         const after = event.nextFrame.getSprite(name);
-        l.expect(after.y).toBe(before.y);
-        l.expect(after.x > before.x).toBe(true);
+        l.expect(after.x > before.x && numericEquals(after.y, before.y))
+          .toBe(true);
       });
     })
     .useKey(keys.left, 500)
@@ -144,13 +149,12 @@ function testCar(e, event, keys, name) {
         });
         const before = event.previousFrame.getSprite(name);
         const after = event.nextFrame.getSprite(name);
-        l.expect(after.y).toBe(before.y);
-        l.expect(after.x < before.x).toBe(true);
+        l.expect(after.x < before.x && numericEquals(after.y, before.y))
+          .toBe(true);
       });
     })
     .log(() => {
       start = e.context.timestamp();
-      console.log('Start is now', start);
     })
     .useKey(keys.down, true)
     .wait(sprite(name).toReach((_x, y) => y < 90))
@@ -190,23 +194,38 @@ function testCar(e, event, keys, name) {
     .wait(sprite(name).toReach((_x, y) => y < -130))
     .useKey(keys.down, false)
     .useKey(keys.right, true)
-    .wait(sprite(name).toReach((x, _y) => x >= 170))
+    .wait(sprite(name).toReach((x, _y) => x >= 195))
     .useKey(keys.right, false)
     .useKey(keys.up, true)
-    .wait(sprite(name).toReach((_x, y) => y >= -10))
+    .wait(sprite(name).toTouch('Boom'))
     .useKey(keys.up, false)
-    .useKey(keys.left, true)
-    .wait(sprite(name).toReach((x, _y) => x <= 15))
-    .useKey(keys.left, false)
-    .useKey(keys.up, true)
-    .wait(sprite(name).toReach((_x, y) => y >= 100))
-    .useKey(keys.up, false)
-    .useKey(keys.right, true)
-    .wait(sprite(name).toReach((x, _y) => x >= 30))
-    .useKey(keys.right, false)
-    .useKey(keys.up, true)
-    .wait(sprite(name).toReach((_x, y) => y >= 120))
-    .useKey(keys.up, false)
+    .wait(3000) // Should be 3s
+    .log(() => {
+      const sprite = e.vm.runtime.getSpriteTargetByName(name);
+      // Check that we waited ~3s, and then moved -5 down.
+      
+      e.test(`${name} moet 3s wachten bij het botsen met de boom`, l => {
+        const touchFrame = e.log.events.list
+          .find(ev => ev.type === 'waitForSpriteTouch' && ev.data.targets[0] === 'Boom' && ev.data.sprite === name)
+          .nextFrame;
+        const touchSprite = touchFrame.getSprite(name);
+        const moveFrames = e.log.frames.filter(fr => fr.time > touchFrame.time && fr.block === `update_${name}`);
+        const firstMoved = moveFrames.find(fr => {
+          const sp = fr.getSprite(name);
+          return sp.x !== touchSprite.x || sp.y !== touchSprite.y;
+        });
+        const time = firstMoved.time - touchFrame.time;
+        const expected = e.context.accelerateEvent(3000);
+        l.expect(expected - (expected / 2) <= time && time <= expected + (expected / 2))
+          .toBe(true);
+      });
+      e.test(`${name} moet achteruit bewegen na het botsen met de boom`, l => {
+        l.expect(sprite.isTouchingSprite('Boom'))
+          .toBe(false);
+      });
+      // Move along...
+      sprite.setXY(125, 130);
+    })
     .useKey(keys.right, true)
     .log(() => {
       start = e.context.timestamp();
@@ -225,33 +244,43 @@ function testCar(e, event, keys, name) {
     // Reset to start position
     .greenFlag(false)
     // Drive into rock
-    .useKey(keys.down, true)
-    .wait(sprite(name).toReach((_x, y) => y < 70))
-    .useKey(keys.right, true)
-    .wait(sprite(name).toReach((x, y) => x >= -105 && y <= 25))
-    .useKey(keys.right, false)
-    .wait(sprite(name).toReach((_x, y) => y <= -110))
-    .useKey(keys.down, false)
+    // Set the car to before the rock.
+    .log(() => {
+      const sprite = e.vm.runtime.getSpriteTargetByName(name);
+      sprite.setXY(10, -110);
+    })
     .useKey(keys.right, true)
     .wait(sprite(name).toTouch('Rots'))
     .useKey(keys.right, false)
-    .wait(500)
+    .wait(1000) // Should be 1000 in the future
     .log(() => {
+      e.test(`${name} blijft een seconde staan na botsing met de rots`, l => {
+        // Check that the car waits 1000ms before moving.
+        const touchFrame = e.log.events.list
+          .find(ev => ev.type === 'waitForSpriteTouch' && ev.data.targets[0] === 'Rots' && ev.data.sprite === name)
+          .nextFrame;
+        const touchSprite = touchFrame.getSprite(name);
+        const moveFrames = e.log.frames.filter(fr => fr.time > touchFrame.time && fr.block === `update_${name}`);
+        const firstMoved = moveFrames.find(fr => {
+          const sp = fr.getSprite(name);
+          return sp.x !== touchSprite.x || sp.y !== touchSprite.y;
+        });
+        const time = firstMoved.time - touchFrame.time;
+        const expected = e.context.accelerateEvent(1000);
+        // Check that we are within range.
+        l.expect(expected - (expected / 2) <= time && time <= expected + (expected / 2))
+          .toBe(true);
+      });
       e.test(`${name} gaat terug naar start bij botsing met rots`, l => {
         const sprite = e.vm.runtime.getSpriteTargetByName(name);
         l.expect(sprite.x > -200 && sprite.x < -150 && sprite.y > 150)
           .toBe(true);
       });
     })
-    // Get to lightning
-    .useKey(keys.down, true)
-    // Go down until we are off the gras.
-    .wait(sprite(name).toReach((_x, y) => y < 70))
-    .useKey(keys.right, true)
-    .wait(sprite(name).toReach((x, y) => x >= -105 && y <= 25))
-    .useKey(keys.right, false)
-    .wait(sprite(name).toReach((_x, y) => y <= -70))
-    .useKey(keys.down, false)
+    .log(() => {
+      const sprite = e.vm.runtime.getSpriteTargetByName(name);
+      sprite.setXY(-100, -60);
+    })
     .useKey(keys.right, true)
     .log(() => {
       start = e.context.timestamp();
@@ -294,13 +323,12 @@ function testCar(e, event, keys, name) {
     .useKey(keys.up, false)
     .wait(1000) // Give it some time
     .log(() => {
-      // e.test(`${name} gaat naar willekeurige posities na het aanraken van de bliksem`, l => {
-      //   const frames = e.log.frames.filter(ev => ev.time >= start && ev.block === `update_${name}`);
-      //   const positions = e.log.getSpritePositions(name, frames);
-      //   l.expect(positions.length >= 5)
-      //     .toBe(true);
-      // });
-      // TODO: how
+      e.test(`${name} gaat naar willekeurige posities na het aanraken van de bliksem`, l => {
+        const frames = e.log.frames.filter(ev => ev.time >= start && ev.block === `update_${name}`);
+        const positions = e.log.getSpritePositions(name, frames);
+        l.expect(positions.length >= 2)
+          .toBe(true);
+      });
     });
 }
 
