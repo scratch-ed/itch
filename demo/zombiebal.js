@@ -48,8 +48,9 @@ function testSprite(events, data, e) {
           })
           .toBe(true);
       });
+      const realSprite = e.vm.runtime.getSpriteTargetByName(name);
+      realSprite.setDirection(90);
     })
-
     .useKey(up)
     .log(() => {
       const sprite = e.log.current.getSprite(name);
@@ -81,6 +82,8 @@ function testSprite(events, data, e) {
         x: sprite.x,
         y: sprite.y,
       };
+      const realSprite = e.vm.runtime.getSpriteTargetByName(name);
+      realSprite.setDirection(90);
     })
     .useKey(down)
     .log(() => {
