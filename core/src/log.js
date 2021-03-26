@@ -88,6 +88,10 @@ export class LoggedSprite {
   hasBlock(opcode) {
     return Object.values(this.blocks).some(block => block.opcode === opcode);
   }
+  
+  blockList() {
+    return Object.values(this.blocks);
+  }
 
   /**
    * Check if this sprite touches another sprite.

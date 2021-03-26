@@ -7,13 +7,17 @@
 function checkStartCarConditions(sprite, template, submission, l) {
   const fromTemplate = template.sprite(sprite);
   const fromSubmission = submission.sprite(sprite);
-  l.expect(fromSubmission).toNotBe(null);
+  l.expect(fromSubmission)
+    .fatal()
+    .toNotBe(null);
   // Check hat
   const templateStartIndex = fromTemplate.blocks.findIndex(b => b.opcode === 'event_whenflagclicked');
   const submissionStartIndex = fromSubmission.blocks.findIndex(b => b.opcode === 'event_whenflagclicked');
   const templateBlocks = fromTemplate.blocks.slice(templateStartIndex, templateStartIndex + 6);
   const submissionBlocks = fromTemplate.blocks.slice(submissionStartIndex, submissionStartIndex + 6);
-  l.expect(submissionBlocks).toBe(templateBlocks);
+  l.expect(submissionBlocks)
+    .fatal()
+    .toBe(templateBlocks);
 }
 
 /**
@@ -31,18 +35,26 @@ function beforeExecution(template, submission, e) {
       checkStartCarConditions('Mini Blauw', template, submission, l);
     });
     l.test('Boom', l => {
-      l.expect(submission.sprite('Boom')).toNotBe(null);
+      l.expect(submission.sprite('Boom'))
+        .fatal()
+        .toNotBe(null);
       l.expect(submission.sprite('Boom')?.blocks).toBe(template.sprite('Boom').blocks);
     });
     l.test('Rots', l => {
-      l.expect(submission.sprite('Rots')).toNotBe(null);
+      l.expect(submission.sprite('Rots'))
+        .fatal()
+        .toNotBe(null);
       l.expect(submission.sprite('Rots')?.blocks).toBe(template.sprite('Rots').blocks);
     });
     l.test('Bliksem', l => {
-      l.expect(submission.sprite('Bliksem')).toNotBe(null);
+      l.expect(submission.sprite('Bliksem'))
+        .fatal()
+        .toNotBe(null);
       const fromTemplate = template.sprite('Bliksem');
       const fromSubmission = submission.sprite('Bliksem');
-      l.expect(fromSubmission).toNotBe(null);
+      l.expect(fromSubmission)
+        .fatal()
+        .toNotBe(null);
       // Check hat
       const templateStartIndex = fromTemplate.blocks.findIndex(b => b.opcode === 'event_whenflagclicked');
       const submissionStartIndex = fromSubmission?.blocks?.findIndex(b => b.opcode === 'event_whenflagclicked');
@@ -51,19 +63,27 @@ function beforeExecution(template, submission, e) {
       l.expect(submissionBlocks).toBe(templateBlocks);
     });
     l.test('Vat', l => {
-      l.expect(submission.sprite('Vat')).toNotBe(null);
+      l.expect(submission.sprite('Vat'))
+        .fatal()
+        .toNotBe(null);
       l.expect(submission.sprite('Vat').blocks).toBe(template.sprite('Vat').blocks);
     });
     l.test('Eindmeet', l => {
-      l.expect(submission.sprite('Eindmeet')).toNotBe(null);
+      l.expect(submission.sprite('Eindmeet'))
+        .fatal()
+        .toNotBe(null);
       l.expect(submission.sprite('Eindmeet').blocks).toBe(template.sprite('Eindmeet').blocks);
     });
     l.test('Schaap', l => {
-      l.expect(submission.sprite('Schaap')).toNotBe(null);
+      l.expect(submission.sprite('Schaap'))
+        .fatal()
+        .toNotBe(null);
       l.expect(submission.sprite('Schaap').blocks).toBe(template.sprite('Schaap').blocks);
     });
     l.test('Gras', l => {
-      l.expect(submission.sprite('Gras')).toNotBe(null);
+      l.expect(submission.sprite('Gras'))
+        .fatal()
+        .toNotBe(null);
       l.expect(submission.sprite('Gras').blocks).toBe(template.sprite('Gras').blocks);
     });
   });
@@ -93,12 +113,28 @@ function testCar(e, event, keys, name) {
   // Save a time for later user.
   let start = null;
   let lightningPosition = null;
+  let normalSpeed = null;
   // Go down, up, right, left during one second.
   return event
     .track(name)
     .log(() => {
       e.output.startContext(`Testen voor ${name}`);
       const sprite = e.vm.runtime.getSpriteTargetByName('Bliksem');
+      const car = e.log.current.getSprite(name);
+      
+      // Check that we have a loop.
+      e.test(`Herhalende lus gebruikt bij ${name}`, (l) => {
+        const blocks = car.blockList().filter(bl => bl.opcode === 'control_repeat_until');
+        const found = blocks.some(block => {
+          // The child should be a 'sensing_touchingobject'
+          const child = car.blockList().find(bl => bl.opcode === 'sensing_touchingobject' && bl.parent === block.id);
+          return car.blockList().find(bl => bl.opcode === 'sensing_touchingobjectmenu'
+            && bl.fields.TOUCHINGOBJECTMENU?.value === 'Eindmeet' && bl.parent === child.id) !== undefined;
+        });
+        l.expect(found)
+          .toBe(true);
+      });
+      
       lightningPosition = {
         x: sprite.x,
         y: sprite.y
@@ -160,42 +196,93 @@ function testCar(e, event, keys, name) {
     .wait(sprite(name).toReach((_x, y) => y < 90))
     // Go until we touch the grass
     .wait(sprite(name).toTouch('Gras'))
-    // Go further until we are off the grass.
-    .wait(sprite(name).toNotTouch('Gras'))
+    .useKey(keys.down, false)
     .log(() => {
-      e.test(`${name} rijdt trager op het gras`, l => {
-        // Get the frame from when we started to go down.
-        const normalStartFrame = e.log.events.list
-          .find(ev => ev.time >= start && ev.type === 'useKey' && ev.data.key === keys.down)
-          .previousFrame;
-        const touchGrassFrame = e.log.events.list
-          .find(ev => ev.time > start && ev.type === 'waitForSpriteTouch' && ev.data.sprite === name)
-          .nextFrame;
-        const offGrassFrame = e.log.events.list
-          .find(ev => ev.time > start && ev.type === 'waitForSpriteNotTouch' && ev.data.sprite === name)
-          .nextFrame;
+      // Save the speed off the grass.
+      const normalStartFrame = e.log.events.list
+        .find(ev => ev.time >= start && ev.type === 'useKey' && ev.data.key === keys.down)
+        .previousFrame;
+      const touchGrassFrame = e.log.events.list
+        .find(ev => ev.time > start && ev.type === 'waitForSpriteTouch' && ev.data.sprite === name)
+        .nextFrame;
 
-        const normalStartSprite = normalStartFrame.getSprite(name);
-        const switchSprite = touchGrassFrame.getSprite(name);
-        const grassEndSprite = offGrassFrame.getSprite(name);
+      const normalStartSprite = normalStartFrame.getSprite(name);
+      const switchSprite = touchGrassFrame.getSprite(name);
 
-        const normalDistance = Math.abs(switchSprite.y - normalStartSprite.y);
-        const normalTime = (touchGrassFrame.time - normalStartFrame.time) / e.acceleration;
+      const normalDistance = Math.abs(switchSprite.y - normalStartSprite.y);
+      const normalTime = (touchGrassFrame.time - normalStartFrame.time) / e.acceleration;
+      
+      normalSpeed = normalDistance / normalTime;
+      
+      // Move the car onto the grass.
+      const sprite = e.vm.runtime.getSpriteTargetByName(name);
+      sprite.setXY(-200, -20);
+    })
+    .useKey(keys.down, 500)
+    .log(() => {
+      e.test(`${name} rijdt omlaag trager op het gras`, l => {
+        const event = e.log.events.list.find(ev => {
+          return ev.time >= start && ev.type === 'useKey' && ev.data.key === keys.down;
+        });
+        const before = event.previousFrame.getSprite(name);
+        const after = event.nextFrame.getSprite(name);
+        const grassDistance = Math.abs(after.y - before.y);
+        const grassTime = (after.time - before.time) / e.acceleration;
 
-        const grassDistance = Math.abs(grassEndSprite.y - switchSprite.y);
-        const grassTime = (offGrassFrame.time - touchGrassFrame.time) / e.acceleration;
-
-        const normalSpeed = normalDistance / normalTime;
         const grassSpeed = grassDistance / grassTime;
         l.expect(normalSpeed > grassSpeed).toBe(true);
       });
     })
-    // Drive the rest of the track.
-    .wait(sprite(name).toReach((_x, y) => y < -130))
-    .useKey(keys.down, false)
-    .useKey(keys.right, true)
-    .wait(sprite(name).toReach((x, _y) => x >= 195))
-    .useKey(keys.right, false)
+    .useKey(keys.up, 500)
+    .log(() => {
+      e.test(`${name} rijdt omhoog trager op het gras`, l => {
+        const event = e.log.events.list.find(ev => {
+          return ev.time >= start && ev.type === 'useKey' && ev.data.key === keys.up;
+        });
+        const before = event.previousFrame.getSprite(name);
+        const after = event.nextFrame.getSprite(name);
+        const grassDistance = Math.abs(after.y - before.y);
+        const grassTime = (after.time - before.time) / e.acceleration;
+
+        const grassSpeed = grassDistance / grassTime;
+        l.expect(normalSpeed > grassSpeed).toBe(true);
+      });
+    })
+    .useKey(keys.right, 500)
+    .log(() => {
+      e.test(`${name} rijdt naar rechts trager op het gras`, l => {
+        const event = e.log.events.list.find(ev => {
+          return ev.time >= start && ev.type === 'useKey' && ev.data.key === keys.right;
+        });
+        const before = event.previousFrame.getSprite(name);
+        const after = event.nextFrame.getSprite(name);
+        const grassDistance = Math.abs(after.y - before.y);
+        const grassTime = (after.time - before.time) / e.acceleration;
+
+        const grassSpeed = grassDistance / grassTime;
+        l.expect(normalSpeed > grassSpeed).toBe(true);
+      });
+    })
+    .useKey(keys.left, 500)
+    .log(() => {
+      e.test(`${name} rijdt naar links trager op het gras`, l => {
+        const event = e.log.events.list.find(ev => {
+          return ev.time >= start && ev.type === 'useKey' && ev.data.key === keys.left;
+        });
+        const before = event.previousFrame.getSprite(name);
+        const after = event.nextFrame.getSprite(name);
+        const grassDistance = Math.abs(after.y - before.y);
+        const grassTime = (after.time - before.time) / e.acceleration;
+
+        const grassSpeed = grassDistance / grassTime;
+        l.expect(normalSpeed > grassSpeed).toBe(true);
+      });
+    })
+    // Move to below the tree.$
+    .log(() => {
+      const sprite = e.vm.runtime.getSpriteTargetByName(name);
+      sprite.setXY(190, -55);
+    })
     .useKey(keys.up, true)
     .wait(sprite(name).toTouch('Boom'))
     .useKey(keys.up, false)
