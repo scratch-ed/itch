@@ -201,7 +201,7 @@ function testTon(events, e) {
         .wait(sprite('Ton').toReach((x, y) => limitSecond(x, y), 2000))
         .asTest({
           correct: () => `Goed bezig! De ton weerkaatst naar ${touchedSprite}`,
-          wrong: () => `De toen moet weerkaatsen naar ${touchedSprite}`,
+          wrong: () => `De ton moet weerkaatsen naar ${touchedSprite}`,
         })
         .log(() => {
           const ton = e.vm.runtime.getSpriteTargetByName('Ton');
