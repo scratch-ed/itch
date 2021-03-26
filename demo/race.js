@@ -323,7 +323,7 @@ function testCar(e, event, keys, name) {
     .useKey(keys.up, false)
     .wait(1000) // Give it some time
     .log(() => {
-      e.test(`${name} gaat naar willekeurige posities na het aanraken van de bliksem`, l => {
+      e.test(`${name} gaat naar willekeurige posities na het aanraken van de vat`, l => {
         const frames = e.log.frames.filter(ev => ev.time >= start && ev.block === `update_${name}`);
         const positions = e.log.getSpritePositions(name, frames);
         l.expect(positions.length >= 2)
