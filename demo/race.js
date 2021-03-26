@@ -1,5 +1,20 @@
 /**
  * @param {string} sprite
+ * @param {Project} submission
+ * @param {ExpectLevel} l
+ */
+function checkExistence(l, submission, sprite) {
+  l.expect(submission.sprite(sprite))
+    .fatal()
+    .with({
+      correct: `Top! Je hebt de ${sprite} niet verwijderd.`,
+      wrong: `Oops, je hebt de ${sprite} verwijderd... Je gaat opnieuw moeten beginnen.`
+    })
+    .toNotBe(null);
+}
+
+/**
+ * @param {string} sprite
  * @param {Project} template
  * @param {Project} submission
  * @param {ExpectLevel} l
@@ -7,9 +22,7 @@
 function checkStartCarConditions(sprite, template, submission, l) {
   const fromTemplate = template.sprite(sprite);
   const fromSubmission = submission.sprite(sprite);
-  l.expect(fromSubmission)
-    .fatal()
-    .toNotBe(null);
+  checkExistence(l, submission, sprite);
   // Check hat
   const templateStartIndex = fromTemplate.blocks.findIndex(b => b.opcode === 'event_whenflagclicked');
   const submissionStartIndex = fromSubmission.blocks.findIndex(b => b.opcode === 'event_whenflagclicked');
@@ -17,6 +30,10 @@ function checkStartCarConditions(sprite, template, submission, l) {
   const submissionBlocks = fromTemplate.blocks.slice(submissionStartIndex, submissionStartIndex + 6);
   l.expect(submissionBlocks)
     .fatal()
+    .with({
+      correct: `Joehoe! De oorspronkelijke code bij de ${sprite} staat er nog!`,
+      wrong: `Oei, er is iets misgelopen. Waar zijn de klaargezette blokken bij de ${sprite} naartoe?`
+    })
     .toBe(templateBlocks);
 }
 
@@ -34,58 +51,29 @@ function beforeExecution(template, submission, e) {
     l.test('Mini Blauw', l => {
       checkStartCarConditions('Mini Blauw', template, submission, l);
     });
-    l.test('Boom', l => {
-      l.expect(submission.sprite('Boom'))
-        .fatal()
-        .toNotBe(null);
-      l.expect(submission.sprite('Boom')?.blocks).toBe(template.sprite('Boom').blocks);
-    });
-    l.test('Rots', l => {
-      l.expect(submission.sprite('Rots'))
-        .fatal()
-        .toNotBe(null);
-      l.expect(submission.sprite('Rots')?.blocks).toBe(template.sprite('Rots').blocks);
-    });
     l.test('Bliksem', l => {
-      l.expect(submission.sprite('Bliksem'))
-        .fatal()
-        .toNotBe(null);
+      checkExistence(l, submission, 'Bliksem');
       const fromTemplate = template.sprite('Bliksem');
       const fromSubmission = submission.sprite('Bliksem');
-      l.expect(fromSubmission)
-        .fatal()
-        .toNotBe(null);
       // Check hat
       const templateStartIndex = fromTemplate.blocks.findIndex(b => b.opcode === 'event_whenflagclicked');
       const submissionStartIndex = fromSubmission?.blocks?.findIndex(b => b.opcode === 'event_whenflagclicked');
       const templateBlocks = fromTemplate.blocks.slice(templateStartIndex, templateStartIndex + 4);
       const submissionBlocks = fromTemplate.blocks.slice(submissionStartIndex, submissionStartIndex + 4);
-      l.expect(submissionBlocks).toBe(templateBlocks);
+      l.expect(submissionBlocks)
+        .with({
+          correct: `Joehoe! De oorspronkelijke code bij de Bliksem staat er nog!`,
+          wrong: `Oei, er is iets misgelopen. Waar zijn de klaargezette blokken bij de Bliksem naartoe?`
+        })
+        .toBe(templateBlocks);
     });
-    l.test('Vat', l => {
-      l.expect(submission.sprite('Vat'))
-        .fatal()
-        .toNotBe(null);
-      l.expect(submission.sprite('Vat').blocks).toBe(template.sprite('Vat').blocks);
-    });
-    l.test('Eindmeet', l => {
-      l.expect(submission.sprite('Eindmeet'))
-        .fatal()
-        .toNotBe(null);
-      l.expect(submission.sprite('Eindmeet').blocks).toBe(template.sprite('Eindmeet').blocks);
-    });
-    l.test('Schaap', l => {
-      l.expect(submission.sprite('Schaap'))
-        .fatal()
-        .toNotBe(null);
-      l.expect(submission.sprite('Schaap').blocks).toBe(template.sprite('Schaap').blocks);
-    });
-    l.test('Gras', l => {
-      l.expect(submission.sprite('Gras'))
-        .fatal()
-        .toNotBe(null);
-      l.expect(submission.sprite('Gras').blocks).toBe(template.sprite('Gras').blocks);
-    });
+    const others = ['Vat', 'Eindmeet', 'Schaap', 'Gras', 'Rots', 'Boom'];
+    others.forEach(sprite => {
+      l.test(sprite, l => {
+        checkExistence(l, submission, sprite);
+        l.expect(submission.sprite(sprite).blocks).toBe(template.sprite(sprite).blocks);
+      });
+    })
   });
 }
 
@@ -103,13 +91,28 @@ const BLUE = {
   right: 'd'
 };
 
+const YELLOW_NAME = {
+  up: 'pijltje omhoog',
+  down: 'pijltje omlaag',
+  left: 'pijltje naar links',
+  right: 'pijltje naar rechts'
+};
+
+const BLUE_NAME = {
+  up: 'letter z',
+  down: 'letter w',
+  left: 'letter q',
+  right: 'letter d'
+};
+
 /**
  * @param {ScheduledEvent} event
  * @param {Evaluation} e
  * @param {string} name
  * @param {{down:string,up:string,left:string,right:string}} keys
+ * @param {{down:string,up:string,left:string,right:string}} keyNames
  * */
-function testCar(e, event, keys, name) {
+function testCar(e, event, keys, name, keyNames) {
   // Save a time for later user.
   let start = null;
   let lightningPosition = null;
@@ -121,7 +124,7 @@ function testCar(e, event, keys, name) {
       e.output.startContext(`Testen voor ${name}`);
       const sprite = e.vm.runtime.getSpriteTargetByName('Bliksem');
       const car = e.log.current.getSprite(name);
-      
+
       // Check that we have a loop.
       e.test(`Herhalende lus gebruikt bij ${name}`, (l) => {
         const blocks = car.blockList().filter(bl => bl.opcode === 'control_repeat_until');
@@ -132,9 +135,13 @@ function testCar(e, event, keys, name) {
             && bl.fields.TOUCHINGOBJECTMENU?.value === 'Eindmeet' && bl.parent === child.id) !== undefined;
         });
         l.expect(found)
+          .with({
+            correct: `Super! ${name} kan blijven bewegen tot hij de eindmeet raakt.`,
+            wrong: `De ${name} kan nog niet blijven bewegen tot hij de eindmeet raakt.`
+          })
           .toBe(true);
       });
-      
+
       lightningPosition = {
         x: sprite.x,
         y: sprite.y
@@ -150,6 +157,10 @@ function testCar(e, event, keys, name) {
         const before = event.previousFrame.getSprite(name);
         const after = event.nextFrame.getSprite(name);
         l.expect(after.y < before.y && numericEquals(after.x, before.x))
+          .with({
+            correct: `Goed zo! ${name} kan naar omlaag bewegen.`,
+            wrong: `Als er op ${keyNames.down} wordt gedrukt, dan moet ${name} naar beneden richten en stappen nemen.`
+          })
           .toBe(true);
       });
     })
@@ -162,6 +173,10 @@ function testCar(e, event, keys, name) {
         const before = event.previousFrame.getSprite(name);
         const after = event.nextFrame.getSprite(name);
         l.expect(after.y > before.y && numericEquals(after.x, before.x))
+          .with({
+            correct: `Goed zo! ${name} kan naar omhoog bewegen.`,
+            wrong: `Als er op ${keyNames.up} wordt gedrukt, dan moet ${name} naar boven richten en stappen nemen.`
+          })
           .toBe(true);
       });
     })
@@ -174,6 +189,10 @@ function testCar(e, event, keys, name) {
         const before = event.previousFrame.getSprite(name);
         const after = event.nextFrame.getSprite(name);
         l.expect(after.x > before.x && numericEquals(after.y, before.y))
+          .with({
+            correct: `Goed zo! ${name} kan naar rechts bewegen.`,
+            wrong: `Als er op ${keyNames.right} wordt gedrukt, dan moet ${name} naar rechts richten en stappen nemen.`
+          })
           .toBe(true);
       });
     })
@@ -186,6 +205,10 @@ function testCar(e, event, keys, name) {
         const before = event.previousFrame.getSprite(name);
         const after = event.nextFrame.getSprite(name);
         l.expect(after.x < before.x && numericEquals(after.y, before.y))
+          .with({
+            correct: `Goed zo! ${name} kan naar links bewegen.`,
+            wrong: `Als er op ${keyNames.left} wordt gedrukt, dan moet ${name} naar links richten en stappen nemen.`
+          })
           .toBe(true);
       });
     })
@@ -211,9 +234,9 @@ function testCar(e, event, keys, name) {
 
       const normalDistance = Math.abs(switchSprite.y - normalStartSprite.y);
       const normalTime = (touchGrassFrame.time - normalStartFrame.time) / e.acceleration;
-      
+
       normalSpeed = normalDistance / normalTime;
-      
+
       // Move the car onto the grass.
       const sprite = e.vm.runtime.getSpriteTargetByName(name);
       sprite.setXY(-200, -20);
@@ -230,7 +253,12 @@ function testCar(e, event, keys, name) {
         const grassTime = (after.time - before.time) / e.acceleration;
 
         const grassSpeed = grassDistance / grassTime;
-        l.expect(normalSpeed > grassSpeed).toBe(true);
+        l.expect(normalSpeed > grassSpeed)
+          .with({
+            correct: `Super, je ${name} beweegt trager wanneer hij omlaag over het gras rijdt.`,
+            wrong: `Je ${name} rijdt niet trager omlaag op het gras. Als de gele/blauwe auto over het gras rijdt, dan neemt hij 1 stap, anders neemt hij 3 stappen.`
+          })
+          .toBe(true);
       });
     })
     .useKey(keys.up, 500)
@@ -245,7 +273,12 @@ function testCar(e, event, keys, name) {
         const grassTime = (after.time - before.time) / e.acceleration;
 
         const grassSpeed = grassDistance / grassTime;
-        l.expect(normalSpeed > grassSpeed).toBe(true);
+        l.expect(normalSpeed > grassSpeed)
+          .with({
+            correct: `Super, je ${name} beweegt trager wanneer hij omhoog over het gras rijdt.`,
+            wrong: `Je ${name} rijdt niet trager omhoog op het gras. Als de gele/blauwe auto over het gras rijdt, dan neemt hij 1 stap, anders neemt hij 3 stappen.`
+          })
+          .toBe(true);
       });
     })
     .useKey(keys.right, 500)
@@ -260,7 +293,12 @@ function testCar(e, event, keys, name) {
         const grassTime = (after.time - before.time) / e.acceleration;
 
         const grassSpeed = grassDistance / grassTime;
-        l.expect(normalSpeed > grassSpeed).toBe(true);
+        l.expect(normalSpeed > grassSpeed)
+          .with({
+            correct: `Super, je ${name} beweegt trager wanneer hij naar rechts over het gras rijdt.`,
+            wrong: `Je ${name} rijdt niet trager naar rechts op het gras. Als de gele/blauwe auto over het gras rijdt, dan neemt hij 1 stap, anders neemt hij 3 stappen.`
+          })
+          .toBe(true);
       });
     })
     .useKey(keys.left, 500)
@@ -275,7 +313,12 @@ function testCar(e, event, keys, name) {
         const grassTime = (after.time - before.time) / e.acceleration;
 
         const grassSpeed = grassDistance / grassTime;
-        l.expect(normalSpeed > grassSpeed).toBe(true);
+        l.expect(normalSpeed > grassSpeed)
+          .with({
+            correct: `Super, je ${name} beweegt trager wanneer hij naar links over het gras rijdt.`,
+            wrong: `Je ${name} rijdt niet trager naar links op het gras. Als de gele/blauwe auto over het gras rijdt, dan neemt hij 1 stap, anders neemt hij 3 stappen.`
+          })
+          .toBe(true);
       });
     })
     // Move to below the tree.$
@@ -290,7 +333,7 @@ function testCar(e, event, keys, name) {
     .log(() => {
       const sprite = e.vm.runtime.getSpriteTargetByName(name);
       // Check that we waited ~3s, and then moved -5 down.
-      
+
       e.test(`${name} moet 3s wachten bij het botsen met de boom`, l => {
         const touchFrame = e.log.events.list
           .find(ev => ev.type === 'waitForSpriteTouch' && ev.data.targets[0] === 'Boom' && ev.data.sprite === name)
@@ -304,10 +347,18 @@ function testCar(e, event, keys, name) {
         const time = firstMoved.time - touchFrame.time;
         const expected = e.context.accelerateEvent(3000);
         l.expect(expected - (expected / 2) <= time && time <= expected + (expected / 2))
+          .with({
+            correct: `Goed zo, ${name} wacht 3 seconden wanneer hij tegen de boom botst.`,
+            wrong: `Oeps, als ${name} de boom raakt dan moet hij 3 seconden blijven staan.`
+          })
           .toBe(true);
       });
       e.test(`${name} moet achteruit bewegen na het botsen met de boom`, l => {
         l.expect(sprite.isTouchingSprite('Boom'))
+          .with({
+            correct: `Super, na de botsing met de boom verplaatst ${name} zich zodat de auto weer kan bewegen.`,
+            wrong: `Opgelet, ${name} moet –5 stappen nemen nadat hij 3 seconden gewacht heeft wanneer hij de boom raakte.`
+          })
           .toBe(false);
       });
       // Move along...
@@ -325,6 +376,10 @@ function testCar(e, event, keys, name) {
       e.test(`${name} zegt iets als de eindmeet bereikt wordt`, l => {
         const event = e.log.events.list.find(ev => ev.type === 'say' && ev.time > start && ev.data.sprite === name);
         l.expect(event)
+          .with({
+            correct: `Super! ${name} verwittigt dat hij is aangekomen!`,
+            wrong: `Laat ${name} zeggen dat hij aangekomen is wanneer hij de eindmeet raakt.`
+          })
           .toNotBe(undefined);
       });
     })
@@ -356,11 +411,19 @@ function testCar(e, event, keys, name) {
         const expected = e.context.accelerateEvent(1000);
         // Check that we are within range.
         l.expect(expected - (expected / 2) <= time && time <= expected + (expected / 2))
+          .with({
+            correct: 'Joepie! Je auto moet 1 seconde wachten voordat hij terug kan rijden.',
+            wrong: 'Ai, probeer eerst een seconde te wachten voordat de auto terug mag rijden.'
+          })
           .toBe(true);
       });
       e.test(`${name} gaat terug naar start bij botsing met rots`, l => {
         const sprite = e.vm.runtime.getSpriteTargetByName(name);
         l.expect(sprite.x > -200 && sprite.x < -150 && sprite.y > 150)
+          .with({
+            correct: 'Super! De auto gaat terug naar de startplaats wanneer hij de rots raakt.',
+            wrong: 'Laat de auto naar de startplaats gaan nadat hij 1 seconde heeft gewacht bij de rots.'
+          })
           .toBe(true);
       });
     })
@@ -385,11 +448,19 @@ function testCar(e, event, keys, name) {
           y: sprite.y
         }));
         l.expect(distance > 50)
+          .with({
+            correct: 'Joepie! Wanneer de auto geraakt is door de bliksem, dan wacht hij eventjes voordat hij verdwijnt en verschijnt op een nieuwe plaats.',
+            wrong: 'Als de auto geraakt wordt door de bliksem, dan moet hij 0.5 seconden wachten, verdwijnen en verschijnen op een andere plaats.'
+          })
           .toBe(true);
       });
       e.test(`Bliksem gaat weg nadat ${name} er tegen rijdt`, l => {
         const sprite = e.vm.runtime.getSpriteTargetByName('Bliksem');
         l.expect(sprite.visible)
+          .with({
+            correct: `Super! Je bliksem verdwijnt nadat hij een keer geraakt is door ${name}`,
+            wrong: 'De bliksemschicht moet wachten tot hij de blauwe of de gele auto raakt, dan moet hij 0.1 seconden wachten en verdwijnen.'
+          })
           .toBe(false);
       });
     })
@@ -414,6 +485,10 @@ function testCar(e, event, keys, name) {
         const frames = e.log.frames.filter(ev => ev.time >= start && ev.block === `update_${name}`);
         const positions = e.log.getSpritePositions(name, frames);
         l.expect(positions.length >= 2)
+          .with({
+            correct: 'Goed zo! De auto richt zich naar een willekeurige richting wanneer hij het lekkend vat raakt.',
+            wrong: 'Probeer ervoor te zorgen dat de auto zich naar een willekeurige richting richt en vervolgens stappen neemt als hij het vat raakt.'
+          })
           .toBe(true);
       });
     });
@@ -426,7 +501,7 @@ function duringExecution(e) {
 
   e.scheduler
     .greenFlag(false)
-    .pipe(ev => testCar(e, ev, YELLOW, 'Mini Geel'))
-    .pipe(ev => testCar(e, ev, BLUE, 'Mini Blauw'))
+    .pipe(ev => testCar(e, ev, YELLOW, 'Mini Geel', YELLOW_NAME))
+    .pipe(ev => testCar(e, ev, BLUE, 'Mini Blauw', BLUE_NAME))
     .end();
 }
