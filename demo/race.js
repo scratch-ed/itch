@@ -7,8 +7,8 @@ function checkExistence(l, submission, sprite) {
   l.expect(submission.sprite(sprite))
     .fatal()
     .with({
-      correct: `Top! Je hebt de ${sprite} niet verwijderd.`,
-      wrong: `Oops, je hebt de ${sprite} verwijderd... Je gaat opnieuw moeten beginnen.`
+      correct: `Top! Je hebt de sprite ${sprite} niet verwijderd.`,
+      wrong: `Oops, je hebt de sprite ${sprite} verwijderd... Je gaat opnieuw moeten beginnen.`
     })
     .toNotBe(null);
 }
@@ -32,7 +32,7 @@ function checkStartCarConditions(sprite, template, submission, l) {
     .fatal()
     .with({
       correct: `Joehoe! De oorspronkelijke code bij de ${sprite} staat er nog!`,
-      wrong: `Oei, er is iets misgelopen. Waar zijn de klaargezette blokken bij de ${sprite} naartoe?`
+      wrong: `Oei, er is iets misgelopen. Waar zijn de klaargezette blokken bij de sprite ${sprite} naartoe?`
     })
     .toBe(templateBlocks);
 }
@@ -329,11 +329,10 @@ function testCar(e, event, keys, name, keyNames) {
     .useKey(keys.up, true)
     .wait(sprite(name).toTouch('Boom'))
     .useKey(keys.up, false)
-    .wait(3000) // Should be 3s
+    .wait(4000)
     .log(() => {
       const sprite = e.vm.runtime.getSpriteTargetByName(name);
       // Check that we waited ~3s, and then moved -5 down.
-
       e.test(`${name} moet 3s wachten bij het botsen met de boom`, l => {
         const touchFrame = e.log.events.list
           .find(ev => ev.type === 'waitForSpriteTouch' && ev.data.targets[0] === 'Boom' && ev.data.sprite === name)
@@ -496,7 +495,7 @@ function testCar(e, event, keys, name, keyNames) {
 
 /** @param {Evaluation} e */
 function duringExecution(e) {
-  e.actionTimeout = 300000;
+  e.actionTimeout = 3000;
   e.acceleration = 10;
 
   e.scheduler
