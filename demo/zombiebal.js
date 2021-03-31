@@ -116,6 +116,7 @@ function testSprite(events, data, e) {
 
 let loser;
 let winner;
+let tonTime;
 
 /**
  * @param {Evaluation} e
@@ -136,16 +137,17 @@ function testTon(events, e) {
     .wait(sprite('Ton').toMove(4000))
     .asTest({
       correct: 'Super! De ton kan bewegen.',
-      wrong: 'Oei, de ton kan nog niet bewegen.',
+      wrong: 'De ton moet eerst naar Roy of Rob richten. Nadien moet hij 5 stappen blijven nemen tot hij Rob’s doel of Roy’s doel raakt.',
     })
     .log(() => {
+      tonTime = e.context.timestamp();
       e.vm.runtime.getSpriteTargetByName('Ton').setXY(0, 0);
       e.output.startTestcase('De ton gaat naar één van de spelers');
     })
     .wait(sprite('Ton').toReach((x, _y) => x > 60 || x < -60, 2000))
     .asTest({
       correct: 'Super! De ton kan bewegen.',
-      wrong: 'Oei, de ton kan nog niet bewegen.',
+      wrong: 'De ton moet eerst naar Roy of Rob richten. Nadien moet hij 5 stappen blijven nemen tot hij Rob’s doel of Roy’s doel raakt.',
     })
     .log(() => {
       const ton = e.vm.runtime.getSpriteTargetByName('Ton');
@@ -181,7 +183,7 @@ function testTon(events, e) {
     .wait(sprite('Ton').toReach((x, y) => limit(x, y), 2000))
     .asTest({
       correct: 'Goed bezig! De ton weerkaatst.',
-      wrong: 'De ton moet weerkaatsen.',
+      wrong: 'Als de ton de rand raakt, dan keert de ton om aan de rand.',
     })
     .log(() => {
       const ton = e.vm.runtime.getSpriteTargetByName('Ton');
@@ -268,14 +270,19 @@ function duringExecution(e) {
 
 /** @param {Evaluation} e */
 function afterExecution(e) {
-  const sayEvents = e.log.events.filter({ type: 'say' });
-  console.log(sayEvents);
-  const data = _.last(sayEvents)?.data;
+  const sayEvent = e.log.events.list.find(ev => ev.type === 'say' && ev.data.sprite === 'Ton' && ev.time === tonTime);
+  const data = sayEvent?.data;
   e.test(`De ton zegt ${winner} scoort!`, (l) => {
+    let wrong;
+    if (data?.text) {
+      wrong = `De ton zegt "${data.text}", maar als de ton Rob's doel raakt, dan moet de ton "Roy scoort!" zeggen, en anders zegt hij dat "Rob scoort!".`;
+    } else {
+      wrong = 'Als de ton Rob’s doel raakt, dan zegt de ton dat "Roy scoort!" anders zegt hij dat "Rob scoort!".';
+    }
     l.expect(data?.text)
       .with({
         correct: 'Proficiat! De ton zegt wie er wint.',
-        wrong: 'Oei, de ton zegt nog niet wie wint.',
+        wrong: wrong,
       })
       .toBe(`${winner} scoort!`);
   });
