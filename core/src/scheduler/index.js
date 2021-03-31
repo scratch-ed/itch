@@ -652,6 +652,7 @@ export class ScheduledEvent {
         context.output.appendMessage(message);
       }
       context.output.closeTest(false, false);
+      return true;
     });
 
     return this;
