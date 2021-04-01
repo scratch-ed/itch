@@ -1,0 +1,1 @@
+cat $1 | sed '/^$/d' | sed 's/\(.*\)/\1\\/g' | sed '/console.log/d' | sed '/\/\//d' | sed '/@param/d'  | sed '/\/\*\*/d' | sed '/\*\//d' | sed '/ \*/d' | sed '1s/^/"/' | pbcopy
