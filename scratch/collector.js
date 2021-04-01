@@ -9,6 +9,17 @@ class Processor {
 
     /** @type {string} */
     const command = message.command;
+    
+    if (command === 'start-judgement') {
+      this.start = new Date();
+    }
+    
+    if (command === 'close-judgement') {
+      const title = document.getElementById("out");
+      if (title) {
+        title.innerHTML = `Output (took ${new Date() - this.start}ms)`;
+      }
+    }
 
     if (command.startsWith('start')) {
       this.stack.push(message);

@@ -336,21 +336,31 @@ function testCar(e, event, keys, name, keyNames) {
       e.test(`${name} moet 3s wachten bij het botsen met de boom`, l => {
         const touchFrame = e.log.events.list
           .find(ev => ev.type === 'waitForSpriteTouch' && ev.data.targets[0] === 'Boom' && ev.data.sprite === name)
-          .nextFrame;
+          ?.nextFrame;
         const touchSprite = touchFrame.getSprite(name);
         const moveFrames = e.log.frames.filter(fr => fr.time > touchFrame.time && fr.block === `update_${name}`);
         const firstMoved = moveFrames.find(fr => {
           const sp = fr.getSprite(name);
           return sp.x !== touchSprite.x || sp.y !== touchSprite.y;
         });
-        const time = firstMoved.time - touchFrame.time;
-        const expected = e.context.accelerateEvent(3000);
-        l.expect(expected - (expected / 2) <= time && time <= expected + (expected / 2))
-          .with({
-            correct: `Goed zo, ${name} wacht 3 seconden wanneer hij tegen de boom botst.`,
-            wrong: `Oeps, als ${name} de boom raakt dan moet hij 3 seconden blijven staan.`
-          })
-          .toBe(true);
+        
+        if (!touchFrame || !firstMoved) {
+          l.expect(touchFrame && firstMoved)
+            .with({
+              correct: `Goed zo, ${name} wacht 3 seconden wanneer hij tegen de boom botst.`,
+              wrong: `Oeps, als ${name} de boom raakt dan moet hij 3 seconden blijven staan.`
+            })
+            .toBe(true);
+        } else {
+          const time = firstMoved.time - touchFrame.time;
+          const expected = e.context.accelerateEvent(3000);
+          l.expect(expected - (expected / 2) <= time && time <= expected + (expected / 2))
+            .with({
+              correct: `Goed zo, ${name} wacht 3 seconden wanneer hij tegen de boom botst.`,
+              wrong: `Oeps, als ${name} de boom raakt dan moet hij 3 seconden blijven staan.`
+            })
+            .toBe(true);
+        }
       });
       e.test(`${name} moet achteruit bewegen na het botsen met de boom`, l => {
         l.expect(sprite.isTouchingSprite('Boom'))
@@ -406,15 +416,25 @@ function testCar(e, event, keys, name, keyNames) {
           const sp = fr.getSprite(name);
           return sp.x !== touchSprite.x || sp.y !== touchSprite.y;
         });
-        const time = firstMoved.time - touchFrame.time;
-        const expected = e.context.accelerateEvent(1000);
-        // Check that we are within range.
-        l.expect(expected - (expected / 2) <= time && time <= expected + (expected / 2))
-          .with({
-            correct: 'Joepie! Je auto moet 1 seconde wachten voordat hij terug kan rijden.',
-            wrong: 'Ai, probeer eerst een seconde te wachten voordat de auto terug mag rijden.'
-          })
-          .toBe(true);
+
+        if (!touchFrame || !firstMoved) {
+          l.expect(touchFrame && firstMoved)
+            .with({
+              correct: 'Joepie! Je auto moet 1 seconde wachten voordat hij terug kan rijden.',
+              wrong: 'Ai, probeer eerst een seconde te wachten voordat de auto terug mag rijden.'
+            })
+            .toBe(true);
+        } else {
+          const time = firstMoved.time - touchFrame.time;
+          const expected = e.context.accelerateEvent(1000);
+          // Check that we are within range.
+          l.expect(expected - (expected / 2) <= time && time <= expected + (expected / 2))
+            .with({
+              correct: 'Joepie! Je auto moet 1 seconde wachten voordat hij terug kan rijden.',
+              wrong: 'Ai, probeer eerst een seconde te wachten voordat de auto terug mag rijden.'
+            })
+            .toBe(true);
+        }
       });
       e.test(`${name} gaat terug naar start bij botsing met rots`, l => {
         const sprite = e.vm.runtime.getSpriteTargetByName(name);
