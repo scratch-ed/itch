@@ -31,7 +31,7 @@ function checkStartCarConditions(sprite, template, submission, l) {
   l.expect(submissionBlocks)
     .fatal()
     .with({
-      correct: `Joehoe! De oorspronkelijke code bij de ${sprite} staat er nog!`,
+      correct: `Joehoe! De oorspronkelijke code bij de sprite ${sprite} staat er nog!`,
       wrong: `Oei, er is iets misgelopen. Waar zijn de klaargezette blokken bij de sprite ${sprite} naartoe?`
     })
     .toBe(templateBlocks);
