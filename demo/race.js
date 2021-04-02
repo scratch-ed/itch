@@ -403,7 +403,7 @@ function testCar(e, event, keys, name, keyNames) {
     .useKey(keys.right, true)
     .wait(sprite(name).toTouch('Rots'))
     .useKey(keys.right, false)
-    .wait(1000) // Should be 1000 in the future
+    .wait(1000)
     .log(() => {
       e.test(`${name} blijft een seconde staan na botsing met de rots`, l => {
         // Check that the car waits 1000ms before moving.
@@ -456,7 +456,7 @@ function testCar(e, event, keys, name, keyNames) {
     })
     .wait(sprite(name).toTouch('Bliksem'))
     .useKey(keys.right, false)
-    .wait(500) // Give it some time.
+    .wait(500)
     .log(() => {
       const sprite = e.vm.runtime.getSpriteTargetByName(name);
       e.test(`Bliksem verplaatst ${name} naar ergens anders`, l => {
@@ -498,7 +498,7 @@ function testCar(e, event, keys, name, keyNames) {
     })
     .wait(sprite(name).toTouch('Vat'))
     .useKey(keys.up, false)
-    .wait(1000) // Give it some time
+    .wait(1000)
     .log(() => {
       e.test(`${name} gaat naar willekeurige posities na het aanraken van de vat`, l => {
         const frames = e.log.frames.filter(ev => ev.time >= start && ev.block === `update_${name}`);
