@@ -233,7 +233,7 @@ function testCar(e, event, keys, name, keyNames) {
       const switchSprite = touchGrassFrame.getSprite(name);
 
       const normalDistance = Math.abs(switchSprite.y - normalStartSprite.y);
-      const normalTime = (touchGrassFrame.time - normalStartFrame.time) / e.acceleration;
+      const normalTime = touchGrassFrame.time - normalStartFrame.time;
 
       normalSpeed = normalDistance / normalTime;
 
@@ -250,13 +250,13 @@ function testCar(e, event, keys, name, keyNames) {
         const before = event.previousFrame.getSprite(name);
         const after = event.nextFrame.getSprite(name);
         const grassDistance = Math.abs(after.y - before.y);
-        const grassTime = (after.time - before.time) / e.acceleration;
+        const grassTime = after.time - before.time;
 
         const grassSpeed = grassDistance / grassTime;
-        l.expect(normalSpeed > grassSpeed)
+        l.expect(normalSpeed > grassSpeed && grassSpeed !== 0)
           .with({
-            correct: `Super, je ${name} beweegt trager wanneer hij omlaag over het gras rijdt.`,
-            wrong: `Je ${name} rijdt niet trager omlaag op het gras. Als de gele/blauwe auto over het gras rijdt, dan neemt hij 1 stap, anders neemt hij 3 stappen.`
+            correct: `Super, ${name} beweegt trager wanneer hij omlaag over het gras rijdt.`,
+            wrong: `${name} rijdt niet trager omlaag op het gras. Als ${name} over het gras rijdt, dan neemt hij 1 stap, anders neemt hij 3 stappen.`
           })
           .toBe(true);
       });
@@ -270,13 +270,13 @@ function testCar(e, event, keys, name, keyNames) {
         const before = event.previousFrame.getSprite(name);
         const after = event.nextFrame.getSprite(name);
         const grassDistance = Math.abs(after.y - before.y);
-        const grassTime = (after.time - before.time) / e.acceleration;
+        const grassTime = after.time - before.time;
 
         const grassSpeed = grassDistance / grassTime;
-        l.expect(normalSpeed > grassSpeed)
+        l.expect(normalSpeed > grassSpeed && grassSpeed !== 0)
           .with({
-            correct: `Super, je ${name} beweegt trager wanneer hij omhoog over het gras rijdt.`,
-            wrong: `Je ${name} rijdt niet trager omhoog op het gras. Als de gele/blauwe auto over het gras rijdt, dan neemt hij 1 stap, anders neemt hij 3 stappen.`
+            correct: `Super, ${name} beweegt trager wanneer hij omhoog over het gras rijdt.`,
+            wrong: `${name} rijdt niet trager omhoog op het gras. Als ${name} over het gras rijdt, dan neemt hij 1 stap, anders neemt hij 3 stappen.`
           })
           .toBe(true);
       });
@@ -289,14 +289,14 @@ function testCar(e, event, keys, name, keyNames) {
         });
         const before = event.previousFrame.getSprite(name);
         const after = event.nextFrame.getSprite(name);
-        const grassDistance = Math.abs(after.y - before.y);
-        const grassTime = (after.time - before.time) / e.acceleration;
+        const grassDistance = Math.abs(after.x - before.x);
+        const grassTime = after.time - before.time;
 
         const grassSpeed = grassDistance / grassTime;
-        l.expect(normalSpeed > grassSpeed)
+        l.expect(normalSpeed > grassSpeed && grassSpeed !== 0)
           .with({
-            correct: `Super, je ${name} beweegt trager wanneer hij naar rechts over het gras rijdt.`,
-            wrong: `Je ${name} rijdt niet trager naar rechts op het gras. Als de gele/blauwe auto over het gras rijdt, dan neemt hij 1 stap, anders neemt hij 3 stappen.`
+            correct: `Super, ${name} beweegt trager wanneer hij naar rechts over het gras rijdt.`,
+            wrong: `${name} rijdt niet trager naar rechts op het gras. Als ${name} over het gras rijdt, dan neemt hij 1 stap, anders neemt hij 3 stappen.`
           })
           .toBe(true);
       });
@@ -309,14 +309,14 @@ function testCar(e, event, keys, name, keyNames) {
         });
         const before = event.previousFrame.getSprite(name);
         const after = event.nextFrame.getSprite(name);
-        const grassDistance = Math.abs(after.y - before.y);
-        const grassTime = (after.time - before.time) / e.acceleration;
+        const grassDistance = Math.abs(after.x - before.x);
+        const grassTime = after.time - before.time;
 
         const grassSpeed = grassDistance / grassTime;
-        l.expect(normalSpeed > grassSpeed)
+        l.expect(normalSpeed > grassSpeed && grassSpeed !== 0)
           .with({
-            correct: `Super, je ${name} beweegt trager wanneer hij naar links over het gras rijdt.`,
-            wrong: `Je ${name} rijdt niet trager naar links op het gras. Als de gele/blauwe auto over het gras rijdt, dan neemt hij 1 stap, anders neemt hij 3 stappen.`
+            correct: `Super, ${name} beweegt trager wanneer hij naar links over het gras rijdt.`,
+            wrong: `${name} rijdt niet trager naar links op het gras. Als ${name} over het gras rijdt, dan neemt hij 1 stap, anders neemt hij 3 stappen.`
           })
           .toBe(true);
       });
@@ -421,7 +421,7 @@ function testCar(e, event, keys, name, keyNames) {
           l.expect(touchFrame && firstMoved)
             .with({
               correct: 'Joepie! Je auto moet 1 seconde wachten voordat hij terug kan rijden.',
-              wrong: 'Ai, probeer eerst een seconde te wachten voordat de auto terug mag rijden.'
+              wrong: 'Ai, probeer eerst een seconde te wachten voordat de auto terug mag rijden na een botsing met de rots.'
             })
             .toBe(true);
         } else {
