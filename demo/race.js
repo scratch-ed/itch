@@ -515,7 +515,7 @@ function testCar(e, event, keys, name, keyNames) {
 
 /** @param {Evaluation} e */
 function duringExecution(e) {
-  e.actionTimeout = 3000;
+  e.actionTimeout = 10000;
   e.acceleration = 10;
 
   e.scheduler
