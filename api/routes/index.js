@@ -42,6 +42,7 @@ function setupRoutes(server) {
       testplan,
       { fromApi: true, debug: false },
       (judgeObject) => {
+        console.log(judgeObject)
         if (!ALLOWED_COMMANDS.includes(judgeObject.command)) {
           return;
         }
