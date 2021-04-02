@@ -266,6 +266,10 @@ export default class ResultManager {
    * @param {string} message
    */
   appendMessage(message) {
+    if (!this.hasOpenJudgement) {
+      console.warn('Attempting to append message while no judgement is open. Ignoring.');
+      return;
+    }
     this.out({ command: 'append-message', message: message });
   }
 
@@ -273,6 +277,10 @@ export default class ResultManager {
    * @param {Status} status
    */
   escalateStatus(status) {
+    if (!this.hasOpenJudgement) {
+      console.warn('Attempting to escalate status of closed judgement. Ignoring.');
+      return;
+    }
     this.out({ command: 'escalate-status', status: status });
   }
 }

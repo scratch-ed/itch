@@ -146,7 +146,7 @@ function testTon(events, e) {
     })
     .wait(sprite('Ton').toReach((x, _y) => x > 60 || x < -60, 2000))
     .asTest({
-      correct: 'Super! De ton kan bewegen.',
+      correct: 'Super! De ton gaat naar Roy of Rob.',
       wrong: 'De ton moet eerst naar Roy of Rob richten. Nadien moet hij 5 stappen blijven nemen tot hij Rob’s doel of Roy’s doel raakt.',
     })
     .log(() => {
@@ -173,17 +173,31 @@ function testTon(events, e) {
     })
     .wait(sprite('Ton').toTouch(() => touchedSprite, 2000))
     .asTest({
-      correct: () => `Super! ${touchedSprite} schopt tegen de ton.`,
-      wrong: () =>
-        `Als de ton ${touchedSprite} raakt, moet ${touchedSprite} tegen de ton schoppen.`,
+      correct: () => `Super! De ton beweegt tot bij ${touchedSprite}.`,
+      wrong: () => `De ton moet bewegen tot hij ${touchedSprite} raakt, waarna ${touchedSprite} tegen de ton moet schoppen.`,
     })
+    .wait(100)
     .log(() => {
+      e.test("De ton wordt teruggeschopt", l => {
+        const frames = e.log.frames.filter(f => f.time > tonTime);
+        const maxX = e.log.getMaxX('Ton', frames);
+        const minX = e.log.getMinX('Ton', frames);
+        // eslint-disable-next-line yoda
+        l.expect(-120 < minX && maxX < 120)
+          .with({
+            correct: () => `Super! ${touchedSprite} schopt tegen de ton.`,
+            wrong: () => `Als de ton ${touchedSprite} raakt, moet ${touchedSprite} tegen de ton schoppen.`,
+          })
+          .fatal()
+          .toBe(true);
+      });
+      
       e.output.startTestcase('De ton gaat naar de overkant');
     })
     .wait(sprite('Ton').toReach((x, y) => limit(x, y), 2000))
     .asTest({
-      correct: 'Goed bezig! De ton weerkaatst.',
-      wrong: 'Als de ton de rand raakt, dan keert de ton om aan de rand.',
+      correct: () => `Super! De ton beweegt tot bij ${secondSprite}.`,
+      wrong: () => `Nadat ${touchedSprite} tegen de ton schopt, moet de ton omkeren.`,
     })
     .log(() => {
       const ton = e.vm.runtime.getSpriteTargetByName('Ton');
@@ -193,14 +207,28 @@ function testTon(events, e) {
     })
     .wait(sprite('Ton').toTouch(() => secondSprite, 2000))
     .asTest({
-      correct: () => `Super! ${secondSprite} schopt tegen de ton.`,
-      wrong: () =>
-        `Als de ton ${secondSprite} raakt, moet ${secondSprite} tegen de ton schoppen.`,
+      correct: () => `Super! De ton raakt ${secondSprite}.`,
+      wrong: () => `Nadat ${touchedSprite} tegen de ton schopt, moet de ton omkeren.`,
     })
+    .wait(100)
     .log(() => {
+      e.test("De ton wordt teruggeschopt", l => {
+        const frames = e.log.frames.filter(f => f.time > tonTime);
+        const maxX = e.log.getMaxX('Ton', frames);
+        const minX = e.log.getMinX('Ton', frames);
+        // eslint-disable-next-line yoda
+        l.expect(-120 < minX && maxX < 120)
+          .with({
+            correct: () => `Super! ${secondSprite} schopt tegen de ton.`,
+            wrong: () => `Als de ton ${secondSprite} raakt, moet ${secondSprite} tegen de ton schoppen.`,
+          })
+          .fatal()
+          .toBe(true);
+      });
+
       e.output.startTestcase(`Ton gaat naar ${touchedSprite}`);
     })
-    .forEach(_.range(4), (ev) => {
+    .forEach(_.range(1), (ev) => {
       // Wait until we get to the next one.
       return ev
         .wait(sprite('Ton').toReach((x, y) => limitSecond(x, y), 2000))
@@ -228,8 +256,8 @@ function testTon(events, e) {
     })
     .wait(sprite('Ton').toReach((x, y) => limitSecond(x, y), 2000))
     .asTest({
-      correct: () => `Goed bezig! De ton raakt het doel van ${touchedSprite}.`,
-      wrong: () => `De ton moet het doel van ${touchedSprite} raken.`,
+      correct: () => `Goed bezig! De ton kan bewegen naar het doel van ${touchedSprite}.`,
+      wrong: () => `De ton moet naar het doel van ${touchedSprite} gaan.`,
     })
     .log(() => {
       loser = touchedSprite;
@@ -238,7 +266,7 @@ function testTon(events, e) {
     })
     .wait(sprite('Ton').toTouch(() => `${loser}'s Doel`, 2000))
     .asTest({
-      correct: () => `Goed bezig! De ton raakt het doel van ${loser}.`,
+      correct: () => `Goed bezig! De ton kan het doel van ${loser} raken.`,
       wrong: () => `De ton moet het doel van ${loser} raken.`,
     })
     .wait(1000);
@@ -270,7 +298,7 @@ function duringExecution(e) {
 
 /** @param {Evaluation} e */
 function afterExecution(e) {
-  const sayEvent = e.log.events.list.find(ev => ev.type === 'say' && ev.data.sprite === 'Ton' && ev.time === tonTime);
+  const sayEvent = e.log.events.list.find(ev => ev.type === 'say' && ev.data.sprite === 'Ton' && ev.time > tonTime);
   const data = sayEvent?.data;
   e.test(`De ton zegt ${winner} scoort!`, (l) => {
     let wrong;

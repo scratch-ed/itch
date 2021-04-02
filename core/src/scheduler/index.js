@@ -7,6 +7,7 @@ import { EndAction, JoinAction } from './end.js';
 import { delay } from './wait.js';
 import { TrackSpriteAction } from './track.js';
 import { castCallback } from '../utils.js';
+import { FatalErrorException } from '../testplan.js';
 
 export { delay, broadcast, sprite } from './wait.js';
 
@@ -208,7 +209,6 @@ export class ScheduledEvent {
         // - For async events, the resolve of the timeout promise resolves immediately,
         //   we reach this immediately.
         this.nextEvents.forEach(e => e.run(context));
-
       }, (reason) => {
         console.debug(`${context.timestamp()}: Rejected actions ${this.action.toString()}`);
         if (reason instanceof TimeoutError) {
@@ -228,6 +228,9 @@ export class ScheduledEvent {
             });
             context.output.closeJudgement(false);
           }
+        } else if (reason instanceof FatalErrorException) {
+          console.warn("Fatal test failed, stopping execution of all tests.");
+          context.output.closeJudgement(false);
         } else {
           console.error('Unexpected error:', reason);
           context.output.escalateStatus({
