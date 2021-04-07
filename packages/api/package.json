@@ -1,0 +1,20 @@
+{
+  "name": "itch-api",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "cross-env NODE_ENV=development node index.js"
+  },
+  "author": "Cedric Vanhaverbeke",
+  "license": "ISC",
+  "dependencies": {
+    "itch-runner": "0.0.1",
+    "dotenv": "^8.2.0",
+    "morgan": "^1.10.0",
+    "restify": "^8.5.1"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3"
+  }
+}

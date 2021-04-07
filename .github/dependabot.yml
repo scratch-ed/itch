@@ -9,11 +9,9 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
-  - package-ecosystem: "npm"
-    directory: "/api"
-    schedule: 
-      interval: "daily"
-  - package-ecosystem: "npm"
-    directory: "/core"
-    schedule: 
+  - package-ecosystem: "github-actions"
+    # Workflow files stored in the
+    # default location of `.github/workflows`
+    directory: "/"
+    schedule:
       interval: "daily"

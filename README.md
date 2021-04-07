@@ -1,38 +1,57 @@
-# scratch4d-judge
+# Itch
 
-This repo is created with npm workspaces, this means `npm 7` and `node 15` is a requirement. If you use `nvm`, you can simply execute `nvm use` to get the desired `node` and `npm` version.
+Repo for the Scratch judge.
+
+## Requirements
+
+This repo uses _npm_ workspaces, so you need a recent version of npm (> 7.7):
+
+- node: 15+
+- npm: 7.7+
+
+If you use `nvm`, you can simply execute `nvm use` to get the desired `node` and `npm` version.
 
 ## Running the judge
 
-This repo contains a few test exercises and test plans, located respectively in `./tests/projects` and `./tests/plans`. You need to create a `config.js` file. You can copy `config.example.js` to get a configuration. A configuration file looks like this:
+The repo contains some exercises:
 
-```js
-// config.js
+- packages/runner/test/assets/**
+  
+  These are used to run basic integration tests.
 
-module.exports = {
-  resources: 'tests', // where the resources are located
-  template: 'tests/projects/status/01.space_mission.sb3', // the template file, the starter project.
-  source: 'tests/projects/status/01.space_mission.sb3', // the submitted scratch exercise
-  plan: 'plans/status/07.break_the_hay_bale_test.js', // the test plan you want to execute
-  time_limit: 20000,
-  memory_limit: 5000000,
-  natural_language: 'nl', 
-  programming_language: 'Scratch',
-  debug: true, // if this is true, puppeteer will open a new window
-  visualise: true,
-};
+- demo/**
+
+  More in-depth exercises & test plans, used with students. They are not tested automatically at the moment, but we
+  might add that in the future.
+  
+To start, run `npm run build`.
+
+Then, there are three ways to run the judge, depending on what you want:
+
+- As an API: `npm run api`. You can send projects and testplans to the API and receive a response.
+- As a command line tool: `npm run start`. This will execute a project based on the `config.json` file.
+- As a webpage: open `packages/runner/src/environment.html` in your browser. This will load and execute a project based on the `config.json` file.
+
+### Config
+
+The `config.json` file is used to determine what project should be judged.
+An example can be found in `config.example.json`:
+
+```json
+{
+  "template": "tests/projects/status/01.space_mission.sb3",
+  "source": "tests/projects/status/01.space_mission.sb3",
+  "plan": "plans/status/01.space_mission_test.js",
+  "debug": false
+}
 ```
 
+The properties are:
 
-Then, execute these commands:
-
-```bash
-# This installs the dependencies for the core package and the root package
-npm install
-
-# This starts the judge with the config defined in config.js
-npm start
-```
+- **template**: path to the template sb3 file, relative to the root of the repo.
+- **source**: path to the solution sb3 file, relative to the root of the repo.
+- **plan**: plan to the testplan, relative to the root of the repo.
+- **debug**: if true and run with puppeteer, the browser will open, otherwise it will be headless.
 
 ## Docker
 
@@ -69,10 +88,3 @@ npm run clean
 
 npm install
 ```
-
-## Packages
-
-1. The core package in `core`. Given some inputs (e.g. a canvas, files, etc.), this will execute the tests.
-2. The "root" package, which will run some tests with puppeteer automatically.
-
-The core package is a NPM workspace. When running `npm install`, it will symlink the workspace into the current node_modules.
