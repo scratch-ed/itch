@@ -5,7 +5,7 @@ module.exports = {
     node: true,
     'jest/globals': true,
   },
-  extends: ["standard", 'prettier'],
+  extends: ['standard', 'prettier'],
   parserOptions: {
     ecmaVersion: 12,
     sourceType: 'module',
