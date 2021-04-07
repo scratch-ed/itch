@@ -2,23 +2,21 @@
  * @fileOverview A basic debug view for the output of the judge.
  */
 class Processor {
-
   constructor(element) {
     this.stack = [];
     this.element = element;
   }
 
   process(message) {
-
     /** @type {string} */
     const command = message.command;
-    
+
     if (command === 'start-judgement') {
       this.start = new Date();
     }
-    
+
     if (command === 'close-judgement') {
-      const title = document.getElementById("out");
+      const title = document.getElementById('out');
       if (title) {
         title.innerHTML = `Output (took ${new Date() - this.start}ms)`;
       }
@@ -35,7 +33,7 @@ class Processor {
     } else if (command === 'start-testcase') {
       this.case = message.description;
       this.caseTests = [];
-    } else if (command === "start-test") {
+    } else if (command === 'start-test') {
       this.currentTest = message;
     } else if (command === 'close-test') {
       const expected = this.currentTest;
@@ -44,15 +42,23 @@ class Processor {
       this.caseTests.push({
         expected: expected,
         actual: actual,
-        status: status
+        status: status,
       });
-    } else if (command === "close-testcase") {
-      const content = this.caseTests.map(test => {
-        return `${test.status === 'correct' ? '✅' : '❌'} Expected ${test.expected.expected}, got: ${test.actual}`;
+    } else if (command === 'close-testcase') {
+      const content = this.caseTests.map((test) => {
+        return `${test.status === 'correct' ? '✅' : '❌'} Expected ${
+          test.expected.expected
+        }, got: ${test.actual}`;
       });
-      const merged = content.join("\n");
-      const allCorrect = this.caseTests.every(test => test.status === 'correct');
-      this.output(`<span title="${this.case}\n${merged}">${allCorrect ? '✅' : '❌'}</span>`);
+      const merged = content.join('\n');
+      const allCorrect = this.caseTests.every(
+        (test) => test.status === 'correct',
+      );
+      this.output(
+        `<span title="${this.case}\n${merged}">${
+          allCorrect ? '✅' : '❌'
+        }</span>`,
+      );
     } else if (command.startsWith('close')) {
       this.stack.pop();
     } else if (command === 'append-message') {

@@ -47,7 +47,9 @@ export class LoggedSprite {
     // Copy variables.
     this.variables = [];
     for (const varName of Object.keys(target.variables || {})) {
-      this.variables.push(new LoggedVariable(target.lookupVariableById(varName)));
+      this.variables.push(
+        new LoggedVariable(target.lookupVariableById(varName)),
+      );
     }
 
     // Copy sprite information.
@@ -67,7 +69,7 @@ export class LoggedSprite {
       }
       this.touchingSprites.push({
         name: otherTarget.getName(),
-        value: target.isTouchingSprite(otherTarget.getName())
+        value: target.isTouchingSprite(otherTarget.getName()),
       });
     }
     /** @deprecated */
@@ -78,7 +80,6 @@ export class LoggedSprite {
     this.scriptes = target.blocks.getScripts();
   }
 
-
   /**
    * Check if this sprite contains a block with the given opcode.
    *
@@ -86,9 +87,9 @@ export class LoggedSprite {
    * @return {boolean}
    */
   hasBlock(opcode) {
-    return Object.values(this.blocks).some(block => block.opcode === opcode);
+    return Object.values(this.blocks).some((block) => block.opcode === opcode);
   }
-  
+
   blockList() {
     return Object.values(this.blocks);
   }
@@ -101,7 +102,7 @@ export class LoggedSprite {
    * @return {boolean}
    */
   touches(name) {
-    return this.touchingSprites.find(ts => ts.name === name).value;
+    return this.touchingSprites.find((ts) => ts.name === name).value;
   }
 
   getVariable(name) {
@@ -223,8 +224,10 @@ export function searchFrames(frames, constraints) {
   const after = constraints.after || 0;
   const type = constraints.type || null;
 
-  return frames.filter(f => {
-    return f.time >= after && f.time <= before && (f.type === type || type === null);
+  return frames.filter((f) => {
+    return (
+      f.time >= after && f.time <= before && (f.type === type || type === null)
+    );
   });
 }
 
@@ -263,7 +266,9 @@ export class LogBlocks {
    * @return {boolean}
    */
   containsLoop() {
-    return this.blocks.some(key => key === 'control_repeat' || key === 'control_forever');
+    return this.blocks.some(
+      (key) => key === 'control_repeat' || key === 'control_forever',
+    );
   }
 
   /**
@@ -272,7 +277,7 @@ export class LogBlocks {
    * @return {boolean}
    */
   containsBlock(blockName) {
-    return this.blocks.some(key => key === blockName);
+    return this.blocks.some((key) => key === blockName);
   }
 
   countExecutions(name, blocks) {
@@ -386,7 +391,6 @@ class Blocks {
 
 // TODO: review
 export class Log {
-
   constructor() {
     /** @type LogFrame[] */
     this.frames = [];
@@ -475,9 +479,10 @@ export class Log {
   }
 
   getVariables(variableName, spriteName = 'Stage', frames = this.frames) {
-    return frames.map(frame => frame.getSprite(spriteName))
-      .map(sprite => sprite.getVariable(variableName))
-      .map(variable => variable.value)
+    return frames
+      .map((frame) => frame.getSprite(spriteName))
+      .map((sprite) => sprite.getVariable(variableName))
+      .map((variable) => variable.value)
       .filter((item, pos, arr) => {
         return pos === 0 || !isEqual(item, arr[pos - 1]);
       });
@@ -488,7 +493,6 @@ export class Log {
   }
 
   getMaxX(spriteName, frames = this.frames) {
-
     let max = -240;
     for (const frame of frames) {
       const sprite = frame.getSprite(spriteName);
@@ -499,11 +503,9 @@ export class Log {
       }
     }
     return max;
-
   }
 
   getMinX(spriteName, frames = this.frames) {
-
     let min = 240;
     for (const frame of frames) {
       const sprite = frame.getSprite(spriteName);
@@ -514,11 +516,9 @@ export class Log {
       }
     }
     return min;
-
   }
 
   getMaxY(spriteName, frames = this.frames) {
-
     let max = -180;
     for (const frame of frames) {
       const sprite = frame.getSprite(spriteName);
@@ -529,11 +529,9 @@ export class Log {
       }
     }
     return max;
-
   }
 
   getMinY(spriteName, frames = this.frames) {
-
     let min = 180;
     for (const frame of frames) {
       const sprite = frame.getSprite(spriteName);
@@ -544,7 +542,6 @@ export class Log {
       }
     }
     return min;
-
   }
 
   hasSpriteMoved(spriteName, frames = this.frames) {
@@ -557,7 +554,6 @@ export class Log {
   }
 
   inBounds(spriteName, frames = this.frames) {
-
     for (const frame of frames) {
       const sprite = frame.getSprite(spriteName);
       if (sprite != null) {
@@ -629,7 +625,6 @@ export class Log {
       return false;
     }
     return true;
-
   }
 
   /**
@@ -644,16 +639,17 @@ export class Log {
    */
   getSpritePositions(sprite, frames = this.frames) {
     return frames
-      .map(frame => frame.getSprite(sprite))
-      .map(sprite => { return { x: sprite.x, y: sprite.y }; })
+      .map((frame) => frame.getSprite(sprite))
+      .map((sprite) => {
+        return { x: sprite.x, y: sprite.y };
+      })
       .filter((item, pos, arr) => {
         return pos === 0 || !isEqual(item, arr[pos - 1]);
       });
   }
-  
+
   getSprites(sprite, frames = this.frames, mapper = (s) => s) {
-    const sprites =  frames.map(frame => frame.getSprite(sprite))
-      .map(mapper);
+    const sprites = frames.map((frame) => frame.getSprite(sprite)).map(mapper);
     return uniq(sprites);
   }
 
@@ -720,10 +716,9 @@ export class Log {
     }
     for (const e of destroyTextSkinEvents) {
       if (e.data.id === id) {
-        return (e.time - time);
+        return e.time - time;
       }
     }
     return null;
   }
-
 }

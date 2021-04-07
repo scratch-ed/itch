@@ -30,8 +30,11 @@ const judge = new Judge(plan, {
   memory_limit: memoryLimit,
   natural_language: naturalLanguage,
   programming_language: programmingLanguage,
-  debug: config.debug
+  debug: config.debug,
 });
 
 // evaluate tests and output result to stdout
-judge.run(path.resolve(__dirname, templateFile), path.resolve(__dirname, sourceFile));
+judge.run(
+  path.resolve(__dirname, templateFile),
+  path.resolve(__dirname, sourceFile),
+);

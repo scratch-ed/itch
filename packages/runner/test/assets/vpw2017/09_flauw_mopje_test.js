@@ -20,16 +20,16 @@ function afterExecution(e) {
     'Wie is daar?',
     'Ki!',
     'Ki, wie?',
-    'Neen, dank je. Ik heb liever bananen!'
+    'Neen, dank je. Ik heb liever bananen!',
   ];
   console.log(sayEvents);
   for (let i = 0; i < berichten.length; i++) {
-    e.test(`Bericht nummer ${i} komt van de ${sprekers[i]}`, l => {
+    e.test(`Bericht nummer ${i} komt van de ${sprekers[i]}`, (l) => {
       l.expect(sayEvents[i].data.sprite)
         .withError(`Spreker ${i} moet de ${sprekers[i]} zijn!`)
         .toBe(sprekers[i]);
     });
-    e.test(`Correcte text in bericht nummer ${i}`, l => {
+    e.test(`Correcte text in bericht nummer ${i}`, (l) => {
       l.expect(sayEvents[i].data.text)
         .withError('De tekst in de tekstballon is verkeerd')
         .toBe(berichten[i]);

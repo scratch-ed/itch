@@ -17,12 +17,11 @@ module.exports = {
     'no-unused-vars': [
       'error',
       {
-        varsIgnorePattern:
-          'beforeExecution|afterExecution|duringExecution|^_',
-        argsIgnorePattern: '^_'
+        varsIgnorePattern: 'beforeExecution|afterExecution|duringExecution|^_',
+        argsIgnorePattern: '^_',
       },
     ],
-    "promise/param-names": "off"
+    'promise/param-names': 'off',
   },
   plugins: ['jest'],
 };

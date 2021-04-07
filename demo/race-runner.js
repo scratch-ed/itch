@@ -1,8 +1,6 @@
 const { Judge } = require('../judge');
 const path = require('path');
-const {
-  performance
-} = require('perf_hooks');
+const { performance } = require('perf_hooks');
 
 const defaultConfig = {
   resources: '.',
@@ -10,7 +8,7 @@ const defaultConfig = {
   memoryLimit: 5000000,
   natural_language: 'nl',
   programming_language: 'scratch',
-  debug: false
+  debug: false,
 };
 const fs = require('fs');
 
@@ -21,7 +19,7 @@ async function run(configuration = {}) {
   const planFile = path.resolve(__dirname, `./race.js`);
 
   const results = [];
-  const collector = output => results.push(output);
+  const collector = (output) => results.push(output);
 
   const judge = new Judge(planFile, config, collector);
 
@@ -31,8 +29,9 @@ async function run(configuration = {}) {
 }
 
 function testStatuses(result) {
-  return result.filter(obj => obj.command === 'close-test')
-    .map(obj => obj.status.enum);
+  return result
+    .filter((obj) => obj.command === 'close-test')
+    .map((obj) => obj.status.enum);
 }
 
 async function doIt() {
@@ -46,7 +45,7 @@ async function doIt() {
     const result = await run();
     fs.writeFileSync(`racetest/${i}.result.json`, JSON.stringify(result));
     const t1 = performance.now();
-    if (testStatuses(result).filter(t => t !== 'correct').length > 0) {
+    if (testStatuses(result).filter((t) => t !== 'correct').length > 0) {
       wrong++;
       console.log(`${i}: WRONG with ${t1 - t0} ms`);
     } else {
@@ -61,4 +60,3 @@ async function doIt() {
 }
 
 doIt();
-

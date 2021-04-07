@@ -19,10 +19,10 @@ export function isEqual(d1, d2) {
 // Removed duplicate points from an array of points by checking if the position in the list is equal to the position
 // of the first occurance of the point.
 export function removeDuplicates(myArray) {
-  return myArray.filter((obj, index, self) =>
-    index === self.findIndex((t) => (
-      isEqual(t.x, obj.x) && isEqual(t.y, obj.y)
-    ))
+  return myArray.filter(
+    (obj, index, self) =>
+      index ===
+      self.findIndex((t) => isEqual(t.x, obj.x) && isEqual(t.y, obj.y)),
   );
 }
 
@@ -30,9 +30,13 @@ export function removeDuplicates(myArray) {
 // 1) Square of d3 is same as twice the square of d1
 // 2) Square of d2 is same as twice the square of d1
 export function squareTest(d1, d2, d3, p1, p2, p3) {
-  if (isEqual(d1, d2) && isEqual(2 * d1, d3) && isEqual(2 * d1, distSq(p1, p2))) {
+  if (
+    isEqual(d1, d2) &&
+    isEqual(2 * d1, d3) &&
+    isEqual(2 * d1, distSq(p1, p2))
+  ) {
     const d = distSq(p1, p3);
-    return (isEqual(d, distSq(p2, p3)) && isEqual(d, d1));
+    return isEqual(d, distSq(p2, p3)) && isEqual(d, d1);
   }
   return false;
 }
@@ -62,8 +66,8 @@ export function mergeLines(lines) {
         vertDict[x1] = [lines[i]];
       }
     } else {
-      let rico = ((y2 - y1) / (x2 - x1));
-      const b = (y1 - (rico * x1)).toFixed(4);
+      let rico = (y2 - y1) / (x2 - x1);
+      const b = (y1 - rico * x1).toFixed(4);
       rico = rico.toFixed(4);
       if (rico in ricoDict) {
         const lineDict = ricoDict[rico];
@@ -88,7 +92,9 @@ export function mergeLines(lines) {
     for (const [_b, lines] of Object.entries(ld)) {
       let line = lines[0];
       for (let i = 1; i < lines.length; i++) {
-        if (distSq(line.start, lines[i].end) > distSq(line.end, lines[i].start)) {
+        if (
+          distSq(line.start, lines[i].end) > distSq(line.end, lines[i].start)
+        ) {
           line = { start: line.start, end: lines[i].end };
         } else {
           line = { start: lines[i].start, end: line.end };

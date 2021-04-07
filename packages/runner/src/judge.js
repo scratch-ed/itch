@@ -123,7 +123,6 @@ class Judge {
       if (!this.debug) {
         await browser.close();
       }
-
     }
   }
 }

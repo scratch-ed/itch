@@ -15,15 +15,15 @@ If you use `nvm`, you can simply execute `nvm use` to get the desired `node` and
 
 The repo contains some exercises:
 
-- packages/runner/test/assets/**
-  
+- packages/runner/test/assets/\*\*
+
   These are used to run basic integration tests.
 
-- demo/**
+- demo/\*\*
 
   More in-depth exercises & test plans, used with students. They are not tested automatically at the moment, but we
   might add that in the future.
-  
+
 To start, run `npm run build`.
 
 Then, there are three ways to run the judge, depending on what you want:

@@ -15,7 +15,9 @@ class WaitEvent extends ScheduledAction {
 
   execute(context, resolve) {
     const delay = context.accelerateEvent(this.delay);
-    setTimeout(() => { resolve(`finished ${this}`); }, delay);
+    setTimeout(() => {
+      resolve(`finished ${this}`);
+    }, delay);
   }
 
   toString() {
@@ -68,7 +70,7 @@ class WaitForSpritePositionAction extends ScheduledAction {
     if (!sprite) {
       throw new Error(`Sprite ${this.name} was not found in the runtime.`);
     }
-    const event = new LogEvent(context, 'waitForSpritePosition')
+    const event = new LogEvent(context, 'waitForSpritePosition');
     event.previousFrame = new LogFrame(context, 'event');
     context.log.addEvent(event);
     const callback = (target) => {
@@ -105,13 +107,13 @@ class WaitForSpriteTouchAction extends ScheduledAction {
     this.targets = castArray(this.paramCallback());
     const event = new LogEvent(context, 'waitForSpriteTouch', {
       targets: this.targets,
-      sprite: this.name
+      sprite: this.name,
     });
     event.previousFrame = new LogFrame(context, 'event');
     context.log.addEvent(event);
     const callback = (target) => {
       for (const goal of this.targets) {
-        console.log("Checking...", goal);
+        console.log('Checking...', goal);
         if (target.isTouchingObject(goal)) {
           sprite.removeListener('TARGET_MOVED', callback);
           event.nextFrame = new LogFrame(context, 'event');
@@ -147,7 +149,7 @@ class WaitForSpriteNotTouchAction extends ScheduledAction {
     this.target = this.paramCallback();
     const event = new LogEvent(context, 'waitForSpriteNotTouch', {
       target: this.target,
-      sprite: this.name
+      sprite: this.name,
     });
     event.previousFrame = new LogFrame(context, 'event');
     context.log.addEvent(event);
@@ -162,7 +164,9 @@ class WaitForSpriteNotTouchAction extends ScheduledAction {
   }
 
   toString() {
-    return `Wait for sprite ${this.name} to not touch ${this.target || this.paramCallback}`;
+    return `Wait for sprite ${this.name} to not touch ${
+      this.target || this.paramCallback
+    }`;
   }
 }
 
@@ -176,7 +180,9 @@ class WaitOnBroadcastAction extends ScheduledAction {
   }
 
   execute(context, resolve) {
-    const event = new LogEvent(context, 'broadcast_listener', { name: this.name });
+    const event = new LogEvent(context, 'broadcast_listener', {
+      name: this.name,
+    });
     event.previousFrame = new LogFrame(context, 'broadcast_listener');
     context.log.addEvent(event);
 
@@ -206,27 +212,27 @@ export class SpriteCondition {
   toMove(timeout = null) {
     return {
       action: new WaitForSpriteAction(this.name),
-      timeout: timeout
+      timeout: timeout,
     };
   }
 
   /**
    * Wait for a sprite to reach a certain position.
-   * 
+   *
    * You can pass one position or a list of positions. If a list, the sprite
    * needs to reach one of the locations. For each location, you can leave either x or y
    * as null, which will be interpreted as a wildcard. A position object with both x and y
    * as null is considered an error.
-   * 
+   *
    * Alternatively, you can pass a callback that will receive the position (x,y) of the sprite.
    * It must return true if the position is considered reached.
-   * 
+   *
    * The callback can be used to test things like "is the sprite.x > 170?".
-   * 
+   *
    * This event is logged with event type `waitForSpritePosition`. The previous frame
    * is taken at the start of the wait. The next frame is taken when the condition has been
    * completed.
-   * 
+   *
    * {Array<{x:number|null,y:number|null}>|{x:number|null,y:number|null}|function(x:number,y:number):boolean}
    *
    * @param {any} positions - The positions.
@@ -238,25 +244,30 @@ export class SpriteCondition {
     let callback;
     if (typeof positions !== 'function') {
       callback = (x, y) => {
-        return castArray(positions).some(pos => {
+        return castArray(positions).some((pos) => {
           if (pos.x === null && pos.y === null) {
-            console.warn("Both positions in wait condition are wildcard. A mistake?");
+            console.warn(
+              'Both positions in wait condition are wildcard. A mistake?',
+            );
           }
-          return (pos.x === null || numericEquals(x, pos.x)) && (pos.y === null || numericEquals(y, pos.y));
+          return (
+            (pos.x === null || numericEquals(x, pos.x)) &&
+            (pos.y === null || numericEquals(y, pos.y))
+          );
         });
-      }
+      };
     } else {
       callback = positions;
     }
     return {
       action: new WaitForSpritePositionAction(this.name, callback),
-      timeout: timeout
+      timeout: timeout,
     };
   }
 
   /**
    * Wait for a sprite to touch another sprite.
-   * 
+   *
    * This event is logged with event type `waitForSpriteTouch`. The previous frame
    * is taken at the start of the wait. The next frame is taken when the condition has been
    * completed.
@@ -270,13 +281,13 @@ export class SpriteCondition {
     const callback = castCallback(targets);
     return {
       action: new WaitForSpriteTouchAction(this.name, callback),
-      timeout: timeout
+      timeout: timeout,
     };
   }
 
   /**
    * Wait for a sprite to not touch another sprite.
-   * 
+   *
    * @param {string|function():string} target
    * @param {?number} timeout
    * @return {WaitCondition}
@@ -285,8 +296,8 @@ export class SpriteCondition {
     const callback = castCallback(target);
     return {
       action: new WaitForSpriteNotTouchAction(this.name, callback),
-      timeout: timeout
-    }
+      timeout: timeout,
+    };
   }
 
   /**
@@ -343,7 +354,7 @@ export function sprite(name) {
 export function broadcast(name, timeout = null) {
   return {
     action: new WaitOnBroadcastAction(name),
-    timeout: timeout
+    timeout: timeout,
   };
 }
 
@@ -358,6 +369,6 @@ export function broadcast(name, timeout = null) {
 export function delay(delay) {
   return {
     action: new WaitEvent(delay),
-    timeout: delay + 100
+    timeout: delay + 100,
   };
 }

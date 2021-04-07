@@ -17,18 +17,20 @@ export class WhenPressKeyAction extends ScheduledAction {
     event.previousFrame = new LogFrame(context, 'key');
     context.log.addEvent(event);
 
-    const scratchKey = context.vm.runtime.ioDevices.keyboard._keyStringToScratchKey(this.key);
+    const scratchKey = context.vm.runtime.ioDevices.keyboard._keyStringToScratchKey(
+      this.key,
+    );
 
     if (scratchKey === '') {
       throw new Error(`Unknown key press: '${this.key}'`);
     }
 
     const list = context.vm.runtime.startHats('event_whenkeypressed', {
-      KEY_OPTION: scratchKey
+      KEY_OPTION: scratchKey,
     });
 
     const list2 = context.vm.runtime.startHats('event_whenkeypressed', {
-      KEY_OPTION: 'any'
+      KEY_OPTION: 'any',
     });
 
     const threads = list.concat(list2);
@@ -77,11 +79,11 @@ export class KeyUseAction extends ScheduledAction {
     const event = new LogEvent(context, 'useKey', {
       key: this.key,
       down: this.down,
-      delay: this.delay
+      delay: this.delay,
     });
     event.previousFrame = new LogFrame(context, 'event');
     context.log.addEvent(event);
-    
+
     context.vm.postIOData('keyboard', {
       key: this.key,
       isDown: this.isDown(),

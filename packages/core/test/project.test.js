@@ -2,31 +2,39 @@ import Project from '../src/project.js';
 
 function project(...names) {
   return new Project({
-    targets: names.map(n => {
+    targets: names.map((n) => {
       return {
         name: n,
         variables: {},
         costumes: [],
-        lists: []
+        lists: [],
       };
     }),
-    extensions: []
+    extensions: [],
   });
 }
 
 test('hasRemovedSprites', () => {
-  expect(project('Test1', 'Test2').hasRemovedSprites(project('Test1'))).toBe(true);
+  expect(project('Test1', 'Test2').hasRemovedSprites(project('Test1'))).toBe(
+    true,
+  );
   expect(project('Test1').hasRemovedSprites(project('Test1'))).toBe(false);
-  expect(project('Test1').hasRemovedSprites(project('Test1', 'Test2'))).toBe(false);
+  expect(project('Test1').hasRemovedSprites(project('Test1', 'Test2'))).toBe(
+    false,
+  );
   expect(project().hasRemovedSprites(project())).toBe(false);
   expect(project('Test1').hasRemovedSprites(project())).toBe(true);
   expect(project().hasRemovedSprites(project())).toBe(false);
 });
 
 test('hasAddedSprites', () => {
-  expect(project('Test1', 'Test2').hasAddedSprites(project('Test1'))).toBe(false);
+  expect(project('Test1', 'Test2').hasAddedSprites(project('Test1'))).toBe(
+    false,
+  );
   expect(project('Test1').hasAddedSprites(project('Test1'))).toBe(false);
-  expect(project('Test1').hasAddedSprites(project('Test1', 'Test2'))).toBe(true);
+  expect(project('Test1').hasAddedSprites(project('Test1', 'Test2'))).toBe(
+    true,
+  );
   expect(project().hasAddedSprites(project())).toBe(false);
   expect(project('Test1').hasAddedSprites(project())).toBe(false);
   expect(project().hasAddedSprites(project())).toBe(false);
@@ -36,15 +44,15 @@ test('hasChangedCostumes', () => {
   const one = new Project({
     targets: [
       { name: 'Test1', costumes: [{ assetId: 2 }, { assetId: 3 }] },
-      { name: 'Test2', costumes: [{ assetId: 2 }, { assetId: 3 }] }
-    ]
+      { name: 'Test2', costumes: [{ assetId: 2 }, { assetId: 3 }] },
+    ],
   });
 
   const two = new Project({
     targets: [
       { name: 'Test1', costumes: [{ assetId: 2 }, { assetId: 3 }] },
-      { name: 'Test2', costumes: [{ assetId: 4 }] }
-    ]
+      { name: 'Test2', costumes: [{ assetId: 4 }] },
+    ],
   });
 
   const three = new Project({ targets: [] });
@@ -59,15 +67,15 @@ test('hasChangedPosition', () => {
   const one = new Project({
     targets: [
       { name: 'Test1', x: 0, y: 1 },
-      { name: 'Test2', x: 0, y: 1 }
-    ]
+      { name: 'Test2', x: 0, y: 1 },
+    ],
   });
 
   const two = new Project({
     targets: [
       { name: 'Test1', x: 0, y: 1 },
-      { name: 'Test2', x: 1, y: 1 }
-    ]
+      { name: 'Test2', x: 1, y: 1 },
+    ],
   });
 
   const three = new Project({ targets: [] });
@@ -80,7 +88,7 @@ test('hasChangedPosition', () => {
 
 test('containsSprite', () => {
   const one = new Project({
-    targets: [{ name: 'Test1' }, { name: 'Test2' }]
+    targets: [{ name: 'Test1' }, { name: 'Test2' }],
   });
 
   const two = new Project({ targets: [] });

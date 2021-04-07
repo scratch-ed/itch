@@ -5,7 +5,7 @@ export class TrackSpriteAction extends ScheduledAction {
     super();
     this.name = sprite;
   }
-  
+
   execute(context, resolve) {
     const sprite = context.vm.runtime.getSpriteTargetByName(this.name);
     if (!sprite) {

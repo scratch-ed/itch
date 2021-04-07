@@ -34,9 +34,17 @@ export class ClickSpriteAction extends ScheduledAction {
     // Simulate mouse click by explicitly triggering click event on the target
     let list;
     if (this.spriteName !== STAGE) {
-      list = context.vm.runtime.startHats('event_whenthisspriteclicked', null, sprite);
+      list = context.vm.runtime.startHats(
+        'event_whenthisspriteclicked',
+        null,
+        sprite,
+      );
     } else {
-      list = context.vm.runtime.startHats('event_whenstageclicked', null, sprite);
+      list = context.vm.runtime.startHats(
+        'event_whenstageclicked',
+        null,
+        sprite,
+      );
     }
 
     const action = new ThreadListener(list);

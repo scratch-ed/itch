@@ -19,7 +19,7 @@ const Events = {
   SCRATCH_ANSWER: 'ANSWER',
   // Custom events,
   DONE_THREADS_UPDATE: 'DONE_THREADS_UPDATE',
-  BEFORE_HATS_START: 'BEFORE_HATS_START'
+  BEFORE_HATS_START: 'BEFORE_HATS_START',
 };
 
 /**
@@ -34,7 +34,10 @@ function wrapStep(vm) {
   vm.runtime._step = () => {
     const oldResult = oldFunction();
     if (vm.runtime._lastStepDoneThreads.length > 0) {
-      vm.runtime.emit(Events.DONE_THREADS_UPDATE, vm.runtime._lastStepDoneThreads);
+      vm.runtime.emit(
+        Events.DONE_THREADS_UPDATE,
+        vm.runtime._lastStepDoneThreads,
+      );
     }
     // const newTime = Date.now();
     // if (time && newTime) {
@@ -56,7 +59,9 @@ function wrapStartHats(vm) {
 
   vm.runtime.startHats = (requestedHatOpcode, optMatchFields, optTarget) => {
     vm.runtime.emit(Events.BEFORE_HATS_START, {
-      requestedHatOpcode, optMatchFields, optTarget
+      requestedHatOpcode,
+      optMatchFields,
+      optTarget,
     });
     return oldFunction(requestedHatOpcode, optMatchFields, optTarget);
   };
@@ -185,8 +190,8 @@ export default class Context {
      * @type {Acceleration}
      */
     this.accelerationFactor = {
-      factor: 1
-    }
+      factor: 1,
+    };
   }
 
   /**
@@ -212,7 +217,12 @@ export default class Context {
       if (text !== '') {
         console.log(`${this.timestamp()}: say: ${text} with ${type}`);
 
-        const event = new LogEvent(this, 'say', { text: text, target: target, type: type, sprite: target.sprite.name });
+        const event = new LogEvent(this, 'say', {
+          text: text,
+          target: target,
+          type: type,
+          sprite: target.sprite.name,
+        });
         event.previousFrame = new LogFrame(this, 'say');
         event.nextFrame = new LogFrame(this, 'sayEnd');
         this.log.addEvent(event);
@@ -223,13 +233,18 @@ export default class Context {
       if (question != null) {
         let x = this.providedAnswers.shift();
         if (x === undefined) {
-          this.output.addError('Er werd een vraag gesteld waarop geen antwoord voorzien is.');
+          this.output.addError(
+            'Er werd een vraag gesteld waarop geen antwoord voorzien is.',
+          );
           x = null;
         }
 
         console.log(`${this.timestamp()}: input: ${x}`);
 
-        const event = new LogEvent(this, 'answer', { question: question, text: x });
+        const event = new LogEvent(this, 'answer', {
+          question: question,
+          text: x,
+        });
         event.previousFrame = new LogFrame(this, 'answer');
         event.nextFrame = new LogFrame(this, 'answerEnd');
         this.log.addEvent(event);
@@ -255,11 +270,13 @@ export default class Context {
     this.vm.runtime.on(Events.BEFORE_HATS_START, (opts) => {
       if (opts.requestedHatOpcode === 'event_whenbroadcastreceived') {
         this.broadcastListeners
-          .filter(l => l.active)
-          .forEach(l => l.update({
-            matchFields: opts.optMatchFields,
-            target: opts.optTarget
-          }));
+          .filter((l) => l.active)
+          .forEach((l) =>
+            l.update({
+              matchFields: opts.optMatchFields,
+              target: opts.optTarget,
+            }),
+          );
       }
     });
   }
@@ -343,12 +360,18 @@ export default class Context {
       // is handled by the event scheduler itself.
 
       // First, modify the step time.
-      const currentStepInterval = this.vm.runtime.constructor.THREAD_STEP_INTERVAL;
-      const newStepInterval = currentStepInterval / this.accelerationFactor.factor;
+      const currentStepInterval = this.vm.runtime.constructor
+        .THREAD_STEP_INTERVAL;
+      const newStepInterval =
+        currentStepInterval / this.accelerationFactor.factor;
 
-      Object.defineProperty(this.vm.runtime.constructor, "THREAD_STEP_INTERVAL", {
-        value: newStepInterval
-      });
+      Object.defineProperty(
+        this.vm.runtime.constructor,
+        'THREAD_STEP_INTERVAL',
+        {
+          value: newStepInterval,
+        },
+      );
 
       // We also need to change various time stuff.
       this.acceleratePrimitive('control_wait', 'DURATION');
@@ -373,12 +396,13 @@ export default class Context {
    *
    * @param {string} opcode - The opcode to accelerate.
    * @param {string} argument - The argument to accelerate.
-   * 
+   *
    * @private
    */
-  acceleratePrimitive(opcode, argument= 'SECS') {
+  acceleratePrimitive(opcode, argument = 'SECS') {
     const original = this.vm.runtime.getOpcodeFunction(opcode);
-    const factor = this.accelerationFactor.time || this.accelerationFactor.factor;
+    const factor =
+      this.accelerationFactor.time || this.accelerationFactor.factor;
     this.vm.runtime._primitives[opcode] = (originalArgs, util) => {
       // For safety, clone the arguments.
       const args = { ...originalArgs };
@@ -390,7 +414,7 @@ export default class Context {
   /**
    * Adjust the given method on the given device to account for the
    * acceleration factor.
-   * 
+   *
    * This is mainly used to reverse accelerate the project timer.
    * E.g. if the project timer is counts 10s for a project with
    * acceleration factor 2, it should count 20s instead.
@@ -399,7 +423,7 @@ export default class Context {
     const factor = this.accelerationFactor.time || this.accelerationFactor;
     const device = this.vm.runtime.ioDevices.clock;
     const original = device.projectTimer;
-    
+
     device.projectTimer = () => {
       return original.call(device) * factor;
     };
@@ -407,18 +431,19 @@ export default class Context {
 
   /**
    * Accelerate a certain number. This is intended for events.
-   * 
+   *
    * @param {number|any} number - The number to accelerate. All non-numbers are returned as is.
    * @return {number|any}
    */
   accelerateEvent(number) {
-    const factor = this.accelerationFactor.event || this.accelerationFactor.factor;
+    const factor =
+      this.accelerationFactor.event || this.accelerationFactor.factor;
     if (factor === 1 || typeof number !== 'number') {
       return number;
     }
     return number / factor;
   }
-  
+
   terminate() {
     const action = new EndAction();
     action.execute(this, () => {});

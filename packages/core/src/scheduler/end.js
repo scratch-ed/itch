@@ -19,33 +19,35 @@ export class EndAction extends ScheduledAction {
 }
 
 export class JoinAction extends ScheduledAction {
-
   /**
    * @param {ScheduledEvent[]} events
    */
   constructor(events) {
     super();
-    const promises = events.map(e => {
+    const promises = events.map((e) => {
       const deferred = new Deferred();
       const oldExecute = e.action.execute;
       e.action.execute = (context, resolve) => {
-        oldExecute.call(e.action, context, value => {
+        oldExecute.call(e.action, context, (value) => {
           deferred.resolve(value);
           resolve(value);
         });
-      }
+      };
       return deferred.promise;
     });
     this.promise = Promise.race(promises);
   }
-  
+
   execute(_context, resolve) {
     // Do nothing.
-    this.promise.then(() => {
-      console.log("Threads have been joined...");
-      resolve();
-    }, reason => {
-      throw reason;
-    });
+    this.promise.then(
+      () => {
+        console.log('Threads have been joined...');
+        resolve();
+      },
+      (reason) => {
+        throw reason;
+      },
+    );
   }
 }

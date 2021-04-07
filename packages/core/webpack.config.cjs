@@ -11,7 +11,7 @@ module.exports = [
     devServer: {
       contentBase: false,
       host: '0.0.0.0',
-      port: process.env.PORT || 8361
+      port: process.env.PORT || 8361,
     },
     devtool: 'source-map',
     module: {
@@ -19,25 +19,25 @@ module.exports = [
         {
           include: [path.resolve(__dirname, 'src')],
           test: /\.js$/,
-          loader: 'babel-loader'
-        }
-      ]
+          loader: 'babel-loader',
+        },
+      ],
     },
     target: 'web',
     entry: {
-      'itch-core': './src/index.cjs'
+      'itch-core': './src/index.cjs',
     },
     output: {
       library: 'itch-core',
       libraryTarget: 'umd',
       path: path.resolve(path.dirname(pack.main)),
-      filename: path.basename(pack.main)
+      filename: path.basename(pack.main),
     },
     externals: {
       'scratch-vm': 'root VirtualMachine',
       'scratch-storage': 'root ScratchStorage',
       'scratch-svg-renderer': 'root ScratchSVGRenderer',
-      'scratch-render': 'root ScratchRender'
-    }
-  }
+      'scratch-render': 'root ScratchRender',
+    },
+  },
 ];

@@ -45,8 +45,8 @@ export default class Project {
    * @return {boolean}
    */
   hasRemovedSprites(other) {
-    const names = new Set(other.json.targets.map(t => t.name));
-    return !this.json.targets.every(t => names.has(t.name));
+    const names = new Set(other.json.targets.map((t) => t.name));
+    return !this.json.targets.every((t) => names.has(t.name));
   }
 
   /**
@@ -57,8 +57,8 @@ export default class Project {
    * @return {boolean}
    */
   hasAddedSprites(other) {
-    const names = new Set(this.json.targets.map(t => t.name));
-    return other.json.targets.some(t => !names.has(t.name));
+    const names = new Set(this.json.targets.map((t) => t.name));
+    return other.json.targets.some((t) => !names.has(t.name));
   }
 
   /**
@@ -73,13 +73,11 @@ export default class Project {
    * @param {string} sprite - Name of the sprite to check.
    */
   hasChangedCostumes(other, sprite) {
-    const myCostumeIds = this.sprite(sprite)
-      ?.costumes
-      ?.map(c => c.assetId);
+    const myCostumeIds = this.sprite(sprite)?.costumes?.map((c) => c.assetId);
 
-    const otherCustomIds = other.sprite(sprite)
-      ?.costumes
-      ?.map(c => c.assetId);
+    const otherCustomIds = other
+      .sprite(sprite)
+      ?.costumes?.map((c) => c.assetId);
 
     return !isEqual(myCostumeIds, otherCustomIds);
   }
@@ -155,7 +153,7 @@ export default class Project {
    * @return {Sb3Sprite|Sb3Stage|null} The sprite or null if not found.
    */
   sprite(name) {
-    return this.json.targets.find(t => t.name === name) || null;
+    return this.json.targets.find((t) => t.name === name) || null;
   }
 
   /**
@@ -166,7 +164,7 @@ export default class Project {
   }
 
   /**
-   * 
+   *
    * @param name
    * @return {null|{variable: Sb3Variable, target: Sb3Target}}
    */

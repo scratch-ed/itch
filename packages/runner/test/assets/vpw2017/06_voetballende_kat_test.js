@@ -1,15 +1,13 @@
 /* Copyright (C) 2019 Ghent University - All Rights Reserved */
 /** @param {Evaluation} e */
 function duringExecution(e) {
-  e.scheduler
-    .pressKey(' ')
-    .end();
+  e.scheduler.pressKey(' ').end();
 }
 
 /** @param {Evaluation} e */
 function afterExecution(e) {
   // De kat raakt de voetbal in de laatste frame
-  e.test('De kat raakt de voetbal', l => {
+  e.test('De kat raakt de voetbal', (l) => {
     l.expect(e.log.sprites.areTouching('Kat', 'Voetbal'))
       .withError('Op het einde van de uitvoer raakt de kat de voetbal niet')
       .toBe(true);
@@ -25,9 +23,11 @@ function afterExecution(e) {
     }
     oldDistance = distance;
   }
-  e.test('Afstand van kat tot voetbal wordt kleiner', l => {
+  e.test('Afstand van kat tot voetbal wordt kleiner', (l) => {
     l.expect(test)
-      .withError('De afstand van de kat naar de voetbal verkleint niet over de tijd')
+      .withError(
+        'De afstand van de kat naar de voetbal verkleint niet over de tijd',
+      )
       .toBe(true);
   });
 }

@@ -26,9 +26,7 @@ import isEqual from 'lodash/isEqual';
 import { CORRECT, WRONG } from './output.js';
 import { castCallback } from './utils.js';
 
-export class FatalErrorException extends Error {
-  
-}
+export class FatalErrorException extends Error {}
 
 class GenericMatcher {
   constructor(context, actual) {
@@ -57,20 +55,23 @@ class GenericMatcher {
     const status = accepted ? CORRECT : WRONG;
 
     if (accepted) {
-      const message = this.successMessage ?
-        this.successMessage(this.expected, this.actual) : successMessage;
+      const message = this.successMessage
+        ? this.successMessage(this.expected, this.actual)
+        : successMessage;
       if (message) {
         this.context.output.appendMessage(message);
       }
     } else {
-      const message = this.errorMessage ? this.errorMessage(this.expected, this.actual) : errorMessage;
+      const message = this.errorMessage
+        ? this.errorMessage(this.expected, this.actual)
+        : errorMessage;
       if (message) {
         this.context.output.appendMessage(message);
       }
     }
 
     this.context.output.closeTest(this.actual, accepted, status);
-    
+
     if (!accepted && this.terminate) {
       throw new FatalErrorException();
     }
@@ -104,9 +105,9 @@ class GenericMatcher {
 
   /**
    * Combines withSuccess & withError
-   * 
+   *
    * @param {{[correct]:string|function():string, [wrong]:string|function():string}} messages
-   * 
+   *
    * @return {GenericMatcher}
    */
   with(messages) {
@@ -117,7 +118,7 @@ class GenericMatcher {
 
   /**
    * Mark this test as fatal: if it fails, the testplan will stop.
-   * 
+   *
    * @return {GenericMatcher}
    */
   fatal() {
@@ -145,11 +146,15 @@ class GenericMatcher {
   toBe(expected) {
     this.expected = expected;
     if (typeof this.actual === 'number' && typeof expected === 'number') {
-      this.out(numericEquals(this.actual, expected),
-        `Expected ${expected?.toString()} but got ${this.actual?.toString()}`);
+      this.out(
+        numericEquals(this.actual, expected),
+        `Expected ${expected?.toString()} but got ${this.actual?.toString()}`,
+      );
     } else {
-      this.out(isEqual(this.actual, expected),
-        `Expected ${expected?.toString()} but got ${this.actual?.toString()}`);
+      this.out(
+        isEqual(this.actual, expected),
+        `Expected ${expected?.toString()} but got ${this.actual?.toString()}`,
+      );
     }
   }
 
@@ -173,11 +178,15 @@ class GenericMatcher {
   toNotBe(expected) {
     this.expected = expected;
     if (typeof this.actual === 'number' && typeof expected === 'number') {
-      this.out(!numericEquals(this.actual, expected),
-        `Expected ${expected?.toString()} but got ${this.actual?.toString()}`);
+      this.out(
+        !numericEquals(this.actual, expected),
+        `Expected ${expected?.toString()} but got ${this.actual?.toString()}`,
+      );
     } else {
-      this.out(!isEqual(this.actual, expected),
-        `Expected ${expected?.toString()} but got ${this.actual?.toString()}`);
+      this.out(
+        !isEqual(this.actual, expected),
+        `Expected ${expected?.toString()} but got ${this.actual?.toString()}`,
+      );
     }
   }
 }
@@ -258,7 +267,7 @@ class DescribeLevel extends TestLevel {
    * @param {string} name - Either the name or the function.
    * @param {function(TestLevel)} block - The function if a name is passed.
    */
-  describe(name= undefined, block = undefined) {
+  describe(name = undefined, block = undefined) {
     this.context.output.startContext(name);
     block(this);
     this.context.output.closeContext();

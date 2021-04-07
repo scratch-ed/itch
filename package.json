@@ -30,24 +30,8 @@
     "build": "npm run build --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
     "clean": "rimraf ./node_modules",
-    "lint": "eslint ."
-  },
-  "prettier": {
-    "arrowParens": "always",
-    "bracketSpacing": true,
-    "embeddedLanguageFormatting": "auto",
-    "htmlWhitespaceSensitivity": "css",
-    "insertPragma": false,
-    "jsxBracketSameLine": false,
-    "jsxSingleQuote": false,
-    "printWidth": 80,
-    "proseWrap": "preserve",
-    "quoteProps": "as-needed",
-    "requirePragma": false,
-    "semi": true,
-    "singleQuote": true,
-    "tabWidth": 2,
-    "trailingComma": "all",
-    "useTabs": false
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   }
 }

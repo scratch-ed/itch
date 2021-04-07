@@ -7,7 +7,7 @@ const defaultConfig = {
   memoryLimit: 5000000,
   natural_language: 'nl',
   programming_language: 'scratch',
-  debug: false
+  debug: false,
 };
 const fs = require('fs');
 
@@ -18,7 +18,7 @@ async function run(solution, configuration = {}) {
   const planFile = path.resolve(__dirname, `./zombiebal.js`);
 
   const results = [];
-  const collector = output => results.push(output);
+  const collector = (output) => results.push(output);
 
   const judge = new Judge(planFile, config, collector);
 
@@ -28,8 +28,9 @@ async function run(solution, configuration = {}) {
 }
 
 function testStatuses(result) {
-  return result.filter(obj => obj.command === 'close-test')
-    .map(obj => obj.status.enum);
+  return result
+    .filter((obj) => obj.command === 'close-test')
+    .map((obj) => obj.status.enum);
 }
 
 async function doIt() {
@@ -45,7 +46,7 @@ async function doIt() {
     console.log(`checking ${file}...`);
     const result = await run(file);
     fs.writeFileSync(`zombiebal/${file}.result.json`, JSON.stringify(result));
-    if (testStatuses(result).filter(t => t !== 'correct').length > 0) {
+    if (testStatuses(result).filter((t) => t !== 'correct').length > 0) {
       wrong++;
       console.log(`${file}: WRONG`);
     } else {
@@ -58,6 +59,4 @@ async function doIt() {
   // 1 correct, 62 not.
 }
 
-
 doIt();
-

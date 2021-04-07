@@ -4,88 +4,99 @@ const { runTest, testStatuses } = require('./integration-runner');
 jest.setTimeout(50000);
 
 test('01_mad_hatter', () => {
-  return runTest(`vpw2017/${expect.getState().currentTestName}`)
-    .then(result => {
+  return runTest(`vpw2017/${expect.getState().currentTestName}`).then(
+    (result) => {
       expect(result).toMatchSnapshot();
       expect(testStatuses(result)).allStatusesAre('correct');
-    });
+    },
+  );
 });
 
 test('02_papegaai', () => {
-  return runTest(`vpw2017/${expect.getState().currentTestName}`)
-    .then(result => {
+  return runTest(`vpw2017/${expect.getState().currentTestName}`).then(
+    (result) => {
       expect(testStatuses(result)).allStatusesAre('correct');
       expect(result).minimumCommands('close-testcase', 10);
-    });
+    },
+  );
 });
 
 test('03_teken_een_vierkant', () => {
-  return runTest(`vpw2017/${expect.getState().currentTestName}`)
-    .then(result => {
+  return runTest(`vpw2017/${expect.getState().currentTestName}`).then(
+    (result) => {
       expect(result).toMatchSnapshot();
       expect(testStatuses(result)).allStatusesAre('correct');
-    });
+    },
+  );
 });
 
 test('04_teken_een_driehoek', () => {
-  return runTest(`vpw2017/${expect.getState().currentTestName}`)
-    .then(result => {
+  return runTest(`vpw2017/${expect.getState().currentTestName}`).then(
+    (result) => {
       expect(result).toMatchSnapshot();
       expect(testStatuses(result)).onlyStatusesIs('correct');
       expect(result).minimumCommands('close-testcase', 2);
-    });
+    },
+  );
 });
 
 test('05_teken_een_huis', () => {
-  return runTest(`vpw2017/${expect.getState().currentTestName}`)
-    .then(result => {
+  return runTest(`vpw2017/${expect.getState().currentTestName}`).then(
+    (result) => {
       expect(result).toMatchSnapshot();
       expect(testStatuses(result)).onlyStatusesIs('correct');
       expect(result).minimumCommands('close-testcase', 1);
-    });
+    },
+  );
 });
 
 test('06_voetballende_kat', () => {
-  return runTest(`vpw2017/${expect.getState().currentTestName}`)
-    .then(result => {
+  return runTest(`vpw2017/${expect.getState().currentTestName}`).then(
+    (result) => {
       expect(result).toMatchSnapshot();
       expect(testStatuses(result)).onlyStatusesIs('correct');
       expect(result).minimumCommands('close-testcase', 2);
-    });
+    },
+  );
 });
 
 test('07_heksenjacht_eenvoudig', () => {
-  return runTest('vpw2017/07_heksenjacht', `vpw2017/${expect.getState().currentTestName}`)
-    .then(result => {
-      expect(result).toMatchSnapshot();
-      expect(testStatuses(result)).onlyStatusesIs('correct');
-      expect(result).minimumCommands('close-testcase', 5);
-    });
+  return runTest(
+    'vpw2017/07_heksenjacht',
+    `vpw2017/${expect.getState().currentTestName}`,
+  ).then((result) => {
+    expect(result).toMatchSnapshot();
+    expect(testStatuses(result)).onlyStatusesIs('correct');
+    expect(result).minimumCommands('close-testcase', 5);
+  });
 });
 
 test('07_heksenjacht', () => {
-  return runTest(`vpw2017/${expect.getState().currentTestName}`)
-    .then(result => {
+  return runTest(`vpw2017/${expect.getState().currentTestName}`).then(
+    (result) => {
       expect(result).toMatchSnapshot();
       expect(testStatuses(result)).onlyStatusesIs('correct');
       expect(result).minimumCommands('close-testcase', 7);
-    });
+    },
+  );
 });
 
 test('08_op_bezoek_bij_devin', () => {
-  return runTest(`vpw2017/${expect.getState().currentTestName}`)
-    .then(result => {
+  return runTest(`vpw2017/${expect.getState().currentTestName}`).then(
+    (result) => {
       expect(result).toMatchSnapshot();
       expect(testStatuses(result)).allStatusesAre('correct');
-    });
+    },
+  );
 });
 
 test('09_flauw_mopje', () => {
-  return runTest(`vpw2017/${expect.getState().currentTestName}`)
-    .then(result => {
+  return runTest(`vpw2017/${expect.getState().currentTestName}`).then(
+    (result) => {
       expect(result).toMatchSnapshot();
       expect(testStatuses(result)).allStatusesAre('correct');
-    });
+    },
+  );
 });
 
 // TODO: no tests at the moment
@@ -95,11 +106,12 @@ test('09_flauw_mopje', () => {
 // })
 
 test('11_vang_de_appels', () => {
-  return runTest(`vpw2017/${expect.getState().currentTestName}`)
-    .then(result => {
+  return runTest(`vpw2017/${expect.getState().currentTestName}`).then(
+    (result) => {
       expect(result).minimumCommands('close-test', 8);
       expect(testStatuses(result)).allStatusesAre('correct');
-    });
+    },
+  );
 });
 
 // TODO: no tests at the moment
@@ -110,14 +122,16 @@ test('11_vang_de_appels', () => {
 // })
 
 test('13_cijfersom', () => {
-  return runTest(`vpw2017/${expect.getState().currentTestName}`)
-    .then(result => {
+  return runTest(`vpw2017/${expect.getState().currentTestName}`).then(
+    (result) => {
       expect(result).toMatchSnapshot();
       expect(testStatuses(result)).allStatusesAre('correct');
-    });
+    },
+  );
 });
 
 test('draw_a_square', () => {
-  return runTest(`vpw2017/${expect.getState().currentTestName}`)
-    .then(result => expect(result).toMatchSnapshot());
+  return runTest(
+    `vpw2017/${expect.getState().currentTestName}`,
+  ).then((result) => expect(result).toMatchSnapshot());
 });

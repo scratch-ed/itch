@@ -2,10 +2,9 @@ const { PassThrough } = require('stream');
 const { Judge } = require('itch-runner');
 
 const COMMANDS = Object.fromEntries(
-  Object.keys(require('../../../utils/dodona-schema').definitions).map((key) => [
-    [key.toUpperCase().replace('-', '_')],
-    key,
-  ]),
+  Object.keys(
+    require('../../../utils/dodona-schema').definitions,
+  ).map((key) => [[key.toUpperCase().replace('-', '_')], key]),
 );
 
 const ALLOWED_COMMANDS = [
@@ -42,7 +41,7 @@ function setupRoutes(server) {
       testplan,
       { fromApi: true, debug: false },
       (judgeObject) => {
-        console.log(judgeObject)
+        console.log(judgeObject);
         if (!ALLOWED_COMMANDS.includes(judgeObject.command)) {
           return;
         }

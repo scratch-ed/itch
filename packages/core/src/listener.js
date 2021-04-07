@@ -53,7 +53,7 @@ export class ThreadListener extends Listener {
    * @param {Thread} thread - A thread that has finished running.
    */
   update(thread) {
-    this.threads = this.threads.filter(t => t !== thread);
+    this.threads = this.threads.filter((t) => t !== thread);
     if (this.threads.length === 0) {
       this.deffered.resolve('all threads completed');
       this.active = false;
@@ -65,7 +65,6 @@ export class ThreadListener extends Listener {
  * Listens to broadcasts, and resolves once a broadcast has been found.
  */
 export class BroadcastListener extends Listener {
-
   /**
    * @param {string} broadcastName
    */

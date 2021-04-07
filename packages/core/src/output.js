@@ -59,7 +59,9 @@ export default class ResultManager {
    */
   startJudgement() {
     if (this.isFinished) {
-      console.warn('Attempting to start judgement after judgement has been completed. Ignoring.');
+      console.warn(
+        'Attempting to start judgement after judgement has been completed. Ignoring.',
+      );
       return;
     }
     this.out({ command: 'start-judgement' });
@@ -73,13 +75,17 @@ export default class ResultManager {
    * @param {boolean} [accepted] - If the judgement is accepted or not.
    */
   closeJudgement(accepted = undefined) {
-    console.warn("Closing judgement...");
+    console.warn('Closing judgement...');
     if (this.isFinished) {
-      console.warn('Attempting to close judgement after judgement has been completed. Ignoring.');
+      console.warn(
+        'Attempting to close judgement after judgement has been completed. Ignoring.',
+      );
       return;
     }
     if (!this.hasOpenJudgement) {
-      console.warn('Attempting to close judgement while none is open. Ignoring.');
+      console.warn(
+        'Attempting to close judgement while none is open. Ignoring.',
+      );
       return;
     }
     if (this.hasOpenTab) {
@@ -108,7 +114,9 @@ export default class ResultManager {
    */
   startTab(title, hidden = undefined) {
     if (this.isFinished) {
-      console.warn('Attempting to open tab after judgement has been completed. Ignoring.');
+      console.warn(
+        'Attempting to open tab after judgement has been completed. Ignoring.',
+      );
       return;
     }
     if (!this.hasOpenJudgement) {
@@ -126,7 +134,9 @@ export default class ResultManager {
    */
   closeTab() {
     if (this.isFinished) {
-      console.warn('Attempting to close tab after judgement has been completed. Ignoring.');
+      console.warn(
+        'Attempting to close tab after judgement has been completed. Ignoring.',
+      );
       return;
     }
     if (!this.hasOpenTab) {
@@ -147,7 +157,9 @@ export default class ResultManager {
    */
   startContext(description = undefined) {
     if (this.isFinished) {
-      console.warn('Attempting to start context after judgement has been completed.');
+      console.warn(
+        'Attempting to start context after judgement has been completed.',
+      );
       return;
     }
     if (this.hasOpenContext) {
@@ -167,7 +179,9 @@ export default class ResultManager {
    */
   closeContext(accepted = undefined) {
     if (this.isFinished) {
-      console.warn('Attempting to close context after judgement has been completed.');
+      console.warn(
+        'Attempting to close context after judgement has been completed.',
+      );
       return;
     }
     if (!this.hasOpenContext) {
@@ -188,7 +202,9 @@ export default class ResultManager {
    */
   startTestcase(description = undefined) {
     if (this.isFinished) {
-      console.warn('Attempting to start testcase after judgement has been completed.');
+      console.warn(
+        'Attempting to start testcase after judgement has been completed.',
+      );
       return;
     }
     if (this.hasOpenCase) {
@@ -206,11 +222,15 @@ export default class ResultManager {
    */
   closeTestcase(accepted = undefined) {
     if (this.isFinished) {
-      console.warn('Attempting to close testcase after judgement has been completed.');
+      console.warn(
+        'Attempting to close testcase after judgement has been completed.',
+      );
       return;
     }
     if (!this.hasOpenCase) {
-      console.warn('Attempting to close testcase while none is open. Ignoring.');
+      console.warn(
+        'Attempting to close testcase while none is open. Ignoring.',
+      );
       return;
     }
     if (this.hasOpenTest) {
@@ -226,7 +246,9 @@ export default class ResultManager {
    */
   startTest(expected, description = undefined) {
     if (this.isFinished) {
-      console.warn('Attempting to start test after judgement has been completed.');
+      console.warn(
+        'Attempting to start test after judgement has been completed.',
+      );
       return;
     }
     if (this.hasOpenTest) {
@@ -235,7 +257,11 @@ export default class ResultManager {
     if (!this.hasOpenCase) {
       this.startTestcase(description);
     }
-    this.out({ command: 'start-test', expected: expected?.toString(), description: description });
+    this.out({
+      command: 'start-test',
+      expected: expected?.toString(),
+      description: description,
+    });
     this.hasOpenTest = true;
   }
 
@@ -246,7 +272,9 @@ export default class ResultManager {
    */
   closeTest(generated, accepted, status = undefined) {
     if (this.isFinished) {
-      console.warn('Attempting to close test after judgement has been completed.');
+      console.warn(
+        'Attempting to close test after judgement has been completed.',
+      );
       return;
     }
     if (!this.hasOpenTest) {
@@ -267,7 +295,9 @@ export default class ResultManager {
    */
   appendMessage(message) {
     if (!this.hasOpenJudgement) {
-      console.warn('Attempting to append message while no judgement is open. Ignoring.');
+      console.warn(
+        'Attempting to append message while no judgement is open. Ignoring.',
+      );
       return;
     }
     this.out({ command: 'append-message', message: message });
@@ -278,7 +308,9 @@ export default class ResultManager {
    */
   escalateStatus(status) {
     if (!this.hasOpenJudgement) {
-      console.warn('Attempting to escalate status of closed judgement. Ignoring.');
+      console.warn(
+        'Attempting to escalate status of closed judgement. Ignoring.',
+      );
       return;
     }
     this.out({ command: 'escalate-status', status: status });

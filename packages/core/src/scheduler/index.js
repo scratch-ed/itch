@@ -20,9 +20,7 @@ class InitialAction extends CallbackAction {
 /**
  * Used to indicate an event timed out.
  */
-class TimeoutError extends Error {
-
-}
+class TimeoutError extends Error {}
 
 /**
  * @typedef {Object} WaitCondition
@@ -106,7 +104,6 @@ class TimeoutError extends Error {
  * event.newEvent();
  */
 export class ScheduledEvent {
-
   /**
    * Create a new event.
    *
@@ -176,18 +173,32 @@ export class ScheduledEvent {
    * @package
    */
   run(context) {
-    console.debug(`${context.timestamp()}: Running actions ${this.action.toString()}`);
+    console.debug(
+      `${context.timestamp()}: Running actions ${this.action.toString()}`,
+    );
     const action = new Promise((resolve, _reject) => {
-      console.debug(`${context.timestamp()}: Executing actions ${this.action.toString()}`);
+      console.debug(
+        `${context.timestamp()}: Executing actions ${this.action.toString()}`,
+      );
       this.action.execute(context, resolve);
     });
     const timeout = new Promise((resolve, reject) => {
-      const time = this.sync ? context.accelerateEvent(this.timeout || context.actionTimeout) : 0;
+      const time = this.sync
+        ? context.accelerateEvent(this.timeout || context.actionTimeout)
+        : 0;
       setTimeout(() => {
         if (this.sync) {
-          reject(new TimeoutError(`${context.timestamp()}: timeout after ${this.timeout || context.actionTimeout} (real: ${time}) from ${this.action.toString()}`));
+          reject(
+            new TimeoutError(
+              `${context.timestamp()}: timeout after ${
+                this.timeout || context.actionTimeout
+              } (real: ${time}) from ${this.action.toString()}`,
+            ),
+          );
         } else {
-          resolve(`${context.timestamp()}: Ignoring timeout for async event ${this.action.toString()}.`);
+          resolve(
+            `${context.timestamp()}: Ignoring timeout for async event ${this.action.toString()}.`,
+          );
         }
       }, time);
     });
@@ -195,9 +206,11 @@ export class ScheduledEvent {
     // This will take the result from the first promise to resolve, which
     // will be either the result or the timeout if something went wrong.
     // Note that async events cannot timeout.
-    return Promise.race([action, timeout])
-      .then((v) => {
-        console.debug(`${context.timestamp()}: resolved action ${this.action.toString()}: ${v}`);
+    return Promise.race([action, timeout]).then(
+      (v) => {
+        console.debug(
+          `${context.timestamp()}: resolved action ${this.action.toString()}: ${v}`,
+        );
 
         if (this.onResolve) {
           this.onResolve(context);
@@ -208,9 +221,12 @@ export class ScheduledEvent {
         //   If it times out, we don't schedule next events.
         // - For async events, the resolve of the timeout promise resolves immediately,
         //   we reach this immediately.
-        this.nextEvents.forEach(e => e.run(context));
-      }, (reason) => {
-        console.debug(`${context.timestamp()}: Rejected actions ${this.action.toString()}`);
+        this.nextEvents.forEach((e) => e.run(context));
+      },
+      (reason) => {
+        console.debug(
+          `${context.timestamp()}: Rejected actions ${this.action.toString()}`,
+        );
         if (reason instanceof TimeoutError) {
           let escalate = true;
           if (this.onTimeout) {
@@ -224,18 +240,18 @@ export class ScheduledEvent {
             console.warn(reason);
             context.output.escalateStatus({
               human: 'Tijdslimiet overschreden',
-              enum: 'time limit exceeded'
+              enum: 'time limit exceeded',
             });
             context.output.closeJudgement(false);
           }
         } else if (reason instanceof FatalErrorException) {
-          console.warn("Fatal test failed, stopping execution of all tests.");
+          console.warn('Fatal test failed, stopping execution of all tests.');
           context.output.closeJudgement(false);
         } else {
           console.error('Unexpected error:', reason);
           context.output.escalateStatus({
             human: 'Fout bij uitvoeren testplan.',
-            enum: 'runtime error'
+            enum: 'runtime error',
           });
           context.output.appendMessage(reason);
           context.output.closeJudgement(false);
@@ -243,7 +259,8 @@ export class ScheduledEvent {
 
         // Finish executing, ensuring we stop.
         context.terminate();
-      });
+      },
+    );
   }
 
   /**
@@ -418,7 +435,11 @@ export class ScheduledEvent {
    * @return {ScheduledEvent}
    */
   sendBroadcast(broadcast, sync = true, timeout = null) {
-    return this.constructNext(new SendBroadcastAction(broadcast), sync, timeout);
+    return this.constructNext(
+      new SendBroadcastAction(broadcast),
+      sync,
+      timeout,
+    );
   }
 
   /**
@@ -630,15 +651,14 @@ export class ScheduledEvent {
    * Otherwise it will be a failing test with the message.
    *
    * @param {{[correct]:string|function():string, [wrong]:string|function():string}} [messages]
-   * 
+   *
    * @return {ScheduledEvent}
    */
   asTest(messages) {
-    
     const wrapped = {
       correct: castCallback(messages?.correct),
-      wrong: castCallback(messages?.wrong)
-    }
+      wrong: castCallback(messages?.wrong),
+    };
 
     this.resolved((context) => {
       context.output.startTest(true);

@@ -16,13 +16,18 @@ export class SendBroadcastAction extends ScheduledAction {
     // Save the state of the sprite before the click event.
     /** @type {Target} */
     const target = context.vm.runtime.getTargetForStage();
-    const event = new LogEvent(context, 'broadcast', { target: target.getName() });
+    const event = new LogEvent(context, 'broadcast', {
+      target: target.getName(),
+    });
     event.previousFrame = new LogFrame(context, 'broadcast');
     context.log.addEvent(event);
 
-    const threads = context.vm.runtime.startHats('event_whenbroadcastreceived', {
-      BROADCAST_OPTION: this.name,
-    });
+    const threads = context.vm.runtime.startHats(
+      'event_whenbroadcastreceived',
+      {
+        BROADCAST_OPTION: this.name,
+      },
+    );
 
     const action = new ThreadListener(threads);
     context.threadListeners.push(action);

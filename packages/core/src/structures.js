@@ -35,13 +35,13 @@ export class Sb3Block {
      * A string naming the block. The opcode of a "core" block may be found in the
      * Scratch source code here or here for shadows, and the opcode of an extension's
      * block may be found in the extension's source code.
-     * 
+     *
      * @type {string}
      */
     this.opcode = data.opcode;
     /**
      * The ID of the following block or `null`.
-     * 
+     *
      * @type {?string}
      */
     this.next = data.next;
@@ -50,7 +50,7 @@ export class Sb3Block {
      * block. If the block is the first stack block in a C mouth, this is the ID of
      * the C block. If the block is an input to another block, this is the ID of
      * that other block. Otherwise it is null.
-     * 
+     *
      * @type {?string}
      */
     this.parent = data.parent;
@@ -60,10 +60,10 @@ export class Sb3Block {
      * reporters may be dropped and C mouths. The first element of each array
      * is 1 if the input is a shadow, 2 if there is no shadow, and 3 if there
      * is a shadow but it is obscured by the input. The second is either the
-     * ID of the input or an array representing it as described below. If 
+     * ID of the input or an array representing it as described below. If
      * there is an obscured shadow, the third element is its ID or an array
      * representing it.
-     * 
+     *
      * @type {Object.<string,Array>}
      */
     this.inputs = data.inputs;
@@ -71,21 +71,21 @@ export class Sb3Block {
     /**
      * An object associating names with arrays representing fields. The first
      * element of each array is the field's value which may be followed by an ID.
-     * 
+     *
      * @type {Object.<string,Array>}
      */
     this.fields = data.fields;
 
     /**
      * True if this is a shadow and false otherwise.
-     * 
+     *
      * A shadow is a constant expression in a block input which can be replaced
      * by a reporter; Scratch internally considers these to be blocks although they
      * are not usually thought of as such.
-     * 
+     *
      * This means that a shadow is basically the place holder of some variable in blocks
      * while they are in the toolbox.
-     * 
+     *
      * @see https://groups.google.com/g/blockly/c/bXe4iEaVSao
      * @type {boolean}
      */
@@ -93,14 +93,14 @@ export class Sb3Block {
 
     /**
      * False if the block has a parent and true otherwise.
-     * 
+     *
      * @type {boolean}
      */
     this.topLevel = data.topLevel;
 
     /**
      * ID of the comment if the block has a comment.
-     * 
+     *
      * @type {?string}
      */
     this.comment = data.comment;
@@ -113,14 +113,14 @@ export class Sb3Block {
 
     /**
      * Y coordinate in the code area if top-level.
-     * 
+     *
      * @type {?number}
      */
     this.y = data.y;
 
     /**
      * Mutation data if a mutation.
-     * 
+     *
      * @type {Sb3Mutation}
      */
     this.mutation = data.mutation;
@@ -129,19 +129,21 @@ export class Sb3Block {
   /**
    * Get the procedure name of the procedure being called.
    * If the block is not a procedure call, an error will be thrown.
-   * 
+   *
    * @return {string}
    */
   get calledProcedureName() {
     if (this.opcode !== 'procedures_call') {
-      throw new Error("Cannot get called procedure name from non procedure call.");
+      throw new Error(
+        'Cannot get called procedure name from non procedure call.',
+      );
     }
-    
+
     return this.mutation.proccode;
   }
-  
+
   toString() {
-    return `Block ${this.id} (${this.opcode})`
+    return `Block ${this.id} (${this.opcode})`;
   }
 }
 
@@ -215,7 +217,10 @@ export class Sb3Target {
      */
     this.variables = {};
     for (const variable of Object.keys(data.variables || {})) {
-      this.variables[variable] = new Sb3Variable(variable, data.variables[variable]);
+      this.variables[variable] = new Sb3Variable(
+        variable,
+        data.variables[variable],
+      );
     }
     /**
      * An object associating IDs with arrays representing lists whose first element is the list's name followed by the list as an array.
@@ -235,7 +240,7 @@ export class Sb3Target {
     for (const [key, value] of Object.entries(data.blocks || {})) {
       this.blocks.push(new Sb3Block(key, value));
     }
-    
+
     /**
      * An object associating IDs with comments.
      * @type {Object.<string, Sb3Comment>}
@@ -278,32 +283,35 @@ export class Sb3Target {
    */
   difference(object, base) {
     function changes(object, base) {
-      return _.transform(object, function(result, value, key) {
+      return _.transform(object, function (result, value, key) {
         if (!_.isEqual(value, base[key])) {
-          result[key] = (_.isObject(value) && _.isObject(base[key])) ? changes(value, base[key]) : value;
+          result[key] =
+            _.isObject(value) && _.isObject(base[key])
+              ? changes(value, base[key])
+              : value;
         }
       });
     }
     return changes(object, base);
   }
-  
+
   diff(other) {
     return this.difference(this, other);
   }
 
   /**
    * Check if this sprite contains a block with the given opcode.
-   * 
+   *
    * @param {string} opcode
    * @return {boolean}
    */
   hasBlock(opcode) {
-    return this.blocks.some(block => block.opcode === opcode);
+    return this.blocks.some((block) => block.opcode === opcode);
   }
 
   /**
    * Get the first block with opcode.
-   * 
+   *
    * @param {string} opcode
    * @return {null|Sb3Block}
    */
@@ -356,7 +364,9 @@ export class Sb3Sprite extends Sb3Target {
 export class Sb3Json {
   constructor(data) {
     /** @type {Sb3Target[]} */
-    this.targets = data.targets.map(t => t.isStage ? new Sb3Stage(t) : new Sb3Sprite(t));
+    this.targets = data.targets.map((t) =>
+      t.isStage ? new Sb3Stage(t) : new Sb3Sprite(t),
+    );
     /** @type {Sb3Monitor[]} */
     this.monitors = data.monitors;
     /** @type {Object[]} */

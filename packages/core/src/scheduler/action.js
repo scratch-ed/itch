@@ -1,11 +1,11 @@
 /**
  * Base class for scheduled actions.
- * 
+ *
  * When implementing an action, you should override the `execute` function.
  * Its docs contain information on what to do.
- * 
+ *
  * This is a class internal to the judge; do not use it in testplans.
- * 
+ *
  * @package
  */
 export class ScheduledAction {
@@ -28,7 +28,7 @@ export class ScheduledAction {
    * Human readable string representation. The default implementation
    * returns the class name, but you should override this to add relevant
    * params.
-   * 
+   *
    * @return {string}
    */
   toString() {

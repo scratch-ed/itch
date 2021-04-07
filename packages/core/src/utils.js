@@ -14,10 +14,10 @@ export function numericEquals(float1, float2, epsilon = 0.0001) {
 
 /**
  * Convert a value or function to a function.
- * 
+ *
  * If the argument is a function, return it.
  * Otherwise, returns a function that returns the value.
- * 
+ *
  * @template T
  * @param {T|null|undefined|function():T} functionOrObject
  * @return {function():T}

@@ -5,14 +5,14 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [ 15.x ]
+        node-version: [15.x]
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Cache npm dependencies  
+      - name: Cache npm dependencies
         uses: actions/cache@v2
         with:
           path: ~/.npm
@@ -21,7 +21,7 @@ jobs:
             ${{ runner.os }}-node-
       - run: npm ci
       - run: npm run build
-      - name: Test core  
+      - name: Test core
         run: npm test --workspace itch-core
       - name: Test runner
         run: npm test --workspace itch-runner
@@ -29,7 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [ 15.x ]
+        node-version: [15.x]
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js ${{ matrix.node-version }}

@@ -45,8 +45,8 @@ const EvaluationStage = {
   before: 1,
   scheduling: 2,
   executing: 3,
-  after: 4
-}
+  after: 4,
+};
 
 /**
  * Entry point for the test plan API.
@@ -127,7 +127,7 @@ class Evaluation extends TabLevel {
 
   /** @param {number} timeout */
   set actionTimeout(timeout) {
-    this.assertBefore(EvaluationStage.scheduling, "actionTimeout");
+    this.assertBefore(EvaluationStage.scheduling, 'actionTimeout');
     this.context.actionTimeout = timeout;
   }
 
@@ -141,9 +141,9 @@ class Evaluation extends TabLevel {
    * @param {number} factor - The factor, e.g. 2 will double the speed.
    */
   set acceleration(factor) {
-    this.assertBefore(EvaluationStage.scheduling, "acceleration");
-    this.context.accelerationFactor = { 
-      factor: factor
+    this.assertBefore(EvaluationStage.scheduling, 'acceleration');
+    this.context.accelerationFactor = {
+      factor: factor,
     };
   }
 
@@ -157,14 +157,14 @@ class Evaluation extends TabLevel {
   /**
    * Set the acceleration factor for the test's times.
    * This will be used to set the timeouts for the scheduled events.
-   * 
+   *
    * @param {number} factor - The factor, e.g. 2 will double the speed.
    */
   set timeAcceleration(factor) {
-    this.assertBefore(EvaluationStage.scheduling, "timeAcceleration");
+    this.assertBefore(EvaluationStage.scheduling, 'timeAcceleration');
     this.context.accelerationFactor.time = factor;
   }
-  
+
   get timeAcceleration() {
     return this.context.accelerationFactor.time;
   }
@@ -176,21 +176,21 @@ class Evaluation extends TabLevel {
    * @param {number} factor - The factor, e.g. 2 will double the speed.
    */
   set eventAcceleration(factor) {
-    this.assertBefore(EvaluationStage.scheduling, "eventAcceleration");
+    this.assertBefore(EvaluationStage.scheduling, 'eventAcceleration');
     this.context.accelerationFactor.event = factor;
   }
 
   get eventAcceleration() {
     return this.context.accelerationFactor.event;
   }
-  
+
   get runError() {
     return this.context.error;
   }
 
   /**
    * Enables or disabled turbo mode.
-   * 
+   *
    * @param {boolean} enabled
    */
   // eslint-disable-next-line accessor-pairs
@@ -205,7 +205,9 @@ class Evaluation extends TabLevel {
    */
   assertBefore(stage, func) {
     if (this.stage > stage) {
-      throw new Error(`The function ${func} cannot be used at this stage: it must be used earlier.`);
+      throw new Error(
+        `The function ${func} cannot be used at this stage: it must be used earlier.`,
+      );
     }
   }
 }
@@ -253,7 +255,6 @@ class Evaluation extends TabLevel {
  * @return {Promise<void>}
  */
 export async function run(config) {
-
   const context = new Context();
   const templateJson = await context.getProjectJson(config);
   const submissionJson = await context.prepareVm(config);
@@ -261,20 +262,23 @@ export async function run(config) {
     /** @type {BeforeExecution} */
     beforeExecution: window.beforeExecution || (() => {}),
     /** @type {DuringExecution} */
-    duringExecution: window.duringExecution || (e => e.scheduler.end()),
+    duringExecution: window.duringExecution || ((e) => e.scheduler.end()),
     /** @type {AfterExecution} */
-    afterExecution: window.afterExecution || (() => {})
+    afterExecution: window.afterExecution || (() => {}),
   };
-  
+
   context.output.startJudgement();
   context.stage = EvaluationStage.before;
 
   const judge = new Evaluation(context);
-  
-  try {
 
+  try {
     // Run the tests before the execution.
-    testplan.beforeExecution(new Project(templateJson), new Project(submissionJson), judge);
+    testplan.beforeExecution(
+      new Project(templateJson),
+      new Project(submissionJson),
+      judge,
+    );
 
     expose();
 
@@ -296,12 +300,11 @@ export async function run(config) {
 
     // Do post-mortem tests.
     testplan.afterExecution(judge);
-
   } catch (e) {
     if (!(e instanceof FatalErrorException)) {
       throw e;
     } else {
-      console.warn("Stopping tests due to fatal test not passing.");
+      console.warn('Stopping tests due to fatal test not passing.');
       console.warn(e);
     }
   }
