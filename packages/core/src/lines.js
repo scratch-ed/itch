@@ -82,10 +82,10 @@ export function mergeLines(lines) {
   }
 
   // sort rico dictionary on intersection with y-axis.
-  const merged_lines = [];
+  const mergedLines = [];
 
-  for (const [rico, ld] of Object.entries(ricoDict)) {
-    for (const [b, lines] of Object.entries(ld)) {
+  for (const [_rico, ld] of Object.entries(ricoDict)) {
+    for (const [_b, lines] of Object.entries(ld)) {
       let line = lines[0];
       for (let i = 1; i < lines.length; i++) {
         if (distSq(line.start, lines[i].end) > distSq(line.end, lines[i].start)) {
@@ -94,11 +94,11 @@ export function mergeLines(lines) {
           line = { start: lines[i].start, end: line.end };
         }
       }
-      merged_lines.push(line);
+      mergedLines.push(line);
     }
   }
 
-  for (const [x, lines] of Object.entries(vertDict)) {
+  for (const [_x, lines] of Object.entries(vertDict)) {
     let line = lines[0];
     for (let i = 1; i < lines.length; i++) {
       if (distSq(line.start, lines[i].end) > distSq(line.end, lines[i].start)) {
@@ -107,9 +107,9 @@ export function mergeLines(lines) {
         line = { start: lines[i].start, end: line.end };
       }
     }
-    merged_lines.push(line);
+    mergedLines.push(line);
   }
-  return merged_lines;
+  return mergedLines;
 }
 
 // Given points, test if they form a square
@@ -154,22 +154,22 @@ export function findSquares(lines) {
   const squares = [];
   if (lines.length < 4) return false; // no square without at least 4 sides
 
-  const merged_lines = mergeLines(lines);
+  const mergedLines = mergeLines(lines);
   //
   // check if four points are a square
   //
-  for (let i = 0; i < merged_lines.length - 3; i++) {
-    for (let j = i + 1; j < merged_lines.length - 2; j++) {
-      for (let k = j + 1; k < merged_lines.length - 1; k++) {
-        for (let l = k + 1; l < merged_lines.length; l++) {
-          const p11 = merged_lines[i].start;
-          const p12 = merged_lines[i].end;
-          const p21 = merged_lines[j].start;
-          const p22 = merged_lines[j].end;
-          const p31 = merged_lines[k].start;
-          const p32 = merged_lines[k].end;
-          const p41 = merged_lines[l].start;
-          const p42 = merged_lines[l].end;
+  for (let i = 0; i < mergedLines.length - 3; i++) {
+    for (let j = i + 1; j < mergedLines.length - 2; j++) {
+      for (let k = j + 1; k < mergedLines.length - 1; k++) {
+        for (let l = k + 1; l < mergedLines.length; l++) {
+          const p11 = mergedLines[i].start;
+          const p12 = mergedLines[i].end;
+          const p21 = mergedLines[j].start;
+          const p22 = mergedLines[j].end;
+          const p31 = mergedLines[k].start;
+          const p32 = mergedLines[k].end;
+          const p41 = mergedLines[l].start;
+          const p42 = mergedLines[l].end;
           let points = [p11, p12, p21, p22, p31, p32, p41, p42];
 
           // from the 8 points, there should be 4 pairs of equal points
