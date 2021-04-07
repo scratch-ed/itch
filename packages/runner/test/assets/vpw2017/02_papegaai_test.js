@@ -18,7 +18,7 @@ function beforeExecution(template, submission, output) {
 /** @param {Evaluation} e */
 function duringExecution(e) {
   e.actionTimeout = 8000;
-  //e.acceleration = 10;
+  // e.acceleration = 10;
 
   e.scheduler
     .wait(1000)
