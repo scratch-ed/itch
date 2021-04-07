@@ -29,7 +29,8 @@
     "start": "npm start --workspace itch-runner",
     "build": "npm run build --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
-    "clean": "rimraf ./node_modules"
+    "clean": "rimraf ./node_modules",
+    "lint": "eslint ."
   },
   "prettier": {
     "arrowParens": "always",
