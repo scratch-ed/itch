@@ -25,6 +25,7 @@
     "jest": "^26.6.3"
   },
   "scripts": {
-    "start": "node ./src/cli.js"
+    "start": "node ./src/cli.js",
+    "test": "jest"
   }
 }
