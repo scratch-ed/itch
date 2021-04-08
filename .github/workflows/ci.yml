@@ -25,6 +25,8 @@ jobs:
         run: npm test --workspace itch-core
       - name: Test runner
         run: npm test --workspace itch-runner
+      - name: Test exercises
+        run: npm test --workspace exercises-zombiebal
   lint:
     runs-on: ubuntu-latest
     strategy:
