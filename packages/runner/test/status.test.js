@@ -6,7 +6,7 @@ test('01.space_mission', () => {
   return runTest(`status/${expect.getState().currentTestName}`).then(
     (result) => {
       expect(result).toMatchSnapshot();
-      expect(testStatuses(result)).allStatusesAre('correct');
+      expect(testStatuses(result)).everyStatusToBe('correct');
     },
   );
 });

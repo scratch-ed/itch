@@ -72,7 +72,7 @@ docker-compose up
 
 ### Puppeteer complains about my browser
 
-When running into this issue, it might help to manually set the executable for your browser in the `.env` files. For example when using Chromium this might be a valable entry:
+When running into this issue, it might help to manually set the executable for your browser in the `.env` files. For example when using Chromium this might be a viable entry:
 
 ```bash
 # in .env

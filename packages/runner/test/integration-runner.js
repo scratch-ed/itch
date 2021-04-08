@@ -1,6 +1,7 @@
 /* Copyright (C) 2020 Ghent University - All Rights Reserved */
 const { Judge } = require('../src/judge');
 const path = require('path');
+const { testStatuses } = require('itch-test-utils');
 
 const defaultConfig = {
   debug: false,
@@ -37,48 +38,6 @@ async function runTest(projectName, testName = null) {
 
   return results;
 }
-
-function testStatuses(result) {
-  return result
-    .filter((obj) => obj.command === 'close-test')
-    .map((obj) => obj.status.enum);
-}
-
-expect.extend({
-  allStatusesAre(statusses, expected) {
-    const correct =
-      statusses.every((s) => s === expected) && statusses.length >= 1;
-    return {
-      message: () =>
-        `expected all test statuses (>= 1) to be ${expected}, got ${statusses}`,
-      pass: correct,
-    };
-  },
-  onlyStatusesIs(statusses, expected) {
-    const correct = statusses.every((s) => s === expected);
-    return {
-      message: () =>
-        `expected all test statuses (>= 1) to be ${expected}, got ${statusses}`,
-      pass: correct,
-    };
-  },
-  exactStatus(statusses, expected, amount) {
-    const counted = statusses.filter((s) => s === expected).length;
-    return {
-      message: () =>
-        `expected ${amount} statusses of ${expected}, but got ${counted}`,
-      pass: counted === amount,
-    };
-  },
-  minimumCommands(result, command, amount) {
-    const am = result.filter((obj) => obj.command === command).length;
-    return {
-      message: () =>
-        `expected >= ${amount} commands of type ${command}, got ${am}`,
-      pass: am >= amount,
-    };
-  },
-});
 
 module.exports = {
   runTest,

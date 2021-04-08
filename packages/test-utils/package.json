@@ -1,0 +1,10 @@
+{
+  "name": "itch-test-utils",
+  "version": "0.0.1",
+  "description": "Some utilities to test testplans",
+  "private": true,
+  "main": "./matchers.js",
+  "peerDependencies": {
+    "jest": "^26.6.3"
+  }
+}
