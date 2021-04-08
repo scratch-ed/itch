@@ -37,3 +37,10 @@ declare namespace jest {
     atLeastCommands(command: string, amount: number): R;
   }
 }
+
+function executePlan(
+  template: string,
+  solution: string,
+  testplan: string,
+  options: Object,
+): Promise<Object[]>;

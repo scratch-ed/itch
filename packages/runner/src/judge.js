@@ -9,17 +9,11 @@ function toStdOut(output) {
   process.stdout.write(`${JSON.stringify(output)}\n`);
 }
 
-/**
- * @typedef {Object} FrameAddScriptTagOptions
- * @property {string} [url]
- * @property {string} [content]
- */
-
 class Judge {
   /**
    * Create a judge class.
    *
-   * @param {FrameAddScriptTagOptions} testplan
+   * @param {string} testplan
    * @param {object} options
    * @param {function(object):void} outputStream
    */

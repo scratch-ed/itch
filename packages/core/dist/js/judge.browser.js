@@ -14241,6 +14241,192 @@ module.exports = uid;
 
 /***/ }),
 
+/***/ "../../node_modules/seed-random/index.js":
+/*!**************************************************************************************************!*\
+  !*** C:/Users/strij/Ontwikkeling/Scratch4D/itch-scratch-judge/node_modules/seed-random/index.js ***!
+  \**************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(global) {
+
+var width = 256;// each RC4 output is 0 <= x < 256
+var chunks = 6;// at least six RC4 outputs for each double
+var digits = 52;// there are 52 significant digits in a double
+var pool = [];// pool: entropy pool starts empty
+var GLOBAL = typeof global === 'undefined' ? window : global;
+
+//
+// The following constants are related to IEEE 754 limits.
+//
+var startdenom = Math.pow(width, chunks),
+    significance = Math.pow(2, digits),
+    overflow = significance * 2,
+    mask = width - 1;
+
+
+var oldRandom = Math.random;
+
+//
+// seedrandom()
+// This is the seedrandom function described above.
+//
+module.exports = function(seed, options) {
+  if (options && options.global === true) {
+    options.global = false;
+    Math.random = module.exports(seed, options);
+    options.global = true;
+    return Math.random;
+  }
+  var use_entropy = (options && options.entropy) || false;
+  var key = [];
+
+  // Flatten the seed string or build one from local entropy if needed.
+  var shortseed = mixkey(flatten(
+    use_entropy ? [seed, tostring(pool)] :
+    0 in arguments ? seed : autoseed(), 3), key);
+
+  // Use the seed to initialize an ARC4 generator.
+  var arc4 = new ARC4(key);
+
+  // Mix the randomness into accumulated entropy.
+  mixkey(tostring(arc4.S), pool);
+
+  // Override Math.random
+
+  // This function returns a random double in [0, 1) that contains
+  // randomness in every bit of the mantissa of the IEEE 754 value.
+
+  return function() {         // Closure to return a random double:
+    var n = arc4.g(chunks),             // Start with a numerator n < 2 ^ 48
+        d = startdenom,                 //   and denominator d = 2 ^ 48.
+        x = 0;                          //   and no 'extra last byte'.
+    while (n < significance) {          // Fill up all significant digits by
+      n = (n + x) * width;              //   shifting numerator and
+      d *= width;                       //   denominator and generating a
+      x = arc4.g(1);                    //   new least-significant-byte.
+    }
+    while (n >= overflow) {             // To avoid rounding up, before adding
+      n /= 2;                           //   last byte, shift everything
+      d /= 2;                           //   right using integer Math until
+      x >>>= 1;                         //   we have exactly the desired bits.
+    }
+    return (n + x) / d;                 // Form the number within [0, 1).
+  };
+};
+
+module.exports.resetGlobal = function () {
+  Math.random = oldRandom;
+};
+
+//
+// ARC4
+//
+// An ARC4 implementation.  The constructor takes a key in the form of
+// an array of at most (width) integers that should be 0 <= x < (width).
+//
+// The g(count) method returns a pseudorandom integer that concatenates
+// the next (count) outputs from ARC4.  Its return value is a number x
+// that is in the range 0 <= x < (width ^ count).
+//
+/** @constructor */
+function ARC4(key) {
+  var t, keylen = key.length,
+      me = this, i = 0, j = me.i = me.j = 0, s = me.S = [];
+
+  // The empty key [] is treated as [0].
+  if (!keylen) { key = [keylen++]; }
+
+  // Set up S using the standard key scheduling algorithm.
+  while (i < width) {
+    s[i] = i++;
+  }
+  for (i = 0; i < width; i++) {
+    s[i] = s[j = mask & (j + key[i % keylen] + (t = s[i]))];
+    s[j] = t;
+  }
+
+  // The "g" method returns the next (count) outputs as one number.
+  (me.g = function(count) {
+    // Using instance members instead of closure state nearly doubles speed.
+    var t, r = 0,
+        i = me.i, j = me.j, s = me.S;
+    while (count--) {
+      t = s[i = mask & (i + 1)];
+      r = r * width + s[mask & ((s[i] = s[j = mask & (j + t)]) + (s[j] = t))];
+    }
+    me.i = i; me.j = j;
+    return r;
+    // For robust unpredictability discard an initial batch of values.
+    // See http://www.rsa.com/rsalabs/node.asp?id=2009
+  })(width);
+}
+
+//
+// flatten()
+// Converts an object tree to nested arrays of strings.
+//
+function flatten(obj, depth) {
+  var result = [], typ = (typeof obj)[0], prop;
+  if (depth && typ == 'o') {
+    for (prop in obj) {
+      try { result.push(flatten(obj[prop], depth - 1)); } catch (e) {}
+    }
+  }
+  return (result.length ? result : typ == 's' ? obj : obj + '\0');
+}
+
+//
+// mixkey()
+// Mixes a string seed into a key that is an array of integers, and
+// returns a shortened string seed that is equivalent to the result key.
+//
+function mixkey(seed, key) {
+  var stringseed = seed + '', smear, j = 0;
+  while (j < stringseed.length) {
+    key[mask & j] =
+      mask & ((smear ^= key[mask & j] * 19) + stringseed.charCodeAt(j++));
+  }
+  return tostring(key);
+}
+
+//
+// autoseed()
+// Returns an object for autoseeding, using window.crypto if available.
+//
+/** @param {Uint8Array=} seed */
+function autoseed(seed) {
+  try {
+    GLOBAL.crypto.getRandomValues(seed = new Uint8Array(width));
+    return tostring(seed);
+  } catch (e) {
+    return [+new Date, GLOBAL, GLOBAL.navigator && GLOBAL.navigator.plugins,
+            GLOBAL.screen, tostring(pool)];
+  }
+}
+
+//
+// tostring()
+// Converts an array of charcodes to a string
+//
+function tostring(a) {
+  return String.fromCharCode.apply(0, a);
+}
+
+//
+// When seedrandom.js is loaded, we immediately mix a few bits
+// from the built-in RNG into the entropy pool.  Because we do
+// not want to intefere with determinstic PRNG state later,
+// seedrandom will not call Math.random on its own again after
+// initialization.
+//
+mixkey(Math.random(), pool);
+
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../webpack/buildin/global.js */ "../../node_modules/webpack/buildin/global.js")))
+
+/***/ }),
+
 /***/ "../../node_modules/startaudiocontext/StartAudioContext.js":
 /*!********************************************************************************************************************!*\
   !*** C:/Users/strij/Ontwikkeling/Scratch4D/itch-scratch-judge/node_modules/startaudiocontext/StartAudioContext.js ***!
@@ -15067,7 +15253,7 @@ var Context = /*#__PURE__*/function () {
         // First, modify the step time.
         var currentStepInterval = this.vm.runtime.constructor.THREAD_STEP_INTERVAL;
         var newStepInterval = currentStepInterval / this.accelerationFactor.factor;
-        Object.defineProperty(this.vm.runtime.constructor, "THREAD_STEP_INTERVAL", {
+        Object.defineProperty(this.vm.runtime.constructor, 'THREAD_STEP_INTERVAL', {
           value: newStepInterval
         }); // We also need to change various time stuff.
 
@@ -15091,7 +15277,7 @@ var Context = /*#__PURE__*/function () {
      *
      * @param {string} opcode - The opcode to accelerate.
      * @param {string} argument - The argument to accelerate.
-     * 
+     *
      * @private
      */
 
@@ -15113,7 +15299,7 @@ var Context = /*#__PURE__*/function () {
     /**
      * Adjust the given method on the given device to account for the
      * acceleration factor.
-     * 
+     *
      * This is mainly used to reverse accelerate the project timer.
      * E.g. if the project timer is counts 10s for a project with
      * acceleration factor 2, it should count 20s instead.
@@ -15132,7 +15318,7 @@ var Context = /*#__PURE__*/function () {
     }
     /**
      * Accelerate a certain number. This is intended for events.
-     * 
+     *
      * @param {number|any} number - The number to accelerate. All non-numbers are returned as is.
      * @return {number|any}
      */
@@ -15255,13 +15441,15 @@ __webpack_require__.r(__webpack_exports__);
 /* WEBPACK VAR INJECTION */(function(global) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "run", function() { return run; });
 /* harmony import */ var regenerator_runtime_runtime_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! regenerator-runtime/runtime.js */ "../../node_modules/regenerator-runtime/runtime.js");
 /* harmony import */ var regenerator_runtime_runtime_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(regenerator_runtime_runtime_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _log_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./log.js */ "./src/log.js");
-/* harmony import */ var _utils_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./utils.js */ "./src/utils.js");
-/* harmony import */ var _context_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./context.js */ "./src/context.js");
-/* harmony import */ var _project_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./project.js */ "./src/project.js");
-/* harmony import */ var _scheduler_index_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./scheduler/index.js */ "./src/scheduler/index.js");
-/* harmony import */ var _testplan_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./testplan.js */ "./src/testplan.js");
-/* harmony import */ var _lines_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./lines.js */ "./src/lines.js");
+/* harmony import */ var seed_random__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! seed-random */ "../../node_modules/seed-random/index.js");
+/* harmony import */ var seed_random__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(seed_random__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _log_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./log.js */ "./src/log.js");
+/* harmony import */ var _utils_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./utils.js */ "./src/utils.js");
+/* harmony import */ var _context_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./context.js */ "./src/context.js");
+/* harmony import */ var _project_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./project.js */ "./src/project.js");
+/* harmony import */ var _scheduler_index_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./scheduler/index.js */ "./src/scheduler/index.js");
+/* harmony import */ var _testplan_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./testplan.js */ "./src/testplan.js");
+/* harmony import */ var _lines_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./lines.js */ "./src/lines.js");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -15297,6 +15485,7 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 
 
+
 var object;
 
 if (typeof global === 'undefined') {
@@ -15312,12 +15501,12 @@ if (typeof global === 'undefined') {
 
 
 function expose() {
-  object.numericEquals = _utils_js__WEBPACK_IMPORTED_MODULE_2__["numericEquals"];
-  object.searchFrames = _log_js__WEBPACK_IMPORTED_MODULE_1__["searchFrames"];
-  object.sprite = _scheduler_index_js__WEBPACK_IMPORTED_MODULE_5__["sprite"];
-  object.broadcast = _scheduler_index_js__WEBPACK_IMPORTED_MODULE_5__["broadcast"];
-  object.delay = _scheduler_index_js__WEBPACK_IMPORTED_MODULE_5__["delay"];
-  object.distSq = _lines_js__WEBPACK_IMPORTED_MODULE_7__["distSq"];
+  object.numericEquals = _utils_js__WEBPACK_IMPORTED_MODULE_3__["numericEquals"];
+  object.searchFrames = _log_js__WEBPACK_IMPORTED_MODULE_2__["searchFrames"];
+  object.sprite = _scheduler_index_js__WEBPACK_IMPORTED_MODULE_6__["sprite"];
+  object.broadcast = _scheduler_index_js__WEBPACK_IMPORTED_MODULE_6__["broadcast"];
+  object.delay = _scheduler_index_js__WEBPACK_IMPORTED_MODULE_6__["delay"];
+  object.distSq = _lines_js__WEBPACK_IMPORTED_MODULE_8__["distSq"];
 }
 /**
  * A bundle of all inputs for the judge. It contains all information
@@ -15450,7 +15639,7 @@ var Evaluation = /*#__PURE__*/function (_TabLevel) {
      */
     ,
     set: function set(timeout) {
-      this.assertBefore(EvaluationStage.scheduling, "actionTimeout");
+      this.assertBefore(EvaluationStage.scheduling, 'actionTimeout');
       this.context.actionTimeout = timeout;
     }
   }, {
@@ -15465,12 +15654,12 @@ var Evaluation = /*#__PURE__*/function (_TabLevel) {
     /**
      * Set the acceleration factor for the test's times.
      * This will be used to set the timeouts for the scheduled events.
-     * 
+     *
      * @param {number} factor - The factor, e.g. 2 will double the speed.
      */
     ,
     set: function set(factor) {
-      this.assertBefore(EvaluationStage.scheduling, "acceleration");
+      this.assertBefore(EvaluationStage.scheduling, 'acceleration');
       this.context.accelerationFactor = {
         factor: factor
       };
@@ -15488,7 +15677,7 @@ var Evaluation = /*#__PURE__*/function (_TabLevel) {
      */
     ,
     set: function set(factor) {
-      this.assertBefore(EvaluationStage.scheduling, "timeAcceleration");
+      this.assertBefore(EvaluationStage.scheduling, 'timeAcceleration');
       this.context.accelerationFactor.time = factor;
     }
   }, {
@@ -15497,7 +15686,7 @@ var Evaluation = /*#__PURE__*/function (_TabLevel) {
       return this.context.accelerationFactor.event;
     },
     set: function set(factor) {
-      this.assertBefore(EvaluationStage.scheduling, "eventAcceleration");
+      this.assertBefore(EvaluationStage.scheduling, 'eventAcceleration');
       this.context.accelerationFactor.event = factor;
     }
   }, {
@@ -15507,7 +15696,7 @@ var Evaluation = /*#__PURE__*/function (_TabLevel) {
     }
     /**
      * Enables or disabled turbo mode.
-     * 
+     *
      * @param {boolean} enabled
      */
     // eslint-disable-next-line accessor-pairs
@@ -15533,7 +15722,7 @@ var Evaluation = /*#__PURE__*/function (_TabLevel) {
   }]);
 
   return Evaluation;
-}(_testplan_js__WEBPACK_IMPORTED_MODULE_6__["TabLevel"]);
+}(_testplan_js__WEBPACK_IMPORTED_MODULE_7__["TabLevel"]);
 /**
  * Function that runs before the project is started. This can be used to
  * run static checks on the submitted project. For your convenience, the
@@ -15591,16 +15780,21 @@ function _run() {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            context = new _context_js__WEBPACK_IMPORTED_MODULE_3__["default"]();
-            _context.next = 3;
+            // Seed random data.
+            seed_random__WEBPACK_IMPORTED_MODULE_1___default()('itch-judge', {
+              global: true
+            });
+            console.error(Math.random());
+            context = new _context_js__WEBPACK_IMPORTED_MODULE_4__["default"]();
+            _context.next = 5;
             return context.getProjectJson(config);
 
-          case 3:
+          case 5:
             templateJson = _context.sent;
-            _context.next = 6;
+            _context.next = 8;
             return context.prepareVm(config);
 
-          case 6:
+          case 8:
             submissionJson = _context.sent;
             testplan = {
               /** @type {BeforeExecution} */
@@ -15617,14 +15811,14 @@ function _run() {
             context.output.startJudgement();
             context.stage = EvaluationStage.before;
             judge = new Evaluation(context);
-            _context.prev = 11;
+            _context.prev = 13;
             // Run the tests before the execution.
-            testplan.beforeExecution(new _project_js__WEBPACK_IMPORTED_MODULE_4__["default"](templateJson), new _project_js__WEBPACK_IMPORTED_MODULE_4__["default"](submissionJson), judge);
+            testplan.beforeExecution(new _project_js__WEBPACK_IMPORTED_MODULE_5__["default"](templateJson), new _project_js__WEBPACK_IMPORTED_MODULE_5__["default"](submissionJson), judge);
             expose();
-            _context.next = 16;
+            _context.next = 18;
             return context.vmLoaded.promise;
 
-          case 16:
+          case 18:
             context.stage = EvaluationStage.scheduling; // Schedule the commands for the duration.
 
             testplan.duringExecution(judge);
@@ -15632,45 +15826,46 @@ function _run() {
 
             context.prepareAndRunVm(); // Run the events.
 
-            _context.next = 22;
+            _context.next = 24;
             return context.event.run(context);
 
-          case 22:
-            _context.next = 24;
+          case 24:
+            _context.next = 26;
             return context.simulationEnd.promise;
 
-          case 24:
+          case 26:
             context.stage = EvaluationStage.after; // Do post-mortem tests.
 
             testplan.afterExecution(judge);
-            _context.next = 36;
+            _context.next = 38;
             break;
 
-          case 28:
-            _context.prev = 28;
-            _context.t0 = _context["catch"](11);
+          case 30:
+            _context.prev = 30;
+            _context.t0 = _context["catch"](13);
 
-            if (_context.t0 instanceof _testplan_js__WEBPACK_IMPORTED_MODULE_6__["FatalErrorException"]) {
-              _context.next = 34;
+            if (_context.t0 instanceof _testplan_js__WEBPACK_IMPORTED_MODULE_7__["FatalErrorException"]) {
+              _context.next = 36;
               break;
             }
 
             throw _context.t0;
 
-          case 34:
-            console.warn("Stopping tests due to fatal test not passing.");
+          case 36:
+            console.warn('Stopping tests due to fatal test not passing.');
             console.warn(_context.t0);
 
-          case 36:
+          case 38:
             context.output.closeJudgement();
+            seed_random__WEBPACK_IMPORTED_MODULE_1___default.a.resetGlobal();
             console.log('--- END OF EVALUATION ---');
 
-          case 38:
+          case 41:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee, null, [[11, 28]]);
+    }, _callee, null, [[13, 30]]);
   }));
   return _run.apply(this, arguments);
 }
@@ -15691,6 +15886,7 @@ object.run = run;
 const result = __webpack_require__(/*! ./evaluation.js */ "./src/evaluation.js");
 
 module.exports = result.run;
+
 
 /***/ }),
 
@@ -15806,7 +16002,7 @@ function mergeLines(lines) {
   } // sort rico dictionary on intersection with y-axis.
 
 
-  var merged_lines = [];
+  var mergedLines = [];
 
   for (var _i = 0, _Object$entries = Object.entries(ricoDict); _i < _Object$entries.length; _i++) {
     var _Object$entries$_i = _slicedToArray(_Object$entries[_i], 2),
@@ -15834,13 +16030,13 @@ function mergeLines(lines) {
         }
       }
 
-      merged_lines.push(line);
+      mergedLines.push(line);
     }
   }
 
   for (var _i4 = 0, _Object$entries3 = Object.entries(vertDict); _i4 < _Object$entries3.length; _i4++) {
     var _Object$entries3$_i = _slicedToArray(_Object$entries3[_i4], 2),
-        x = _Object$entries3$_i[0],
+        _x = _Object$entries3$_i[0],
         _lines2 = _Object$entries3$_i[1];
 
     var _line = _lines2[0];
@@ -15859,10 +16055,10 @@ function mergeLines(lines) {
       }
     }
 
-    merged_lines.push(_line);
+    mergedLines.push(_line);
   }
 
-  return merged_lines;
+  return mergedLines;
 } // Given points, test if they form a square
 
 function pointsAreSquare(points) {
@@ -15910,22 +16106,22 @@ function findSquares(lines) {
   var squares = [];
   if (lines.length < 4) return false; // no square without at least 4 sides
 
-  var merged_lines = mergeLines(lines); //
+  var mergedLines = mergeLines(lines); //
   // check if four points are a square
   //
 
-  for (var i = 0; i < merged_lines.length - 3; i++) {
-    for (var j = i + 1; j < merged_lines.length - 2; j++) {
-      for (var k = j + 1; k < merged_lines.length - 1; k++) {
-        for (var l = k + 1; l < merged_lines.length; l++) {
-          var p11 = merged_lines[i].start;
-          var p12 = merged_lines[i].end;
-          var p21 = merged_lines[j].start;
-          var p22 = merged_lines[j].end;
-          var p31 = merged_lines[k].start;
-          var p32 = merged_lines[k].end;
-          var p41 = merged_lines[l].start;
-          var p42 = merged_lines[l].end;
+  for (var i = 0; i < mergedLines.length - 3; i++) {
+    for (var j = i + 1; j < mergedLines.length - 2; j++) {
+      for (var k = j + 1; k < mergedLines.length - 1; k++) {
+        for (var l = k + 1; l < mergedLines.length; l++) {
+          var p11 = mergedLines[i].start;
+          var p12 = mergedLines[i].end;
+          var p21 = mergedLines[j].start;
+          var p22 = mergedLines[j].end;
+          var p31 = mergedLines[k].start;
+          var p32 = mergedLines[k].end;
+          var p41 = mergedLines[l].start;
+          var p42 = mergedLines[l].end;
           var points = [p11, p12, p21, p22, p31, p32, p41, p42]; // from the 8 points, there should be 4 pairs of equal points
 
           points = removeDuplicates(points);
@@ -16357,8 +16553,6 @@ var LogFrame = /*#__PURE__*/function () {
    * @param {string} block - The block that triggered the fame saving.
    */
   function LogFrame(context, block) {
-    var data = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-
     _classCallCheck(this, LogFrame);
 
     /**
@@ -17420,7 +17614,7 @@ var ResultManager = /*#__PURE__*/function () {
     key: "closeJudgement",
     value: function closeJudgement() {
       var accepted = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : undefined;
-      console.warn("Closing judgement...");
+      console.warn('Closing judgement...');
 
       if (this.isFinished) {
         console.warn('Attempting to close judgement after judgement has been completed. Ignoring.');
@@ -17952,7 +18146,7 @@ var Project = /*#__PURE__*/function () {
       return this.json.targets;
     }
     /**
-     * 
+     *
      * @param name
      * @return {null|{variable: Sb3Variable, target: Sb3Target}}
      */
@@ -18171,12 +18365,12 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 /**
  * Base class for scheduled actions.
- * 
+ *
  * When implementing an action, you should override the `execute` function.
  * Its docs contain information on what to do.
- * 
+ *
  * This is a class internal to the judge; do not use it in testplans.
- * 
+ *
  * @package
  */
 var ScheduledAction = /*#__PURE__*/function () {
@@ -18205,7 +18399,7 @@ var ScheduledAction = /*#__PURE__*/function () {
      * Human readable string representation. The default implementation
      * returns the class name, but you should override this to add relevant
      * params.
-     * 
+     *
      * @return {string}
      */
 
@@ -18631,7 +18825,7 @@ var JoinAction = /*#__PURE__*/function (_ScheduledAction2) {
     value: function execute(_context, resolve) {
       // Do nothing.
       this.promise.then(function () {
-        console.log("Threads have been joined...");
+        console.log('Threads have been joined...');
         resolve();
       }, function (reason) {
         throw reason;
@@ -19052,7 +19246,7 @@ var ScheduledEvent = /*#__PURE__*/function () {
             context.output.closeJudgement(false);
           }
         } else if (reason instanceof _testplan_js__WEBPACK_IMPORTED_MODULE_9__["FatalErrorException"]) {
-          console.warn("Fatal test failed, stopping execution of all tests.");
+          console.warn('Fatal test failed, stopping execution of all tests.');
           context.output.closeJudgement(false);
         } else {
           console.error('Unexpected error:', reason);
@@ -19502,7 +19696,7 @@ var ScheduledEvent = /*#__PURE__*/function () {
      * Otherwise it will be a failing test with the message.
      *
      * @param {{[correct]:string|function():string, [wrong]:string|function():string}} [messages]
-     * 
+     *
      * @return {ScheduledEvent}
      */
 
@@ -20068,7 +20262,7 @@ var WaitForSpriteTouchAction = /*#__PURE__*/function (_ScheduledAction4) {
         try {
           for (_iterator.s(); !(_step = _iterator.n()).done;) {
             var goal = _step.value;
-            console.log("Checking...", goal);
+            console.log('Checking...', goal);
 
             if (target.isTouchingObject(goal)) {
               sprite.removeListener('TARGET_MOVED', callback);
@@ -20224,21 +20418,21 @@ var SpriteCondition = /*#__PURE__*/function () {
     }
     /**
      * Wait for a sprite to reach a certain position.
-     * 
+     *
      * You can pass one position or a list of positions. If a list, the sprite
      * needs to reach one of the locations. For each location, you can leave either x or y
      * as null, which will be interpreted as a wildcard. A position object with both x and y
      * as null is considered an error.
-     * 
+     *
      * Alternatively, you can pass a callback that will receive the position (x,y) of the sprite.
      * It must return true if the position is considered reached.
-     * 
+     *
      * The callback can be used to test things like "is the sprite.x > 170?".
-     * 
+     *
      * This event is logged with event type `waitForSpritePosition`. The previous frame
      * is taken at the start of the wait. The next frame is taken when the condition has been
      * completed.
-     * 
+     *
      * {Array<{x:number|null,y:number|null}>|{x:number|null,y:number|null}|function(x:number,y:number):boolean}
      *
      * @param {any} positions - The positions.
@@ -20257,7 +20451,7 @@ var SpriteCondition = /*#__PURE__*/function () {
         callback = function callback(x, y) {
           return lodash_castArray__WEBPACK_IMPORTED_MODULE_0___default()(positions).some(function (pos) {
             if (pos.x === null && pos.y === null) {
-              console.warn("Both positions in wait condition are wildcard. A mistake?");
+              console.warn('Both positions in wait condition are wildcard. A mistake?');
             }
 
             return (pos.x === null || numericEquals(x, pos.x)) && (pos.y === null || numericEquals(y, pos.y));
@@ -20274,7 +20468,7 @@ var SpriteCondition = /*#__PURE__*/function () {
     }
     /**
      * Wait for a sprite to touch another sprite.
-     * 
+     *
      * This event is logged with event type `waitForSpriteTouch`. The previous frame
      * is taken at the start of the wait. The next frame is taken when the condition has been
      * completed.
@@ -20297,7 +20491,7 @@ var SpriteCondition = /*#__PURE__*/function () {
     }
     /**
      * Wait for a sprite to not touch another sprite.
-     * 
+     *
      * @param {string|function():string} target
      * @param {?number} timeout
      * @return {WaitCondition}
@@ -20488,14 +20682,14 @@ var Sb3Block = /*#__PURE__*/function () {
      * A string naming the block. The opcode of a "core" block may be found in the
      * Scratch source code here or here for shadows, and the opcode of an extension's
      * block may be found in the extension's source code.
-     * 
+     *
      * @type {string}
      */
 
     this.opcode = data.opcode;
     /**
      * The ID of the following block or `null`.
-     * 
+     *
      * @type {?string}
      */
 
@@ -20505,7 +20699,7 @@ var Sb3Block = /*#__PURE__*/function () {
      * block. If the block is the first stack block in a C mouth, this is the ID of
      * the C block. If the block is an input to another block, this is the ID of
      * that other block. Otherwise it is null.
-     * 
+     *
      * @type {?string}
      */
 
@@ -20515,10 +20709,10 @@ var Sb3Block = /*#__PURE__*/function () {
      * reporters may be dropped and C mouths. The first element of each array
      * is 1 if the input is a shadow, 2 if there is no shadow, and 3 if there
      * is a shadow but it is obscured by the input. The second is either the
-     * ID of the input or an array representing it as described below. If 
+     * ID of the input or an array representing it as described below. If
      * there is an obscured shadow, the third element is its ID or an array
      * representing it.
-     * 
+     *
      * @type {Object.<string,Array>}
      */
 
@@ -20526,21 +20720,21 @@ var Sb3Block = /*#__PURE__*/function () {
     /**
      * An object associating names with arrays representing fields. The first
      * element of each array is the field's value which may be followed by an ID.
-     * 
+     *
      * @type {Object.<string,Array>}
      */
 
     this.fields = data.fields;
     /**
      * True if this is a shadow and false otherwise.
-     * 
+     *
      * A shadow is a constant expression in a block input which can be replaced
      * by a reporter; Scratch internally considers these to be blocks although they
      * are not usually thought of as such.
-     * 
+     *
      * This means that a shadow is basically the place holder of some variable in blocks
      * while they are in the toolbox.
-     * 
+     *
      * @see https://groups.google.com/g/blockly/c/bXe4iEaVSao
      * @type {boolean}
      */
@@ -20548,14 +20742,14 @@ var Sb3Block = /*#__PURE__*/function () {
     this.shadow = data.shadow;
     /**
      * False if the block has a parent and true otherwise.
-     * 
+     *
      * @type {boolean}
      */
 
     this.topLevel = data.topLevel;
     /**
      * ID of the comment if the block has a comment.
-     * 
+     *
      * @type {?string}
      */
 
@@ -20568,14 +20762,14 @@ var Sb3Block = /*#__PURE__*/function () {
     this.x = data.x;
     /**
      * Y coordinate in the code area if top-level.
-     * 
+     *
      * @type {?number}
      */
 
     this.y = data.y;
     /**
      * Mutation data if a mutation.
-     * 
+     *
      * @type {Sb3Mutation}
      */
 
@@ -20584,7 +20778,7 @@ var Sb3Block = /*#__PURE__*/function () {
   /**
    * Get the procedure name of the procedure being called.
    * If the block is not a procedure call, an error will be thrown.
-   * 
+   *
    * @return {string}
    */
 
@@ -20593,7 +20787,7 @@ var Sb3Block = /*#__PURE__*/function () {
     key: "calledProcedureName",
     get: function get() {
       if (this.opcode !== 'procedures_call') {
-        throw new Error("Cannot get called procedure name from non procedure call.");
+        throw new Error('Cannot get called procedure name from non procedure call.');
       }
 
       return this.mutation.proccode;
@@ -20706,7 +20900,7 @@ var Sb3Target = /*#__PURE__*/function () {
 
     this.blocks = [];
 
-    for (var _i2 = 0, _Object$entries = Object.entries(data.blocks); _i2 < _Object$entries.length; _i2++) {
+    for (var _i2 = 0, _Object$entries = Object.entries(data.blocks || {}); _i2 < _Object$entries.length; _i2++) {
       var _Object$entries$_i = _slicedToArray(_Object$entries[_i2], 2),
           key = _Object$entries$_i[0],
           value = _Object$entries$_i[1];
@@ -20783,7 +20977,7 @@ var Sb3Target = /*#__PURE__*/function () {
     }
     /**
      * Check if this sprite contains a block with the given opcode.
-     * 
+     *
      * @param {string} opcode
      * @return {boolean}
      */
@@ -20797,7 +20991,7 @@ var Sb3Target = /*#__PURE__*/function () {
     }
     /**
      * Get the first block with opcode.
-     * 
+     *
      * @param {string} opcode
      * @return {null|Sb3Block}
      */
@@ -21079,9 +21273,9 @@ var GenericMatcher = /*#__PURE__*/function () {
     }
     /**
      * Combines withSuccess & withError
-     * 
+     *
      * @param {{[correct]:string|function():string, [wrong]:string|function():string}} messages
-     * 
+     *
      * @return {GenericMatcher}
      */
 
@@ -21094,7 +21288,7 @@ var GenericMatcher = /*#__PURE__*/function () {
     }
     /**
      * Mark this test as fatal: if it fails, the testplan will stop.
-     * 
+     *
      * @return {GenericMatcher}
      */
 
@@ -21355,10 +21549,10 @@ function numericEquals(float1, float2) {
 }
 /**
  * Convert a value or function to a function.
- * 
+ *
  * If the argument is a function, return it.
  * Otherwise, returns a function that returns the value.
- * 
+ *
  * @template T
  * @param {T|null|undefined|function():T} functionOrObject
  * @return {function():T}

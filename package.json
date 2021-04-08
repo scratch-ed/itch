@@ -9,7 +9,8 @@
   ],
   "private": true,
   "workspaces": [
-    "packages/**"
+    "packages/**",
+    "exercises/**"
   ],
   "devDependencies": {
     "eslint": "^7.23.0",

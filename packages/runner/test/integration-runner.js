@@ -1,7 +1,6 @@
 /* Copyright (C) 2020 Ghent University - All Rights Reserved */
-const { Judge } = require('../src/judge');
 const path = require('path');
-const { testStatuses } = require('itch-test-utils');
+const { executePlan } = require('itch-test-utils');
 
 const defaultConfig = {
   debug: false,
@@ -22,24 +21,9 @@ async function runTest(projectName, testName = null) {
     `assets/${testName || projectName}_test.js`,
   );
 
-  const results = [];
-  const collector = (output) => results.push(output);
-
-  const judge = new Judge(
-    planFile,
-    {
-      ...defaultConfig,
-      source: sourceFile,
-    },
-    collector,
-  );
-
-  await judge.run(sourceFile, sourceFile);
-
-  return results;
+  return executePlan(sourceFile, sourceFile, planFile, defaultConfig);
 }
 
 module.exports = {
   runTest,
-  testStatuses,
 };
