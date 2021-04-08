@@ -1,12 +1,13 @@
 // Neede for https://github.com/LLK/scratch-gui/issues/5025
 import 'regenerator-runtime/runtime.js';
 
+import seed from 'seed-random';
 import { searchFrames } from './log.js';
 import { numericEquals } from './utils.js';
 import Context from './context.js';
 import Project from './project.js';
-import { delay, broadcast, sprite } from './scheduler/index.js';
-import { TabLevel, FatalErrorException } from './testplan.js';
+import { broadcast, delay, sprite } from './scheduler/index.js';
+import { FatalErrorException, TabLevel } from './testplan.js';
 import { distSq } from './lines.js';
 
 let object;
@@ -235,6 +236,7 @@ class Evaluation extends TabLevel {
  * @param {Evaluation} evaluation - The judge object, providing the API.
  * @return {void} Nothing -> ignored.
  */
+
 /**
  * Function that is run after the project has been executed. At this
  * point the log is filled, and available for inspection. Mosts tests
@@ -255,6 +257,10 @@ class Evaluation extends TabLevel {
  * @return {Promise<void>}
  */
 export async function run(config) {
+
+  // Seed random data.
+  seed('itch-judge', { global: true });
+
   const context = new Context();
   const templateJson = await context.getProjectJson(config);
   const submissionJson = await context.prepareVm(config);
@@ -310,6 +316,7 @@ export async function run(config) {
   }
 
   context.output.closeJudgement();
+  seed.resetGlobal();
   console.log('--- END OF EVALUATION ---');
 }
 
