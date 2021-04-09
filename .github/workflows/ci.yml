@@ -28,7 +28,7 @@ jobs:
       - name: Test zombiebal
         run: npm test --workspace @exercises/zombiebal
       - name: Test race
-        run: npm test --workspace @exercises/race  
+        run: npm test --workspace @exercises/race
   lint:
     runs-on: ubuntu-latest
     strategy:
