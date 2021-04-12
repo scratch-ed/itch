@@ -23,6 +23,7 @@ class Judge {
     this.time_limit = options.time_limit || 10000;
 
     this.testplan = testplan;
+    this.page = options.page;
 
     this.out = outputStream;
 
@@ -33,21 +34,23 @@ class Judge {
   async run(templateFile, submissionFile) {
     let browser;
     try {
-      browser = await puppeteer.launch({
-        ...(process.env.PUPPETEER_BROWSER_PATH && {
-          executablePath: process.env.PUPPETEER_BROWSER_PATH,
-        }),
-        args: [
-          '--no-sandbox',
-          '--disable-setuid-sandbox',
-          '--disable-dev-shm-usage',
-          '--disable-web-security',
-        ],
-        ...(this.debug && { headless: false, devtools: true }),
-      });
+      browser =
+        !this.fromApi &&
+        (await puppeteer.launch({
+          ...(process.env.PUPPETEER_BROWSER_PATH && {
+            executablePath: process.env.PUPPETEER_BROWSER_PATH,
+          }),
+          args: [
+            '--no-sandbox',
+            '--disable-setuid-sandbox',
+            '--disable-dev-shm-usage',
+            '--disable-web-security',
+          ],
+          ...(this.debug && { headless: false, devtools: true }),
+        }));
 
       /** @type {Page} */
-      const page = await browser.newPage();
+      const page = this.page || (await browser.newPage());
 
       if (this.debug) {
         page.on('console', (msg) => console.debug('PAGE LOG:', msg.text()));
@@ -99,7 +102,7 @@ class Judge {
       //   fullPage: true
       // });
     } finally {
-      if (!this.debug) {
+      if (!this.debug && !this.fromApi) {
         await browser.close();
       }
     }

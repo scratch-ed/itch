@@ -18,7 +18,7 @@ const ALLOWED_COMMANDS = [
   COMMANDS.ESCALATE_STATUS,
 ];
 
-function setupRoutes(server) {
+function setupRoutes(server, browser) {
   server.post('/test', async (req, res, next) => {
     const { testplan } = req.body;
     const { templateFile, testFile } = req.files;
@@ -37,9 +37,11 @@ function setupRoutes(server) {
       status: {},
     };
 
+    const page = await browser.newPage();
+
     const judge = new Judge(
       testplan,
-      { fromApi: true, debug: false },
+      { page, fromApi: true },
       (judgeObject) => {
         console.log(judgeObject);
         if (!ALLOWED_COMMANDS.includes(judgeObject.command)) {
@@ -98,8 +100,9 @@ function setupRoutes(server) {
       console.error(err);
     }
 
-    next();
+    await page.close();
     pass.end();
+    next();
   });
 }
 
