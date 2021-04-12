@@ -1,5 +1,6 @@
 require('dotenv').config();
 const setupRoutes = require('./routes/index.js');
+const setupBrowser = require('./utils/puppeteer');
 
 const restify = require('restify');
 const logger = require('morgan');
@@ -31,8 +32,9 @@ if (process.env.NODE_ENV === 'development') {
   });
 }
 
-setupRoutes(server);
-
-server.listen(process.env.PORT, function () {
-  console.log(`listening on port ${process.env.PORT}`);
+setupBrowser.then((browser) => {
+  setupRoutes(server, browser);
+  server.listen(process.env.PORT, function () {
+    console.log(`listening on port ${process.env.PORT}`);
+  });
 });
