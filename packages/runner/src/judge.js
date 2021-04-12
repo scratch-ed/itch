@@ -33,33 +33,18 @@ class Judge {
   async run(templateFile, submissionFile) {
     let browser;
     try {
-      if (this.debug) {
-        browser = await puppeteer.launch({
-          ...(process.env.PUPPETEER_BROWSER_PATH && {
-            executablePath: process.env.PUPPETEER_BROWSER_PATH,
-          }),
-          headless: false,
-          devtools: true,
-          args: [
-            '--no-sandbox',
-            '--disable-setuid-sandbox',
-            '--disable-dev-shm-usage',
-            '--disable-web-security',
-          ],
-        });
-      } else {
-        browser = await puppeteer.launch({
-          ...(process.env.PUPPETEER_BROWSER_PATH && {
-            executablePath: process.env.PUPPETEER_BROWSER_PATH,
-          }),
-          args: [
-            '--no-sandbox',
-            '--disable-setuid-sandbox',
-            '--disable-dev-shm-usage',
-            '--disable-web-security',
-          ],
-        });
-      }
+      browser = await puppeteer.launch({
+        ...(process.env.PUPPETEER_BROWSER_PATH && {
+          executablePath: process.env.PUPPETEER_BROWSER_PATH,
+        }),
+        args: [
+          '--no-sandbox',
+          '--disable-setuid-sandbox',
+          '--disable-dev-shm-usage',
+          '--disable-web-security',
+        ],
+        ...(this.debug && { headless: false, devtools: true }),
+      });
 
       /** @type {Page} */
       const page = await browser.newPage();
