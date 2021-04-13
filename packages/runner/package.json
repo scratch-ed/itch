@@ -19,7 +19,7 @@
     "scratch-render": "0.1.0-prerelease.20210325231800",
     "scratch-storage": "^1.3.3",
     "scratch-svg-renderer": "^0.2.0-prerelease.20210408171934",
-    "scratch-vm": "^0.2.0-prerelease.20210324111836",
+    "scratch-vm": "^0.2.0-prerelease.20210412181234",
     "itch-test-utils": "^0.0.1"
   },
   "devDependencies": {
