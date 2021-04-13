@@ -1,6 +1,6 @@
 // Require for side-effects
 require('./matchers.js');
-const { Judge } = require('itch-runner');
+const { runJudge } = require('itch-runner');
 
 /**
  * Execute a test plan for a certain exercise.
@@ -16,8 +16,14 @@ async function executePlan(template, solution, testplan, options = {}) {
   const results = [];
   const collector = (output) => results.push(output);
 
-  const judge = new Judge(testplan, options, collector);
-  await judge.run(template, solution);
+  await runJudge({
+    testplan: { url: testplan },
+    template: template,
+    solution: solution,
+    out: collector,
+    ...options,
+  });
+
   return results;
 }
 
