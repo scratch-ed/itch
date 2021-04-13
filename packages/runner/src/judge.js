@@ -5,110 +5,109 @@ const puppeteer = require('puppeteer');
 // Path to the HTML to run.
 const url = path.resolve(__dirname, 'environment.html');
 
+/**
+ * Default output handler - writes to stdout in de JSON Lines format.
+ */
 function toStdOut(output) {
   process.stdout.write(`${JSON.stringify(output)}\n`);
 }
 
-class Judge {
-  /**
-   * Create a judge class.
-   *
-   * @param {string} testplan
-   * @param {object} options
-   * @param {function(object):void} outputStream
-   */
-  constructor(testplan, options = {}, outputStream = toStdOut) {
-    this.fromApi = options.fromApi;
+/**
+ * The testplan is either an URL or a string.
+ *
+ * @typedef {Object} TestplanOption
+ * @property {string} [content] - The testplan as a string.
+ * @property {string} [url] - URL to the testplan.
+ */
 
-    this.time_limit = options.time_limit || 10000;
+/**
+ * The options for the judge.
+ *
+ * @typedef {Object} JudgeOptions
+ * @property {TestplanOption} testplan - The testplan to run.
+ * @property {string} template - Path to template sb3 file.
+ * @property {string} solution - Path to solution sb3 file.
+ * @property {Page} [page] - Optional page to use. If not given, the judge will open a new puppeteer instance.
+ * @property {boolean} [debug] - If debug mode should be use.
+ * @property {function(Object):void} [out] - The output handle.
+ */
 
-    this.testplan = testplan;
-    this.page = options.page;
+/**
+ * Run the judge.
+ *
+ * @param {JudgeOptions} options
+ */
+async function runJudge(options) {
 
-    this.out = outputStream;
+  let browser;
 
-    this.debug = options.debug;
-    this.visualise = options.visualise;
-  }
-
-  async run(templateFile, submissionFile) {
-    let browser;
-    try {
-      browser =
-        !this.fromApi &&
-        (await puppeteer.launch({
-          ...(process.env.PUPPETEER_BROWSER_PATH && {
-            executablePath: process.env.PUPPETEER_BROWSER_PATH,
-          }),
-          args: [
-            '--no-sandbox',
-            '--disable-setuid-sandbox',
-            '--disable-dev-shm-usage',
-            '--disable-web-security',
-          ],
-          ...(this.debug && { headless: false, devtools: true }),
-        }));
-
-      /** @type {Page} */
-      const page = this.page || (await browser.newPage());
-
-      if (this.debug) {
-        page.on('console', (msg) => console.debug('PAGE LOG:', msg.text()));
-      }
-
-      await page.evaluateOnNewDocument(() => {
-        window.isPuppeteer = true;
+  try {
+    if (!options.page) {
+      browser = await puppeteer.launch({
+        ...(process.env.PUPPETEER_BROWSER_PATH && {
+          executablePath: process.env.PUPPETEER_BROWSER_PATH,
+        }),
+        args: [
+          '--no-sandbox',
+          '--disable-setuid-sandbox',
+          '--disable-dev-shm-usage',
+          '--disable-web-security',
+        ],
+        ...(this.debug && { headless: false, devtools: true }),
       });
+    }
 
-      await page.goto(`file://${url}`);
+    /** @type {Page} */
+    const page = options.page || (await browser.newPage());
 
-      // Hook up the test output to stdout.
-      await page.exposeFunction('handleOut', this.out);
-      await page.exposeFunction('visualise', () => this.visualise);
+    if (this.debug) {
+      page.on('console', (msg) => console.debug('PAGE LOG:', msg.text()));
+    }
 
-      await page.addScriptTag({
-        ...(this.fromApi ? { content: this.testplan } : { url: this.testplan }),
-      });
+    await page.evaluateOnNewDocument(() => {
+      window.isPuppeteer = true;
+    });
 
-      const sourceFileTemplate = this.fromApi
-        ? submissionFile
-        : path.resolve(__dirname, submissionFile);
-      const templateFileTemplate = this.fromApi
-        ? templateFile
-        : path.resolve(__dirname, templateFile);
+    await page.goto(`file://${url}`);
 
-      const fileHandle = await page.$('#file');
-      await fileHandle.uploadFile(sourceFileTemplate);
-      const templateHandle = await page.$('#template');
-      await templateHandle.uploadFile(templateFileTemplate);
+    // Hook up the test output to stdout.
+    await page.exposeFunction('handleOut', options.out || toStdOut);
+    await page.exposeFunction('visualise', () => this.visualise);
 
-      await page.setViewport({ height: 1080, width: 960 });
-      await page.waitForTimeout(50);
+    await page.addScriptTag(options.testplan);
 
-      if (this.debug) {
-        await page.evaluate(() => {
-          // eslint-disable-next-line no-debugger
-          debugger;
-        });
-      }
+    // const sourceFileTemplate = this.fromApi
+    //   ? submissionFile
+    //   : path.resolve(__dirname, submissionFile);
+    // const templateFileTemplate = this.fromApi
+    //   ? templateFile
+    //   : path.resolve(__dirname, templateFile);
 
+    const fileHandle = await page.$('#file');
+    await fileHandle.uploadFile(options.solution);
+    const templateHandle = await page.$('#template');
+    await templateHandle.uploadFile(options.template);
+
+    await page.setViewport({ height: 1080, width: 960 });
+    await page.waitForTimeout(50);
+
+    if (this.debug) {
       await page.evaluate(() => {
-        return runTests();
+        // eslint-disable-next-line no-debugger
+        debugger;
       });
+    }
 
-      // await page.screenshot({
-      //   path: "./screenshot.jpg",
-      //   type: "jpeg",
-      //   fullPage: true
-      // });
-    } finally {
-      if (!this.debug && !this.fromApi) {
-        await browser.close();
-      }
+    await page.evaluate(() => {
+      return runTests();
+    });
+  } finally {
+    if (!this.debug && browser) {
+      await browser.close();
     }
   }
 }
 
 module.exports = {
-  Judge,
+  runJudge,
 };
