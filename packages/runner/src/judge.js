@@ -38,7 +38,6 @@ function toStdOut(output) {
  * @param {JudgeOptions} options
  */
 async function runJudge(options) {
-
   let browser;
 
   try {
