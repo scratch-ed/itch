@@ -12,13 +12,14 @@ RUN \
   && rm -rf /var/cache/apk/* /tmp/*
 
 ARG PORT
+ENV PORT=$PORT
 ENV PUPPETEER_BROWSER_PATH /usr/bin/chromium-browser
 
 COPY . ./app
 
 WORKDIR /app
 
-RUN rm -f ./.env.example
+RUN rm -f ./.env.example && rm -rf ./packages/api/.env && rm -rf ./packages/api/.env.example 
 
 RUN npm install
 
