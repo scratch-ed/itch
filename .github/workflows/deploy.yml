@@ -28,10 +28,10 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: ftrprf.azurecr.io/judge:${{ env.GITHUB_RUN_ID }}
+          tags: ftrprf.azurecr.io/judge:$GITHUB_RUN_ID
 
       - name: Update image tag on the Azure Web App
         uses: azure/webapps-deploy@v2
         with:
           app-name: 'scratch-judge'
-          images: ftrprf.azurecr.io/judge:${{ env.GITHUB_RUN_ID }}
+          images: ftrprf.azurecr.io/judge:$GITHUB_RUN_ID
