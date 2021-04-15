@@ -1,16 +1,16 @@
 name: Deploy to Azure
 
-on: 
+on:
   push:
     branch:
-      - "development"
-      - "deploy"
+      - 'development'
+      - 'deploy'
 
-jobs: 
+jobs:
   build:
     runs-on: ubuntu-latest
 
-    steps: 
+    steps:
       - name: Login to ACR
         uses: docker/login-action@v1
         with:
@@ -28,10 +28,10 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: ftrprf.azurecr.io/judge:test
-      
+          tags: ftrprf.azurecr.io/judge:${{ env.GITHUB_RUN_ID }}
+
       - name: Update image tag on the Azure Web App
         uses: azure/webapps-deploy@v2
         with:
-          app-name: "scratch-judge"
-          images: ftrprf.azurecr.io/judge:test
+          app-name: 'scratch-judge'
+          images: ftrprf.azurecr.io/judge:${{ env.GITHUB_RUN_ID }}
