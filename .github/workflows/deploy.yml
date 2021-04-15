@@ -28,7 +28,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: judge:test
+          tags: ftrprf.azurecr.io/judge:test
       
       - name: Update image tag on the Azure Web App
         uses: azure/webapps-deploy@v2
