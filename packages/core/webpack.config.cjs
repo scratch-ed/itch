@@ -13,7 +13,7 @@ module.exports = [
       host: '0.0.0.0',
       port: process.env.PORT || 8361,
     },
-    devtool: 'source-map',
+    devtool: 'eval-source-map',
     module: {
       rules: [
         {

@@ -259,7 +259,7 @@ export default class ResultManager {
     }
     this.out({
       command: 'start-test',
-      expected: expected?.toString(),
+      expected: JSON.stringify(expected),
       description: description,
     });
     this.hasOpenTest = true;
@@ -283,7 +283,7 @@ export default class ResultManager {
     }
     this.out({
       command: 'close-test',
-      generated: generated?.toString(),
+      generated: JSON.stringify(generated),
       accepted: accepted,
       status: status || (accepted ? CORRECT : WRONG),
     });
