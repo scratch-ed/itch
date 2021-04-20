@@ -184,12 +184,16 @@ class GenericMatcher {
     if (typeof this.actual === 'number' && typeof expected === 'number') {
       this.out(
         !numericEquals(this.actual, expected),
-        `Expected ${expected?.toString()} but got ${this.actual?.toString()}`,
+        `Expected not ${JSON.stringify(expected)} but got ${JSON.stringify(
+          this.actual,
+        )}`,
       );
     } else {
       this.out(
         !isEqual(this.actual, expected),
-        `Expected ${expected?.toString()} but got ${this.actual?.toString()}`,
+        `Expected ${JSON.stringify(expected)} but got ${JSON.stringify(
+          this.actual,
+        )}`,
       );
     }
   }
