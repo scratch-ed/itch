@@ -820,12 +820,12 @@ Array [
   },
   Object {
     "command": "start-test",
-    "expected": "kogels",
+    "expected": "\\"kogels\\"",
   },
   Object {
     "accepted": true,
     "command": "close-test",
-    "generated": "kogels",
+    "generated": "\\"kogels\\"",
     "status": Object {
       "enum": "correct",
       "human": "Correct",
@@ -840,12 +840,12 @@ Array [
   },
   Object {
     "command": "start-test",
-    "expected": "kogels",
+    "expected": "\\"kogels\\"",
   },
   Object {
     "accepted": true,
     "command": "close-test",
-    "generated": "kogels",
+    "generated": "\\"kogels\\"",
     "status": Object {
       "enum": "correct",
       "human": "Correct",
@@ -860,12 +860,12 @@ Array [
   },
   Object {
     "command": "start-test",
-    "expected": "kogels",
+    "expected": "\\"kogels\\"",
   },
   Object {
     "accepted": true,
     "command": "close-test",
-    "generated": "kogels",
+    "generated": "\\"kogels\\"",
     "status": Object {
       "enum": "correct",
       "human": "Correct",
@@ -880,12 +880,12 @@ Array [
   },
   Object {
     "command": "start-test",
-    "expected": "kogels",
+    "expected": "\\"kogels\\"",
   },
   Object {
     "accepted": true,
     "command": "close-test",
-    "generated": "kogels",
+    "generated": "\\"kogels\\"",
     "status": Object {
       "enum": "correct",
       "human": "Correct",
@@ -907,12 +907,12 @@ Array [
   },
   Object {
     "command": "start-test",
-    "expected": "brandstof",
+    "expected": "\\"brandstof\\"",
   },
   Object {
     "accepted": true,
     "command": "close-test",
-    "generated": "brandstof",
+    "generated": "\\"brandstof\\"",
     "status": Object {
       "enum": "correct",
       "human": "Correct",
@@ -927,12 +927,12 @@ Array [
   },
   Object {
     "command": "start-test",
-    "expected": "brandstof",
+    "expected": "\\"brandstof\\"",
   },
   Object {
     "accepted": true,
     "command": "close-test",
-    "generated": "brandstof",
+    "generated": "\\"brandstof\\"",
     "status": Object {
       "enum": "correct",
       "human": "Correct",
@@ -947,12 +947,12 @@ Array [
   },
   Object {
     "command": "start-test",
-    "expected": "brandstof",
+    "expected": "\\"brandstof\\"",
   },
   Object {
     "accepted": true,
     "command": "close-test",
-    "generated": "brandstof",
+    "generated": "\\"brandstof\\"",
     "status": Object {
       "enum": "correct",
       "human": "Correct",
@@ -967,12 +967,12 @@ Array [
   },
   Object {
     "command": "start-test",
-    "expected": "brandstof",
+    "expected": "\\"brandstof\\"",
   },
   Object {
     "accepted": true,
     "command": "close-test",
-    "generated": "brandstof",
+    "generated": "\\"brandstof\\"",
     "status": Object {
       "enum": "correct",
       "human": "Correct",

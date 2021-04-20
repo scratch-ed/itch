@@ -990,12 +990,12 @@ Array [
   },
   Object {
     "command": "start-test",
-    "expected": "Hallo, ik ben Devin.",
+    "expected": "\\"Hallo, ik ben Devin.\\"",
   },
   Object {
     "accepted": true,
     "command": "close-test",
-    "generated": "Hallo, ik ben Devin.",
+    "generated": "\\"Hallo, ik ben Devin.\\"",
     "status": Object {
       "enum": "correct",
       "human": "Correct",
@@ -1010,12 +1010,12 @@ Array [
   },
   Object {
     "command": "start-test",
-    "expected": "Wat is jouw naam?",
+    "expected": "\\"Wat is jouw naam?\\"",
   },
   Object {
     "accepted": true,
     "command": "close-test",
-    "generated": "Wat is jouw naam?",
+    "generated": "\\"Wat is jouw naam?\\"",
     "status": Object {
       "enum": "correct",
       "human": "Correct",
@@ -1030,12 +1030,12 @@ Array [
   },
   Object {
     "command": "start-test",
-    "expected": "Hallo, Louise",
+    "expected": "\\"Hallo, Louise\\"",
   },
   Object {
     "accepted": true,
     "command": "close-test",
-    "generated": "Hallo, Louise",
+    "generated": "\\"Hallo, Louise\\"",
     "status": Object {
       "enum": "correct",
       "human": "Correct",
@@ -1095,12 +1095,12 @@ Array [
   },
   Object {
     "command": "start-test",
-    "expected": "Kat",
+    "expected": "\\"Kat\\"",
   },
   Object {
     "accepted": true,
     "command": "close-test",
-    "generated": "Kat",
+    "generated": "\\"Kat\\"",
     "status": Object {
       "enum": "correct",
       "human": "Correct",
@@ -1115,12 +1115,12 @@ Array [
   },
   Object {
     "command": "start-test",
-    "expected": "Klop, klop!",
+    "expected": "\\"Klop, klop!\\"",
   },
   Object {
     "accepted": true,
     "command": "close-test",
-    "generated": "Klop, klop!",
+    "generated": "\\"Klop, klop!\\"",
     "status": Object {
       "enum": "correct",
       "human": "Correct",
@@ -1135,12 +1135,12 @@ Array [
   },
   Object {
     "command": "start-test",
-    "expected": "Bananen",
+    "expected": "\\"Bananen\\"",
   },
   Object {
     "accepted": true,
     "command": "close-test",
-    "generated": "Bananen",
+    "generated": "\\"Bananen\\"",
     "status": Object {
       "enum": "correct",
       "human": "Correct",
@@ -1155,12 +1155,12 @@ Array [
   },
   Object {
     "command": "start-test",
-    "expected": "Wie is daar?",
+    "expected": "\\"Wie is daar?\\"",
   },
   Object {
     "accepted": true,
     "command": "close-test",
-    "generated": "Wie is daar?",
+    "generated": "\\"Wie is daar?\\"",
     "status": Object {
       "enum": "correct",
       "human": "Correct",
@@ -1175,12 +1175,12 @@ Array [
   },
   Object {
     "command": "start-test",
-    "expected": "Kat",
+    "expected": "\\"Kat\\"",
   },
   Object {
     "accepted": true,
     "command": "close-test",
-    "generated": "Kat",
+    "generated": "\\"Kat\\"",
     "status": Object {
       "enum": "correct",
       "human": "Correct",
@@ -1195,12 +1195,12 @@ Array [
   },
   Object {
     "command": "start-test",
-    "expected": "Ki!",
+    "expected": "\\"Ki!\\"",
   },
   Object {
     "accepted": true,
     "command": "close-test",
-    "generated": "Ki!",
+    "generated": "\\"Ki!\\"",
     "status": Object {
       "enum": "correct",
       "human": "Correct",
@@ -1215,12 +1215,12 @@ Array [
   },
   Object {
     "command": "start-test",
-    "expected": "Bananen",
+    "expected": "\\"Bananen\\"",
   },
   Object {
     "accepted": true,
     "command": "close-test",
-    "generated": "Bananen",
+    "generated": "\\"Bananen\\"",
     "status": Object {
       "enum": "correct",
       "human": "Correct",
@@ -1235,12 +1235,12 @@ Array [
   },
   Object {
     "command": "start-test",
-    "expected": "Ki, wie?",
+    "expected": "\\"Ki, wie?\\"",
   },
   Object {
     "accepted": true,
     "command": "close-test",
-    "generated": "Ki, wie?",
+    "generated": "\\"Ki, wie?\\"",
     "status": Object {
       "enum": "correct",
       "human": "Correct",
@@ -1255,12 +1255,12 @@ Array [
   },
   Object {
     "command": "start-test",
-    "expected": "Kat",
+    "expected": "\\"Kat\\"",
   },
   Object {
     "accepted": true,
     "command": "close-test",
-    "generated": "Kat",
+    "generated": "\\"Kat\\"",
     "status": Object {
       "enum": "correct",
       "human": "Correct",
@@ -1275,12 +1275,12 @@ Array [
   },
   Object {
     "command": "start-test",
-    "expected": "Neen, dank je. Ik heb liever bananen!",
+    "expected": "\\"Neen, dank je. Ik heb liever bananen!\\"",
   },
   Object {
     "accepted": true,
     "command": "close-test",
-    "generated": "Neen, dank je. Ik heb liever bananen!",
+    "generated": "\\"Neen, dank je. Ik heb liever bananen!\\"",
     "status": Object {
       "enum": "correct",
       "human": "Correct",
@@ -1320,12 +1320,12 @@ Array [
   },
   Object {
     "command": "start-test",
-    "expected": "21",
+    "expected": "\\"21\\"",
   },
   Object {
     "accepted": true,
     "command": "close-test",
-    "generated": "21",
+    "generated": "\\"21\\"",
     "status": Object {
       "enum": "correct",
       "human": "Correct",
@@ -1340,12 +1340,12 @@ Array [
   },
   Object {
     "command": "start-test",
-    "expected": "0",
+    "expected": "\\"0\\"",
   },
   Object {
     "accepted": true,
     "command": "close-test",
-    "generated": "0",
+    "generated": "\\"0\\"",
     "status": Object {
       "enum": "correct",
       "human": "Correct",
@@ -1360,12 +1360,12 @@ Array [
   },
   Object {
     "command": "start-test",
-    "expected": "46",
+    "expected": "\\"46\\"",
   },
   Object {
     "accepted": true,
     "command": "close-test",
-    "generated": "46",
+    "generated": "\\"46\\"",
     "status": Object {
       "enum": "correct",
       "human": "Correct",
