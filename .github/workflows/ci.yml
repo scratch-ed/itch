@@ -29,6 +29,8 @@ jobs:
         run: npm test --workspace @exercises/zombiebal
       - name: Test pico
         run: npm test --workspace @exercises/pico
+      - name: Test spaceship
+        run: npm test --workspace @exercises/space
   lint:
     runs-on: ubuntu-latest
     strategy:
