@@ -27,6 +27,8 @@ jobs:
         run: npm test --workspace itch-runner
       - name: Test zombiebal
         run: npm test --workspace @exercises/zombiebal
+      - name: Test pico
+        run: npm test --workspace @exercises/pico
   lint:
     runs-on: ubuntu-latest
     strategy:
