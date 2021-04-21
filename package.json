@@ -21,8 +21,7 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "prettier": "^2.2.1",
-    "rimraf": "^3.0.2",
-    "webpack-bundle-analyzer": "^4.4.1"
+    "rimraf": "^3.0.2"
   },
   "scripts": {
     "watch": "npm run watch --workspace itch-core",
@@ -30,7 +29,7 @@
     "start": "npm start --workspace itch-runner",
     "build": "npm run build --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
-    "clean": "rimraf ./node_modules",
+    "clean": "rimraf ./node_modules && npm run clean --workspaces --if-present",
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check ."

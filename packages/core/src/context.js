@@ -6,8 +6,8 @@ import ScratchRender from 'scratch-render';
 
 import { Log, LogEvent, LogFrame } from './log.js';
 import Deferred from './deferred.js';
-import { makeProxiedRenderer } from './renderer';
-import ResultManager from './output';
+import { makeProxiedRenderer } from './renderer.js';
+import ResultManager from './output.js';
 import { ScheduledEvent } from './scheduler/index.js';
 import { EndAction } from './scheduler/end.js';
 

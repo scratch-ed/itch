@@ -1,7 +1,6 @@
 import { ScheduledAction } from './action.js';
 import { LogFrame } from '../log.js';
 import Deferred from '../deferred.js';
-import Promise from 'lodash-es/_Promise.js';
 
 /** @package */
 export class EndAction extends ScheduledAction {

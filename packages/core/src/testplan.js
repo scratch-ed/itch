@@ -22,7 +22,7 @@
  * 3. The `describe` directive groups a bunch of related tests, e.g. for one sprite.
  * 4. The `tab` groups a bunch of `describe` statements. These are mainly for UI purposes.
  */
-import isEqual from 'lodash/isEqual';
+import isEqual from 'lodash-es/isEqual.js';
 import { CORRECT, WRONG } from './output.js';
 import { castCallback } from './utils.js';
 

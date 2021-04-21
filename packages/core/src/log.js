@@ -1,9 +1,15 @@
-import last from 'lodash/last';
-import first from 'lodash/first';
-import isEqual from 'lodash/isEqual';
-import { containsBlock, containsLoop, countExecutions } from './blocks';
-import { dist, distSq, findSquares, findTriangles, mergeLines } from './lines';
-import { uniq } from 'lodash/array.js';
+import last from 'lodash-es/last.js';
+import first from 'lodash-es/first.js';
+import isEqual from 'lodash-es/isEqual.js';
+import { containsBlock, containsLoop, countExecutions } from './blocks.js';
+import {
+  dist,
+  distSq,
+  findSquares,
+  findTriangles,
+  mergeLines,
+} from './lines.js';
+import { uniq } from 'lodash-es/array.js';
 
 /**
  * Our own version of a variable. Basically a copy of a {@link Variable}.

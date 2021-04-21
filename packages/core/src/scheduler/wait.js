@@ -1,4 +1,4 @@
-import castArray from 'lodash/castArray';
+import castArray from 'lodash-es/castArray.js';
 import { ScheduledAction } from './action.js';
 import { LogEvent, LogFrame } from '../log.js';
 import { BroadcastListener } from '../listener.js';

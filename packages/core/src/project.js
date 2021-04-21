@@ -1,5 +1,5 @@
 import { Sb3Json } from './structures.js';
-import isEqual from 'lodash/isEqual';
+import isEqual from 'lodash-es/isEqual.js';
 
 /**
  * A callback allowing comparison between two sprites.
