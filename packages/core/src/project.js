@@ -6,8 +6,8 @@ import isEqual from 'lodash-es/isEqual.js';
  *
  * @callback SpritePredicate
  *
- * @param {Sb3Target} one - The first sprite, from the base project.
- * @param {Sb3Target} two - The second sprite, from the comparing project.
+ * @param {Sb3Sprite|Sb3Stage} one - The first sprite, from the base project.
+ * @param {Sb3Sprite|Sb3Stage} two - The second sprite, from the comparing project.
  *
  * @return {boolean} Value defined by usage.
  */
@@ -91,12 +91,7 @@ export default class Project {
    * - If missing in one, but not the other, returns true.
    * - Else pass to the predicate.
    *
-   * For example, to check if a given sprite has changed position:
-   *
-   * @example
-   *  const template = new Project(templateJSON);
-   *  const test = new Project(testJSON);
-   *  template.hasChangedSprite(test, "test", (a, b) => a.size === b.size);
+   * The default predicate checks the sprite itself, but not it's blocks.
    *
    * @param {Project} other - Project to compare to.
    * @param {string} sprite - Name of the sprite.
@@ -104,7 +99,12 @@ export default class Project {
    *
    * @return True if the sprite satisfies the change predicate.
    */
-  hasChangedSprite(other, sprite, predicate) {
+  hasChangedSprite(
+    other,
+    sprite,
+    predicate = (s1, s2) =>
+      !isEqual(s1.comparableObject(), s2.comparableObject()),
+  ) {
     const baseSprite = this.sprite(sprite);
     const comparisonSprite = other.sprite(sprite);
 
@@ -117,6 +117,18 @@ export default class Project {
     }
 
     return predicate(baseSprite, comparisonSprite);
+  }
+
+  hasChangedBlocks(other, sprite) {
+    return this.hasChangedSprite(other, sprite, (s1, s2) => {
+      const convertedTemplateBlocks = s1.blocks.map((f) =>
+        f.comparableObject(),
+      );
+      const convertedSubmissionBlocks = s2.blocks.map((f) =>
+        f.comparableObject(),
+      );
+      return !isEqual(convertedSubmissionBlocks, convertedTemplateBlocks);
+    });
   }
 
   /**

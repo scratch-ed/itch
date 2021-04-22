@@ -145,6 +145,26 @@ export class Sb3Block {
   toString() {
     return `Block ${this.id} (${this.opcode})`;
   }
+
+  /**
+   * Get an object that can be used to compare against other sprites
+   * from a similar project, e.g. to compare if the user changed something.
+   *
+   * @return {{next: ?string, parent: ?string, mutation: Sb3Mutation, shadow: boolean, inputs: Object<string, Array>, comment: ?string, id: string, opcode: string, fields: Object<string, Array>}}
+   */
+  comparableObject() {
+    return {
+      id: this.id,
+      opcode: this.opcode,
+      next: this.next,
+      parent: this.parent,
+      inputs: this.inputs,
+      fields: this.fields,
+      shadow: this.shadow,
+      comment: this.comment,
+      mutation: this.mutation,
+    };
+  }
 }
 
 /**
@@ -339,6 +359,19 @@ export class Sb3Stage extends Sb3Target {
     /** @type {string} */
     this.textToSpeechLanguage = data.textToSpeechLanguage;
   }
+
+  /**
+   * Get an object that can be used to compare against other sprites
+   * from a similar project, e.g. to compare if the user changed something.
+   *
+   * @return {{isStage, name: string}}
+   */
+  comparableObject() {
+    return {
+      isStage: this.isStage,
+      name: this.name,
+    };
+  }
 }
 
 export class Sb3Sprite extends Sb3Target {
@@ -358,6 +391,27 @@ export class Sb3Sprite extends Sb3Target {
     this.draggable = data.draggable;
     /** @type {"all around" | "left-right" | "don't rotate"} */
     this.rotationStyle = data.rotationStyle;
+  }
+
+  /**
+   * /**
+   * Get an object that can be used to compare against other sprites
+   * from a similar project, e.g. to compare if the user changed something.
+   *
+   * @return {{rotationStyle, visible, size, draggable, isStage, name: string, x, y, direction}}
+   */
+  comparableObject() {
+    return {
+      isStage: this.isStage,
+      name: this.name,
+      visible: this.visible,
+      x: this.x,
+      y: this.y,
+      size: this.size,
+      direction: this.direction,
+      draggable: this.draggable,
+      rotationStyle: this.rotationStyle,
+    };
   }
 }
 
