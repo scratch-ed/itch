@@ -1,6 +1,27 @@
 // Require for side-effects
 require('./matchers.js');
 const { runJudge } = require('itch-runner');
+const puppeteer = require('puppeteer');
+
+let browser;
+
+beforeAll(async () => {
+  browser = await puppeteer.launch({
+    ...(process.env.PUPPETEER_BROWSER_PATH && {
+      executablePath: process.env.PUPPETEER_BROWSER_PATH,
+    }),
+    args: [
+      '--no-sandbox',
+      '--disable-setuid-sandbox',
+      '--disable-dev-shm-usage',
+      '--disable-web-security',
+    ],
+  });
+});
+
+afterAll(async () => {
+  await browser.close();
+});
 
 /**
  * Execute a test plan for a certain exercise.
@@ -16,13 +37,23 @@ async function executePlan(template, solution, testplan, options = {}) {
   const results = [];
   const collector = (output) => results.push(output);
 
+  let page;
+  if (browser) {
+    page = await browser.newPage();
+  }
+
   await runJudge({
     testplan: { url: testplan },
     template: template,
     solution: solution,
     out: collector,
+    page: page,
     ...options,
   });
+
+  if (page) {
+    await page.close();
+  }
 
   return results;
 }
