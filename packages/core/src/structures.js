@@ -345,6 +345,19 @@ export class Sb3Target {
     }
     return found;
   }
+
+  /**
+   * Get an object that can be used to compare against other sprites
+   * from a similar project, e.g. to compare if the user changed something.
+   *
+   * @return {{isStage, name: string}}
+   */
+  comparableObject() {
+    return {
+      isStage: this.isStage,
+      name: this.name,
+    };
+  }
 }
 
 export class Sb3Stage extends Sb3Target {
@@ -358,19 +371,6 @@ export class Sb3Stage extends Sb3Target {
     this.videoState = data.videoState;
     /** @type {string} */
     this.textToSpeechLanguage = data.textToSpeechLanguage;
-  }
-
-  /**
-   * Get an object that can be used to compare against other sprites
-   * from a similar project, e.g. to compare if the user changed something.
-   *
-   * @return {{isStage, name: string}}
-   */
-  comparableObject() {
-    return {
-      isStage: this.isStage,
-      name: this.name,
-    };
   }
 }
 
@@ -391,27 +391,6 @@ export class Sb3Sprite extends Sb3Target {
     this.draggable = data.draggable;
     /** @type {"all around" | "left-right" | "don't rotate"} */
     this.rotationStyle = data.rotationStyle;
-  }
-
-  /**
-   * /**
-   * Get an object that can be used to compare against other sprites
-   * from a similar project, e.g. to compare if the user changed something.
-   *
-   * @return {{rotationStyle, visible, size, draggable, isStage, name: string, x, y, direction}}
-   */
-  comparableObject() {
-    return {
-      isStage: this.isStage,
-      name: this.name,
-      visible: this.visible,
-      x: this.x,
-      y: this.y,
-      size: this.size,
-      direction: this.direction,
-      draggable: this.draggable,
-      rotationStyle: this.rotationStyle,
-    };
   }
 }
 
