@@ -46,7 +46,6 @@ function setupRoutes(server, browser) {
         solution: testFile.path,
         page: page,
         out: (judgeObject) => {
-          console.log(judgeObject);
           if (!ALLOWED_COMMANDS.includes(judgeObject.command)) {
             return;
           }
