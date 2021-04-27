@@ -26,6 +26,7 @@
   },
   "scripts": {
     "watch": "npm run watch --workspace itch-core",
+    "dev:api": "npm run dev --workspace itch-api",
     "api": "npm start --workspace itch-api",
     "start": "npm start --workspace itch-runner",
     "build": "npm run build --workspaces --if-present",
