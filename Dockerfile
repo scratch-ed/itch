@@ -9,11 +9,11 @@ RUN \
   && apk add --no-cache --virtual .build-deps \
     gifsicle pngquant optipng libjpeg-turbo-utils \
     udev ttf-opensans chromium \
-  && rm -rf /var/cache/apk/* /tmp/*
+  && rm -rf /var/cache/apk/* /tmp/*\
 
 ARG PORT
 ENV PORT=$PORT
-ENV PUPPETEER_BROWSER_PATH /usr/bin/chromium-browser
+ENV PUPPETEER_BROWSER_PATH=/usr/bin/chromium-browser
 
 COPY . ./app
 
