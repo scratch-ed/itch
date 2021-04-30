@@ -413,14 +413,14 @@ export class OneHatAllowedTest {
       const templateTree = templateHatSprite.blockTree();
 
       l.test(this.hatSprite, (l) => {
-        if (solutionTree.size > templateTree.size) {
-          l.expect(true)
-            .with({
-              wrong:
-                'Probeer je rondslingerende blokjes te verwijderen of te gebruiken',
-            })
-            .toBe(false);
-        } else {
+        l.expect(solutionTree.size <= templateTree.size)
+          .with({
+            wrong:
+              'Probeer je rondslingerende blokjes te verwijderen of te gebruiken.',
+            correct: 'Goed zo! Je hebt geen losse blokjes laten rondslingeren.',
+          })
+          .toBe(true);
+        if (solutionTree.size <= templateTree.size) {
           l.expect(_.isEqual(templateTree, solutionTree))
             .fatal()
             .with({
