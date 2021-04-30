@@ -1,5 +1,6 @@
 import { Sb3Json } from './structures.js';
 import isEqual from 'lodash-es/isEqual.js';
+import { asTree } from './blocks.js';
 
 /**
  * A callback allowing comparison between two sprites.
@@ -121,13 +122,9 @@ export default class Project {
 
   hasChangedBlocks(other, sprite) {
     return this.hasChangedSprite(other, sprite, (s1, s2) => {
-      const convertedTemplateBlocks = s1.blocks.map((f) =>
-        f.comparableObject(),
-      );
-      const convertedSubmissionBlocks = s2.blocks.map((f) =>
-        f.comparableObject(),
-      );
-      return !isEqual(convertedSubmissionBlocks, convertedTemplateBlocks);
+      const set1 = asTree(s1);
+      const set2 = asTree(s2);
+      return !isEqual(set1, set2);
     });
   }
 

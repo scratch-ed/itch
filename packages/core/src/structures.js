@@ -1,4 +1,5 @@
 import isEqual from 'lodash-es/isEqual.js';
+import { asTree } from './blocks.js';
 
 export class Sb3Variable {
   constructor(id, data) {
@@ -144,26 +145,6 @@ export class Sb3Block {
 
   toString() {
     return `Block ${this.id} (${this.opcode})`;
-  }
-
-  /**
-   * Get an object that can be used to compare against other sprites
-   * from a similar project, e.g. to compare if the user changed something.
-   *
-   * @return {{next: ?string, parent: ?string, mutation: Sb3Mutation, shadow: boolean, inputs: Object<string, Array>, comment: ?string, id: string, opcode: string, fields: Object<string, Array>}}
-   */
-  comparableObject() {
-    return {
-      id: this.id,
-      opcode: this.opcode,
-      next: this.next,
-      parent: this.parent,
-      inputs: this.inputs,
-      fields: this.fields,
-      shadow: this.shadow,
-      comment: this.comment,
-      mutation: this.mutation,
-    };
   }
 }
 
@@ -357,6 +338,17 @@ export class Sb3Target {
       isStage: this.isStage,
       name: this.name,
     };
+  }
+
+  /**
+   * Get all blocks as a set of trees.
+   * You can optionally pass a list of tree roots to consider; other blocks
+   * will be ignored.
+   *
+   * @param {?Sb3Block[]} blocks
+   */
+  blockTree(blocks = undefined) {
+    return asTree(this, blocks);
   }
 }
 
