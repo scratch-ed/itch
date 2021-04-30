@@ -448,6 +448,6 @@ export class OneHatAllowedTest {
           });
         }
       }
-    };);
+    });
   }
 }
