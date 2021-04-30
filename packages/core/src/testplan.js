@@ -297,3 +297,157 @@ export class TabLevel extends DescribeLevel {
     this.context.output.closeTab();
   }
 }
+
+export class OneHatAllowedTest {
+  constructor(template, submission) {
+    this.template = template;
+    this.submission = submission;
+
+    this.ignoredSprites = ['Stage'];
+    this.hatSprite = undefined;
+    this.hatBlockFinder = undefined;
+    this.allowedBlockCheck = undefined;
+  }
+
+  ignoredSprite(sprite) {
+    this.ignoredSprites.push(sprite);
+  }
+
+  /**
+   * @param {Evaluation} e
+   */
+  execute(e) {
+    e.describe('Controle op bestaande code', (l) => {
+      this.template
+        .sprites()
+        .filter(
+          (s) =>
+            !this.ignoredSprites.includes(s.name) && this.hatSprite !== s.name,
+        )
+        .map((s) => s.name)
+        .forEach((sprite) => {
+          l.test(sprite, (l) => {
+            l.expect(this.template.hasChangedSprite(this.submission, sprite))
+              .with({
+                correct: `Top! Je hebt niets veranderd aan de sprite ${sprite}.`,
+                wrong: `Oops, je hebt iets veranderd aan de sprite ${sprite}. Je gaat opnieuw moeten beginnen.`,
+              })
+              .toBe(false);
+
+            l.expect(this.template.hasChangedBlocks(this.submission, sprite))
+              .with({
+                correct: `Top! Je hebt niets veranderd aan de blokjes van sprite ${sprite}.`,
+                wrong: `Oops, je hebt iets veranderd aan de blokjes sprite ${sprite}. Je gaat opnieuw moeten beginnen.`,
+              })
+              .toBe(false);
+          });
+        });
+
+      l.test('Speelveld', (l) => {
+        l.expect(this.template.hasChangedSprite(this.submission, 'Stage'))
+          .with({
+            correct: `Top! Je hebt niets veranderd aan het speelveld.`,
+            wrong: `Oops, je hebt iets veranderd aan het speelveld. Je gaat opnieuw moeten beginnen.`,
+          })
+          .toBe(false);
+
+        l.expect(this.template.hasChangedBlocks(this.submission, 'Stage'))
+          .with({
+            correct: `Top! Je hebt niets veranderd aan de blokjes van het speelveld.`,
+            wrong: `Oops, je hebt iets veranderd aan de blokjes van het speelveld. Je gaat opnieuw moeten beginnen.`,
+          })
+          .toBe(false);
+      });
+
+      const solutionHatSprite = this.submission.sprite('Pico');
+      const templateHatSprite = this.template.sprite('Pico');
+      // We test as follows: remove all blocks attached to the hat block.
+      // The remaining blocks should be identical to the template sprite.
+      // Start by finding the hat block (in the template, guaranteed to exist).
+      const hatBlock = solutionHatSprite?.blocks?.find(this.hatBlockFinder);
+
+      if (!hatBlock) {
+        l.test(this.hatSprite, (l) => {
+          l.expect(true)
+            .fatal()
+            .with({
+              wrong: `Oei, je verwijderde een noodzakelijk blokje bij de sprite ${this.hatSprite}`,
+            })
+            .toBe(false);
+        });
+      }
+
+      // We remove all attached code from the hat block in the solution.
+      const toCheck = new Set();
+      toCheck.add(hatBlock.id);
+      const toRemoveIds = new Set();
+      const removedBlocks = [];
+      while (toCheck.size !== 0) {
+        const checking = toCheck.values().next().value;
+        solutionHatSprite?.blocks
+          ?.filter((b) => b.parent === checking)
+          ?.forEach((b) => {
+            if (!toRemoveIds.has(b.id)) {
+              toRemoveIds.add(b.id);
+              removedBlocks.push(b);
+              toCheck.add(b.id);
+            }
+          });
+        toCheck.delete(checking);
+      }
+
+      const filteredBlocks = solutionHatSprite?.blocks?.filter(
+        (b) => !toRemoveIds.has(b.id),
+      );
+      // Fix next block. Needed because the solution might contain a next block.
+      if (hatBlock && filteredBlocks) {
+        const solutionIndex = filteredBlocks.findIndex(
+          (b) => b.id === hatBlock.id,
+        );
+        hatBlock.next = null;
+        filteredBlocks[solutionIndex] = hatBlock;
+      }
+
+      const solutionTree =
+        solutionHatSprite?.blockTree(filteredBlocks || []) || new Set();
+      const templateTree = templateHatSprite.blockTree();
+
+      l.test(this.hatSprite, (l) => {
+        if (solutionTree.size > templateTree.size) {
+          l.expect(true)
+            .with({
+              wrong:
+                'Probeer je rondslingerende blokjes te verwijderen of te gebruiken',
+            })
+            .toBe(false);
+        } else {
+          l.expect(_.isEqual(templateTree, solutionTree))
+            .fatal()
+            .with({
+              wrong: `Je hebt aan de voorgeprogrammeerde blokjes van de sprite ${this.hatSprite} wijzigingen aangebracht.`,
+              correct: `Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite ${this.hatSprite}.`,
+            })
+            .toBe(true);
+        }
+      });
+
+      if (this.allowedBlockCheck) {
+        // Verify that only allowed blocks are used.
+        const usesAllowed = removedBlocks.every(this.allowedBlockCheck);
+        // Don't show if no blocks.
+        if (removedBlocks.length > 0) {
+          l.test('Juiste blokjes', (l) => {
+            l.expect(usesAllowed)
+              .fatal()
+              .with({
+                wrong:
+                  'Oei, je gebruikt de verkeerde blokjes. Je mag enkel de blokjes uit mijn blokken en eindige lussen gebruiken.',
+                correct: 'Goed zo! Je gebruikt geen verkeerde blokjes.',
+              })
+              .toBe(true);
+          });
+        }
+      }
+    });
+  }
+}

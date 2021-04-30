@@ -166,7 +166,7 @@ export default class Project {
   }
 
   /**
-   * @return {Sb3Sprite|Sb3Stage[]} A list of sprites in this project.
+   * @return {Sb3Sprite[]|Sb3Stage[]} A list of sprites in this project.
    */
   sprites() {
     return this.json.targets;

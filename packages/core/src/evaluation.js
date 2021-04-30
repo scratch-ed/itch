@@ -7,7 +7,11 @@ import { numericEquals } from './utils.js';
 import Context from './context.js';
 import Project from './project.js';
 import { broadcast, delay, sprite } from './scheduler/index.js';
-import { FatalErrorException, TabLevel } from './testplan.js';
+import {
+  FatalErrorException,
+  OneHatAllowedTest,
+  TabLevel,
+} from './testplan.js';
 import { distSq } from './lines.js';
 
 let object;
@@ -29,6 +33,7 @@ function expose() {
   object.broadcast = broadcast;
   object.delay = delay;
   object.distSq = distSq;
+  object.OneHatAllowedTest = OneHatAllowedTest;
 }
 
 /**
@@ -279,14 +284,14 @@ export async function run(config) {
   const judge = new Evaluation(context);
 
   try {
+    expose();
+
     // Run the tests before the execution.
     testplan.beforeExecution(
       new Project(templateJson),
       new Project(submissionJson),
       judge,
     );
-
-    expose();
 
     await context.vmLoaded.promise;
     context.stage = EvaluationStage.scheduling;
