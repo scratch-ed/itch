@@ -359,8 +359,8 @@ export class OneHatAllowedTest {
           .toBe(false);
       });
 
-      const solutionHatSprite = this.submission.sprite('Pico');
-      const templateHatSprite = this.template.sprite('Pico');
+      const solutionHatSprite = this.submission.sprite(this.hatSprite);
+      const templateHatSprite = this.template.sprite(this.hatSprite);
       // We test as follows: remove all blocks attached to the hat block.
       // The remaining blocks should be identical to the template sprite.
       // Start by finding the hat block (in the template, guaranteed to exist).
@@ -448,6 +448,6 @@ export class OneHatAllowedTest {
           });
         }
       }
-    });
+    };);
   }
 }
