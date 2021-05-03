@@ -298,6 +298,35 @@ export class TabLevel extends DescribeLevel {
   }
 }
 
+function removeAttached(block, from) {
+  // We remove all attached code from the hat block in the solution.
+  const toCheck = new Set();
+  toCheck.add(block.id);
+  const toRemoveIds = new Set();
+  const removedBlocks = [];
+  while (toCheck.size !== 0) {
+    const checking = toCheck.values().next().value;
+    from?.blocks
+      ?.filter((b) => b.parent === checking)
+      ?.forEach((b) => {
+        if (!toRemoveIds.has(b.id)) {
+          toRemoveIds.add(b.id);
+          removedBlocks.push(b);
+          toCheck.add(b.id);
+        }
+      });
+    toCheck.delete(checking);
+  }
+
+  return removedBlocks;
+}
+
+function fixHatBlock(filteredBlocks, hatBlock) {
+  const solutionIndex = filteredBlocks.findIndex((b) => b.id === hatBlock.id);
+  hatBlock.next = null;
+  filteredBlocks[solutionIndex] = hatBlock;
+}
+
 export class OneHatAllowedTest {
   constructor(template, submission) {
     this.template = template;
@@ -364,9 +393,14 @@ export class OneHatAllowedTest {
       // We test as follows: remove all blocks attached to the hat block.
       // The remaining blocks should be identical to the template sprite.
       // Start by finding the hat block (in the template, guaranteed to exist).
-      const hatBlock = solutionHatSprite?.blocks?.find(this.hatBlockFinder);
+      const solutionHatBlock = solutionHatSprite?.blocks?.find(
+        this.hatBlockFinder,
+      );
+      const templateHatBlock = templateHatSprite.blocks.find(
+        this.hatBlockFinder,
+      );
 
-      if (!hatBlock) {
+      if (!solutionHatBlock) {
         l.test(this.hatSprite, (l) => {
           l.expect(true)
             .fatal()
@@ -378,39 +412,38 @@ export class OneHatAllowedTest {
       }
 
       // We remove all attached code from the hat block in the solution.
-      const toCheck = new Set();
-      toCheck.add(hatBlock.id);
-      const toRemoveIds = new Set();
-      const removedBlocks = [];
-      while (toCheck.size !== 0) {
-        const checking = toCheck.values().next().value;
-        solutionHatSprite?.blocks
-          ?.filter((b) => b.parent === checking)
-          ?.forEach((b) => {
-            if (!toRemoveIds.has(b.id)) {
-              toRemoveIds.add(b.id);
-              removedBlocks.push(b);
-              toCheck.add(b.id);
-            }
-          });
-        toCheck.delete(checking);
-      }
+      const removedSolutionBlocks = removeAttached(
+        solutionHatBlock,
+        solutionHatSprite,
+      );
+      const removedSolutionBlockIds = new Set(
+        removedSolutionBlocks.map((b) => b.id),
+      );
 
-      const filteredBlocks = solutionHatSprite?.blocks?.filter(
-        (b) => !toRemoveIds.has(b.id),
+      const removedTemplateBlocks = removeAttached(
+        templateHatBlock,
+        solutionHatSprite,
+      );
+      const removedTemplateBlockIds = new Set(
+        removedTemplateBlocks.map((b) => b.id),
+      );
+
+      const filteredSolutionBlocks = solutionHatSprite?.blocks?.filter(
+        (b) => !removedSolutionBlockIds.has(b.id),
       );
       // Fix next block. Needed because the solution might contain a next block.
-      if (hatBlock && filteredBlocks) {
-        const solutionIndex = filteredBlocks.findIndex(
-          (b) => b.id === hatBlock.id,
-        );
-        hatBlock.next = null;
-        filteredBlocks[solutionIndex] = hatBlock;
+      if (solutionHatBlock && filteredSolutionBlocks) {
+        fixHatBlock(filteredSolutionBlocks, solutionHatBlock);
       }
 
+      const filteredTemplateBlocks = templateHatSprite.blocks.filter(
+        (b) => !removedTemplateBlockIds.has(b.id),
+      );
+      fixHatBlock(filteredTemplateBlocks, templateHatBlock);
+
       const solutionTree =
-        solutionHatSprite?.blockTree(filteredBlocks || []) || new Set();
-      const templateTree = templateHatSprite.blockTree();
+        solutionHatSprite?.blockTree(filteredSolutionBlocks || []) || new Set();
+      const templateTree = templateHatSprite.blockTree(filteredTemplateBlocks);
 
       l.test(this.hatSprite, (l) => {
         l.expect(solutionTree.size <= templateTree.size)
@@ -433,9 +466,9 @@ export class OneHatAllowedTest {
 
       if (this.allowedBlockCheck) {
         // Verify that only allowed blocks are used.
-        const usesAllowed = removedBlocks.every(this.allowedBlockCheck);
+        const usesAllowed = removedSolutionBlocks.every(this.allowedBlockCheck);
         // Don't show if no blocks.
-        if (removedBlocks.length > 0) {
+        if (removedSolutionBlocks.length > 0) {
           l.test('Juiste blokjes', (l) => {
             l.expect(usesAllowed)
               .fatal()
