@@ -64,7 +64,6 @@ function blockToNode(block, blockmap, sprite) {
 
   const input = {};
   for (const [key, value] of Object.entries(block.inputs || {})) {
-    console.log(`${key}: ${value}`);
     input[key] = convertInput(value, blockmap, sprite);
   }
 

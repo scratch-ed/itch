@@ -38,8 +38,9 @@ async function executePlan(template, solution, testplan, options = {}) {
   const collector = (output) => results.push(output);
 
   let page;
-  if (browser) {
+  if (browser && !options?.debug) {
     page = await browser.newPage();
+    await page.setCacheEnabled(false);
   }
 
   await runJudge({

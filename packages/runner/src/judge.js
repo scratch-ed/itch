@@ -52,14 +52,16 @@ async function runJudge(options) {
           '--disable-dev-shm-usage',
           '--disable-web-security',
         ],
-        ...(this.debug && { headless: false, devtools: true }),
+        ...(options?.debug && { headless: false, devtools: true }),
       });
     }
 
     /** @type {Page} */
     const page = options.page || (await browser.newPage());
 
-    if (this.debug) {
+    await page.setCacheEnabled(false);
+
+    if (options?.debug) {
       page.on('console', (msg) => console.debug('PAGE LOG:', msg.text()));
     }
 
@@ -90,7 +92,7 @@ async function runJudge(options) {
     await page.setViewport({ height: 1080, width: 960 });
     await page.waitForTimeout(50);
 
-    if (this.debug) {
+    if (options?.debug) {
       await page.evaluate(() => {
         // eslint-disable-next-line no-debugger
         debugger;
@@ -101,7 +103,7 @@ async function runJudge(options) {
       return runTests();
     });
   } finally {
-    if (!this.debug && browser) {
+    if (!options?.debug && browser) {
       await browser.close();
     }
   }
