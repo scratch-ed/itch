@@ -1,4 +1,6 @@
 /* Copyright (C) 2019 Ghent University - All Rights Reserved */
+import { isNumber } from 'lodash-es/lang.js';
+
 export function containsLoop(blocks) {
   for (const key in blocks) {
     if (key === 'control_repeat' || key === 'control_forever') return true;
@@ -65,6 +67,9 @@ function blockToNode(block, blockmap, sprite) {
   const input = {};
   for (const [key, value] of Object.entries(block.inputs || {})) {
     input[key] = convertInput(value, blockmap, sprite);
+    if (isNumber(input[key])) {
+      input[key] = input[key].toString();
+    }
   }
 
   return {
