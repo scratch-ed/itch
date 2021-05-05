@@ -2,9 +2,10 @@ FROM mhart/alpine-node:latest
 
 ARG PORT
 ARG NODE_ENV
+ARG PUPPETEER_BROWSER_PATH
 ENV PORT $PORT
 ENV NODE_ENV $NODE_ENV
-ENV PUPPETEER_BROWSER_PATH=/usr/bin/chromium-browser
+ENV PUPPETEER_BROWSER_PATH $PUPPETEER_BROWSER_PATH
 
 RUN \
   echo "http://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
