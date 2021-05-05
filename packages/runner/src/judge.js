@@ -77,13 +77,6 @@ async function runJudge(options) {
 
     await page.addScriptTag(options.testplan);
 
-    // const sourceFileTemplate = this.fromApi
-    //   ? submissionFile
-    //   : path.resolve(__dirname, submissionFile);
-    // const templateFileTemplate = this.fromApi
-    //   ? templateFile
-    //   : path.resolve(__dirname, templateFile);
-
     const fileHandle = await page.$('#file');
     await fileHandle.uploadFile(options.solution);
     const templateHandle = await page.$('#template');
