@@ -1,7 +1,9 @@
-FROM mhart/alpine-node:15
+FROM mhart/alpine-node:latest
 
 ARG PORT
+ARG NODE_ENV
 ENV PORT $PORT
+ENV NODE_ENV $NODE_ENV
 ENV PUPPETEER_BROWSER_PATH=/usr/bin/chromium-browser
 
 RUN \

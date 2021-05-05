@@ -7,5 +7,6 @@ services:
       args:
         - PUPPETEER_BROWSER_PATH=/usr/bin/google-chrome
         - PORT=8000
+        - NODE_ENV=development
     ports:
       - 8000:8000
