@@ -36,8 +36,8 @@ setupBrowser.then((browser) => {
   setupRoutes(server, browser);
   server.listen(process.env.PORT, function () {
     console.log('Started service with following environment variables:');
-    const { PORT, PUPPETEER_BROWSER_PATH, NODE_ENV } = process.env;
-    console.log({ PORT, PUPPETEER_BROWSER_PATH, NODE_ENV });
+    const { PORT, PUPPETEER_BROWSER_PATH, NODE_ENV, DEBUG } = process.env;
+    console.log({ PORT, PUPPETEER_BROWSER_PATH, NODE_ENV, DEBUG });
     console.log(`---------------\nlistening on port ${process.env.PORT}`);
   });
 });
