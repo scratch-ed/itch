@@ -32,6 +32,8 @@ COPY . ./app
 
 WORKDIR /app
 
+RUN npm run build
+
 RUN rm -f ./.env.example && rm -rf ./packages/api/.env && rm -rf ./packages/api/.env.example 
 
 ENTRYPOINT ["npm", "run", "api"]
