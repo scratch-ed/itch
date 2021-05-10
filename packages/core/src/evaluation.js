@@ -8,7 +8,8 @@ import Context from './context.js';
 import Project from './project.js';
 import { broadcast, delay, sprite } from './scheduler/index.js';
 import {
-  FatalErrorException, ignoreWaitInProcedureFor,
+  FatalErrorException,
+  ignoreWaitInProcedureFor,
   OneHatAllowedTest,
   TabLevel,
 } from './testplan.js';

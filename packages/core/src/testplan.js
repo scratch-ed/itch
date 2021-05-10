@@ -487,10 +487,10 @@ export class OneHatAllowedTest {
 
 /**
  * EXPERIMENTAL!
- * 
+ *
  * Intercepts wait blocks in procedure definitions in the given sprite for the
  * given amount and ignores them.
- * 
+ *
  * @param {VirtualMachine} vm
  * @param {string} sprite
  */

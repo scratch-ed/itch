@@ -31,6 +31,8 @@ jobs:
         run: npm test --workspace @exercises/navigeer-rommel
       - name: Test spaceship
         run: npm test --workspace @exercises/space
+      - name: Test rommelopruimend
+        run: npm test --workspace @exercises/rommelopruimend
   lint:
     runs-on: ubuntu-latest
     strategy:
