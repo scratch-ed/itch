@@ -484,3 +484,34 @@ export class OneHatAllowedTest {
     });
   }
 }
+
+/**
+ * EXPERIMENTAL!
+ * 
+ * Intercepts wait blocks in procedure definitions in the given sprite for the
+ * given amount and ignores them.
+ * 
+ * @param {VirtualMachine} vm
+ * @param {string} sprite
+ */
+export function ignoreWaitInProcedureFor(vm, sprite) {
+  const original = vm.runtime._primitives.control_wait;
+  vm.runtime._primitives.control_wait = (args, util) => {
+    // Big hack to ignore wait in movement steps.
+    if (util.thread.target.getName() === sprite) {
+      const glowId = util.thread.blockGlowInFrame;
+      if (glowId) {
+        let current = util.thread.blockContainer.getBlock(glowId);
+        while (current?.parent !== null) {
+          current = util.thread.blockContainer.getBlock(current.parent);
+        }
+        if (current?.opcode === 'procedures_definition') {
+          console.log(`Skipping ... ${current?.opcode}`);
+          return;
+        }
+      }
+    }
+
+    original(args, util);
+  };
+}

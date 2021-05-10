@@ -8,7 +8,7 @@ import Context from './context.js';
 import Project from './project.js';
 import { broadcast, delay, sprite } from './scheduler/index.js';
 import {
-  FatalErrorException,
+  FatalErrorException, ignoreWaitInProcedureFor,
   OneHatAllowedTest,
   TabLevel,
 } from './testplan.js';
@@ -34,6 +34,7 @@ function expose() {
   object.delay = delay;
   object.distSq = distSq;
   object.OneHatAllowedTest = OneHatAllowedTest;
+  object.ignoreWaitInProcedureFor = ignoreWaitInProcedureFor;
 }
 
 /**
