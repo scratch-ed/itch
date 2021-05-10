@@ -1,4 +1,4 @@
-import { Sb3Json } from './structures.js';
+import { Sb3Json } from './structures.ts';
 import isEqual from 'lodash-es/isEqual.js';
 import { asTree } from './blocks.js';
 
