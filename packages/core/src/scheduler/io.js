@@ -17,9 +17,8 @@ export class WhenPressKeyAction extends ScheduledAction {
     event.previousFrame = new LogFrame(context, 'key');
     context.log.addEvent(event);
 
-    const scratchKey = context.vm.runtime.ioDevices.keyboard._keyStringToScratchKey(
-      this.key,
-    );
+    const scratchKey =
+      context.vm.runtime.ioDevices.keyboard._keyStringToScratchKey(this.key);
 
     if (scratchKey === '') {
       throw new Error(`Unknown key press: '${this.key}'`);

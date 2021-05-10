@@ -360,8 +360,8 @@ export default class Context {
       // is handled by the event scheduler itself.
 
       // First, modify the step time.
-      const currentStepInterval = this.vm.runtime.constructor
-        .THREAD_STEP_INTERVAL;
+      const currentStepInterval =
+        this.vm.runtime.constructor.THREAD_STEP_INTERVAL;
       const newStepInterval =
         currentStepInterval / this.accelerationFactor.factor;
 

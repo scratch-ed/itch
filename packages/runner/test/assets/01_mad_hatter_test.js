@@ -87,8 +87,9 @@ function afterExecution(e) {
         const costumeNrBefore = click
           .getPreviousFrame()
           .getSprite(click.data.target).currentCostume;
-        const costumeNrAfter = click.getNextFrame().getSprite(click.data.target)
-          .currentCostume;
+        const costumeNrAfter = click
+          .getNextFrame()
+          .getSprite(click.data.target).currentCostume;
 
         // Indien er op de hoed wordt geklikt
         if (click.data.target === 'Hat') {

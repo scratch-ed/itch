@@ -1,7 +1,7 @@
 const COMMANDS = Object.fromEntries(
-  Object.keys(
-    require('../../../utils/dodona-schema').definitions,
-  ).map((key) => [[key.toUpperCase().replace('-', '_')], key]),
+  Object.keys(require('../../../utils/dodona-schema').definitions).map(
+    (key) => [[key.toUpperCase().replace('-', '_')], key],
+  ),
 );
 
 const ALLOWED_COMMANDS = [
