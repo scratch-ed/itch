@@ -18,7 +18,7 @@ jobs:
           password: ${{ secrets.AZURE_CLIENT_SECRET }}
 
       - name: Authenticate using a Service Principal
-        uses: azure/login@v1
+        uses: azure/login@v1.3.0
         with:
           creds: ${{ secrets.AZURE_SERVICE_PRINCIPLE_FOR_APP_SERVICE }}
 
