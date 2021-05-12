@@ -1,5 +1,5 @@
-import isEqual from 'lodash-es/isEqual.js';
-import { asTree } from './blocks.js';
+import isEqual from 'lodash-es/isEqual';
+import { asTree } from './blocks';
 
 export class Sb3Variable {
   name: string;
@@ -141,9 +141,19 @@ interface Sb3Comment {
 }
 
 /**
+ * @see https://en.scratch-wiki.info/wiki/Scratch_File_Format#Assets
+ */
+interface Sb3Asset {
+  assetId: string;
+  name: string;
+  md5ext: string;
+  dataFormat: string;
+}
+
+/**
  * @see https://en.scratch-wiki.info/wiki/Scratch_File_Format#Costumes
  */
-interface Sb3Costume {
+interface Sb3Costume extends Sb3Asset {
   bitmapResolution: number | null;
   rotationCenterX: number;
   rotationCenterY: number;
@@ -152,7 +162,7 @@ interface Sb3Costume {
 /**
  * @see https://en.scratch-wiki.info/wiki/Scratch_File_Format#Sounds
  */
-interface Sb3Sound {
+interface Sb3Sound extends Sb3Asset {
   rate: number;
   sampleCount: number;
 }

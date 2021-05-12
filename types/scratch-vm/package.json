@@ -1,0 +1,10 @@
+{
+  "name": "@itch-types/scratch-vm",
+  "version": "0.2.0",
+  "description": "TypeScript definitions for scratch-vm",
+  "license": "MIT",
+  "private": true,
+  "main": "",
+  "types": "types",
+  "dependencies": {}
+}

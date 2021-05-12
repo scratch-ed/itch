@@ -6,6 +6,7 @@
     "emitDeclarationOnly": true,
     "isolatedModules": true,
     "strict": true,
-    "moduleResolution": "Node"
+    "moduleResolution": "Node",
+    "esModuleInterop": true,
   }
 }

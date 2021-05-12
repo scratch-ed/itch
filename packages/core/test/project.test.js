@@ -63,29 +63,6 @@ test('hasChangedCostumes', () => {
   expect(three.hasChangedCostumes(three, 'Test1')).toBe(false);
 });
 
-test('hasChangedPosition', () => {
-  const one = new Project({
-    targets: [
-      { name: 'Test1', x: 0, y: 1 },
-      { name: 'Test2', x: 0, y: 1 },
-    ],
-  });
-
-  const two = new Project({
-    targets: [
-      { name: 'Test1', x: 0, y: 1 },
-      { name: 'Test2', x: 1, y: 1 },
-    ],
-  });
-
-  const three = new Project({ targets: [] });
-
-  expect(one.hasChangedPosition(two, 'Test1')).toBe(false);
-  expect(one.hasChangedPosition(two, 'Test2')).toBe(true);
-  expect(one.hasChangedPosition(three, 'Test1')).toBe(true);
-  expect(three.hasChangedPosition(three, 'Test1')).toBe(false);
-});
-
 test('containsSprite', () => {
   const one = new Project({
     targets: [{ name: 'Test1' }, { name: 'Test2' }],
