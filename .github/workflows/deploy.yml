@@ -30,7 +30,7 @@ jobs:
           tags: ftrprf.azurecr.io/judge:${{ github.run_id }}
 
       - name: Update image tag on the Azure Web App
-        uses: azure/webapps-deploy@v2
+        uses: azure/webapps-deploy@v2.1.6
         with:
           app-name: 'scratch-judge'
           images: ftrprf.azurecr.io/judge:${{ github.run_id }}
