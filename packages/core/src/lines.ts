@@ -27,7 +27,7 @@ export function isEqual(d1: number, d2: number): boolean {
 }
 
 // Removed duplicate points from an array of points by checking if the position in the list is equal to the position
-// of the first occurance of the point.
+// of the first occurrence of the point.
 export function removeDuplicates(myArray: Position[]): Position[] {
   return myArray.filter(
     (obj, index, self) =>
@@ -56,8 +56,8 @@ export function squareTest(d1: number, d2: number, d3: number, p1: Position, p2:
 // Function that takes an array of line segments and merges the overlapping segments.
 // It returns an array with the merged lines.
 export function mergeLines(lines: Line[]): Line[] {
-  const ricoDict: Record<any, Record<any, any>> = {};
-  const vertDict: Record<any, any[]> = {};
+  const ricoDict: Record<string, Record<string, Line[]>> = {};
+  const vertDict: Record<string, Line[]> = {};
 
   // sort op rico and on intersection with the y-axis:
   // This groups line segments on the same line together.
@@ -88,7 +88,7 @@ export function mergeLines(lines: Line[]): Line[] {
         }
         ricoDict[rico] = lineDict;
       } else {
-        const lineDict: Record<any, any> = {};
+        const lineDict: Record<string, Line[]> = {};
         lineDict[b] = [lines[i]];
         ricoDict[rico] = lineDict;
       }
@@ -102,9 +102,7 @@ export function mergeLines(lines: Line[]): Line[] {
     for (const [_b, lines] of Object.entries(ld)) {
       let line = lines[0];
       for (let i = 1; i < lines.length; i++) {
-        if (
-          distSq(line.start, lines[i].end) > distSq(line.end, lines[i].start)
-        ) {
+        if (distSq(line.start, lines[i].end) > distSq(line.end, lines[i].start)) {
           line = { start: line.start, end: lines[i].end };
         } else {
           line = { start: lines[i].start, end: line.end };
@@ -129,7 +127,7 @@ export function mergeLines(lines: Line[]): Line[] {
 }
 
 // Given points, test if they form a square
-export function pointsAreSquare(points: Position[]) {
+export function pointsAreSquare(points: Position[]): boolean {
   // only square if there are four unique points
   if (points.length === 4) {
     const p1 = points[0];
@@ -149,7 +147,7 @@ export function pointsAreSquare(points: Position[]) {
   return false;
 }
 
-export function findSquareLength(points: Position[]) {
+export function findSquareLength(points: Position[]): number {
   let l = 0;
   for (let i = 0; i < 4; i++) {
     const p = points[i];
@@ -166,7 +164,7 @@ export function findSquareLength(points: Position[]) {
   return Math.sqrt(l);
 }
 
-export function findSquares(lines: Line[]) {
+export function findSquares(lines: Line[]): false | { points: Position[], length: number }[] {
   const squares = [];
   if (lines.length < 4) return false; // no square without at least 4 sides
 
@@ -192,7 +190,9 @@ export function findSquares(lines: Line[]) {
           points = removeDuplicates(points);
           const square = { points: points, length: findSquareLength(points) };
 
-          if (pointsAreSquare(points)) squares.push(square);
+          if (pointsAreSquare(points)) {
+            squares.push(square);
+          }
         }
       }
     }
@@ -200,12 +200,12 @@ export function findSquares(lines: Line[]) {
   return squares;
 }
 
-export function pointsAreTriangle(points: Position[]) {
+export function pointsAreTriangle(points: Position[]): boolean {
   // given points are not equal
   return points.length === 3;
 }
 
-export function findTriangles(lines: Line[]) {
+export function findTriangles(lines: Line[]): boolean | Position[][] {
   const triangles = [];
   if (lines.length < 3) return false;
   const mergedLinesList = mergeLines(lines);

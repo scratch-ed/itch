@@ -12,7 +12,7 @@ export class SetSpritePositionAction extends ScheduledAction {
     this.y = y;
   }
 
-  execute(context: Context, resolve: (v: string) => void) {
+  execute(context: Context, resolve: (v: string) => void): void {
     const target = context.vm!.runtime.getSpriteTargetByName(this.sprite);
     if (!target) {
       throw new Error(`Could not find target ${this.sprite}`);
@@ -21,7 +21,7 @@ export class SetSpritePositionAction extends ScheduledAction {
     resolve(`finished ${this}`);
   }
 
-  toString() {
+  toString(): string {
     return `${super.toString()} on ${this.sprite} to (${this.x},${this.y})`;
   }
 }

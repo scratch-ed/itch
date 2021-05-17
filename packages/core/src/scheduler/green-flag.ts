@@ -4,7 +4,7 @@ import { ThreadListener } from '../listener';
 import { Context } from '../context';
 
 export class GreenFlagAction extends ScheduledAction {
-  execute(context: Context, resolve: (v: string) => void) {
+  execute(context: Context, resolve: (v: string) => void): void {
     const event = new LogEvent(context, 'greenFlag');
     event.previousFrame = new LogFrame(context, 'greenFlag');
     context.log.addEvent(event);

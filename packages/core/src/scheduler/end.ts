@@ -6,7 +6,7 @@ import { Context } from '../context';
 import type { ScheduledEvent } from './scheduled-event';
 
 export class EndAction extends ScheduledAction {
-  execute(context: Context, resolve: (v: string) => void) {
+  execute(context: Context, resolve: (v: string) => void): void {
     for (const event of context.log.events.list) {
       if (event.nextFrame == null) {
         event.nextFrame = new LogFrame(context, 'programEnd');
@@ -38,7 +38,7 @@ export class JoinAction extends ScheduledAction {
     this.promise = Promise.race(promises);
   }
 
-  execute(_context: Context, resolve: (v: string) => void) {
+  execute(_context: Context, resolve: (v: string) => void): void {
     // Do nothing.
     this.promise.then(
       () => {

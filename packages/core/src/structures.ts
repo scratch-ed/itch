@@ -1,13 +1,13 @@
 import isEqual from 'lodash-es/isEqual';
-import { asTree } from './blocks';
+import { asTree, Node } from './blocks';
 
 export class Sb3Variable {
   name: string;
-  value: any;
+  value: unknown;
   id: string;
 
-  constructor(id: string, data: Array<any>) {
-    this.name = data[0];
+  constructor(id: string, data: Array<unknown>) {
+    this.name = data[0] as string;
     this.value = data[1];
     this.id = id;
   }
@@ -15,14 +15,14 @@ export class Sb3Variable {
 
 export interface Sb3Mutation {
   tagName: string;
-  children: Array<any>;
+  children: Array<unknown>;
   proccode: string;
   argumentids: string;
 }
 
 export interface Sb3List {
   name: string;
-  list: Array<any>;
+  list: Array<unknown>;
 }
 
 export class Sb3Block {
@@ -53,12 +53,12 @@ export class Sb3Block {
    * there is an obscured shadow, the third element is its ID or an array
    * representing it.
    */
-  inputs: Record<string, Array<any>>;
+  inputs: Record<string, Array<unknown>>;
   /**
    * An object associating names with arrays representing fields. The first
    * element of each array is the field's value which may be followed by an ID.
    */
-  fields: Record<string, Array<any>>;
+  fields: Record<string, Array<unknown>>;
   /**
    * True if this is a shadow and false otherwise.
    *
@@ -93,19 +93,19 @@ export class Sb3Block {
    */
   mutation: Sb3Mutation | null;
 
-  constructor(id: string, data: any) {
+  constructor(id: string, data: Record<string, unknown>) {
     this.id = id;
-    this.opcode = data.opcode;
-    this.next = data.next;
-    this.parent = data.parent;
-    this.inputs = data.inputs;
-    this.fields = data.fields;
-    this.shadow = data.shadow;
-    this.topLevel = data.topLevel;
-    this.comment = data.comment;
-    this.x = data.x;
-    this.y = data.y;
-    this.mutation = data.mutation;
+    this.opcode = data.opcode as string;
+    this.next = data.next as string;
+    this.parent = data.parent as string;
+    this.inputs = data.inputs as Record<string, Array<unknown>>;
+    this.fields = data.fields as Record<string, Array<unknown>>;
+    this.shadow = data.shadow as boolean;
+    this.topLevel = data.topLevel as boolean;
+    this.comment = data.comment as string;
+    this.x = data.x as number;
+    this.y = data.y as number;
+    this.mutation = data.mutation as Sb3Mutation | null;
   }
 
   /**
@@ -171,9 +171,9 @@ interface Sb3Monitor {
   id: string;
   mode: 'default' | 'large' | 'slider' | 'list';
   opcode: string;
-  params: Record<string, any>;
+  params: Record<string, unknown>;
   spriteName: string | null;
-  value: any;
+  value: unknown;
   width: number;
   height: number;
   x: number;
@@ -232,7 +232,8 @@ export class Sb3Target {
   /**
    * @param {Object} data - Original data from the project.json
    */
-  constructor(data: Record<any, any>) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  constructor(data: Record<string, any>) {
     this.isStage = data.isStage;
     this.name = data.name;
     this.variables = {};
@@ -246,7 +247,7 @@ export class Sb3Target {
     this.broadcasts = data.broadcasts || {};
     this.blocks = [];
     for (const [key, value] of Object.entries(data.blocks || {})) {
-      this.blocks.push(new Sb3Block(key, value));
+      this.blocks.push(new Sb3Block(key, value as Record<string, unknown>));
     }
     this.comments = data.comments || {};
     this.currentCostume = data.currentCostume;
@@ -301,7 +302,7 @@ export class Sb3Target {
    * You can optionally pass a list of tree roots to consider; other blocks
    * will be ignored.
    */
-  blockTree(blocks: Array<Sb3Block> | undefined = undefined): any {
+  blockTree(blocks: Array<Sb3Block> | undefined = undefined): Set<Node> {
     return asTree(this, blocks);
   }
 }
@@ -312,7 +313,8 @@ export class Sb3Stage extends Sb3Target {
   videoState: 'on' | 'on-flipped' | 'off';
   textToSpeechLanguage: string;
 
-  constructor(data: Record<any, any>) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  constructor(data: Record<string, any>) {
     super(data);
     this.tempo = data.temppo;
     this.videoTransparency = data.videoTransparency;
@@ -330,7 +332,8 @@ export class Sb3Sprite extends Sb3Target {
   draggable: boolean;
   rotationStyle: 'all around' | 'left-right' | "don't rotate";
 
-  constructor(data: Record<any, any>) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  constructor(data: Record<string, any>) {
     super(data);
     this.visible = data.visible;
     this.x = data.x;
@@ -345,11 +348,13 @@ export class Sb3Sprite extends Sb3Target {
 export class Sb3Json {
   targets: Array<Sb3Target>;
   monitors: Array<Sb3Monitor>;
-  extensions: Array<any>;
-  meta: Record<any, any>;
+  extensions: Array<unknown>;
+  meta: Record<string, unknown>;
 
-  constructor(data: Record<any, any>) {
-    this.targets = data.targets.map((t: Record<any, any>) =>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  constructor(data: Record<string, any>) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    this.targets = data.targets.map((t: Record<string, any>) =>
       t.isStage ? new Sb3Stage(t) : new Sb3Sprite(t),
     );
     this.monitors = data.monitors;

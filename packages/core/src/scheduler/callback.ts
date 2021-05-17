@@ -9,7 +9,7 @@ export class CallbackAction extends ScheduledAction {
     this.callback = callback;
   }
 
-  execute(context: Context, resolve: (v: string) => void) {
+  execute(context: Context, resolve: (v: string) => void): void {
     context.log.addFrame(context, 'manual_logging');
     this.callback();
     resolve(`finished ${this}`);

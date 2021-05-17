@@ -37,7 +37,7 @@ declare global {
   }
 }
 
-let object: Window = window;
+const object: Window = window;
 
 /**
  * Expose the some API in the global namespace.
@@ -71,7 +71,7 @@ export interface EvalConfig {
 }
 
 enum EvaluationStage {
-  not_started, before, scheduling, executing, after
+  notStarted, before, scheduling, executing, after
 }
 
 
@@ -93,7 +93,7 @@ export class Evaluation extends TabLevel {
      * @type {number}
      * @protected
      */
-    this.stage = EvaluationStage.not_started;
+    this.stage = EvaluationStage.notStarted;
   }
 
   /**
@@ -261,7 +261,7 @@ interface AfterExecution {
  *
  * @param config - The config with the inputs for the judge.
  */
-export async function run(config: EvalConfig) {
+export async function run(config: EvalConfig): Promise<void> {
   // Seed random data.
   seed('itch-judge', { global: true });
   console.error(Math.random());

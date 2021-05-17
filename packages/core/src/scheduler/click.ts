@@ -13,7 +13,7 @@ export class ClickSpriteAction extends ScheduledAction {
     this.sprite = spriteName;
   }
 
-  execute(context: Context, resolve: (v: string) => void) {
+  execute(context: Context, resolve: (v: string) => void): void {
     // Get the sprite
     /** @type {Target} */
     let sprite;
@@ -55,7 +55,7 @@ export class ClickSpriteAction extends ScheduledAction {
     });
   }
 
-  toString() {
+  toString(): string {
     return `${super.toString()} on ${this.sprite}`;
   }
 }

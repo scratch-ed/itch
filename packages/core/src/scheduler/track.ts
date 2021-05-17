@@ -11,7 +11,7 @@ export class TrackSpriteAction extends ScheduledAction {
     this.name = sprite;
   }
 
-  execute(context: Context, resolve: (v: string) => void) {
+  execute(context: Context, resolve: (v: string) => void): void {
     const sprite = context.vm!.runtime.getSpriteTargetByName(this.name);
     if (!sprite) {
       throw new Error(`Sprite ${this.name} was not found in the runtime.`);

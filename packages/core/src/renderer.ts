@@ -78,7 +78,7 @@ function interceptPen(context: Context, renderer: ScratchRender) {
  *
  * @return {ScratchRender}
  */
-export function makeProxiedRenderer(context: Context, canvas: HTMLCanvasElement) {
+export function makeProxiedRenderer(context: Context, canvas: HTMLCanvasElement): ScratchRender {
   const render = new ScratchRender(canvas);
   console.log('renderer created');
 

@@ -4,7 +4,7 @@ import { Deferred } from './deferred';
 import Thread from '@itch-types/scratch-vm/types/engine/thread';
 
 class Listener {
-  active: boolean = true;
+  active = true;
   protected deferred: Deferred<string> = new Deferred();
 
   /**
@@ -49,7 +49,7 @@ export class ThreadListener extends Listener {
    *
    * @param thread - A thread that has finished running.
    */
-  update(thread: Thread) {
+  update(thread: Thread): void {
     this.threads = this.threads.filter((t) => t !== thread);
     if (this.threads.length === 0) {
       this.deferred.resolve('all threads completed');
@@ -59,8 +59,8 @@ export class ThreadListener extends Listener {
 }
 
 interface BroadcastUpdate {
-  matchFields: Record<string, any>,
-  target: any,
+  matchFields: Record<string, unknown>,
+  target: unknown,
 }
 
 /**
@@ -74,7 +74,7 @@ export class BroadcastListener extends Listener {
     this.name = broadcastName;
   }
 
-  update(options: BroadcastUpdate) {
+  update(options: BroadcastUpdate): void {
     if (options?.matchFields?.BROADCAST_OPTION === this.name) {
       this.deferred.resolve(`received broadcast ${this.name}`);
       this.active = false;

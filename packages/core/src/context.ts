@@ -198,7 +198,7 @@ export class Context {
    * Set up the event handles for a the vm.
    * @private
    */
-  attachEventHandles() {
+  attachEventHandles(): void {
     this.vm!.runtime.on(Events.SCRATCH_PROJECT_START, () => {
       console.log(`${this.timestamp()}: run number: ${this.numberOfRun}`);
       this.numberOfRun++;
@@ -276,7 +276,7 @@ export class Context {
    * Create a profile and attach it to the VM.
    * @private
    */
-  createProfiler() {
+  createProfiler(): void {
     this.vm!.runtime.enableProfiling();
     const blockId = this.vm!.runtime.profiler.idByName('blockFunction');
     this.vm!.runtime.profiler.onFrame = (frame) => {
@@ -293,7 +293,8 @@ export class Context {
    * it's more efficient to use `prepareVm`, since that will re-use the created
    * VM.
    */
-  async getProjectJson(config: EvalConfig): Promise<object> {
+  // eslint-disable-next-line
+  async getProjectJson(config: EvalConfig): Promise<Record<string, any>> {
     if (!this.vm) {
       this.vm = new VirtualMachine();
     }
@@ -305,7 +306,8 @@ export class Context {
    * Set-up the scratch vm. After calling this function,
    * the vmLoaded promise will be resolved.
    */
-  async prepareVm(config: EvalConfig): Promise<object> {
+  // eslint-disable-next-line
+  async prepareVm(config: EvalConfig): Promise<Record<string, any>> {
     if (!this.vm) {
       this.vm = new VirtualMachine();
     }
@@ -332,7 +334,7 @@ export class Context {
    * questions (if applicable) and instrument the VM to take the
    * acceleration factor into account.
    */
-  prepareAndRunVm() {
+  prepareAndRunVm(): void {
     this.providedAnswers = this.answers.slice();
 
     // Optimisation.
@@ -381,14 +383,14 @@ export class Context {
    *
    * @private
    */
-  acceleratePrimitive(opcode: string, argument: string = 'SECS') {
+  acceleratePrimitive(opcode: string, argument = 'SECS'): void {
     const original = this.vm!.runtime.getOpcodeFunction(opcode);
     const factor =
       this.accelerationFactor.time || this.accelerationFactor.factor;
-    this.vm!.runtime._primitives[opcode] = (originalArgs: Record<string, any>, util: any) => {
+    this.vm!.runtime._primitives[opcode] = (originalArgs: Record<string, unknown>, util: unknown) => {
       // For safety, clone the arguments.
       const args = { ...originalArgs };
-      args[argument] = args[argument] / factor;
+      args[argument] = <number>args[argument] / factor;
       return original(args, util);
     };
   }
@@ -401,7 +403,7 @@ export class Context {
    * E.g. if the project timer is counts 10s for a project with
    * acceleration factor 2, it should count 20s instead.
    */
-  accelerateTimer() {
+  accelerateTimer(): void {
     const factor = this.accelerationFactor.time || this.accelerationFactor.factor;
     const device = this.vm!.runtime.ioDevices.clock;
     const original = device.projectTimer;
@@ -425,7 +427,7 @@ export class Context {
     return number / factor;
   }
 
-  terminate() {
+  terminate(): void {
     const action = new EndAction();
     action.execute(this, () => {});
   }

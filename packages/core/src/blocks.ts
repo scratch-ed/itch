@@ -1,11 +1,13 @@
+/* eslint-disable @typescript-eslint/no-use-before-define */
 /* Copyright (C) 2019 Ghent University - All Rights Reserved */
 import isNumber from 'lodash-es/isNumber';
 import { Sb3Block, Sb3Mutation, Sb3Target } from './structures';
+import { ensure } from './utils';
 
 /**
  * @deprecated
  */
-export function containsLoop(blocks: Record<string, any>): boolean {
+export function containsLoop(blocks: Record<string, unknown>): boolean {
   for (const key in blocks) {
     if (key === 'control_repeat' || key === 'control_forever') return true;
   }
@@ -15,7 +17,7 @@ export function containsLoop(blocks: Record<string, any>): boolean {
 /**
  * @deprecated
  */
-export function containsBlock(name: string, blocks: object): boolean {
+export function containsBlock(name: string, blocks: Record<string, unknown>): boolean {
   for (const key in blocks) {
     if (key === name) return true;
   }
@@ -27,21 +29,24 @@ export function containsBlock(name: string, blocks: object): boolean {
  */
 export function countExecutions(name: string, blocks: Record<string, number>): number {
   for (const key in blocks) {
-    if (key === name) return blocks[key];
+    if (key === name) {
+      return blocks[key];
+    }
   }
   return 0;
 }
 
+// eslint-disable-next-line no-use-before-define
 function getOrNull(blockId: string | null, blockmap: Map<string, Sb3Block>): Node | null {
   if (blockId) {
-    const parentBlock = blockmap.get(blockId)!;
+    const parentBlock = ensure(blockmap.get(blockId));
     return blockToNode(parentBlock, blockmap);
   } else {
     return null;
   }
 }
 
-function convertInput(inputArray: any[], blockmap: Map<string, Sb3Block>) {
+function convertInput(inputArray: unknown[], blockmap: Map<string, Sb3Block>) {
   // We ignore shadows, as they are not that relevant for us.
   // As such, we always convert the second element in the input array.
   if (Array.isArray(inputArray[1])) {
@@ -50,7 +55,8 @@ function convertInput(inputArray: any[], blockmap: Map<string, Sb3Block>) {
   } else {
     // ID of a block.
     const id = inputArray[1];
-    return blockToNode(id, blockmap);
+    const block = ensure(blockmap.get(<string>id));
+    return blockToNode(block, blockmap);
   }
 }
 
@@ -62,10 +68,10 @@ function convertMutation(mutation: Sb3Mutation | null): string | null {
   return mutation.proccode;
 }
 
-interface Node {
+export interface Node {
   opcode: string;
   next: Node | null;
-  input: Record<string, any>;
+  input: Record<string, unknown>;
   mutation: string | null;
 }
 
@@ -75,11 +81,11 @@ interface Node {
 function blockToNode(block: Sb3Block, blockmap: Map<string, Sb3Block>): Node {
   const next = getOrNull(block.next, blockmap);
 
-  const input: Record<string, any> = {};
+  const input: Record<string, unknown> = {};
   for (const [key, value] of Object.entries(block.inputs || {})) {
     input[key] = convertInput(value, blockmap);
     if (isNumber(input[key])) {
-      input[key] = input[key].toString();
+      input[key] = (<number>input[key]).toString();
     }
   }
 
@@ -101,7 +107,7 @@ function blockToNode(block: Sb3Block, blockmap: Map<string, Sb3Block>): Node {
 export function asTree(
   sprite: Sb3Target,
   blocks: Sb3Block[] = sprite.blocks.filter((b) => b.topLevel)
-): Set<object> {
+): Set<Node> {
   const blockMap = new Map(sprite.blocks.map((i) => [i.id, i]));
 
   // Find all top-level blocks.

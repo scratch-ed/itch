@@ -3,7 +3,7 @@
  *
  * @private
  */
-function toOutput(output: object): void {
+function toOutput(output: Record<string, unknown>): void {
   // @ts-ignore
   if (typeof window.handleOut !== 'undefined') {
     // @ts-ignore
@@ -43,7 +43,7 @@ export const WRONG: Status = { enum: 'wrong', human: 'Wrong' };
  * as the result manager has no way of knowing if the test is successful or not.
  */
 export class ResultManager {
-  out: (obj: object) => void;
+  out: (obj: Record<string, unknown>) => void;
   hasOpenJudgement: boolean;
   hasOpenTab: boolean;
   hasOpenContext: boolean;
@@ -64,7 +64,7 @@ export class ResultManager {
   /**
    * Start the judgement.
    */
-  startJudgement() {
+  startJudgement(): void {
     if (this.isFinished) {
       console.warn(
         'Attempting to start judgement after judgement has been completed. Ignoring.',
@@ -81,7 +81,7 @@ export class ResultManager {
    *
    * @param {boolean} [accepted] - If the judgement is accepted or not.
    */
-  closeJudgement(accepted?: boolean) {
+  closeJudgement(accepted?: boolean): void {
     console.warn('Closing judgement...');
     if (this.isFinished) {
       console.warn(
@@ -116,7 +116,7 @@ export class ResultManager {
   /**
    * Start a tab.
    */
-  startTab(title: string, hidden?: boolean) {
+  startTab(title: string, hidden?: boolean): void {
     if (this.isFinished) {
       console.warn(
         'Attempting to open tab after judgement has been completed. Ignoring.',
@@ -136,7 +136,7 @@ export class ResultManager {
   /**
    * Close a tab.
    */
-  closeTab() {
+  closeTab(): void {
     if (this.isFinished) {
       console.warn(
         'Attempting to close tab after judgement has been completed. Ignoring.',
@@ -157,7 +157,7 @@ export class ResultManager {
   /**
    * Start a context. This will initialise other levels if needed.
    */
-  startContext(description?: string) {
+  startContext(description?: string): void {
     if (this.isFinished) {
       console.warn(
         'Attempting to start context after judgement has been completed.',
@@ -177,7 +177,7 @@ export class ResultManager {
   /**
    * Close a context.
    */
-  closeContext(accepted?: boolean) {
+  closeContext(accepted?: boolean): void {
     if (this.isFinished) {
       console.warn(
         'Attempting to close context after judgement has been completed.',
@@ -198,7 +198,7 @@ export class ResultManager {
   /**
    * Start a testcase. This will initialise other levels if needed.
    */
-  startTestcase(description?: string) {
+  startTestcase(description?: string): void {
     if (this.isFinished) {
       console.warn(
         'Attempting to start testcase after judgement has been completed.',
@@ -215,7 +215,7 @@ export class ResultManager {
     this.hasOpenCase = true;
   }
 
-  closeTestcase(accepted?: boolean) {
+  closeTestcase(accepted?: boolean): void {
     if (this.isFinished) {
       console.warn(
         'Attempting to close testcase after judgement has been completed.',
@@ -235,7 +235,7 @@ export class ResultManager {
     this.hasOpenCase = false;
   }
 
-  startTest(expected: any, description?: string) {
+  startTest(expected: unknown, description?: string): void {
     if (this.isFinished) {
       console.warn(
         'Attempting to start test after judgement has been completed.',
@@ -256,7 +256,7 @@ export class ResultManager {
     this.hasOpenTest = true;
   }
 
-  closeTest(generated: any, accepted?: boolean, status?: Status) {
+  closeTest(generated: unknown, accepted?: boolean, status?: Status): void {
     if (this.isFinished) {
       console.warn(
         'Attempting to close test after judgement has been completed.',
@@ -276,7 +276,7 @@ export class ResultManager {
     this.hasOpenTest = false;
   }
 
-  appendMessage(message: string) {
+  appendMessage(message: string): void {
     if (!this.hasOpenJudgement) {
       console.warn(
         'Attempting to append message while no judgement is open. Ignoring.',
@@ -286,7 +286,7 @@ export class ResultManager {
     this.out({ command: 'append-message', message: message });
   }
 
-  escalateStatus(status: Status) {
+  escalateStatus(status: Status): void {
     if (!this.hasOpenJudgement) {
       console.warn(
         'Attempting to escalate status of closed judgement. Ignoring.',

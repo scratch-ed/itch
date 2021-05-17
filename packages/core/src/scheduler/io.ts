@@ -11,7 +11,7 @@ export class WhenPressKeyAction extends ScheduledAction {
     this.key = key;
   }
 
-  execute(context: Context, resolve: (v: string) => void) {
+  execute(context: Context, resolve: (v: string) => void): void {
     // Save sprites state before key press.
     const event = new LogEvent(context, 'key', { key: this.key });
     event.previousFrame = new LogFrame(context, 'key');
@@ -60,7 +60,7 @@ export class MouseUseAction extends ScheduledAction {
     this.data = data;
   }
 
-  execute(context: Context, resolve: (v: string) => void) {
+  execute(context: Context, resolve: (v: string) => void): void {
     this.data.x = this.data.x + 240;
     this.data.y = this.data.y + 180;
     this.data.canvasWidth = 480;
@@ -81,7 +81,7 @@ export class KeyUseAction extends ScheduledAction {
     this.delay = delay;
   }
 
-  execute(context: Context, resolve: (v: string) => void) {
+  execute(context: Context, resolve: (v: string) => void): void {
     const event = new LogEvent(context, 'useKey', {
       key: this.key,
       down: this.down,
@@ -117,7 +117,7 @@ export class KeyUseAction extends ScheduledAction {
     }
   }
 
-  isDown() {
+  private isDown(): boolean | number {
     if (this.isDelayed()) {
       return true;
     } else {
@@ -125,7 +125,7 @@ export class KeyUseAction extends ScheduledAction {
     }
   }
 
-  isDelayed() {
+  private isDelayed(): boolean {
     return typeof this.down === 'number';
   }
 }

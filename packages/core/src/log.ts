@@ -8,15 +8,17 @@ import {
   dist,
   distSq,
   findSquares,
-  findTriangles, Line,
+  findTriangles,
+  Line,
   mergeLines,
+  Position,
 } from './lines';
 import { ensure } from './utils';
 import { Context } from './context';
 
-import type RenderedTarget from "@itch-types/scratch-vm/types/sprites/rendered-target";
+import type RenderedTarget from '@itch-types/scratch-vm/types/sprites/rendered-target';
 import type Target from '@itch-types/scratch-vm/types/engine/target';
-
+import type Variable from '@itch-types/scratch-vm/types/engine/variable';
 
 /**
  * Our own version of a variable. Basically a copy of a {@link Variable}.
@@ -25,12 +27,12 @@ export class LoggedVariable {
   id: string;
   name: string;
   type: string;
-  value: any;
+  value: string | number | unknown[];
 
   /**
    * @param {Variable} variable - The source to copy from.
    */
-  constructor(variable: Record<string, any>) {
+  constructor(variable: Variable) {
     this.id = variable.id;
     this.name = variable.name;
     this.type = variable.type;
@@ -59,10 +61,10 @@ export class LoggedSprite {
   costume: string;
   costumeSize: number;
   isTouchingEdge: boolean;
-  bounds: { left: number, right: number, top: number, bottom: number } | null;
+  bounds: { left: number; right: number; top: number; bottom: number } | null;
   touchingSprites: { name: string; value: boolean }[];
   isTouchingSprite: { name: string; value: boolean }[];
-  blocks: Record<string, any>;
+  blocks: Record<string, Record<string, unknown>>;
   scripts: string[];
 
   /**
@@ -88,9 +90,7 @@ export class LoggedSprite {
     // Copy variables.
     this.variables = [];
     for (const varName of Object.keys(target.variables || {})) {
-      this.variables.push(
-        new LoggedVariable(target.lookupVariableById(varName)),
-      );
+      this.variables.push(new LoggedVariable(target.lookupVariableById(varName)));
     }
 
     // Copy sprite information.
@@ -99,7 +99,12 @@ export class LoggedSprite {
     this.costumeSize = target.getCurrentCostume().size;
 
     this.isTouchingEdge = target.isTouchingEdge();
-    this.bounds = target.getBounds() as { left: number, right: number, top: number, bottom: number };
+    this.bounds = target.getBounds() as {
+      left: number;
+      right: number;
+      top: number;
+      bottom: number;
+    };
 
     // Get all targets that touch this one.
     this.touchingSprites = [];
@@ -128,7 +133,7 @@ export class LoggedSprite {
     return Object.values(this.blocks).some((block) => block.opcode === opcode);
   }
 
-  blockList(): any[] {
+  blockList(): Record<string, unknown>[] {
     return Object.values(this.blocks);
   }
 
@@ -178,6 +183,7 @@ export class LogFrame {
    * The targets saved at this moment in the VM.
    */
   sprites: LoggedSprite[];
+
   /**
    * When a new frame is created, information from the current state of the targets is saved. Some properties, like if the target is touching another target,
    * are calculated before being saved.
@@ -207,6 +213,11 @@ export class LogFrame {
       }
     }
     return null;
+  }
+
+  getSpriteOr(name: string): LoggedSprite {
+    const sp = this.getSprite(name);
+    return ensure(sp);
   }
 
   /**
@@ -253,15 +264,13 @@ interface Constraints {
  *
  * @deprecated
  */
-export function searchFrames(frames: LogFrame[], constraints: Constraints) {
+export function searchFrames(frames: LogFrame[], constraints: Constraints): LogFrame[] {
   const before = constraints.before || ensure(last(frames)).time;
   const after = constraints.after || 0;
   const type = constraints.type || null;
 
   return frames.filter((f) => {
-    return (
-      f.time >= after && f.time <= before && (f.block === type || type === null)
-    );
+    return f.time >= after && f.time <= before && (f.block === type || type === null);
   });
 }
 
@@ -270,21 +279,22 @@ export function searchFrames(frames: LogFrame[], constraints: Constraints) {
  * TODO: review
  */
 export class LogRenderer {
-  index: number = 0;
-  lines: any[] = [];
-  color: any = null;
-  points: any[] = [];
-  responses: any[] = [];
+  index = 0;
+  lines: Line[] = [];
+  color: unknown = null;
+  points: unknown[] = [];
+  responses: unknown[] = [];
 }
 
 // TODO: review
 export class LogEvent {
   time: number;
   type: string;
-  data: Record<string, any>;
+  data: Record<string, unknown>;
   nextFrame: LogFrame | null;
   previousFrame: LogFrame | null;
-  constructor(context: Context, type: string, data: Record<string, any> = {}) {
+
+  constructor(context: Context, type: string, data: Record<string, unknown> = {}) {
     this.time = context.timestamp();
     this.type = type;
     this.data = data;
@@ -305,6 +315,7 @@ class Events {
   list: LogEvent[];
   length: number;
   lastTime: number;
+
   constructor() {
     this.list = [];
     /** @deprecated */
@@ -321,10 +332,10 @@ class Events {
   }
 
   /** @deprecated */
-  filter(arg: Record<any, any>) {
+  filter(arg: Record<string, unknown>) {
     const type = arg.type || 'all';
-    const before = arg.before || this.lastTime;
-    const after = arg.after || 0;
+    const before = (arg.before as number) || this.lastTime;
+    const after = (arg.after as number) || 0;
 
     const filtered = [];
     for (const event of this.list) {
@@ -338,11 +349,13 @@ class Events {
   }
 
   /** @deprecated */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   find(a: any) {
     return this.list.find(a);
   }
 
   /** @deprecated */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   findIndex(a: any) {
     return this.list.findIndex(a);
   }
@@ -350,6 +363,7 @@ class Events {
 
 class Blocks {
   blocks: Record<string, number>;
+
   constructor() {
     this.blocks = {};
   }
@@ -394,50 +408,49 @@ export class Log {
    *
    * @return {LogFrame|undefined}
    */
-  get initial() {
+  get initial(): LogFrame | undefined {
     return first(this.frames);
   }
 
   /**
    * Get the current frame, i.e. the last saved frame.
-   *
-   * @return {LogFrame|undefined}
    */
-  get current() {
+  get current(): LogFrame | undefined {
     return last(this.frames);
   }
 
   /**
    * Add a frame.
-   * @param {Context} context
-   * @param block
    */
-  addFrame(context: Context, block: string) {
+  addFrame(context: Context, block: string): void {
     const frame = new LogFrame(context, block);
     this.frames.push(frame);
     this.blocks.push(block);
   }
 
-  addEvent(event: LogEvent) {
+  addEvent(event: LogEvent): void {
     this.events.push(event);
   }
 
-  reset() {
+  /**
+   * @deprecated
+   */
+  reset(): void {
     // not needed
   }
 
   /**
    * @return {LogFrame} return final state of sprites
    */
-  get sprites() {
+  get sprites(): LogFrame {
     return this.frames[this.frames.length - 1];
   }
 
   // Functions needed for evaluation
 
   // Sprite related
-  getCostumes(spriteName: string, frames = this.frames) {
-    const costumes: Record<string, any> = {};
+  getCostumes(spriteName: string, frames = this.frames): Record<string, string> {
+    const costumes: Record<string, string> = {};
     const costumeIds = new Set();
     for (const frame of frames) {
       const sprite = frame.getSprite(spriteName);
@@ -451,12 +464,16 @@ export class Log {
     return costumes;
   }
 
-  getNumberOfCostumes(spriteName: string) {
+  getNumberOfCostumes(spriteName: string): number {
     const costumes = this.getCostumes(spriteName);
     return Object.keys(costumes).length;
   }
 
-  getVariableValue(variableName: string, spriteName = 'Stage', frame = this.sprites) {
+  getVariableValue(
+    variableName: string,
+    spriteName = 'Stage',
+    frame = this.sprites,
+  ): unknown {
     for (const sprite of frame.sprites) {
       if (sprite.name === spriteName) {
         for (const variable of sprite.variables) {
@@ -468,7 +485,11 @@ export class Log {
     }
   }
 
-  getVariables(variableName: string, spriteName = 'Stage', frames = this.frames) {
+  getVariables(
+    variableName: string,
+    spriteName = 'Stage',
+    frames = this.frames,
+  ): unknown[] {
     return frames
       .map((frame) => frame.getSprite(spriteName))
       .map((sprite) => ensure(sprite).getVariable(variableName))
@@ -478,11 +499,11 @@ export class Log {
       });
   }
 
-  getStartSprites() {
+  getStartSprites(): LoggedSprite[] {
     return this.frames[0].sprites;
   }
 
-  getMaxX(spriteName: string, frames = this.frames) {
+  getMaxX(spriteName: string, frames = this.frames): number {
     let max = -240;
     for (const frame of frames) {
       const sprite = frame.getSprite(spriteName);
@@ -495,7 +516,7 @@ export class Log {
     return max;
   }
 
-  getMinX(spriteName: string, frames = this.frames) {
+  getMinX(spriteName: string, frames = this.frames): number {
     let min = 240;
     for (const frame of frames) {
       const sprite = frame.getSprite(spriteName);
@@ -508,7 +529,7 @@ export class Log {
     return min;
   }
 
-  getMaxY(spriteName: string, frames = this.frames) {
+  getMaxY(spriteName: string, frames = this.frames): number {
     let max = -180;
     for (const frame of frames) {
       const sprite = frame.getSprite(spriteName);
@@ -521,7 +542,7 @@ export class Log {
     return max;
   }
 
-  getMinY(spriteName: string, frames = this.frames) {
+  getMinY(spriteName: string, frames = this.frames): number {
     let min = 180;
     for (const frame of frames) {
       const sprite = frame.getSprite(spriteName);
@@ -534,7 +555,7 @@ export class Log {
     return min;
   }
 
-  hasSpriteMoved(spriteName: string, frames = this.frames) {
+  hasSpriteMoved(spriteName: string, frames = this.frames): boolean {
     if (frames.length === 0) return false;
     const minX = this.getMinX(spriteName, frames);
     const maxX = this.getMaxX(spriteName, frames);
@@ -543,7 +564,7 @@ export class Log {
     return !(minX === maxX && minY === maxY);
   }
 
-  inBounds(spriteName: string, frames = this.frames) {
+  inBounds(spriteName: string, frames = this.frames): boolean {
     for (const frame of frames) {
       const sprite = frame.getSprite(spriteName);
       if (sprite != null) {
@@ -555,7 +576,7 @@ export class Log {
     return true;
   }
 
-  getDirectionChanges(spriteName: string, frames = this.frames) {
+  getDirectionChanges(spriteName: string, frames = this.frames): number[] {
     const directions = [];
     let oldDirection = 0;
     for (const frame of frames) {
@@ -570,7 +591,7 @@ export class Log {
     return directions;
   }
 
-  getCostumeChanges(spriteName: string, frames = this.frames) {
+  getCostumeChanges(spriteName: string, frames = this.frames): string[] {
     const costumes = [];
     let oldCostume = '';
     for (const frame of frames) {
@@ -588,11 +609,15 @@ export class Log {
   /**
    * @deprecated
    */
-  isTouchingSprite(spriteName: string, targetName: string, frame: LogFrame) {
+  isTouchingSprite(spriteName: string, targetName: string, frame: LogFrame): boolean {
     return frame.isTouching(spriteName, targetName);
   }
 
-  getDistancesToSprite(spriteName: string, targetName: string, frames = this.frames) {
+  getDistancesToSprite(
+    spriteName: string,
+    targetName: string,
+    frames = this.frames,
+  ): number[] {
     const distances = [];
     for (const frame of frames) {
       const sprite = frame.getSprite(spriteName);
@@ -604,9 +629,13 @@ export class Log {
     return distances;
   }
 
-  doSpritesOverlap(spriteName1: string, spriteName2: string, frame = this.sprites) {
-    const sprite1 = frame.getSprite(spriteName1)!;
-    const sprite2 = frame.getSprite(spriteName2)!;
+  doSpritesOverlap(
+    spriteName1: string,
+    spriteName2: string,
+    frame = this.sprites,
+  ): boolean {
+    const sprite1 = frame.getSpriteOr(spriteName1);
+    const sprite2 = frame.getSpriteOr(spriteName2);
     const bounds1 = sprite1.bounds!;
     const bounds2 = sprite2.bounds!;
     // If one rectangle is on left side of other
@@ -614,10 +643,7 @@ export class Log {
       return false;
     }
     // If one rectangle is above other
-    if (bounds1.top < bounds2.bottom || bounds1.bottom > bounds2.top) {
-      return false;
-    }
-    return true;
+    return !(bounds1.top < bounds2.bottom || bounds1.bottom > bounds2.top);
   }
 
   /**
@@ -630,50 +656,54 @@ export class Log {
    * @param {LogFrame[]} frames - The frames to search. Defaults to all frames.
    * @return {Array<{x:Number, y:Number}>} The positions.
    */
-  getSpritePositions(sprite: string, frames = this.frames) {
+  getSpritePositions(sprite: string, frames = this.frames): Position[] {
     return frames
-      .map((frame) => frame.getSprite(sprite))
+      .map((frame) => frame.getSpriteOr(sprite))
       .map((sprite) => {
-        return { x: sprite!.x, y: sprite!.y };
+        return { x: sprite.x, y: sprite.y };
       })
       .filter((item, pos, arr) => {
         return pos === 0 || !isEqual(item, arr[pos - 1]);
       });
   }
 
-  getSprites(sprite: string, frames = this.frames, mapper = (s: LoggedSprite | null) => s) {
-    const sprites = frames.map((frame) => frame.getSprite(sprite)).map(mapper);
+  getSprites(
+    sprite: string,
+    frames = this.frames,
+    mapper = (s: LoggedSprite) => s,
+  ): LoggedSprite[] {
+    const sprites = frames.map((frame) => frame.getSpriteOr(sprite)).map(mapper);
     return uniq(sprites);
   }
 
   /** @deprecated Use getSpritePositions */
-  getSpriteLocations(spriteName: string, frames = this.frames) {
+  getSpriteLocations(spriteName: string, frames = this.frames): Position[] {
     return this.getSpritePositions(spriteName, frames);
   }
 
   // RENDERER RELATED
 
-  getSquares() {
+  getSquares(): false | { points: Position[]; length: number }[] {
     return findSquares(this.renderer.lines);
   }
 
-  getTriangles() {
+  getTriangles(): boolean | Position[][] {
     return findTriangles(this.renderer.lines);
   }
 
-  getMergedLines() {
+  getMergedLines(): Line[] {
     return mergeLines(this.renderer.lines);
   }
 
-  getLineLength(line: Line) {
+  getLineLength(line: Line): number {
     return dist(line);
   }
 
-  getResponses() {
+  getResponses(): unknown[] {
     return this.renderer.responses;
   }
 
-  getCreateSkinEvents() {
+  getCreateSkinEvents(): LogEvent[] {
     const rendererEvents = this.events.filter({ type: 'renderer' });
     const createTextSkinEvents = [];
     for (const event of rendererEvents) {
@@ -684,7 +714,7 @@ export class Log {
     return createTextSkinEvents;
   }
 
-  getDestroySkinEvents() {
+  getDestroySkinEvents(): LogEvent[] {
     const rendererEvents = this.events.filter({ type: 'renderer' });
     const destroySkinEvents = [];
     for (const event of rendererEvents) {
@@ -704,7 +734,7 @@ export class Log {
     for (const e of createTextSkinEvents) {
       if (e.data.text === text) {
         time = e.time;
-        id = e.data.id;
+        id = e.data.id as number;
       }
     }
     for (const e of destroyTextSkinEvents) {

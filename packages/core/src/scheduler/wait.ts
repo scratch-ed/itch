@@ -1,3 +1,4 @@
+/* eslint-disable */
 import castArray from 'lodash-es/castArray';
 import { ScheduledAction } from './action';
 import { LogEvent, LogFrame } from '../log';

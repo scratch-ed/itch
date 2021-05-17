@@ -11,7 +11,7 @@ export class SendBroadcastAction extends ScheduledAction {
     this.name = name;
   }
 
-  execute(context: Context, resolve: (v: string) => void) {
+  execute(context: Context, resolve: (v: string) => void): void {
     // Save the state of the sprite before the click event.
     const target = context.vm!.runtime.getTargetForStage();
     const event = new LogEvent(context, 'broadcast', {
@@ -37,7 +37,7 @@ export class SendBroadcastAction extends ScheduledAction {
     });
   }
 
-  toString() {
+  toString(): string {
     return `${super.toString()} of ${this.name}`;
   }
 }

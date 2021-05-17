@@ -12,7 +12,8 @@ export function numericEquals(float1: number, float2: number, epsilon = 0.0001):
  * If the argument is a function, return it.
  * Otherwise, returns a function that returns the value.
  */
-export function castCallback<F extends (...args: any) => any>(functionOrObject: F | ReturnType<F>): F {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function castCallback<F extends (..._args: any) => any>(functionOrObject: F | ReturnType<F>): F {
   if (typeof functionOrObject === 'function') {
     return functionOrObject;
   } else {
@@ -20,7 +21,7 @@ export function castCallback<F extends (...args: any) => any>(functionOrObject: 
   }
 }
 
-export function ensure<T>(argument: T | undefined | null, message: string = 'This value was promised to be there.'): T {
+export function ensure<T>(argument: T | undefined | null, message = 'This value was promised to be there.'): T {
   if (argument === undefined || argument === null) {
     throw new TypeError(message);
   }
@@ -29,8 +30,10 @@ export function ensure<T>(argument: T | undefined | null, message: string = 'Thi
 }
 
 interface CorrectMessage {
-  correct: string | ((...args: any[]) => string);
-  wrong?: string | ((...args: any[]) => string);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  correct: string | ((..._args: any[]) => string);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  wrong?: string | ((..._args: any[]) => string);
 }
 
 interface WrongMessage {

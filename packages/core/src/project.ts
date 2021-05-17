@@ -1,4 +1,4 @@
-import { Sb3Json, Sb3Sprite, Sb3Stage, Sb3Target, Sb3Variable } from './structures';
+import { Sb3Json, Sb3Target, Sb3Variable } from './structures';
 import isEqual from 'lodash-es/isEqual';
 import { asTree } from './blocks';
 
@@ -26,7 +26,7 @@ export class Project {
   /**
    * @param {Object} json - The JSON extracted from the sb3 file.
    */
-  constructor(json: Record<string, any>) {
+  constructor(json: Record<string, unknown>) {
     this.json = new Sb3Json(json);
   }
 
@@ -40,7 +40,7 @@ export class Project {
    * template.hasRemovedSprites(submission);
    * // Returns true if the student removed some sprites.
    */
-  hasRemovedSprites(other: Project) {
+  hasRemovedSprites(other: Project): boolean {
     const names = new Set(other.json.targets.map((t) => t.name));
     return !this.json.targets.every((t) => names.has(t.name));
   }
@@ -64,7 +64,7 @@ export class Project {
    * @param {Project} other - Project to compare to.
    * @param {string} sprite - Name of the sprite to check.
    */
-  hasChangedCostumes(other: Project, sprite: string) {
+  hasChangedCostumes(other: Project, sprite: string): boolean {
     const myCostumeIds = this.sprite(sprite)?.costumes?.map((c) => c.assetId);
 
     const otherCustomIds = other
@@ -96,7 +96,7 @@ export class Project {
     sprite: string,
     predicate: SpritePredicate = (s1, s2) =>
       !isEqual(s1.comparableObject(), s2.comparableObject()),
-  ) {
+  ): boolean {
     const baseSprite = this.sprite(sprite);
     const comparisonSprite = other.sprite(sprite);
 
@@ -140,7 +140,7 @@ export class Project {
   /**
    * @return {Sb3Sprite[]|Sb3Stage[]} A list of sprites in this project.
    */
-  sprites() {
+  sprites(): Sb3Target[] {
     return this.json.targets;
   }
 

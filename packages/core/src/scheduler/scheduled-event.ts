@@ -4,7 +4,7 @@ import { ClickSpriteAction } from './click';
 import { KeyUseAction, MouseData, MouseUseAction, WhenPressKeyAction } from './io';
 import { SendBroadcastAction } from './broadcast';
 import { EndAction, JoinAction } from './end';
-import { delay, broadcast, sprite } from './wait';
+import { delay } from './wait';
 import { TrackSpriteAction } from './track';
 import { castCallback, MessageData } from '../utils';
 import { FatalErrorException } from '../testplan';
@@ -120,17 +120,10 @@ export class ScheduledEvent {
    * @param sync - The data for the event.
    * @param timeout - How to long to wait before resolving.
    */
-  constructor(action: ScheduledAction, sync: boolean = true, timeout?: number) {
-    /** @package */
+  constructor(action: ScheduledAction, sync = true, timeout?: number) {
     this.action = action;
-    /** @private */
     this.sync = sync;
-    /** @private */
     this.timeout = timeout;
-    /**
-     * @private
-     * @type {ScheduledEvent[]}
-     */
     this.nextEvents = [];
   }
 
@@ -158,7 +151,7 @@ export class ScheduledEvent {
    *
    * You should not call this function; the framework takes care of it for you.
    */
-  run(context: Context): Promise<any> {
+  run(context: Context): Promise<void> {
     console.debug(
       `${context.timestamp()}: Running actions ${this.action.toString()}`,
     );
@@ -252,13 +245,11 @@ export class ScheduledEvent {
   /**
    * Create and schedule a new event.
    *
-   * @param {ScheduledAction} action - What to execute.
-   * @param {boolean} sync - If the event is sync.
-   * @param {?number} timeout - Optional timeout.
-   * @return {ScheduledEvent}
-   * @private
+   * @param action - What to execute.
+   * @param sync - If the event is sync.
+   * @param timeout - Optional timeout.
    */
-  constructNext(action: ScheduledAction, sync: boolean = true, timeout?: number) {
+  private constructNext(action: ScheduledAction, sync = true, timeout?: number): ScheduledEvent {
     const event = new (<typeof ScheduledEvent>this.constructor)(action, sync, timeout);
     this.nextEvents.push(event);
     return event;
@@ -373,7 +364,7 @@ export class ScheduledEvent {
    * @param {number} timeout - How long to wait for synchronous events.
    * @return {ScheduledEvent}
    */
-  greenFlag(sync: boolean = true, timeout?: number): ScheduledEvent {
+  greenFlag(sync = true, timeout?: number): ScheduledEvent {
     return this.constructNext(new GreenFlagAction(), sync, timeout);
   }
 
@@ -388,7 +379,7 @@ export class ScheduledEvent {
    * @param sync - Synchronous or not, default true.
    * @param timeout - How long to wait for synchronous events.
    */
-  clickSprite(spriteName: string = 'Stage', sync: boolean = true, timeout?: number): ScheduledEvent {
+  clickSprite(spriteName = 'Stage', sync = true, timeout?: number): ScheduledEvent {
     return this.constructNext(new ClickSpriteAction(spriteName), sync, timeout);
   }
 
@@ -411,7 +402,7 @@ export class ScheduledEvent {
    * @param sync - Synchronous or not, default true.
    * @param timeout - How long to wait for synchronous events.
    */
-  sendBroadcast(broadcast: string, sync: boolean = true, timeout?: number): ScheduledEvent {
+  sendBroadcast(broadcast: string, sync = true, timeout?: number): ScheduledEvent {
     return this.constructNext(
       new SendBroadcastAction(broadcast),
       sync,
@@ -442,7 +433,7 @@ export class ScheduledEvent {
    * @param sync - Synchronous or not, default true.
    * @param timeout - How long to wait for synchronous events.
    */
-  pressKey(key: string, sync: boolean = true, timeout?: number): ScheduledEvent {
+  pressKey(key: string, sync = true, timeout?: number): ScheduledEvent {
     return this.constructNext(new WhenPressKeyAction(key), sync, timeout);
   }
 
@@ -500,7 +491,7 @@ export class ScheduledEvent {
    *        set this to less than 10, but you risk that your key press will be
    *        undetected.
    */
-  useKey(key: string, down: number | boolean = 60, sync: boolean = true, delay: number = 20): ScheduledEvent {
+  useKey(key: string, down: number | boolean = 60, sync = true, delay = 20): ScheduledEvent {
     return this.constructNext(new KeyUseAction(key, down, delay), sync);
   }
 
@@ -608,7 +599,7 @@ export class ScheduledEvent {
    *
    * @return {ScheduledEvent}
    */
-  asTest(messages?: MessageData) {
+  asTest(messages?: MessageData): ScheduledEvent {
     const wrapped = {
       correct: castCallback(messages?.correct),
       wrong: castCallback(messages?.wrong),

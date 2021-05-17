@@ -37,13 +37,13 @@ export class FatalErrorException extends Error {}
 
 class GenericMatcher {
   context: Context;
-  actual: any;
-  errorMessage?: (expected: any, actual: any) => string;
-  successMessage?: (expected: any, actual: any) => string;
-  terminate: boolean = false;
-  expected: any;
+  actual: unknown;
+  errorMessage?: (expected: unknown, actual: unknown) => string;
+  successMessage?: (expected: unknown, actual: unknown) => string;
+  terminate = false;
+  expected: unknown;
 
-  constructor(context: Context, actual: any) {
+  constructor(context: Context, actual: unknown) {
     this.context = context;
     this.actual = actual;
   }
@@ -86,7 +86,7 @@ class GenericMatcher {
    * Allows setting an error message.
    * @deprecated
    */
-  withError(message: string | ((expected: any, actual: any) => string)): GenericMatcher {
+  withError(message: string | ((expected: unknown, actual: unknown) => string)): GenericMatcher {
     this.errorMessage = castCallback(message);
     return this;
   }
@@ -122,7 +122,7 @@ class GenericMatcher {
    *   > by their own, not inherited, enumerable properties. Functions and DOM
    *   > nodes are **not** supported.
    */
-  toBe(expected: any): void {
+  toBe(expected: unknown): void {
     this.expected = expected;
     if (typeof this.actual === 'number' && typeof expected === 'number') {
       this.out(
@@ -155,7 +155,7 @@ class GenericMatcher {
    *   > by their own, not inherited, enumerable properties. Functions and DOM
    *   > nodes are **not** supported.
    */
-  toNotBe(expected: any): void {
+  toNotBe(expected: unknown): void {
     this.expected = expected;
     if (typeof this.actual === 'number' && typeof expected === 'number') {
       this.out(
@@ -185,7 +185,7 @@ class ExpectLevel {
   /**
    * Start an assertion be providing a value.
    */
-  expect(value: any): GenericMatcher {
+  expect(value: unknown): GenericMatcher {
     return new GenericMatcher(this.context, value);
   }
 
@@ -251,7 +251,7 @@ export class TabLevel extends DescribeLevel {
    *
    * This level results in a `tab` in the output format.
    */
-  tab(name: string, block: (out: DescribeLevel) => void) {
+  tab(name: string, block: (out: DescribeLevel) => void): void {
     this.context.output.startTab(name);
     block(this);
     this.context.output.closeTab();
@@ -293,19 +293,19 @@ export class OneHatAllowedTest {
 
   private ignoredSprites: string[] = ['Stage'];
   private hatSprite?: string;
-  private hatBlockFinder?: any;
-  private allowedBlockCheck ?: any;
+  private hatBlockFinder?: (value: Sb3Block, index: number, obj: Sb3Block[]) => boolean;
+  private allowedBlockCheck ?: (value: Sb3Block, index: number, array: Sb3Block[]) => boolean;
 
   constructor(template: Project, submission: Project) {
     this.template = template;
     this.submission = submission;
   }
 
-  ignoredSprite(sprite: string) {
+  ignoredSprite(sprite: string): void {
     this.ignoredSprites.push(sprite);
   }
 
-  execute(e: Evaluation) {
+  execute(e: Evaluation): void {
     e.describe('Controle op bestaande code', (l) => {
       this.template
         .sprites()
@@ -358,10 +358,10 @@ export class OneHatAllowedTest {
       // The remaining blocks should be identical to the template sprite.
       // Start by finding the hat block (in the template, guaranteed to exist).
       const solutionHatBlock = solutionHatSprite?.blocks?.find(
-        this.hatBlockFinder,
+        this.hatBlockFinder!,
       );
       const templateHatBlock = templateHatSprite.blocks.find(
-        this.hatBlockFinder,
+        this.hatBlockFinder!,
       )!;
 
       if (typeof solutionHatBlock === 'undefined') {
@@ -458,9 +458,9 @@ export class OneHatAllowedTest {
  * @param {VirtualMachine} vm
  * @param {string} sprite
  */
-export function ignoreWaitInProcedureFor(vm: VirtualMachine, sprite: string) {
+export function ignoreWaitInProcedureFor(vm: VirtualMachine, sprite: string): void {
   const original = vm.runtime._primitives.control_wait;
-  vm.runtime._primitives.control_wait = (args: any, util: BlockUtility) => {
+  vm.runtime._primitives.control_wait = (args: unknown, util: BlockUtility) => {
     // Big hack to ignore wait in movement steps.
     if (util.thread!.target.getName() === sprite) {
       const glowId = util.thread!.blockGlowInFrame;
