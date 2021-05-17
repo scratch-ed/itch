@@ -1,4 +1,4 @@
-import Project from '../src/project.js';
+import { Project } from '../src/project';
 
 function project(...names) {
   return new Project({
