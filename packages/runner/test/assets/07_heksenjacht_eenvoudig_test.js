@@ -8,9 +8,7 @@ function beforeExecution(template, submission, e) {
   // Controleer of het ingediende project van de leerling een sprite heeft met als naam 'Heks'
   e.test('Heks bestaat', (l) => {
     l.expect(submission.containsSprite('Heks'))
-      .withError(
-        'De sprite met als naam Heks werd niet teruggevonden in het project',
-      )
+      .withError('De sprite met als naam Heks werd niet teruggevonden in het project')
       .toBe(true);
   });
 }

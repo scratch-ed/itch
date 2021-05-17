@@ -31,20 +31,22 @@ export function isEqual(d1: number, d2: number): boolean {
 export function removeDuplicates(myArray: Position[]): Position[] {
   return myArray.filter(
     (obj, index, self) =>
-      index ===
-      self.findIndex((t) => isEqual(t.x, obj.x) && isEqual(t.y, obj.y)),
+      index === self.findIndex((t) => isEqual(t.x, obj.x) && isEqual(t.y, obj.y)),
   );
 }
 
 // If d1 and d2 are the same, then following conditions must met to form a square.
 // 1) Square of d3 is same as twice the square of d1
 // 2) Square of d2 is same as twice the square of d1
-export function squareTest(d1: number, d2: number, d3: number, p1: Position, p2: Position, p3: Position): boolean {
-  if (
-    isEqual(d1, d2) &&
-    isEqual(2 * d1, d3) &&
-    isEqual(2 * d1, distSq(p1, p2))
-  ) {
+export function squareTest(
+  d1: number,
+  d2: number,
+  d3: number,
+  p1: Position,
+  p2: Position,
+  p3: Position,
+): boolean {
+  if (isEqual(d1, d2) && isEqual(2 * d1, d3) && isEqual(2 * d1, distSq(p1, p2))) {
     const d = distSq(p1, p3);
     return isEqual(d, distSq(p2, p3)) && isEqual(d, d1);
   }
@@ -164,7 +166,9 @@ export function findSquareLength(points: Position[]): number {
   return Math.sqrt(l);
 }
 
-export function findSquares(lines: Line[]): false | { points: Position[], length: number }[] {
+export function findSquares(
+  lines: Line[],
+): false | { points: Position[]; length: number }[] {
   const squares = [];
   if (lines.length < 4) return false; // no square without at least 4 sides
 

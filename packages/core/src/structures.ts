@@ -114,9 +114,7 @@ export class Sb3Block {
    */
   get calledProcedureName(): string {
     if (this.opcode !== 'procedures_call') {
-      throw new Error(
-        'Cannot get called procedure name from non procedure call.',
-      );
+      throw new Error('Cannot get called procedure name from non procedure call.');
     }
 
     return this.mutation!.proccode;
@@ -238,10 +236,7 @@ export class Sb3Target {
     this.name = data.name;
     this.variables = {};
     for (const variable of Object.keys(data.variables || {})) {
-      this.variables[variable] = new Sb3Variable(
-        variable,
-        data.variables[variable],
-      );
+      this.variables[variable] = new Sb3Variable(variable, data.variables[variable]);
     }
     this.lists = data.lists || {};
     this.broadcasts = data.broadcasts || {};

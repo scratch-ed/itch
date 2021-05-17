@@ -35,8 +35,6 @@ function afterExecution(e) {
   });
 
   if (!e.log.blocks.containsLoop()) {
-    e.output.appendMessage(
-      'You could improve your solution by using a "repeat"-block.',
-    );
+    e.output.appendMessage('You could improve your solution by using a "repeat"-block.');
   }
 }

@@ -106,14 +106,12 @@ function blockToNode(block: Sb3Block, blockmap: Map<string, Sb3Block>): Node {
  */
 export function asTree(
   sprite: Sb3Target,
-  blocks: Sb3Block[] = sprite.blocks.filter((b) => b.topLevel)
+  blocks: Sb3Block[] = sprite.blocks.filter((b) => b.topLevel),
 ): Set<Node> {
   const blockMap = new Map(sprite.blocks.map((i) => [i.id, i]));
 
   // Find all top-level blocks.
-  const filtered = blocks
-    .filter((b) => b.topLevel)
-    .map((b) => blockToNode(b, blockMap));
+  const filtered = blocks.filter((b) => b.topLevel).map((b) => blockToNode(b, blockMap));
 
   return new Set(filtered);
 }

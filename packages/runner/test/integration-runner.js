@@ -14,15 +14,9 @@ const defaultConfig = {
  * @param testName
  * @param configuration
  */
-async function runTest(
-  projectName = expect.getState().currentTestName,
-  testName = null,
-) {
+async function runTest(projectName = expect.getState().currentTestName, testName = null) {
   const sourceFile = path.resolve(__dirname, `assets/${projectName}.sb3`);
-  const planFile = path.resolve(
-    __dirname,
-    `assets/${testName || projectName}_test.js`,
-  );
+  const planFile = path.resolve(__dirname, `assets/${testName || projectName}_test.js`);
 
   return executePlan(sourceFile, sourceFile, planFile, defaultConfig);
 }

@@ -37,11 +37,7 @@ export class ClickSpriteAction extends ScheduledAction {
         sprite,
       );
     } else {
-      list = context.vm!.runtime.startHats(
-        'event_whenstageclicked',
-        undefined,
-        sprite,
-      );
+      list = context.vm!.runtime.startHats('event_whenstageclicked', undefined, sprite);
     }
 
     const action = new ThreadListener(list);

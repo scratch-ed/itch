@@ -38,10 +38,7 @@ function wrapStep(vm: VirtualMachine) {
   vm.runtime._step = () => {
     const oldResult = oldFunction();
     if (vm.runtime._lastStepDoneThreads.length > 0) {
-      vm.runtime.emit(
-        Events.DONE_THREADS_UPDATE,
-        vm.runtime._lastStepDoneThreads,
-      );
+      vm.runtime.emit(Events.DONE_THREADS_UPDATE, vm.runtime._lastStepDoneThreads);
     }
     // const newTime = Date.now();
     // if (time && newTime) {
@@ -82,7 +79,12 @@ function wrapStartHats(vm: VirtualMachine) {
  * @param context - The context. The VM part of the context is not loaded yet.
  * @return The virtual machine.
  */
-async function loadVm(vm: VirtualMachine, project: string | ArrayBuffer, canvas: HTMLCanvasElement, context?: Context) {
+async function loadVm(
+  vm: VirtualMachine,
+  project: string | ArrayBuffer,
+  canvas: HTMLCanvasElement,
+  context?: Context,
+) {
   vm.setTurboMode(false);
 
   // Set up the components.
@@ -225,7 +227,9 @@ export class Context {
       if (question != null) {
         let x = this.providedAnswers.shift();
         if (x === undefined) {
-          this.output.appendMessage('Er werd een vraag gesteld waarop geen antwoord voorzien is.');
+          this.output.appendMessage(
+            'Er werd een vraag gesteld waarop geen antwoord voorzien is.',
+          );
           this.output.escalateStatus(WRONG);
           x = undefined;
         }
@@ -344,18 +348,13 @@ export class Context {
       // is handled by the event scheduler itself.
 
       // First, modify the step time.
-      const currentStepInterval =
-        (<typeof Runtime>this.vm!.runtime.constructor).THREAD_STEP_INTERVAL;
-      const newStepInterval =
-        currentStepInterval / this.accelerationFactor.factor;
+      const currentStepInterval = (<typeof Runtime>this.vm!.runtime.constructor)
+        .THREAD_STEP_INTERVAL;
+      const newStepInterval = currentStepInterval / this.accelerationFactor.factor;
 
-      Object.defineProperty(
-        this.vm!.runtime.constructor,
-        'THREAD_STEP_INTERVAL',
-        {
-          value: newStepInterval,
-        },
-      );
+      Object.defineProperty(this.vm!.runtime.constructor, 'THREAD_STEP_INTERVAL', {
+        value: newStepInterval,
+      });
 
       // We also need to change various time stuff.
       this.acceleratePrimitive('control_wait', 'DURATION');
@@ -385,9 +384,11 @@ export class Context {
    */
   acceleratePrimitive(opcode: string, argument = 'SECS'): void {
     const original = this.vm!.runtime.getOpcodeFunction(opcode);
-    const factor =
-      this.accelerationFactor.time || this.accelerationFactor.factor;
-    this.vm!.runtime._primitives[opcode] = (originalArgs: Record<string, unknown>, util: unknown) => {
+    const factor = this.accelerationFactor.time || this.accelerationFactor.factor;
+    this.vm!.runtime._primitives[opcode] = (
+      originalArgs: Record<string, unknown>,
+      util: unknown,
+    ) => {
       // For safety, clone the arguments.
       const args = { ...originalArgs };
       args[argument] = <number>args[argument] / factor;
@@ -419,8 +420,7 @@ export class Context {
    * @param number - The number to accelerate. All non-numbers are returned as is.
    */
   accelerateEvent<T>(number: number | T): number | T {
-    const factor =
-      this.accelerationFactor.event || this.accelerationFactor.factor;
+    const factor = this.accelerationFactor.event || this.accelerationFactor.factor;
     if (factor === 1 || typeof number !== 'number') {
       return number;
     }

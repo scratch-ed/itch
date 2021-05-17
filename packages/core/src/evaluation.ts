@@ -29,9 +29,9 @@ declare global {
     OneHatAllowedTest: typeof OneHatAllowedTest;
     ignoreWaitInProcedureFor: typeof ignoreWaitInProcedureFor;
 
-    beforeExecution?: BeforeExecution,
-    duringExecution?: DuringExecution,
-    afterExecution?: AfterExecution
+    beforeExecution?: BeforeExecution;
+    duringExecution?: DuringExecution;
+    afterExecution?: AfterExecution;
 
     run: typeof run;
   }
@@ -71,9 +71,12 @@ export interface EvalConfig {
 }
 
 enum EvaluationStage {
-  notStarted, before, scheduling, executing, after
+  notStarted,
+  before,
+  scheduling,
+  executing,
+  after,
 }
-
 
 /**
  * Entry point for the test plan API.
@@ -225,7 +228,7 @@ interface BeforeExecution {
    * @param submission - The submission project.
    * @param e - Evaluation object.
    */
-  (template: Project, submission: Project, e: Evaluation): void
+  (template: Project, submission: Project, e: Evaluation): void;
 }
 
 /**
@@ -239,7 +242,7 @@ interface DuringExecution {
   /**
    * @param e - Evaluation object.
    */
-  (e: Evaluation): void
+  (e: Evaluation): void;
 }
 
 /**
@@ -253,7 +256,7 @@ interface AfterExecution {
   /**
    * @param e - Evaluation object.
    */
-  (e: Evaluation): void
+  (e: Evaluation): void;
 }
 
 /**
@@ -282,11 +285,7 @@ export async function run(config: EvalConfig): Promise<void> {
     expose();
 
     // Run the tests before the execution.
-    beforeExecution(
-      new Project(templateJson),
-      new Project(submissionJson),
-      judge,
-    );
+    beforeExecution(new Project(templateJson), new Project(submissionJson), judge);
 
     await context.vmLoaded.promise;
     judge.stage = EvaluationStage.scheduling;

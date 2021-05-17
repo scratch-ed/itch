@@ -20,12 +20,9 @@ export class SendBroadcastAction extends ScheduledAction {
     event.previousFrame = new LogFrame(context, 'broadcast');
     context.log.addEvent(event);
 
-    const threads = context.vm!.runtime.startHats(
-      'event_whenbroadcastreceived',
-      {
-        BROADCAST_OPTION: this.name,
-      },
-    );
+    const threads = context.vm!.runtime.startHats('event_whenbroadcastreceived', {
+      BROADCAST_OPTION: this.name,
+    });
 
     const action = new ThreadListener(threads);
     context.threadListeners.push(action);

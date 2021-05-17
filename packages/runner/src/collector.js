@@ -51,13 +51,9 @@ class Processor {
         }, got: ${test.actual}`;
       });
       const merged = content.join('\n');
-      const allCorrect = this.caseTests.every(
-        (test) => test.status === 'correct',
-      );
+      const allCorrect = this.caseTests.every((test) => test.status === 'correct');
       this.output(
-        `<span title="${this.case}\n${merged}">${
-          allCorrect ? '✅' : '❌'
-        }</span>`,
+        `<span title="${this.case}\n${merged}">${allCorrect ? '✅' : '❌'}</span>`,
       );
     } else if (command.startsWith('close')) {
       this.stack.pop();

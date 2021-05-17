@@ -1,7 +1,8 @@
 const COMMANDS = Object.fromEntries(
-  Object.keys(require('../../../utils/dodona-schema').definitions).map(
-    (key) => [[key.toUpperCase().replace('-', '_')], key],
-  ),
+  Object.keys(require('../../../utils/dodona-schema').definitions).map((key) => [
+    [key.toUpperCase().replace('-', '_')],
+    key,
+  ]),
 );
 
 const ALLOWED_COMMANDS = [
@@ -61,9 +62,7 @@ const parseCommands = (judgeObject, { onChunkFinished, onError }) => {
     // if a subtest was previously false, show that one
     const isPreviousSubtestCorrect = testCase.status?.enum !== 'wrong';
 
-    testCase.status = isPreviousSubtestCorrect
-      ? judgeObject.status
-      : testCase.status;
+    testCase.status = isPreviousSubtestCorrect ? judgeObject.status : testCase.status;
   }
 
   // push the testcase in the context

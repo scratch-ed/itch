@@ -67,9 +67,7 @@ export class Project {
   hasChangedCostumes(other: Project, sprite: string): boolean {
     const myCostumeIds = this.sprite(sprite)?.costumes?.map((c) => c.assetId);
 
-    const otherCustomIds = other
-      .sprite(sprite)
-      ?.costumes?.map((c) => c.assetId);
+    const otherCustomIds = other.sprite(sprite)?.costumes?.map((c) => c.assetId);
 
     return !isEqual(myCostumeIds, otherCustomIds);
   }
@@ -144,7 +142,7 @@ export class Project {
     return this.json.targets;
   }
 
-  getVariable(name: string): null | {variable: Sb3Variable, target: Sb3Target} {
+  getVariable(name: string): null | { variable: Sb3Variable; target: Sb3Target } {
     for (const target of this.json.targets) {
       for (const variable of Object.keys(target.variables)) {
         /** @type {Sb3Variable} */

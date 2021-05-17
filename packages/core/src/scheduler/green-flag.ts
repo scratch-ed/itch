@@ -13,9 +13,7 @@ export class GreenFlagAction extends ScheduledAction {
     context.vm!.runtime.stopAll();
     context.vm!.runtime.emit('PROJECT_START');
     context.vm!.runtime.ioDevices.clock.resetProjectTimer();
-    context.vm!.runtime.targets.forEach((target) =>
-      target.clearEdgeActivatedValues(),
-    );
+    context.vm!.runtime.targets.forEach((target) => target.clearEdgeActivatedValues());
     // Inform all targets of the green flag.
     for (let i = 0; i < context.vm!.runtime.targets.length; i++) {
       context.vm!.runtime.targets[i].onGreenFlag();

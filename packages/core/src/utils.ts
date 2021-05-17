@@ -13,7 +13,9 @@ export function numericEquals(float1: number, float2: number, epsilon = 0.0001):
  * Otherwise, returns a function that returns the value.
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function castCallback<F extends (..._args: any) => any>(functionOrObject: F | ReturnType<F>): F {
+export function castCallback<F extends (..._args: any) => any>(
+  functionOrObject: F | ReturnType<F>,
+): F {
   if (typeof functionOrObject === 'function') {
     return functionOrObject;
   } else {
@@ -21,7 +23,10 @@ export function castCallback<F extends (..._args: any) => any>(functionOrObject:
   }
 }
 
-export function ensure<T>(argument: T | undefined | null, message = 'This value was promised to be there.'): T {
+export function ensure<T>(
+  argument: T | undefined | null,
+  message = 'This value was promised to be there.',
+): T {
   if (argument === undefined || argument === null) {
     throw new TypeError(message);
   }

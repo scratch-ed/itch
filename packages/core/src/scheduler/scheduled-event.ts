@@ -152,9 +152,7 @@ export class ScheduledEvent {
    * You should not call this function; the framework takes care of it for you.
    */
   run(context: Context): Promise<void> {
-    console.debug(
-      `${context.timestamp()}: Running actions ${this.action.toString()}`,
-    );
+    console.debug(`${context.timestamp()}: Running actions ${this.action.toString()}`);
     const action = new Promise((resolve, _reject) => {
       console.debug(
         `${context.timestamp()}: Executing actions ${this.action.toString()}`,
@@ -249,7 +247,11 @@ export class ScheduledEvent {
    * @param sync - If the event is sync.
    * @param timeout - Optional timeout.
    */
-  private constructNext(action: ScheduledAction, sync = true, timeout?: number): ScheduledEvent {
+  private constructNext(
+    action: ScheduledAction,
+    sync = true,
+    timeout?: number,
+  ): ScheduledEvent {
     const event = new (<typeof ScheduledEvent>this.constructor)(action, sync, timeout);
     this.nextEvents.push(event);
     return event;
@@ -316,7 +318,10 @@ export class ScheduledEvent {
    * @param items - The items to create events for.
    * @param reducer - Reduces the events.
    */
-  forEach<T>(items: T[], reducer: (ev: ScheduledEvent, it: T, index: number, all: T[]) => ScheduledEvent): ScheduledEvent {
+  forEach<T>(
+    items: T[],
+    reducer: (ev: ScheduledEvent, it: T, index: number, all: T[]) => ScheduledEvent,
+  ): ScheduledEvent {
     return items.reduce(reducer, this);
   }
 
@@ -403,11 +408,7 @@ export class ScheduledEvent {
    * @param timeout - How long to wait for synchronous events.
    */
   sendBroadcast(broadcast: string, sync = true, timeout?: number): ScheduledEvent {
-    return this.constructNext(
-      new SendBroadcastAction(broadcast),
-      sync,
-      timeout,
-    );
+    return this.constructNext(new SendBroadcastAction(broadcast), sync, timeout);
   }
 
   /**
@@ -491,7 +492,12 @@ export class ScheduledEvent {
    *        set this to less than 10, but you risk that your key press will be
    *        undetected.
    */
-  useKey(key: string, down: number | boolean = 60, sync = true, delay = 20): ScheduledEvent {
+  useKey(
+    key: string,
+    down: number | boolean = 60,
+    sync = true,
+    delay = 20,
+  ): ScheduledEvent {
     return this.constructNext(new KeyUseAction(key, down, delay), sync);
   }
 

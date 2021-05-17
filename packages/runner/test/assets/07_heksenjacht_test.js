@@ -68,23 +68,17 @@ function afterExecution(e) {
 
   e.test('tijdens een seconde', (l) => {
     l.expect(place1.length)
-      .withError(
-        'De heks mag maar eenmalig veranderen van positie elke seconde',
-      )
+      .withError('De heks mag maar eenmalig veranderen van positie elke seconde')
       .toBe(1);
   });
   e.test('tijdens een seconde', (l) => {
     l.expect(place2.length)
-      .withError(
-        'De heks mag maar eenmalig veranderen van positie elke seconde',
-      )
+      .withError('De heks mag maar eenmalig veranderen van positie elke seconde')
       .toBe(1);
   });
   e.test('tijdens een seconde', (l) => {
     l.expect(place3.length)
-      .withError(
-        'De heks mag maar eenmalig veranderen van positie elke seconde',
-      )
+      .withError('De heks mag maar eenmalig veranderen van positie elke seconde')
       .toBe(1);
   });
 }

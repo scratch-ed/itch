@@ -14,8 +14,7 @@ function beforeExecution(template, submission, e) {
     // Controleer of er aan de sprites geprutst is.
     l.test('Niet geprutst met andere sprites', (l) => {
       l.expect(
-        template.hasAddedSprites(submission) ||
-          template.hasRemovedSprites(submission),
+        template.hasAddedSprites(submission) || template.hasRemovedSprites(submission),
       ).toBe(false);
     });
 
@@ -54,10 +53,7 @@ function duringExecution(e) {
       // After the apple has moved, the score should have been set to zero.
       e.test('Score moet starten op 0', (l) => {
         l.expect(
-          e.log.getVariableValue(
-            scoreVariable.variable.name,
-            scoreVariable.target.name,
-          ),
+          e.log.getVariableValue(scoreVariable.variable.name, scoreVariable.target.name),
         ).toBe('0');
       });
       const sprite = e.log.sprites.getSprite('Kom');

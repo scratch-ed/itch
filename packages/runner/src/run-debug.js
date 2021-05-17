@@ -11,12 +11,8 @@ fetch(configPath)
     script.src = planPath;
     script.async = false;
     script.onload = async () => {
-      const template = await fetch(config.template).then((r) =>
-        r.arrayBuffer(),
-      );
-      const submission = await fetch(config.source).then((r) =>
-        r.arrayBuffer(),
-      );
+      const template = await fetch(config.template).then((r) => r.arrayBuffer());
+      const submission = await fetch(config.source).then((r) => r.arrayBuffer());
 
       const inputs = {
         submission: submission,

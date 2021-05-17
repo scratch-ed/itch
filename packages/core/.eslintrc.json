@@ -21,26 +21,24 @@
     "semi": "off",
     "no-undef": "off",
     "no-unused-vars": "off",
-    "@typescript-eslint/no-unused-vars": ["error", {
-      "varsIgnorePattern": "beforeExecution|afterExecution|duringExecution|^_",
-      "argsIgnorePattern": "^_"
-    }],
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      {
+        "varsIgnorePattern": "beforeExecution|afterExecution|duringExecution|^_",
+        "argsIgnorePattern": "^_"
+      }
+    ],
     "no-use-before-define": "off",
     "@typescript-eslint/no-use-before-define": ["error"],
     "promise/param-names": "off",
     "@typescript-eslint/no-empty-function": [
       "error",
       {
-        "allow": [
-          "arrowFunctions"
-        ]
+        "allow": ["arrowFunctions"]
       }
     ],
     "@typescript-eslint/ban-ts-comment": "off",
     "@typescript-eslint/no-non-null-assertion": "off"
   },
-  "plugins": [
-    "@typescript-eslint",
-    "jest"
-  ]
+  "plugins": ["@typescript-eslint", "jest"]
 }

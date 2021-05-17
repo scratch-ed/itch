@@ -9,9 +9,7 @@ function beforeExecution(template, submission, output) {
   output.describe('Testen voor Papegaai', (l) => {
     l.test('Papegaai bestaat', (l) => {
       l.expect(submission.containsSprite('Papegaai'))
-        .withError(
-          'Er moet een sprite met de naam Papegaai bestaan in het project!',
-        )
+        .withError('Er moet een sprite met de naam Papegaai bestaan in het project!')
         .toBe(true);
     });
   });
@@ -47,9 +45,7 @@ function afterExecution(e) {
     let oldDirection = previousFrame.getSprite('Papegaai').direction;
 
     l.test('Papegaai vliegt enkel horizontaal', (l) => {
-      l.expect(
-        numericEquals(e.log.getMaxY('Papegaai'), e.log.getMinY('Papegaai')),
-      )
+      l.expect(numericEquals(e.log.getMaxY('Papegaai'), e.log.getMinY('Papegaai')))
         .withError('De y-coördinaat van de Papegaai blijft niet constant')
         .toBe(true);
     });
@@ -63,18 +59,14 @@ function afterExecution(e) {
         oldDirection = sprite.direction;
         // Test of de papegaai de rand raakt
         const papegaai = previousFrame.getSprite('Papegaai');
-        const raaktRand =
-          papegaai.bounds.right > 220 || papegaai.bounds.left < -220;
-        l.test(
-          'De papegaai raakt de rand bij het veranderen van richting',
-          (l) => {
-            l.expect(raaktRand)
-              .withError(
-                'De papegaai is veranderd van richting zonder de rand te raken van het speelveld',
-              )
-              .toBe(true);
-          },
-        );
+        const raaktRand = papegaai.bounds.right > 220 || papegaai.bounds.left < -220;
+        l.test('De papegaai raakt de rand bij het veranderen van richting', (l) => {
+          l.expect(raaktRand)
+            .withError(
+              'De papegaai is veranderd van richting zonder de rand te raken van het speelveld',
+            )
+            .toBe(true);
+        });
         l.test('De papegaai vliegt horizontaal', (l) => {
           // Test of de papegaai altijd van links naar rechts en omgekeerd beweegt
           l.expect(sprite.direction === 90 || sprite.direction === -90)

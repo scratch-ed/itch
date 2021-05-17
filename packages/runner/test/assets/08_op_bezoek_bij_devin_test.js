@@ -22,9 +22,7 @@ function afterExecution(e) {
   // Controleer of de eerste tekstballon 2 seconden wordt weergegeven
   e.test('Devin stelt zich minstens 2 seconden lang voor', (l) => {
     l.expect(e.log.getSkinDuration('Hallo, ik ben Devin.') >= 2000)
-      .withError(
-        'De eerste tekstballon moet minimum 2 seconden getoond worden.',
-      )
+      .withError('De eerste tekstballon moet minimum 2 seconden getoond worden.')
       .toBe(true);
   });
 }

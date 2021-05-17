@@ -86,7 +86,9 @@ class GenericMatcher {
    * Allows setting an error message.
    * @deprecated
    */
-  withError(message: string | ((expected: unknown, actual: unknown) => string)): GenericMatcher {
+  withError(
+    message: string | ((expected: unknown, actual: unknown) => string),
+  ): GenericMatcher {
     this.errorMessage = castCallback(message);
     return this;
   }
@@ -127,16 +129,12 @@ class GenericMatcher {
     if (typeof this.actual === 'number' && typeof expected === 'number') {
       this.out(
         numericEquals(this.actual, expected),
-        `Expected ${JSON.stringify(expected)} but got ${JSON.stringify(
-          this.actual,
-        )}`,
+        `Expected ${JSON.stringify(expected)} but got ${JSON.stringify(this.actual)}`,
       );
     } else {
       this.out(
         isEqual(this.actual, expected),
-        `Expected ${JSON.stringify(expected)} but got ${JSON.stringify(
-          this.actual,
-        )}`,
+        `Expected ${JSON.stringify(expected)} but got ${JSON.stringify(this.actual)}`,
       );
     }
   }
@@ -160,16 +158,12 @@ class GenericMatcher {
     if (typeof this.actual === 'number' && typeof expected === 'number') {
       this.out(
         !numericEquals(this.actual, expected),
-        `Expected not ${JSON.stringify(expected)} but got ${JSON.stringify(
-          this.actual,
-        )}`,
+        `Expected not ${JSON.stringify(expected)} but got ${JSON.stringify(this.actual)}`,
       );
     } else {
       this.out(
         !isEqual(this.actual, expected),
-        `Expected ${JSON.stringify(expected)} but got ${JSON.stringify(
-          this.actual,
-        )}`,
+        `Expected ${JSON.stringify(expected)} but got ${JSON.stringify(this.actual)}`,
       );
     }
   }
@@ -294,7 +288,11 @@ export class OneHatAllowedTest {
   private ignoredSprites: string[] = ['Stage'];
   private hatSprite?: string;
   private hatBlockFinder?: (value: Sb3Block, index: number, obj: Sb3Block[]) => boolean;
-  private allowedBlockCheck ?: (value: Sb3Block, index: number, array: Sb3Block[]) => boolean;
+  private allowedBlockCheck?: (
+    value: Sb3Block,
+    index: number,
+    array: Sb3Block[],
+  ) => boolean;
 
   constructor(template: Project, submission: Project) {
     this.template = template;
@@ -309,10 +307,7 @@ export class OneHatAllowedTest {
     e.describe('Controle op bestaande code', (l) => {
       this.template
         .sprites()
-        .filter(
-          (s) =>
-            !this.ignoredSprites.includes(s.name) && this.hatSprite !== s.name,
-        )
+        .filter((s) => !this.ignoredSprites.includes(s.name) && this.hatSprite !== s.name)
         .map((s) => s.name)
         .forEach((sprite) => {
           l.test(sprite, (l) => {
@@ -349,7 +344,7 @@ export class OneHatAllowedTest {
       });
 
       if (typeof this.hatSprite === 'undefined') {
-        throw new Error("You must define a hat sprite before executing these tests.");
+        throw new Error('You must define a hat sprite before executing these tests.');
       }
 
       const solutionHatSprite = this.submission.sprite(this.hatSprite);
@@ -357,12 +352,8 @@ export class OneHatAllowedTest {
       // We test as follows: remove all blocks attached to the hat block.
       // The remaining blocks should be identical to the template sprite.
       // Start by finding the hat block (in the template, guaranteed to exist).
-      const solutionHatBlock = solutionHatSprite?.blocks?.find(
-        this.hatBlockFinder!,
-      );
-      const templateHatBlock = templateHatSprite.blocks.find(
-        this.hatBlockFinder!,
-      )!;
+      const solutionHatBlock = solutionHatSprite?.blocks?.find(this.hatBlockFinder!);
+      const templateHatBlock = templateHatSprite.blocks.find(this.hatBlockFinder!)!;
 
       if (typeof solutionHatBlock === 'undefined') {
         l.test(this.hatSprite, (l) => {
@@ -376,21 +367,11 @@ export class OneHatAllowedTest {
       }
 
       // We remove all attached code from the hat block in the solution.
-      const removedSolutionBlocks = removeAttached(
-        solutionHatBlock!,
-        solutionHatSprite,
-      );
-      const removedSolutionBlockIds = new Set(
-        removedSolutionBlocks.map((b) => b.id),
-      );
+      const removedSolutionBlocks = removeAttached(solutionHatBlock!, solutionHatSprite);
+      const removedSolutionBlockIds = new Set(removedSolutionBlocks.map((b) => b.id));
 
-      const removedTemplateBlocks = removeAttached(
-        templateHatBlock,
-        solutionHatSprite,
-      );
-      const removedTemplateBlockIds = new Set(
-        removedTemplateBlocks.map((b) => b.id),
-      );
+      const removedTemplateBlocks = removeAttached(templateHatBlock, solutionHatSprite);
+      const removedTemplateBlockIds = new Set(removedTemplateBlocks.map((b) => b.id));
 
       const filteredSolutionBlocks = solutionHatSprite?.blocks?.filter(
         (b) => !removedSolutionBlockIds.has(b.id),
@@ -412,8 +393,7 @@ export class OneHatAllowedTest {
       l.test(this.hatSprite, (l) => {
         l.expect(solutionTree.size <= templateTree.size)
           .with({
-            wrong:
-              'Probeer je rondslingerende blokjes te verwijderen of te gebruiken.',
+            wrong: 'Probeer je rondslingerende blokjes te verwijderen of te gebruiken.',
             correct: 'Goed zo! Je hebt geen losse blokjes laten rondslingeren.',
           })
           .toBe(true);

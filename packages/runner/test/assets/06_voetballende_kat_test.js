@@ -25,9 +25,7 @@ function afterExecution(e) {
   }
   e.test('Afstand van kat tot voetbal wordt kleiner', (l) => {
     l.expect(test)
-      .withError(
-        'De afstand van de kat naar de voetbal verkleint niet over de tijd',
-      )
+      .withError('De afstand van de kat naar de voetbal verkleint niet over de tijd')
       .toBe(true);
   });
 }

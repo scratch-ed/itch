@@ -35,7 +35,7 @@ module.exports = [
       filename: path.basename(pack.main),
     },
     resolve: {
-      extensions: ['.ts', '.js', '.json']
+      extensions: ['.ts', '.js', '.json'],
     },
     externals: {
       'scratch-vm': 'root VirtualMachine',

@@ -238,15 +238,19 @@ export class SpriteCondition {
    * @param positions - The positions.
    * @param timeout - Optional timeout.
    */
-  toReach(positions: ((x: number, y: number) => boolean) | Partial<Position>[] | Partial<Position>, timeout?: number): WaitCondition {
+  toReach(
+    positions:
+      | ((x: number, y: number) => boolean)
+      | Partial<Position>[]
+      | Partial<Position>,
+    timeout?: number,
+  ): WaitCondition {
     let callback;
     if (typeof positions !== 'function') {
       callback = (x: number, y: number) => {
         return castArray(positions).some((pos) => {
           if (pos.x === null && pos.y === null) {
-            console.warn(
-              'Both positions in wait condition are wildcard. A mistake?',
-            );
+            console.warn('Both positions in wait condition are wildcard. A mistake?');
           }
           return (
             (pos.x === null || pos.x === undefined || numericEquals(x, pos.x)) &&
@@ -275,7 +279,10 @@ export class SpriteCondition {
    *
    * @return {WaitCondition}
    */
-  toTouch(targets: string | string[] | (() => string | string[]), timeout?: number): WaitCondition {
+  toTouch(
+    targets: string | string[] | (() => string | string[]),
+    timeout?: number,
+  ): WaitCondition {
     const callback = castCallback(targets);
     return {
       action: new WaitForSpriteTouchAction(this.name, callback),

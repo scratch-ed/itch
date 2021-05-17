@@ -1,7 +1,5 @@
 function testStatuses(result) {
-  return result
-    .map((obj) => obj.status?.enum)
-    .filter((status) => status !== undefined);
+  return result.map((obj) => obj.status?.enum).filter((status) => status !== undefined);
 }
 
 expect.extend({
@@ -9,8 +7,7 @@ expect.extend({
     const statuses = testStatuses(result);
     const correct = statuses.every((s) => s === expected);
     return {
-      message: () =>
-        `expected every test status to be ${expected}, got ${statuses}`,
+      message: () => `expected every test status to be ${expected}, got ${statuses}`,
       pass: correct,
     };
   },

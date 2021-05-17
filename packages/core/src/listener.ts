@@ -59,8 +59,8 @@ export class ThreadListener extends Listener {
 }
 
 interface BroadcastUpdate {
-  matchFields: Record<string, unknown>,
-  target: unknown,
+  matchFields: Record<string, unknown>;
+  target: unknown;
 }
 
 /**

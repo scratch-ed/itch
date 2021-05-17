@@ -17,17 +17,13 @@ function beforeExecution(template, submission, output) {
     });
     l.test('Gewijzigde costumes', (l) => {
       for (const target of submission.sprites()) {
-        l.expect(template.hasChangedCostumes(submission, target.name)).toBe(
-          false,
-        );
+        l.expect(template.hasChangedCostumes(submission, target.name)).toBe(false);
       }
     });
     l.test('Code van Nori', (l) => {
       const nori = submission.sprite('Nori');
       l.expect(_.isEmpty(nori.blocks))
-        .withError(
-          'De codeblokken werden toegevoegd aan Nori en niet aan de hoed!',
-        )
+        .withError('De codeblokken werden toegevoegd aan Nori en niet aan de hoed!')
         .toBe(true);
     });
   });
