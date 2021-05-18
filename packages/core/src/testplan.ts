@@ -32,7 +32,6 @@ import { Sb3Block, Sb3Target } from './structures';
 
 import type VirtualMachine from '@itch-types/scratch-vm';
 import type BlockUtility from '@itch-types/scratch-vm/types/engine/block-utility';
-import { difference } from 'lodash-es';
 
 export class FatalErrorException extends Error {}
 
@@ -290,11 +289,7 @@ export class OneHatAllowedTest {
 
   hatSprite?: string;
   hatBlockFinder?: (value: Sb3Block, index: number, obj: Sb3Block[]) => boolean;
-  allowedBlockCheck?: (
-    value: Sb3Block,
-    index: number,
-    array: Sb3Block[],
-  ) => boolean;
+  allowedBlockCheck?: (value: Sb3Block, index: number, array: Sb3Block[]) => boolean;
 
   hatBlockSorter: (list: Sb3Block[]) => Sb3Block[] = (l) => l;
 
@@ -356,10 +351,16 @@ export class OneHatAllowedTest {
       // We test as follows: remove all blocks attached to the hat block.
       // The remaining blocks should be identical to the template sprite.
       // Start by finding the hat block (in the template, guaranteed to exist).
-      let solutionHatBlocks: Sb3Block[] = solutionHatSprite?.blocks?.filter(this.hatBlockFinder!) || [];
-      let templateHatBlocks: Sb3Block[] = templateHatSprite.blocks.filter(this.hatBlockFinder!);
+      let solutionHatBlocks: Sb3Block[] =
+        solutionHatSprite?.blocks?.filter(this.hatBlockFinder!) || [];
+      let templateHatBlocks: Sb3Block[] = templateHatSprite.blocks.filter(
+        this.hatBlockFinder!,
+      );
 
-      if (solutionHatBlocks.length === 0 || solutionHatBlocks.length !== templateHatBlocks.length) {
+      if (
+        solutionHatBlocks.length === 0 ||
+        solutionHatBlocks.length !== templateHatBlocks.length
+      ) {
         l.test(this.hatSprite, (l) => {
           l.expect(true)
             .fatal()
@@ -381,8 +382,12 @@ export class OneHatAllowedTest {
         const solutionHatBlock = solutionHatBlocks[i];
         const templateHatBlock = templateHatBlocks[i];
 
-        removedSolutionBlocks.push(...removeAttached(solutionHatBlock, solutionHatSprite));
-        removedTemplateBlocks.push(...removeAttached(templateHatBlock, templateHatSprite));
+        removedSolutionBlocks.push(
+          ...removeAttached(solutionHatBlock, solutionHatSprite),
+        );
+        removedTemplateBlocks.push(
+          ...removeAttached(templateHatBlock, templateHatSprite),
+        );
       }
 
       const removedSolutionBlockIds = new Set(removedSolutionBlocks.map((b) => b.id));
@@ -393,15 +398,15 @@ export class OneHatAllowedTest {
       );
       // Fix next block. Needed because the solution might contain a next block.
       if (filteredSolutionBlocks) {
-        solutionHatBlocks.forEach(block => {
+        solutionHatBlocks.forEach((block) => {
           fixHatBlock(filteredSolutionBlocks, block);
-        })
+        });
       }
 
       const filteredTemplateBlocks = templateHatSprite.blocks.filter(
         (b) => !removedTemplateBlockIds.has(b.id),
       );
-      templateHatBlocks.forEach(block => {
+      templateHatBlocks.forEach((block) => {
         fixHatBlock(filteredTemplateBlocks, block);
       });
 

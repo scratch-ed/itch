@@ -31,7 +31,9 @@ export class SetVariableAction extends ScheduledAction {
     }
 
     // Get the variable ID.
-    const varKey = Object.keys(sprite.variables).find(key => sprite.variables[key].name === this.name)!;
+    const varKey = Object.keys(sprite.variables).find(
+      (key) => sprite.variables[key].name === this.name,
+    )!;
     const variable = sprite.lookupVariableById(varKey);
     variable.value = this.value as string;
 
