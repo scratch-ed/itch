@@ -32,6 +32,7 @@ import { Sb3Block, Sb3Target } from './structures';
 
 import type VirtualMachine from '@itch-types/scratch-vm';
 import type BlockUtility from '@itch-types/scratch-vm/types/engine/block-utility';
+import { difference } from 'lodash-es';
 
 export class FatalErrorException extends Error {}
 
@@ -286,13 +287,16 @@ export class OneHatAllowedTest {
   private submission: Project;
 
   private ignoredSprites: string[] = ['Stage'];
-  private hatSprite?: string;
-  private hatBlockFinder?: (value: Sb3Block, index: number, obj: Sb3Block[]) => boolean;
-  private allowedBlockCheck?: (
+
+  hatSprite?: string;
+  hatBlockFinder?: (value: Sb3Block, index: number, obj: Sb3Block[]) => boolean;
+  allowedBlockCheck?: (
     value: Sb3Block,
     index: number,
     array: Sb3Block[],
   ) => boolean;
+
+  hatBlockSorter: (list: Sb3Block[]) => Sb3Block[] = (l) => l;
 
   constructor(template: Project, submission: Project) {
     this.template = template;
@@ -352,10 +356,10 @@ export class OneHatAllowedTest {
       // We test as follows: remove all blocks attached to the hat block.
       // The remaining blocks should be identical to the template sprite.
       // Start by finding the hat block (in the template, guaranteed to exist).
-      const solutionHatBlock = solutionHatSprite?.blocks?.find(this.hatBlockFinder!);
-      const templateHatBlock = templateHatSprite.blocks.find(this.hatBlockFinder!)!;
+      let solutionHatBlocks: Sb3Block[] = solutionHatSprite?.blocks?.filter(this.hatBlockFinder!) || [];
+      let templateHatBlocks: Sb3Block[] = templateHatSprite.blocks.filter(this.hatBlockFinder!);
 
-      if (typeof solutionHatBlock === 'undefined') {
+      if (solutionHatBlocks.length === 0 || solutionHatBlocks.length !== templateHatBlocks.length) {
         l.test(this.hatSprite, (l) => {
           l.expect(true)
             .fatal()
@@ -367,24 +371,39 @@ export class OneHatAllowedTest {
       }
 
       // We remove all attached code from the hat block in the solution.
-      const removedSolutionBlocks = removeAttached(solutionHatBlock!, solutionHatSprite);
-      const removedSolutionBlockIds = new Set(removedSolutionBlocks.map((b) => b.id));
+      solutionHatBlocks = this.hatBlockSorter(solutionHatBlocks);
+      templateHatBlocks = this.hatBlockSorter(templateHatBlocks);
 
-      const removedTemplateBlocks = removeAttached(templateHatBlock, solutionHatSprite);
+      const removedSolutionBlocks: Sb3Block[] = [];
+      const removedTemplateBlocks: Sb3Block[] = [];
+
+      for (let i = 0; i < solutionHatBlocks.length; i++) {
+        const solutionHatBlock = solutionHatBlocks[i];
+        const templateHatBlock = templateHatBlocks[i];
+
+        removedSolutionBlocks.push(...removeAttached(solutionHatBlock, solutionHatSprite));
+        removedTemplateBlocks.push(...removeAttached(templateHatBlock, templateHatSprite));
+      }
+
+      const removedSolutionBlockIds = new Set(removedSolutionBlocks.map((b) => b.id));
       const removedTemplateBlockIds = new Set(removedTemplateBlocks.map((b) => b.id));
 
       const filteredSolutionBlocks = solutionHatSprite?.blocks?.filter(
         (b) => !removedSolutionBlockIds.has(b.id),
       );
       // Fix next block. Needed because the solution might contain a next block.
-      if (solutionHatBlock && filteredSolutionBlocks) {
-        fixHatBlock(filteredSolutionBlocks, solutionHatBlock);
+      if (filteredSolutionBlocks) {
+        solutionHatBlocks.forEach(block => {
+          fixHatBlock(filteredSolutionBlocks, block);
+        })
       }
 
       const filteredTemplateBlocks = templateHatSprite.blocks.filter(
         (b) => !removedTemplateBlockIds.has(b.id),
       );
-      fixHatBlock(filteredTemplateBlocks, templateHatBlock);
+      templateHatBlocks.forEach(block => {
+        fixHatBlock(filteredTemplateBlocks, block);
+      });
 
       const solutionTree =
         solutionHatSprite?.blockTree(filteredSolutionBlocks || []) || new Set();

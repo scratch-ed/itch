@@ -10,6 +10,7 @@ import { castCallback, MessageData } from '../utils';
 import { FatalErrorException } from '../testplan';
 import { ScheduledAction } from './action';
 import { Context } from '../context';
+import { SetVariableAction } from './variable';
 
 class InitialAction extends CallbackAction {
   constructor() {
@@ -630,5 +631,19 @@ export class ScheduledEvent {
     });
 
     return this;
+  }
+
+  /**
+   * Set the value of a variable on a target.
+   *
+   * This event is always synchronous.
+   *
+   *
+   * @param target - Name of the target sprite.
+   * @param name - Name of the variable.
+   * @param value - The value to set it to.
+   */
+  setVariableTo(name: string, value: unknown, target = 'Stage'): ScheduledEvent {
+    return this.constructNext(new SetVariableAction(target, name, value));
   }
 }

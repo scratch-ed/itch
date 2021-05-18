@@ -15,7 +15,6 @@ export class ClickSpriteAction extends ScheduledAction {
 
   execute(context: Context, resolve: (v: string) => void): void {
     // Get the sprite
-    /** @type {Target} */
     let sprite;
     if (this.sprite !== STAGE) {
       sprite = context.vm!.runtime.getSpriteTargetByName(this.sprite);

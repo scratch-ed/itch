@@ -1,6 +1,7 @@
 'use strict';
 
 module.exports = {
+  sourceMaps: 'both',
   plugins: [
     '@babel/plugin-syntax-dynamic-import',
     '@babel/plugin-transform-async-to-generator',
