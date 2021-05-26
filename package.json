@@ -37,6 +37,7 @@
     "clean": "rimraf ./node_modules && npm run clean --workspaces --if-present",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "itch": "node packages/external-runner/src/cli.js"
   }
 }

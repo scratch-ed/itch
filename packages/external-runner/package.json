@@ -1,0 +1,14 @@
+{
+  "name": "itch-external-runner",
+  "version": "0.0.1",
+  "description": "External runner for Itch",
+  "private": true,
+  "main": "src/cli.js",
+  "dependencies": {
+    "itch-runner": "^0.0.1",
+    "commander": "^7.2.0"
+  },
+  "scripts": {
+    "itch": "node ./src/cli.js"
+  }
+}

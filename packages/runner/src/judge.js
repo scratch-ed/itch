@@ -29,6 +29,7 @@ function toStdOut(output) {
  * @property {string} solution - Path to solution sb3 file.
  * @property {Page} [page] - Optional page to use. If not given, the judge will open a new puppeteer instance.
  * @property {boolean} [debug] - If debug mode should be use.
+ * @property {"debug"|"cli"|"normal"} [mode] - Start paused, implied by debug.
  * @property {function(Object):void} [out] - The output handle.
  */
 
@@ -39,6 +40,13 @@ function toStdOut(output) {
  */
 async function runJudge(options) {
   let browser;
+
+  let mode = 'normal';
+  if (options?.mode) {
+    mode = options.mode;
+  } else if (options?.debug) {
+    mode = 'debug';
+  }
 
   try {
     if (!options.page) {
@@ -52,7 +60,8 @@ async function runJudge(options) {
           '--disable-dev-shm-usage',
           '--disable-web-security',
         ],
-        ...(options?.debug && { headless: false, devtools: true }),
+        headless: mode === 'normal',
+        devtools: mode === 'debug',
       });
     }
 
@@ -61,7 +70,7 @@ async function runJudge(options) {
 
     await page.setCacheEnabled(false);
 
-    if (options?.debug) {
+    if (mode === 'debug') {
       page.on('console', (msg) => console.debug('PAGE LOG:', msg.text()));
     }
 
@@ -85,7 +94,7 @@ async function runJudge(options) {
     await page.setViewport({ height: 1080, width: 960 });
     await page.waitForTimeout(50);
 
-    if (options?.debug) {
+    if (mode === 'debug') {
       await page.evaluate(() => {
         // eslint-disable-next-line no-debugger
         debugger;
@@ -96,7 +105,10 @@ async function runJudge(options) {
       return runTests();
     });
   } finally {
-    if (!options?.debug && browser) {
+    if (browser && mode === 'debug') {
+      console.log('Closing browser...');
+      const pages = await browser.pages();
+      await Promise.all(pages.map(page => page.close()));
       await browser.close();
     }
   }
