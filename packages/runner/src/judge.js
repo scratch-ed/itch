@@ -108,7 +108,7 @@ async function runJudge(options) {
     if (browser && mode === 'debug') {
       console.log('Closing browser...');
       const pages = await browser.pages();
-      await Promise.all(pages.map(page => page.close()));
+      await Promise.all(pages.map((page) => page.close()));
       await browser.close();
     }
   }

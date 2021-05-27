@@ -29,15 +29,25 @@ function getTemplate(options) {
 }
 
 program
-  .addOption(new Option('-e, --exercise <exercise>', 'internal exercise name').makeOptionMandatory(true).choices(exercises))
+  .addOption(
+    new Option('-e, --exercise <exercise>', 'internal exercise name')
+      .makeOptionMandatory(true)
+      .choices(exercises),
+  )
   .option('-l, --level <level>', 'optional level of the exercise')
   .arguments('<solution>')
   .description('itch', {
     solution: 'path to the solution sb3 file to test',
   })
   .action(async (solution, options) => {
-    const plan = path.resolve(__dirname, `../../../exercises/${options.exercise}/${getPlan(options)}`);
-    const template = path.resolve(__dirname, `../../../exercises/${options.exercise}/projects/${getTemplate(options)}`);
+    const plan = path.resolve(
+      __dirname,
+      `../../../exercises/${options.exercise}/${getPlan(options)}`,
+    );
+    const template = path.resolve(
+      __dirname,
+      `../../../exercises/${options.exercise}/projects/${getTemplate(options)}`,
+    );
     if (!fs.existsSync(solution)) {
       throw new Error(`"${solution}" is not a valid path!`);
     }
@@ -45,10 +55,8 @@ program
       testplan: { url: plan },
       template: template,
       solution: solution,
-      mode: "cli"
+      mode: 'cli',
     });
   });
 
-program.parseAsync(process.argv)
-  .then(() => console.log('Done'));
-
+program.parseAsync(process.argv).then(() => console.log('Done'));
