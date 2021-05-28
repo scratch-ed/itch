@@ -34,8 +34,7 @@ import type VirtualMachine from '@itch-types/scratch-vm';
 import type BlockUtility from '@itch-types/scratch-vm/types/engine/block-utility';
 import { LoggedSprite } from './log';
 
-export class FatalErrorException extends Error {
-}
+export class FatalErrorException extends Error {}
 
 class GenericMatcher {
   context: Context;
@@ -487,8 +486,8 @@ export function ignoreWaitInProcedureFor(vm: VirtualMachine, sprite: string): vo
 }
 
 interface Range {
-  min: number,
-  max: number
+  min: number;
+  max: number;
 }
 
 export function asRange(range: number | Range): Range {
@@ -508,7 +507,11 @@ export function asRange(range: number | Range): Range {
  *
  * @return The message.
  */
-export function generatePositionMessage(sprite: LoggedSprite, xRange: Range | number, yRange: Range | number): string {
+export function generatePositionMessage(
+  sprite: LoggedSprite,
+  xRange: Range | number,
+  yRange: Range | number,
+): string {
   xRange = asRange(xRange);
   yRange = asRange(yRange);
   let message = `De sprite '${sprite.name}' moet `;

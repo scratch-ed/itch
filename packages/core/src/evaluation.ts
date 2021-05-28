@@ -10,7 +10,8 @@ import { ScheduledEvent } from './scheduler/scheduled-event';
 import { broadcast, delay, sprite } from './scheduler/wait';
 import {
   asRange,
-  FatalErrorException, generatePositionMessage,
+  FatalErrorException,
+  generatePositionMessage,
   ignoreWaitInProcedureFor,
   OneHatAllowedTest,
   TabLevel,
