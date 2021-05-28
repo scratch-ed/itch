@@ -32,8 +32,10 @@ import { Sb3Block, Sb3Target } from './structures';
 
 import type VirtualMachine from '@itch-types/scratch-vm';
 import type BlockUtility from '@itch-types/scratch-vm/types/engine/block-utility';
+import { LoggedSprite } from './log';
 
-export class FatalErrorException extends Error {}
+export class FatalErrorException extends Error {
+}
 
 class GenericMatcher {
   context: Context;
@@ -482,4 +484,56 @@ export function ignoreWaitInProcedureFor(vm: VirtualMachine, sprite: string): vo
 
     original(args, util);
   };
+}
+
+interface Range {
+  min: number,
+  max: number
+}
+
+export function asRange(range: number | Range): Range {
+  if (typeof range === 'number') {
+    return { min: range, max: range };
+  } else {
+    return range;
+  }
+}
+
+/**
+ * Generate an error message for a sprite that is not in the correct position.
+ *
+ * @param sprite - The sprite from the log.
+ * @param xRange - Range or number of allowed X values.
+ * @param yRange - Range or number of allowed Y values.
+ *
+ * @return The message.
+ */
+export function generatePositionMessage(sprite: LoggedSprite, xRange: Range | number, yRange: Range | number): string {
+  xRange = asRange(xRange);
+  yRange = asRange(yRange);
+  let message = `De sprite '${sprite.name}' moet `;
+
+  let messageX = '';
+  // First check x part.
+  if (sprite.x < xRange.min) {
+    messageX = 'meer naar links';
+  } else if (sprite.x > xRange.max) {
+    messageX = 'meer naar rechts';
+  }
+
+  let messageY = '';
+  // First check x part.
+  if (sprite.y < yRange.min) {
+    messageY = 'meer omhoog';
+  } else if (sprite.y > yRange.max) {
+    messageY = 'meer omlaag';
+  }
+
+  message += messageX;
+  if (messageX && messageY) {
+    message += ' en ';
+  }
+  message += messageY;
+  message += '.';
+  return message;
 }

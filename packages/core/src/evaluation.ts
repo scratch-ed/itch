@@ -9,7 +9,8 @@ import { Project } from './project';
 import { ScheduledEvent } from './scheduler/scheduled-event';
 import { broadcast, delay, sprite } from './scheduler/wait';
 import {
-  FatalErrorException,
+  asRange,
+  FatalErrorException, generatePositionMessage,
   ignoreWaitInProcedureFor,
   OneHatAllowedTest,
   TabLevel,
@@ -28,6 +29,8 @@ declare global {
     delay: typeof delay;
     OneHatAllowedTest: typeof OneHatAllowedTest;
     ignoreWaitInProcedureFor: typeof ignoreWaitInProcedureFor;
+    generatePositionMessage: typeof generatePositionMessage;
+    asRange: typeof asRange;
 
     beforeExecution?: BeforeExecution;
     duringExecution?: DuringExecution;
@@ -53,6 +56,8 @@ function expose() {
   // object.distSq = distSq;
   object.OneHatAllowedTest = OneHatAllowedTest;
   object.ignoreWaitInProcedureFor = ignoreWaitInProcedureFor;
+  object.generatePositionMessage = generatePositionMessage;
+  object.asRange = asRange;
 }
 
 export interface EvalConfig {
