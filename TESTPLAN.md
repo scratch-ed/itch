@@ -3,7 +3,7 @@
 ## Benodigdheden
 
 1. Installeer git via https://git-scm.com/download/win.
-2. Installeer Windows Terminal uit de MS Store: https://www.microsoft.com/store/productId/9N0DX20HK701 (dit is optioneel, is een betere command line, maar zeker niet verplicht).
+2. (optioneel, kan zeker overgeslagen worden) Installeer Windows Terminal uit de MS Store: https://www.microsoft.com/store/productId/9N0DX20HK701 (dit is een betere command line)
 3. Installer NodeJS via https://nodejs.org/en/ (Kies de versie 16.XX Current)
 
 ## Code lokaal hebben
