@@ -1,4 +1,4 @@
-FROM mhart/alpine-node:latest
+FROM mhart/alpine-node:15
 
 ARG PORT
 ARG NODE_ENV
