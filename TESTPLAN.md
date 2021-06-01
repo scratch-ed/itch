@@ -5,7 +5,7 @@
 1. Installeer git via https://git-scm.com/download/win.
 2. Installer NodeJS via https://nodejs.org/en/ (Kies de versie 16.XX Current)
 
-**Tip**: als je in een map bent in de verkenner, duw op <kbd>Ctrl</kbd>+<kbd>Rechtermuisknop</kbd>, dan kan je vanuit het menu dat verschijnt Powershell openen in die map. Dit geeft een blauwe opdrachtprompt, maar in de correct map, waardoor je geen `cd` meer moet doen.
+**Tip**: als je in een map bent in de verkenner, duw op <kbd>Ctrl</kbd>+<kbd>Rechtermuisknop</kbd>. Dan kun je vanuit het menu dat verschijnt Powershell openen in die map. Dit geeft een blauwe opdrachtprompt, maar in de correct map, waardoor je geen `cd` meer moet doen.
 
 ## Code lokaal hebben
 
@@ -21,8 +21,9 @@
    Hier zul je een GitHub-account voor nodig hebben, en toegang tot de repo.
 
 4. Ga nu in de opdrachtprompt naar deze map, opnieuw met `cd scratch-judge`.
-5. Typ `npm install`.
-6. Typ `npm run build`.
+5. Voer uit: `git checkout development`.
+6. Voer uit: `npm ci`.
+7. Voer uit: `npm run build`.
 
 ## Testplan proberen
 
@@ -58,17 +59,18 @@ npm run itch -- -e bouw-de-rakket "C:\Users\strij\Downloads\solution.sb3"
 npm run itch -- -e pico -l 2 "C:\Users\strij\Downloads\pico.sb3"
 ```
 
-## Updaten met nieuwe code en/of testplannen
+## Bijwerken met nieuwe code en/of testplannen
 
 1. Ga naar de map waarin de judge staat.
 2. Open een opdrachtprompt in die map.
+3. Voer uit: `git checkout development`
 3. Voer uit: `git pull`
-4. Voer uit: `npm install`
+4. Voer uit: `npm ci`
 5. Voer uit: `npm run build`
 6. Je bent opnieuw klaar om testplannen te runnen.
 
 ## Vragen
 
-- Updaten lukt niet.
+- Bijwerken lukt niet
 
   Dit is vaak doordat je dingen gewijzigd hebt in die map. Om de map te resetten, typ `git reset --hard` in een opdrachtprompt in die map.
