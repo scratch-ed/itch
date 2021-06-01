@@ -63,8 +63,9 @@ npm run itch -- -e pico -l 2 "C:\Users\strij\Downloads\pico.sb3"
 1. Ga naar de map waarin de judge staat.
 2. Open een opdrachtprompt in die map.
 3. Voer uit: `git pull`
-4. Voer uit: `npm run build`
-5. Je bent opnieuw klaar om testplannen te runnen.
+4. Voer uit: `npm install`
+5. Voer uit: `npm run build`
+6. Je bent opnieuw klaar om testplannen te runnen.
 
 ## Vragen
 
