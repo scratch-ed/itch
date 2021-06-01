@@ -14,7 +14,7 @@
     "itch-core": "^0.0.1",
     "jszip": "^3.6.0",
     "lodash": "^4.17.21",
-    "puppeteer": "^9.1.1",
+    "puppeteer": "^10.0.0",
     "scratch-audio": "0.1.0-prerelease.20200528195344",
     "scratch-render": "0.1.0-prerelease.20210325231800",
     "scratch-storage": "^1.3.4",
