@@ -21,9 +21,8 @@
    Hier zul je een GitHub-account voor nodig hebben, en toegang tot de repo.
 
 4. Ga nu in de opdrachtprompt naar deze map, opnieuw met `cd scratch-judge`.
-5. Voer uit: `git checkout development`.
-6. Voer uit: `npm ci`.
-7. Voer uit: `npm run build`.
+5. Voer uit: `npm ci`.
+6. Voer uit: `npm run build`.
 
 ## Testplan proberen
 
@@ -63,11 +62,10 @@ npm run itch -- -e pico -l 2 "C:\Users\strij\Downloads\pico.sb3"
 
 1. Ga naar de map waarin de judge staat.
 2. Open een opdrachtprompt in die map.
-3. Voer uit: `git checkout development`
-4. Voer uit: `git pull`
-5. Voer uit: `npm ci`
-6. Voer uit: `npm run build`
-7. Je bent opnieuw klaar om testplannen te runnen.
+3. Voer uit: `git pull`
+4. Voer uit: `npm ci`
+5. Voer uit: `npm run build`
+6. Je bent opnieuw klaar om testplannen te runnen.
 
 ## Vragen
 
