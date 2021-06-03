@@ -2,6 +2,7 @@
 require('./matchers.js');
 const { runJudge } = require('itch-runner');
 const puppeteer = require('puppeteer');
+const path = require('path');
 
 let browser;
 
@@ -59,6 +60,22 @@ async function executePlan(template, solution, testplan, options = {}) {
   return results;
 }
 
+function run(dir, solutionName, level) {
+  const template = path.resolve(
+    dir,
+    level ? `projects/${level}-template.sb3` : 'projects/template.sb3',
+  );
+  const plan = path.resolve(dir, level ? `plan-${level}.js` : 'plan.js');
+  const solution = path.resolve(
+    dir,
+    level ? `projects/${level}-${solutionName}.sb3` : `projects/${solutionName}.sb3`,
+  );
+  return executePlan(template, solution, plan, {
+    debug: false,
+  });
+}
+
 module.exports = {
   executePlan,
+  run,
 };

@@ -14,7 +14,7 @@ const exercises = fs.readdirSync(exercisePath);
 
 function getPlan(options) {
   if (options.level) {
-    return `plan-${options.level}.js`;
+    return `${options.level}-plan.js`;
   } else {
     return 'plan.js';
   }
@@ -22,7 +22,7 @@ function getPlan(options) {
 
 function getTemplate(options) {
   if (options.level) {
-    return `template-${options.level}.sb3`;
+    return `${options.level}-template.sb3`;
   } else {
     return 'template.sb3';
   }

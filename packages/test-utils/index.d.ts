@@ -38,9 +38,15 @@ declare namespace jest {
   }
 }
 
-function executePlan(
+export function executePlan(
   template: string,
   solution: string,
   testplan: string,
   options: Object,
+): Promise<Object[]>;
+
+export function run(
+  dir: string,
+  solutionName: string,
+  level?: string | number,
 ): Promise<Object[]>;
