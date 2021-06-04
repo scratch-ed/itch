@@ -23,7 +23,7 @@
     "itch-test-utils": "^0.0.1"
   },
   "devDependencies": {
-    "jest": "^27.0.3"
+    "jest": "^27.0.4"
   },
   "scripts": {
     "start": "node ./src/cli.js",
