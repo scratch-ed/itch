@@ -35,7 +35,7 @@ function getPlan(options) {
   }
 
   if (level) {
-    return `${level}-plan.js`;
+    return `plan-${level}.js`;
   } else {
     return 'plan.js';
   }
