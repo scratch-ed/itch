@@ -12,9 +12,30 @@ const exercisePath = path.resolve(__dirname, '../../../exercises');
 // Get a list of available exercises.
 const exercises = fs.readdirSync(exercisePath);
 
+const planMapping = {
+  'navigeer-rommel': {
+    1: 4,
+    2: 10,
+    3: 10,
+    4: 14,
+    5: 15,
+    6: 25,
+    'extra-1': 15,
+    'extra-2': 15,
+    'extra-3': 15,
+  }
+};
+
 function getPlan(options) {
-  if (options.level) {
-    return `${options.level}-plan.js`;
+  let level;
+  if (planMapping[options.exercise]?.[options.level]) {
+    level = planMapping[options.exercise][options.level];
+  } else {
+    level = options.level;
+  }
+
+  if (level) {
+    return `${level}-plan.js`;
   } else {
     return 'plan.js';
   }
