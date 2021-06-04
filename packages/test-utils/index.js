@@ -65,7 +65,7 @@ function run(dir, solutionName, level, planLevel = level) {
     dir,
     level ? `projects/${level}-template.sb3` : 'projects/template.sb3',
   );
-  const plan = path.resolve(dir, planLevel ? `plan-${planLevel}.js` : 'plan-1.js');
+  const plan = path.resolve(dir, planLevel ? `plan-${planLevel}.js` : 'plan.js');
   const solution = path.resolve(
     dir,
     level ? `projects/${level}-${solutionName}.sb3` : `projects/${solutionName}.sb3`,
