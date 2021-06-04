@@ -23,7 +23,7 @@ const planMapping = {
     'extra-1': 15,
     'extra-2': 15,
     'extra-3': 15,
-  }
+  },
 };
 
 function getPlan(options) {
@@ -37,7 +37,7 @@ function getPlan(options) {
   if (level) {
     return `plan-${level}.js`;
   } else {
-    return 'plan.js';
+    return 'plan-1.js';
   }
 }
 
