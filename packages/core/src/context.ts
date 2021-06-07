@@ -14,6 +14,7 @@ import { ScheduledEvent } from './scheduler/scheduled-event';
 import { EndAction } from './scheduler/end';
 import { BroadcastListener, ThreadListener } from './listener';
 import { EvalConfig } from './evaluation';
+import { AdvancedProfiler } from './profiler';
 
 const Events: Record<string, string> = {
   SCRATCH_PROJECT_START: 'PROJECT_START',
@@ -160,6 +161,8 @@ export class Context {
   broadcastListeners: BroadcastListener[];
   event: ScheduledEvent;
   output: ResultManager;
+  // TODO: integrate with log.
+  advancedProfiler: AdvancedProfiler;
 
   /**
    * The acceleration factor, used to speed up (or slow down)
@@ -183,6 +186,7 @@ export class Context {
     this.broadcastListeners = [];
     this.event = ScheduledEvent.create();
     this.output = new ResultManager();
+    this.advancedProfiler = new AdvancedProfiler();
     this.accelerationFactor = {
       factor: 1,
     };
@@ -288,6 +292,8 @@ export class Context {
         this.log.addFrame(this, frame.arg);
       }
     };
+
+    this.advancedProfiler.register(this.vm!, this);
   }
 
   /**

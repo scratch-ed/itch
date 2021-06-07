@@ -253,9 +253,7 @@ declare class Runtime extends EventEmitter {
      * This is a two-step lookup: package name first, then primitive name.
      * @type {Object.<string, Function>}
      */
-    _primitives: {
-        [x: string]: Function;
-    };
+    _primitives: Record<string, Function>;
     /**
      * Map to look up all block information by extended opcode.
      * @type {Array.<CategoryInfo>}
