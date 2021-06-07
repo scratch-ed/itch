@@ -34,7 +34,7 @@
     "start": "npm start --workspace itch-runner",
     "build": "npm run build --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
-    "clean": "rimraf ./node_modules && npm run clean --workspaces --if-present",
+    "clean": "npm run clean --workspaces --if-present && rimraf ./**/node_modules",
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
