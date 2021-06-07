@@ -5,11 +5,9 @@ class ProfiledBlock {
   constructor(
     readonly opcode: string,
     readonly args: Record<string, unknown>,
-    readonly timestamp: number
-  ) {
-  }
+    readonly timestamp: number,
+  ) {}
 }
-
 
 /**
  * An advanced profiler that will collect information on all
@@ -25,10 +23,10 @@ export class AdvancedProfiler {
     // Attach the advanced profiler.
     for (const [opcode, blockFunction] of Object.entries(vm.runtime._primitives)) {
       vm.runtime._primitives[opcode] = new Proxy(blockFunction, {
-        apply: function(target, thisArg, argumentsList) {
+        apply: function (target, thisArg, argumentsList) {
           execs.push(new ProfiledBlock(opcode, argumentsList[0], context.timestamp()));
           return target.apply(thisArg, argumentsList);
-        }
+        },
       });
     }
   }
