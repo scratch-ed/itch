@@ -1,0 +1,60 @@
+name: Release
+on:
+  workflow_dispatch:
+    inputs:
+      release-type:
+        description: 'Chose between: major, minor, patch'
+        required: true
+        default: 'patch'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    env:
+      REMOTE_ORIGIN: https://$GITHUB_ACTOR:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY.git
+    steps:
+      - name: Check input
+        run: |
+          if ! [[ ${{ github.event.inputs.release-type }} = "major" || ${{ github.event.inputs.release-type }} = "minor" || ${{ github.event.inputs.release-type }} = "patch" ]]; then  echo "Use major, minor, patch to run this workflow"; exit 1; fi
+          if [ ${GITHUB_REF#refs/heads/} = main ]; then echo "Don't run this workflow on the main branch"; exit 1; fi
+
+      - uses: actions/checkout@v2
+
+      - name: Use Node.js 15
+        uses: actions/setup-node@v1
+        with:
+          node-version: 15
+
+      - name: update version
+        run: npm version ${{ github.event.inputs.release-type }} --no-git-tag-version
+
+      - name: Set version variable
+        run: |
+          export VERSION="$(grep 'version' package.json | head -n 1 | cut -d '"' -f4 | tr -d '[[:space:]]')"
+          echo "version=$VERSION" >> $GITHUB_ENV
+
+      - name: Commit
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.co"
+          git config --local user.name "github-actions[bot]"
+          git add -A && git commit -m "update package version to ${{ env.version }}"
+
+      - name: Push and create pull request
+        run: |
+          if [[ ${GITHUB_REF#refs/heads/} = 'development' ]]; then
+            git checkout -b RELEASE-v${{ env.version }}-DEVELOPMENT
+            git push ${{ env.REMOTE_ORIGIN }}
+            curl \
+              -X POST \
+              -H "Accept: application/vnd.github.v3+json" \
+              -H "Authorization: token ${{ secrets.SUPER_GITHUB_TOKEN }}" \
+              https://api.github.com/repos/$GITHUB_REPOSITORY/merges \
+              -d '{"base":"development","head":"RELEASE-v${{ env.version }}-DEVELOPMENT"}'
+            git push ${{ env.REMOTE_ORIGIN }} --delete RELEASE-v${{ env.version }}-DEVELOPMENT
+            GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} \
+            gh pr create --base main --head ${GITHUB_REF#refs/heads/} --title RELEASE-v${{ env.version }} --body "release-v${{ env.version }}"
+          else
+            git push ${{ env.REMOTE_ORIGIN }}
+            GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} \
+            gh pr create --base main --head ${GITHUB_REF#refs/heads/} --title RELEASE-v${{ env.version }} --body "release-v${{ env.version }}"
+          fi

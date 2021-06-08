@@ -1,0 +1,41 @@
+name: Publish to development-tag
+
+on:
+  push:
+    tags:
+      - 'DEVELOPMENT-*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Authenticate using a Service Principal
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_SP_TEST }}
+
+      - name: Login to ACR
+        uses: docker/login-action@v1
+        with:
+          registry: ${{ secrets.AZURE_REGISTRY_DOMAIN_TEST }}
+          username: ${{ secrets.AZURE_REGISTRY_USERNAME_TEST }}
+          password: ${{ secrets.AZURE_REGISTRY_PASSWORD_TEST }}
+
+      - name: Image tag name
+        run: echo "tag_name=test-$${BRANCH_REF##*/}" >> $GITHUB_ENV
+
+      - name: Build and push
+        id: docker_build
+        uses: docker/build-push-action@v2.5.0
+        with:
+          push: true
+          tags: ${{ secrets.AZURE_REGISTRY_DOMAIN_TEST }}/scratch-judge:${{ env.tag_name}}
+
+      - name: Update image tag on the Azure Web App
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'scratch-judge-tst'
+          images: ${{ secrets.AZURE_REGISTRY_DOMAIN_TEST }}/scratch-judge:${{ env.tag_name }}
