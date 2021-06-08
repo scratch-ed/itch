@@ -20,6 +20,7 @@ import { ResultManager } from './output';
 // import { distSq } from './lines.js';
 
 import type VirtualMachine from '@itch-types/scratch-vm';
+import { angle } from './lines';
 
 declare global {
   interface Window {
@@ -32,6 +33,7 @@ declare global {
     ignoreWaitInProcedureFor: typeof ignoreWaitInProcedureFor;
     generatePositionMessage: typeof generatePositionMessage;
     asRange: typeof asRange;
+    angle: typeof angle;
 
     beforeExecution?: BeforeExecution;
     duringExecution?: DuringExecution;
@@ -59,6 +61,7 @@ function expose() {
   object.ignoreWaitInProcedureFor = ignoreWaitInProcedureFor;
   object.generatePositionMessage = generatePositionMessage;
   object.asRange = asRange;
+  object.angle = angle;
 }
 
 export interface EvalConfig {

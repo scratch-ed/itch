@@ -220,6 +220,10 @@ export class LogFrame {
     return ensure(sp);
   }
 
+  getSprites(name: string): LoggedSprite[] {
+    return this.sprites.filter((s) => s.name === name);
+  }
+
   /**
    * Check if two sprites were touching when the frame was captured.
    *

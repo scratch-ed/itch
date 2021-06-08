@@ -233,3 +233,13 @@ export function findTriangles(lines: Line[]): boolean | Position[][] {
   }
   return triangles;
 }
+
+export function angle(p1: Position, p2: Position): number {
+  const result = (Math.atan2(p2.y - p1.y, p2.x - p1.x) * 180) / Math.PI;
+  // if (result <= 180) {
+  //   return result;
+  // } else {
+  //   return 360 - result;
+  // }
+  return -(result - 90);
+}
