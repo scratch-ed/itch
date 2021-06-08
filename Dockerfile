@@ -1,22 +1,15 @@
-FROM mhart/alpine-node:15
+FROM node:15.14.0-alpine3.13
 
 ARG PORT
 ARG NODE_ENV
 ARG PUPPETEER_BROWSER_PATH
+ARG JUDGE_SERVICE_URI
 ENV PORT $PORT
 ENV NODE_ENV $NODE_ENV
 ENV PUPPETEER_BROWSER_PATH $PUPPETEER_BROWSER_PATH
+ENV JUDGE_SERVICE_URI $JUDGE_SERVICE_URI
 
-RUN \
-  echo "http://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
-  && echo "http://dl-cdn.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories \
-  && echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
-  && apk --no-cache  update \
-  && apk --no-cache  upgrade \
-  && apk add --no-cache --virtual .build-deps \
-    gifsicle pngquant optipng libjpeg-turbo-utils \
-    udev ttf-opensans chromium \
-  && rm -rf /var/cache/apk/* /tmp/*
+RUN apk add chromium
 
 # For caching purposes first copy all package.json files
 COPY ./package*.json  /app/

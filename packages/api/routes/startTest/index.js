@@ -1,4 +1,5 @@
 const { runJudge } = require('itch-runner');
+const fetch = require('node-fetch');
 
 const parseCommands = require('../../utils/parseCommands');
 
@@ -42,7 +43,7 @@ const test = async (req, reply, next, browser) => {
 
   const data = { sessionId, output, error };
 
-  fetch(`${process.env.JUDGE_SERVICE_PATH}/return-test`, {
+  fetch(`${process.env.JUDGE_SERVICE_URI}/return-test`, {
     method: 'POST',
     mode: 'cors',
     cache: 'no-cache',
