@@ -2,6 +2,7 @@ import last from 'lodash-es/last';
 import first from 'lodash-es/first';
 import isEqual from 'lodash-es/isEqual';
 import uniq from 'lodash-es/uniq';
+import cloneDeep from 'lodash-es/cloneDeep';
 
 import { containsBlock, containsLoop, countExecutions } from './blocks';
 import {
@@ -36,7 +37,7 @@ export class LoggedVariable {
     this.id = variable.id;
     this.name = variable.name;
     this.type = variable.type;
-    this.value = variable.value;
+    this.value = cloneDeep(variable.value);
   }
 }
 
