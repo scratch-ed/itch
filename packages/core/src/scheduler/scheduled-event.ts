@@ -556,12 +556,12 @@ export class ScheduledEvent {
 
   /**
    * Joins the scheduled event threads, ie. waits until
-   * all events are resolved. This could be considered the
+   * one of the events is resolved. This could be considered the
    * opposite of "forking" the threads.
    *
    * Technically speaking, this will add an event on the first
-   * event as anchor, which will only resolve if all other events
-   * are resolved.
+   * event as anchor, which will only resolve if one of the other events
+   * is resolved.
    */
   join(events: ScheduledEvent[], timeout?: number): ScheduledEvent {
     return this.constructNext(new JoinAction(events), true, timeout);
