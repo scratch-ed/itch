@@ -195,6 +195,10 @@ class WaitOnBroadcastAction extends ScheduledAction {
       resolve(`finished ${this}`);
     });
   }
+
+  toString(): string {
+    return super.toString() + " " + this.name;
+  }
 }
 
 /**
