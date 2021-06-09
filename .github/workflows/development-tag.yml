@@ -25,7 +25,7 @@ jobs:
           password: ${{ secrets.AZURE_REGISTRY_PASSWORD_TEST }}
 
       - name: Image tag name
-        run: echo "tag_name=test-$${BRANCH_REF##*/}" >> $GITHUB_ENV
+        run: echo "tag_name=test-${BRANCH_REF##*/}" >> $GITHUB_ENV
 
       - name: Build and push
         id: docker_build
