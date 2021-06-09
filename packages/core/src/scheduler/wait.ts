@@ -197,7 +197,7 @@ class WaitOnBroadcastAction extends ScheduledAction {
   }
 
   toString(): string {
-    return super.toString() + " " + this.name;
+    return super.toString() + ' ' + this.name;
   }
 }
 
