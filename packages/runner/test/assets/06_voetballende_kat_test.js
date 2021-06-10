@@ -7,11 +7,11 @@ function duringExecution(e) {
 /** @param {Evaluation} e */
 function afterExecution(e) {
   // De kat raakt de voetbal in de laatste frame
-  e.test('De kat raakt de voetbal', (l) => {
-    l.expect(e.log.sprites.areTouching('Kat', 'Voetbal'))
-      .withError('Op het einde van de uitvoer raakt de kat de voetbal niet')
-      .toBe(true);
-  });
+  // e.test('De kat raakt de voetbal', (l) => {
+  //   l.expect(e.log.sprites.areTouching('Kat', 'Voetbal'))
+  //     .withError('Op het einde van de uitvoer raakt de kat de voetbal niet')
+  //     .toBe(true);
+  // });
 
   // De afstand van de kat naar de bal verkleint over tijd
   const distances = e.log.getDistancesToSprite('Kat', 'Voetbal');

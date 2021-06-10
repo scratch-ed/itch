@@ -600,27 +600,7 @@ Array [
   },
   Object {
     "command": "start-context",
-    "description": "De kat raakt de voetbal",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "De kat raakt de voetbal",
-  },
-  Object {
-    "command": "start-test",
-    "expected": "true",
-  },
-  Object {
-    "accepted": true,
-    "command": "close-test",
-    "generated": "true",
-    "status": Object {
-      "enum": "correct",
-      "human": "Correct",
-    },
-  },
-  Object {
-    "command": "close-testcase",
+    "description": "Afstand van kat tot voetbal wordt kleiner",
   },
   Object {
     "command": "start-testcase",

@@ -235,6 +235,7 @@ export class LogFrame {
    * @param second - The second sprite.
    *
    * @return If they were touching ir not.
+   * @deprecated
    */
   areTouching(first: string, second: string): boolean {
     const firstSprite = this.getSprite(first);

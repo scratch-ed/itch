@@ -44,7 +44,7 @@ test('06_voetballende_kat', () => {
   return runTest().then((result) => {
     expect(result).toMatchSnapshot();
     expect(result).everyStatusToBe('correct');
-    expect(result).atLeastCommands('close-testcase', 2);
+    expect(result).atLeastCommands('close-testcase', 1);
   });
 });
 
