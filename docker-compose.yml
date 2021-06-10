@@ -8,6 +8,6 @@ services:
         - PUPPETEER_BROWSER_PATH=/usr/bin/chromium-browser
         - PORT=8000
         - NODE_ENV=development
-        - JUDGE_SERVICE_NOTIFY_URL=https://86fe98e7-458c-4715-b1cf-04facaa84232.mock.pstmn.io/
+        - JUDGE_SERVICE_NOTIFY_URL=https://judge-service-tst.azurewebsites.net/rest/notify-scratch-judge-result
     ports:
       - 8000:8000
