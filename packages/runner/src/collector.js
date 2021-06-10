@@ -59,6 +59,10 @@ class Processor {
       this.stack.pop();
     } else if (command === 'append-message') {
       this.output(`<br>Message: ${message.message}`);
+    } else if (command === 'escalate-status') {
+      this.output(
+        `<br><strong>ESCALATION</strong>: status is now ${message.status.enum} (${message.status.human})`,
+      );
     }
   }
 
