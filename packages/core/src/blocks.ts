@@ -72,7 +72,21 @@ export interface Node {
   opcode: string;
   next: Node | null;
   input: Record<string, unknown>;
+  fields: Record<string, unknown>;
   mutation: string | null;
+}
+
+function convertFields(
+  fields: Record<string, unknown[]> | null,
+): Record<string, unknown> {
+  const object: Record<string, unknown> = {};
+  if (!fields) {
+    return object;
+  }
+  for (const [name, description] of Object.entries(fields)) {
+    object[name] = description[0];
+  }
+  return object;
 }
 
 /**
@@ -96,6 +110,7 @@ function blockToNode(block: Sb3Block, blockmap: Map<string, Sb3Block>): Node {
     opcode: block.opcode,
     next: next,
     input: input,
+    fields: convertFields(block.fields),
     mutation: convertMutation(block.mutation),
   };
 }
