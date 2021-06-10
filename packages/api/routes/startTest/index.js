@@ -43,7 +43,7 @@ const test = async (req, reply, next, browser) => {
 
   const data = { sessionId, output, error };
 
-  fetch(`${process.env.JUDGE_SERVICE_URI}/return-test`, {
+  fetch(process.env.JUDGE_SERVICE_NOTIFY_URL, {
     method: 'POST',
     mode: 'cors',
     cache: 'no-cache',
