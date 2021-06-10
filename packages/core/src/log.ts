@@ -63,16 +63,18 @@ export class LoggedSprite {
   costumeSize: number;
   isTouchingEdge: boolean;
   bounds: { left: number; right: number; top: number; bottom: number } | null;
+  /** @deprecated */
   touchingSprites: { name: string; value: boolean }[];
+  /** @deprecated */
   isTouchingSprite: { name: string; value: boolean }[];
   blocks: Record<string, Record<string, unknown>>;
   scripts: string[];
 
   /**
    * @param {RenderedTarget} target - The source to extract information from.
-   * @param {Target[]} targets - Other targets.
+   * @param {Target[]} _targets - Other targets.
    */
-  constructor(target: RenderedTarget, targets: Target[]) {
+  constructor(target: RenderedTarget, _targets: Target[]) {
     // Copy some properties
     this.id = target.id;
     this.name = target.getName();
@@ -109,17 +111,16 @@ export class LoggedSprite {
 
     // Get all targets that touch this one.
     this.touchingSprites = [];
-    for (const otherTarget of targets) {
-      if (otherTarget.id === this.id) {
-        // Skip self.
-        continue;
-      }
-      this.touchingSprites.push({
-        name: otherTarget.getName(),
-        value: target.isTouchingSprite(otherTarget.getName()),
-      });
-    }
-    /** @deprecated */
+    // for (const otherTarget of targets) {
+    //   if (otherTarget.id === this.id) {
+    //     // Skip self.
+    //     continue;
+    //   }
+    //   this.touchingSprites.push({
+    //     name: otherTarget.getName(),
+    //     value: target.isTouchingSprite(otherTarget.getName()),
+    //   });
+    // }
     this.isTouchingSprite = this.touchingSprites;
 
     // Get blocks.
