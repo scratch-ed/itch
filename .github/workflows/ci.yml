@@ -39,6 +39,8 @@ jobs:
         run: npm test --workspace @exercises/bouw-de-raket
       - name: Test vliegtest
         run: npm test --workspace @exercises/vliegtest
+      - name: Test geld inzamelen
+        run: npm test --workspace @exercises/geld-inzamelen
   lint:
     runs-on: ubuntu-latest
     strategy:
