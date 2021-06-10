@@ -276,7 +276,6 @@ interface AfterExecution {
 export async function run(config: EvalConfig): Promise<void> {
   // Seed random data.
   seed('itch-judge', { global: true });
-  console.error(Math.random());
 
   const context = new Context();
   const templateJson = await context.getProjectJson(config);
