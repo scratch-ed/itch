@@ -33,6 +33,7 @@ import { Sb3Block, Sb3Target } from './structures';
 import type VirtualMachine from '@itch-types/scratch-vm';
 import type BlockUtility from '@itch-types/scratch-vm/types/engine/block-utility';
 import { LoggedSprite } from './log';
+import { cloneDeep } from 'lodash-es';
 
 export class FatalErrorException extends Error {}
 
@@ -288,6 +289,8 @@ export class OneHatAllowedTest {
 
   private ignoredSprites: string[] = ['Stage'];
 
+  hatSprites: string[];
+  /** @deprecated */
   hatSprite?: string;
   hatBlockFinder?: (value: Sb3Block, index: number, obj: Sb3Block[]) => boolean;
   allowedBlockCheck?: (value: Sb3Block, index: number, array: Sb3Block[]) => boolean;
@@ -297,6 +300,7 @@ export class OneHatAllowedTest {
   constructor(template: Project, submission: Project) {
     this.template = template;
     this.submission = submission;
+    this.hatSprites = [];
   }
 
   ignoredSprite(sprite: string): void {
@@ -304,10 +308,16 @@ export class OneHatAllowedTest {
   }
 
   execute(e: Evaluation): void {
+    if (this.hatSprite) {
+      this.hatSprites = [this.hatSprite];
+    }
     e.describe('Controle op bestaande code', (l) => {
       this.template
         .sprites()
-        .filter((s) => !this.ignoredSprites.includes(s.name) && this.hatSprite !== s.name)
+        .filter(
+          (s) =>
+            !this.ignoredSprites.includes(s.name) && !this.hatSprites.includes(s.name),
+        )
         .map((s) => s.name)
         .forEach((sprite) => {
           l.test(sprite, (l) => {
@@ -343,111 +353,113 @@ export class OneHatAllowedTest {
           .toBe(false);
       });
 
-      if (typeof this.hatSprite === 'undefined') {
+      if (this.hatSprites.length === 0) {
         throw new Error('You must define a hat sprite before executing these tests.');
       }
 
-      const solutionHatSprite = this.submission.sprite(this.hatSprite);
-      const templateHatSprite = this.template.sprite(this.hatSprite)!;
-      // We test as follows: remove all blocks attached to the hat block.
-      // The remaining blocks should be identical to the template sprite.
-      // Start by finding the hat block (in the template, guaranteed to exist).
-      let solutionHatBlocks: Sb3Block[] =
-        solutionHatSprite?.blocks?.filter(this.hatBlockFinder!) || [];
-      let templateHatBlocks: Sb3Block[] = templateHatSprite.blocks.filter(
-        this.hatBlockFinder!,
-      );
-
-      if (
-        solutionHatBlocks.length === 0 ||
-        solutionHatBlocks.length !== templateHatBlocks.length
-      ) {
-        l.test(this.hatSprite, (l) => {
-          l.expect(true)
-            .fatal()
-            .with({
-              wrong: `Oei, je verwijderde een noodzakelijk blokje bij de sprite ${this.hatSprite}`,
-            })
-            .toBe(false);
-        });
-      }
-
-      // We remove all attached code from the hat block in the solution.
-      solutionHatBlocks = this.hatBlockSorter(solutionHatBlocks);
-      templateHatBlocks = this.hatBlockSorter(templateHatBlocks);
-
-      const removedSolutionBlocks: Sb3Block[] = [];
-      const removedTemplateBlocks: Sb3Block[] = [];
-
-      for (let i = 0; i < solutionHatBlocks.length; i++) {
-        const solutionHatBlock = solutionHatBlocks[i];
-        const templateHatBlock = templateHatBlocks[i];
-
-        removedSolutionBlocks.push(
-          ...removeAttached(solutionHatBlock, solutionHatSprite),
+      for (const hatSprite of this.hatSprites) {
+        const solutionHatSprite = cloneDeep(this.submission.sprite(hatSprite));
+        const templateHatSprite = cloneDeep(this.template.sprite(hatSprite))!;
+        // We test as follows: remove all blocks attached to the hat block.
+        // The remaining blocks should be identical to the template sprite.
+        // Start by finding the hat block (in the template, guaranteed to exist).
+        let solutionHatBlocks: Sb3Block[] =
+          solutionHatSprite?.blocks?.filter(this.hatBlockFinder!) || [];
+        let templateHatBlocks: Sb3Block[] = templateHatSprite.blocks.filter(
+          this.hatBlockFinder!,
         );
-        removedTemplateBlocks.push(
-          ...removeAttached(templateHatBlock, templateHatSprite),
-        );
-      }
 
-      const removedSolutionBlockIds = new Set(removedSolutionBlocks.map((b) => b.id));
-      const removedTemplateBlockIds = new Set(removedTemplateBlocks.map((b) => b.id));
-
-      const filteredSolutionBlocks = solutionHatSprite?.blocks?.filter(
-        (b) => !removedSolutionBlockIds.has(b.id),
-      );
-      // Fix next block. Needed because the solution might contain a next block.
-      if (filteredSolutionBlocks) {
-        solutionHatBlocks.forEach((block) => {
-          fixHatBlock(filteredSolutionBlocks, block);
-        });
-      }
-
-      const filteredTemplateBlocks = templateHatSprite.blocks.filter(
-        (b) => !removedTemplateBlockIds.has(b.id),
-      );
-      templateHatBlocks.forEach((block) => {
-        fixHatBlock(filteredTemplateBlocks, block);
-      });
-
-      const solutionTree =
-        solutionHatSprite?.blockTree(filteredSolutionBlocks || []) || new Set();
-      const templateTree = templateHatSprite.blockTree(filteredTemplateBlocks);
-
-      l.test(this.hatSprite, (l) => {
-        l.expect(solutionTree.size <= templateTree.size)
-          .with({
-            wrong: 'Probeer je rondslingerende blokjes te verwijderen of te gebruiken.',
-            correct: 'Goed zo! Je hebt geen losse blokjes laten rondslingeren.',
-          })
-          .toBe(true);
-        if (solutionTree.size <= templateTree.size) {
-          l.expect(isEqual(templateTree, solutionTree))
-            .fatal()
-            .with({
-              wrong: `Je hebt aan de voorgeprogrammeerde blokjes van de sprite ${this.hatSprite} wijzigingen aangebracht.`,
-              correct: `Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite ${this.hatSprite}.`,
-            })
-            .toBe(true);
-        }
-      });
-
-      if (this.allowedBlockCheck) {
-        // Verify that only allowed blocks are used.
-        const usesAllowed = removedSolutionBlocks.every(this.allowedBlockCheck);
-        // Don't show if no blocks.
-        if (removedSolutionBlocks.length > 0) {
-          l.test('Juiste blokjes', (l) => {
-            l.expect(usesAllowed)
+        if (
+          solutionHatBlocks.length === 0 ||
+          solutionHatBlocks.length !== templateHatBlocks.length
+        ) {
+          l.test(hatSprite, (l) => {
+            l.expect(true)
               .fatal()
               .with({
-                wrong:
-                  'Oei, je gebruikt de verkeerde blokjes. Je mag enkel de blokjes uit mijn blokken en eindige lussen gebruiken.',
-                correct: 'Goed zo! Je gebruikt geen verkeerde blokjes.',
+                wrong: `Oei, je verwijderde een noodzakelijk blokje bij de sprite ${hatSprite}`,
+              })
+              .toBe(false);
+          });
+        }
+
+        // We remove all attached code from the hat block in the solution.
+        solutionHatBlocks = this.hatBlockSorter(solutionHatBlocks);
+        templateHatBlocks = this.hatBlockSorter(templateHatBlocks);
+
+        const removedSolutionBlocks: Sb3Block[] = [];
+        const removedTemplateBlocks: Sb3Block[] = [];
+
+        for (let i = 0; i < solutionHatBlocks.length; i++) {
+          const solutionHatBlock = solutionHatBlocks[i];
+          const templateHatBlock = templateHatBlocks[i];
+
+          removedSolutionBlocks.push(
+            ...removeAttached(solutionHatBlock, solutionHatSprite),
+          );
+          removedTemplateBlocks.push(
+            ...removeAttached(templateHatBlock, templateHatSprite),
+          );
+        }
+
+        const removedSolutionBlockIds = new Set(removedSolutionBlocks.map((b) => b.id));
+        const removedTemplateBlockIds = new Set(removedTemplateBlocks.map((b) => b.id));
+
+        const filteredSolutionBlocks = solutionHatSprite?.blocks?.filter(
+          (b) => !removedSolutionBlockIds.has(b.id),
+        );
+        // Fix next block. Needed because the solution might contain a next block.
+        if (filteredSolutionBlocks) {
+          solutionHatBlocks.forEach((block) => {
+            fixHatBlock(filteredSolutionBlocks, block);
+          });
+        }
+
+        const filteredTemplateBlocks = templateHatSprite.blocks.filter(
+          (b) => !removedTemplateBlockIds.has(b.id),
+        );
+        templateHatBlocks.forEach((block) => {
+          fixHatBlock(filteredTemplateBlocks, block);
+        });
+
+        const solutionTree =
+          solutionHatSprite?.blockTree(filteredSolutionBlocks || []) || new Set();
+        const templateTree = templateHatSprite.blockTree(filteredTemplateBlocks);
+
+        l.test(hatSprite, (l) => {
+          l.expect(solutionTree.size <= templateTree.size)
+            .with({
+              wrong: 'Probeer je rondslingerende blokjes te verwijderen of te gebruiken.',
+              correct: 'Goed zo! Je hebt geen losse blokjes laten rondslingeren.',
+            })
+            .toBe(true);
+          if (solutionTree.size <= templateTree.size) {
+            l.expect(isEqual(templateTree, solutionTree))
+              .fatal()
+              .with({
+                wrong: `Je hebt aan de voorgeprogrammeerde blokjes van de sprite ${hatSprite} wijzigingen aangebracht.`,
+                correct: `Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite ${hatSprite}.`,
               })
               .toBe(true);
-          });
+          }
+        });
+
+        if (this.allowedBlockCheck) {
+          // Verify that only allowed blocks are used.
+          const usesAllowed = removedSolutionBlocks.every(this.allowedBlockCheck);
+          // Don't show if no blocks.
+          if (removedSolutionBlocks.length > 0) {
+            l.test('Juiste blokjes', (l) => {
+              l.expect(usesAllowed)
+                .fatal()
+                .with({
+                  wrong:
+                    'Oei, je gebruikt de verkeerde blokjes. Je mag enkel de blokjes uit mijn blokken en eindige lussen gebruiken.',
+                  correct: 'Goed zo! Je gebruikt geen verkeerde blokjes.',
+                })
+                .toBe(true);
+            });
+          }
         }
       }
     });
