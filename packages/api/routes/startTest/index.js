@@ -13,7 +13,6 @@ const test = async (req, reply, next, browser) => {
   next();
 
   const output = [];
-  let error;
 
   try {
     await runJudge({
@@ -35,22 +34,20 @@ const test = async (req, reply, next, browser) => {
     });
   } catch (err) {
     console.log(err);
-
-    error = err;
   }
 
   await page.close();
 
-  const data = { sessionId, output, error };
+  console.log(`Result for ${sessionId}: ${output}`);
 
-  fetch(process.env.JUDGE_SERVICE_NOTIFY_URL, {
+  fetch(`${process.env.JUDGE_SERVICE_NOTIFY_URL}/${sessionId}`, {
     method: 'POST',
     mode: 'cors',
     cache: 'no-cache',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(data),
+    body: JSON.stringify(output),
   });
 };
 
