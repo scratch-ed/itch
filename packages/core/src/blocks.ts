@@ -55,8 +55,12 @@ function convertInput(inputArray: unknown[], blockmap: Map<string, Sb3Block>) {
   } else {
     // ID of a block.
     const id = inputArray[1];
-    const block = ensure(blockmap.get(<string>id));
-    return blockToNode(block, blockmap);
+    const block = blockmap.get(<string>id);
+    if (!block) {
+      return undefined;
+    } else {
+      return blockToNode(block, blockmap);
+    }
   }
 }
 
@@ -97,10 +101,11 @@ function blockToNode(block: Sb3Block, blockmap: Map<string, Sb3Block>): Node {
 
   const input: Record<string, unknown> = {};
   for (const [key, value] of Object.entries(block.inputs || {})) {
-    if (value[0] === 1) {
+    const converted = convertInput(value, blockmap);
+    if (value[0] === 1 && !converted) {
       continue;
     }
-    input[key] = convertInput(value, blockmap);
+    input[key] = converted;
     if (isNumber(input[key])) {
       input[key] = (<number>input[key]).toString();
     }

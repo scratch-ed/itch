@@ -292,8 +292,20 @@ export class OneHatAllowedTest {
   hatSprites: string[];
   /** @deprecated */
   hatSprite?: string;
+  /** @deprecated */
   hatBlockFinder?: (value: Sb3Block, index: number, obj: Sb3Block[]) => boolean;
+  /** @deprecated */
   allowedBlockCheck?: (value: Sb3Block, index: number, array: Sb3Block[]) => boolean;
+
+  hatBlockFinders: Record<
+    string,
+    (value: Sb3Block, index: number, obj: Sb3Block[]) => boolean
+  > = {};
+
+  allowedBlockChecks: Record<
+    string,
+    (value: Sb3Block, index: number, array: Sb3Block[]) => boolean
+  > = {};
 
   hatBlockSorter: (list: Sb3Block[]) => Sb3Block[] = (l) => l;
 
@@ -310,6 +322,18 @@ export class OneHatAllowedTest {
   execute(e: Evaluation): void {
     if (this.hatSprite) {
       this.hatSprites = [this.hatSprite];
+    }
+    if (this.hatBlockFinder) {
+      this.hatBlockFinders = {};
+      this.hatSprites.forEach((sprite) => {
+        this.hatBlockFinders[sprite] = this.hatBlockFinder!;
+      });
+    }
+    if (this.allowedBlockCheck) {
+      this.allowedBlockChecks = {};
+      this.hatSprites.forEach((sprite) => {
+        this.allowedBlockChecks[sprite] = this.allowedBlockCheck!;
+      });
     }
     e.describe('Controle op bestaande code', (l) => {
       this.template
@@ -363,11 +387,11 @@ export class OneHatAllowedTest {
         // We test as follows: remove all blocks attached to the hat block.
         // The remaining blocks should be identical to the template sprite.
         // Start by finding the hat block (in the template, guaranteed to exist).
+        const hatBlockFinder = this.hatBlockFinders[hatSprite];
         let solutionHatBlocks: Sb3Block[] =
-          solutionHatSprite?.blocks?.filter(this.hatBlockFinder!) || [];
-        let templateHatBlocks: Sb3Block[] = templateHatSprite.blocks.filter(
-          this.hatBlockFinder!,
-        );
+          solutionHatSprite?.blocks?.filter(hatBlockFinder) || [];
+        let templateHatBlocks: Sb3Block[] =
+          templateHatSprite.blocks.filter(hatBlockFinder);
 
         if (
           solutionHatBlocks.length === 0 ||
@@ -444,9 +468,11 @@ export class OneHatAllowedTest {
           }
         });
 
-        if (this.allowedBlockCheck) {
+        const allowedBlockCheck = this.allowedBlockChecks[hatSprite];
+
+        if (allowedBlockCheck) {
           // Verify that only allowed blocks are used.
-          const usesAllowed = removedSolutionBlocks.every(this.allowedBlockCheck);
+          const usesAllowed = removedSolutionBlocks.every(allowedBlockCheck);
           // Don't show if no blocks.
           if (removedSolutionBlocks.length > 0) {
             l.test('Juiste blokjes', (l) => {
