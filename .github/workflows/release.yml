@@ -16,7 +16,7 @@ jobs:
       - name: Check input
         run: |
           if ! [[ ${{ github.event.inputs.release-type }} = "major" || ${{ github.event.inputs.release-type }} = "minor" || ${{ github.event.inputs.release-type }} = "patch" ]]; then  echo "Use major, minor, patch to run this workflow"; exit 1; fi
-          if [ ${GITHUB_REF#refs/heads/} = main ]; then echo "Don't run this workflow on the main branch"; exit 1; fi
+          if [ ${GITHUB_REF#refs/heads/} = master ]; then echo "Don't run this workflow on the master branch"; exit 1; fi
 
       - uses: actions/checkout@v2
 
@@ -52,9 +52,9 @@ jobs:
               -d '{"base":"development","head":"RELEASE-v${{ env.version }}-DEVELOPMENT"}'
             git push ${{ env.REMOTE_ORIGIN }} --delete RELEASE-v${{ env.version }}-DEVELOPMENT
             GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} \
-            gh pr create --base main --head ${GITHUB_REF#refs/heads/} --title RELEASE-v${{ env.version }} --body "release-v${{ env.version }}"
+            gh pr create --base master --head ${GITHUB_REF#refs/heads/} --title RELEASE-v${{ env.version }} --body "release-v${{ env.version }}"
           else
             git push ${{ env.REMOTE_ORIGIN }}
             GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} \
-            gh pr create --base main --head ${GITHUB_REF#refs/heads/} --title RELEASE-v${{ env.version }} --body "release-v${{ env.version }}"
+            gh pr create --base master --head ${GITHUB_REF#refs/heads/} --title RELEASE-v${{ env.version }} --body "release-v${{ env.version }}"
           fi
