@@ -41,8 +41,8 @@ jobs:
         run: npm test --workspace @exercises/geld-inzamelen
       - name: Test Agar.io
         run: npm test --workspace @exercises/agario
-      - name: Test Eerste Vliegtest
-        run: npm test --workspace @exercises/eerste-vliegtest
+      - name: Test eerste testvlucht
+        run: npm test --workspace @exercises/eerste-testvlucht
   lint:
     runs-on: ubuntu-latest
     strategy:
