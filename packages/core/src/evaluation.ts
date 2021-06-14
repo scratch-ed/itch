@@ -20,7 +20,7 @@ import { ResultManager } from './output';
 // import { distSq } from './lines.js';
 
 import type VirtualMachine from '@itch-types/scratch-vm';
-import { angle } from './lines';
+import { angle, distSq, mergeLines } from './lines';
 
 declare global {
   interface Window {
@@ -34,6 +34,8 @@ declare global {
     generatePositionMessage: typeof generatePositionMessage;
     asRange: typeof asRange;
     angle: typeof angle;
+    mergeLines: typeof mergeLines;
+    distSq: typeof distSq;
 
     beforeExecution?: BeforeExecution;
     duringExecution?: DuringExecution;
@@ -62,6 +64,8 @@ function expose() {
   object.generatePositionMessage = generatePositionMessage;
   object.asRange = asRange;
   object.angle = angle;
+  object.mergeLines = mergeLines;
+  object.distSq = distSq;
 }
 
 export interface EvalConfig {
