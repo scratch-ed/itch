@@ -4,7 +4,6 @@ import { Context } from '../context';
 import type Target from '@itch-types/scratch-vm/types/engine/target';
 import { BroadcastReceiver, BroadcastUpdate } from '../listener';
 import { LogEvent, LogFrame } from '../log';
-import { toString } from 'lodash-es';
 
 export class TrackSpriteAction extends ScheduledAction {
   name: string;

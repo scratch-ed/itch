@@ -12,7 +12,7 @@ import { makeProxiedRenderer } from './renderer';
 import { ResultManager, WRONG } from './output';
 import { ScheduledEvent } from './scheduler/scheduled-event';
 import { EndAction } from './scheduler/end';
-import { BroadcastListener, BroadcastReceiver, ThreadListener } from './listener';
+import { BroadcastReceiver, ThreadListener } from './listener';
 import { EvalConfig } from './evaluation';
 import { AdvancedProfiler } from './profiler';
 
