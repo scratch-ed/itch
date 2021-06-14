@@ -139,6 +139,11 @@ export class LoggedSprite {
     return Object.values(this.blocks);
   }
 
+  touchesPosition(pos: Position): boolean {
+    const {left, right, bottom, top} = this.bounds!;
+    return left < pos.x && pos.x < right && bottom < pos.y && pos.y < top;
+  }
+
   /**
    * Check if this sprite touches another sprite.
    *
