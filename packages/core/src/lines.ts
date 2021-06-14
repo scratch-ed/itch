@@ -53,6 +53,15 @@ export function squareTest(
   return false;
 }
 
+function toFixed(num: number): string {
+  const fixed = num.toFixed(4);
+  if (fixed === '-0.0000') {
+    return '0.0000';
+  } else {
+    return fixed;
+  }
+}
+
 // EXPORTED FUNCTIONS
 
 // Function that takes an array of line segments and merges the overlapping segments.
@@ -79,8 +88,8 @@ export function mergeLines(lines: Line[]): Line[] {
       }
     } else {
       let rico: number | string = (y2 - y1) / (x2 - x1);
-      const b = (y1 - rico * x1).toFixed(4);
-      rico = rico.toFixed(4);
+      const b = toFixed(y1 - rico * x1);
+      rico = toFixed(rico);
       if (rico in ricoDict) {
         const lineDict = ricoDict[rico];
         if (b in lineDict) {
