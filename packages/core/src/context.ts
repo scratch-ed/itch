@@ -12,7 +12,7 @@ import { makeProxiedRenderer } from './renderer';
 import { ResultManager, WRONG } from './output';
 import { ScheduledEvent } from './scheduler/scheduled-event';
 import { EndAction } from './scheduler/end';
-import { BroadcastListener, ThreadListener } from './listener';
+import { BroadcastListener, BroadcastReceiver, ThreadListener } from './listener';
 import { EvalConfig } from './evaluation';
 import { AdvancedProfiler } from './profiler';
 
@@ -158,7 +158,7 @@ export class Context {
    * The listeners for the threads.
    */
   threadListeners: ThreadListener[];
-  broadcastListeners: BroadcastListener[];
+  broadcastListeners: BroadcastReceiver[];
   event: ScheduledEvent;
   output: ResultManager;
   // TODO: integrate with log.

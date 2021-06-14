@@ -5,7 +5,7 @@ import { KeyUseAction, MouseData, MouseUseAction, WhenPressKeyAction } from './i
 import { SendBroadcastAction } from './broadcast';
 import { EndAction, JoinAction } from './end';
 import { delay } from './wait';
-import { TrackSpriteAction } from './track';
+import { TrackBroadcasts, TrackSpriteAction } from './track';
 import { castCallback, MessageData } from '../utils';
 import { FatalErrorException } from '../testplan';
 import { ScheduledAction } from './action';
@@ -357,6 +357,10 @@ export class ScheduledEvent {
 
   track(sprite: string): ScheduledEvent {
     return this.constructNext(new TrackSpriteAction(sprite));
+  }
+
+  trackBroadcast(...names: string[]): ScheduledEvent {
+    return this.constructNext(new TrackBroadcasts(names));
   }
 
   /**

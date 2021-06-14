@@ -58,15 +58,20 @@ export class ThreadListener extends Listener {
   }
 }
 
-interface BroadcastUpdate {
+export interface BroadcastUpdate {
   matchFields: Record<string, unknown>;
   target: unknown;
+}
+
+export interface BroadcastReceiver {
+  get active(): boolean;
+  update(options: BroadcastUpdate): void;
 }
 
 /**
  * Listens to broadcasts, and resolves once a broadcast has been found.
  */
-export class BroadcastListener extends Listener {
+export class BroadcastListener extends Listener implements BroadcastReceiver {
   name: string;
 
   constructor(broadcastName: string) {

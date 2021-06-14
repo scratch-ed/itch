@@ -58,9 +58,15 @@ function interceptPen(context: Context, renderer: ScratchRender) {
   const penClearOld = renderer.penClear;
   renderer.penClear = new Proxy(penClearOld, {
     apply: function (target, thisArg, argumentsList) {
+      const event = new LogEvent(context, 'renderer', {
+        name: 'penClear',
+        previous: {
+          lines: context.log.renderer.lines.slice(),
+          points: context.log.renderer.points.slice(),
+        },
+      });
       context.log.renderer.lines = [];
       context.log.renderer.points = [];
-      const event = new LogEvent(context, 'renderer', { name: 'penClear' });
       event.previousFrame = new LogFrame(context, 'penClear');
       event.nextFrame = new LogFrame(context, 'penClearEnd');
       context.log.addEvent(event);
