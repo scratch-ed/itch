@@ -33,8 +33,6 @@ jobs:
         run: npm test --workspace @exercises/space
       - name: Test rommelopruimend
         run: npm test --workspace @exercises/rommelruimend
-      - name: Test bouw de raket
-        run: npm test --workspace @exercises/bouw-de-raket
       - name: Test vliegtest
         run: npm test --workspace @exercises/vliegtest
       - name: Test geld inzamelen
@@ -43,6 +41,8 @@ jobs:
         run: npm test --workspace @exercises/agario
       - name: Test eerste testvlucht
         run: npm test --workspace @exercises/eerste-testvlucht
+      - name: Test chaos in de raket
+        run: npm test --workspace @exercises/chaos-in-de-raket
   lint:
     runs-on: ubuntu-latest
     strategy:
