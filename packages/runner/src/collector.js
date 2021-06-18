@@ -53,12 +53,12 @@ class Processor {
       const merged = content.join('\n');
       const allCorrect = this.caseTests.every((test) => test.status === 'correct');
       this.output(
-        `<span title="${this.case}\n${merged}">${allCorrect ? '✅' : '❌'}</span>`,
+        `<span title="${this.case}\n${merged}">${allCorrect ? '✅' : '❌'}</span><br>`,
       );
     } else if (command.startsWith('close')) {
       this.stack.pop();
     } else if (command === 'append-message') {
-      this.output(`<br>Message: ${message.message}`);
+      this.output(`Message: ${message.message}`);
     } else if (command === 'escalate-status') {
       this.output(
         `<br><strong>ESCALATION</strong>: status is now ${message.status.enum} (${message.status.human})`,
