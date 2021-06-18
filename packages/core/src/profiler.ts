@@ -6,6 +6,7 @@ class ProfiledBlock {
     readonly opcode: string,
     readonly args: Record<string, unknown>,
     readonly timestamp: number,
+    readonly target?: string,
   ) {}
 }
 
@@ -24,7 +25,10 @@ export class AdvancedProfiler {
     for (const [opcode, blockFunction] of Object.entries(vm.runtime._primitives)) {
       vm.runtime._primitives[opcode] = new Proxy(blockFunction, {
         apply: function (target, thisArg, argumentsList) {
-          execs.push(new ProfiledBlock(opcode, argumentsList[0], context.timestamp()));
+          const targetName = argumentsList[1].target.getName();
+          execs.push(
+            new ProfiledBlock(opcode, argumentsList[0], context.timestamp(), targetName),
+          );
           return target.apply(thisArg, argumentsList);
         },
       });

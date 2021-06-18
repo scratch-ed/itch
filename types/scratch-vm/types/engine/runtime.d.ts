@@ -1,3 +1,5 @@
+import Target = require('./target');
+
 export = Runtime;
 
 /**
@@ -698,7 +700,7 @@ declare class Runtime extends EventEmitter {
      * @param {Target=} optTarget Optionally, a target to restrict to.
      * @return {Array.<Thread>} List of threads started by this function.
      */
-    startHats(requestedHatOpcode: string, optMatchFields?: object | undefined, optTarget?: any): Array<Thread>;
+    startHats(requestedHatOpcode: string, optMatchFields?: object | undefined, optTarget?: Target): Array<Thread>;
     /**
      * Dispose all targets. Return to clean state.
      */
@@ -923,7 +925,7 @@ declare class Runtime extends EventEmitter {
      * Get a target representing the Scratch stage, if one exists.
      * @return {?Target} The target, if found.
      */
-    getTargetForStage(): any;
+    getTargetForStage(): Target | null | undefined;
     /**
      * Get the editing target.
      * @return {?Target} The editing target.

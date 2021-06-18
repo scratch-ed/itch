@@ -12,6 +12,8 @@ import { ScheduledAction } from './action';
 import { Context } from '../context';
 import { SetVariableAction } from './variable';
 
+import type Target from '@itch-types/scratch-vm/types/engine/target';
+
 class InitialAction extends CallbackAction {
   constructor() {
     super(() => {});
@@ -412,8 +414,21 @@ export class ScheduledEvent {
    * @param sync - Synchronous or not, default true.
    * @param timeout - How long to wait for synchronous events.
    */
-  sendBroadcast(broadcast: string, sync = true, timeout?: number): ScheduledEvent {
-    return this.constructNext(new SendBroadcastAction(broadcast), sync, timeout);
+  sendBroadcast(
+    broadcast: string | { name: string; restrict: (c: Context) => Target },
+    sync = true,
+    timeout?: number,
+  ): ScheduledEvent {
+    let name;
+    let restrict;
+    if (typeof broadcast === 'string') {
+      name = broadcast;
+      restrict = undefined;
+    } else {
+      name = broadcast.name;
+      restrict = broadcast.restrict;
+    }
+    return this.constructNext(new SendBroadcastAction(name, restrict), sync, timeout);
   }
 
   /**
