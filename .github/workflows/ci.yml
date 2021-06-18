@@ -43,6 +43,8 @@ jobs:
         run: npm test --workspace @exercises/eerste-testvlucht
       - name: Test chaos in de raket
         run: npm test --workspace @exercises/chaos-in-de-raket
+      - name: Test koppel de motoren los
+        run: npm test --workspace @exercises/koppel-motoren-los
   lint:
     runs-on: ubuntu-latest
     strategy:
