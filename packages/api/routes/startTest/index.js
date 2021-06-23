@@ -32,23 +32,33 @@ const test = async (req, reply, next, browser) => {
           },
         }),
     });
+
+    await page.close();
+
+    console.log(`Result for ${sessionId}: ${output}`);
+
+    fetch(`${process.env.JUDGE_SERVICE_NOTIFY_URL}/${sessionId}`, {
+      method: 'POST',
+      mode: 'cors',
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(output),
+    });
   } catch (err) {
     console.log(err);
+
+    fetch(`${process.env.JUDGE_SERVICE_NOTIFY_ERROR_URL}/${sessionId}`, {
+      method: 'POST',
+      mode: 'cors',
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(error),
+    });
   }
-
-  await page.close();
-
-  console.log(`Result for ${sessionId}: ${output}`);
-
-  fetch(`${process.env.JUDGE_SERVICE_NOTIFY_URL}/${sessionId}`, {
-    method: 'POST',
-    mode: 'cors',
-    cache: 'no-cache',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(output),
-  });
 };
 
 module.exports = test;
