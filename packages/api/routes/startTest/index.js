@@ -57,7 +57,7 @@ const test = async (req, reply, next, browser) => {
       body: JSON.stringify(error),
     });
   }
-  
+
   await page.close();
 };
 
