@@ -6,7 +6,7 @@
   "main": "src/cli.js",
   "dependencies": {
     "itch-runner": "^0.0.1",
-    "commander": "^7.2.0"
+    "commander": "^8.0.0"
   },
   "scripts": {
     "itch": "node ./src/cli.js"
