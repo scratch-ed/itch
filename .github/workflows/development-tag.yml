@@ -29,7 +29,7 @@ jobs:
 
       - name: Build and push
         id: docker_build
-        uses: docker/build-push-action@v2.5.0
+        uses: docker/build-push-action@v2.6.1
         with:
           push: true
           tags: ${{ secrets.AZURE_REGISTRY_DOMAIN_TEST }}/scratch-judge:${{ env.tag_name}}
