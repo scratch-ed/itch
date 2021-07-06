@@ -39,7 +39,7 @@
     "webpack-dev-server": "^3.1.4",
     "@types/lodash-es": "^4.17.4",
     "@itch-types/scratch-vm": "^0.2.0",
-    "@types/seed-random": "^2.2.0",
+    "@types/seed-random": "^2.2.1",
     "rimraf": "^3.0.2"
   },
   "scripts": {
