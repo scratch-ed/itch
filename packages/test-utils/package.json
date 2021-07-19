@@ -1,12 +1,21 @@
 {
-  "name": "itch-test-utils",
-  "version": "0.0.1",
+  "name": "@ftrprf/judge-test-utils",
+  "version": "0.0.2",
   "description": "Some utilities to test testplans",
-  "private": true,
   "main": "./index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/FTRPRF/scratch-judge",
+    "directory": "packages/test-utils"
+  },
+  "files": [
+    "./index.js",
+    "./index.d.ts",
+    "./matchers.js"
+  ],
   "peerDependencies": {
-    "jest": "^26.6.3",
-    "itch-core": "^0.0.1",
-    "puppeteer": "^9.0.0"
+    "jest": "^27.0.6",
+    "@ftrprf/judge-core": "^0.0.2",
+    "puppeteer": "^10.1.0"
   }
 }

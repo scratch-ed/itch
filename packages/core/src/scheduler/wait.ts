@@ -8,7 +8,7 @@ import { Context } from '../context';
 import { WaitCondition } from './scheduled-event';
 import { Position } from '../lines';
 
-import type RenderedTarget from '@itch-types/scratch-vm/types/sprites/rendered-target';
+import type RenderedTarget from '@ftrprf/judge-scratch-vm-types/types/sprites/rendered-target';
 
 class WaitEvent extends ScheduledAction {
   delay: number;

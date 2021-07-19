@@ -19,7 +19,7 @@ import {
 import { ResultManager } from './output';
 // import { distSq } from './lines.js';
 
-import type VirtualMachine from '@itch-types/scratch-vm';
+import type VirtualMachine from '@ftrprf/judge-scratch-vm-types';
 import { angle, distSq, mergeLines } from './lines';
 
 declare global {

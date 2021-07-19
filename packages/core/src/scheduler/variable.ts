@@ -1,7 +1,7 @@
 import { ScheduledAction } from './action';
 import { LogEvent, LogFrame } from '../log';
 import { Context } from '../context';
-import Target from '@itch-types/scratch-vm/types/engine/target';
+import Target from '@ftrprf/judge-scratch-vm-types/types/engine/target';
 
 const STAGE = 'Stage';
 

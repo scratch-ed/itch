@@ -2,7 +2,7 @@ import { ScheduledAction } from './action';
 import { LogEvent, LogFrame } from '../log';
 import { ThreadListener } from '../listener';
 import { Context } from '../context';
-import Target from '@itch-types/scratch-vm/types/engine/target';
+import Target from '@ftrprf/judge-scratch-vm-types/types/engine/target';
 
 export class SendBroadcastAction extends ScheduledAction {
   private readonly name: string;

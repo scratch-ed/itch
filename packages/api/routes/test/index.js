@@ -1,4 +1,4 @@
-const { runJudge } = require('itch-runner');
+const { runJudge } = require('@ftrprf/judge-runner');
 const testStream = require('./stream');
 
 const parseCommands = require('../../utils/parseCommands');

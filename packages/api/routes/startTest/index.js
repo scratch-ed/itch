@@ -1,4 +1,4 @@
-const { runJudge } = require('itch-runner');
+const { runJudge } = require('@ftrprf/judge-runner');
 const fetch = require('node-fetch');
 
 const parseCommands = require('../../utils/parseCommands');

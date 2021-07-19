@@ -1,11 +1,11 @@
 {
-  "name": "itch-external-runner",
-  "version": "0.0.1",
+  "name": "@ftrprf/judge-external-runner",
+  "version": "0.0.2",
   "description": "External runner for Itch",
   "private": true,
   "main": "src/cli.js",
   "dependencies": {
-    "itch-runner": "^0.0.1",
+    "@ftrprf/judge-runner": "^0.0.2",
     "commander": "^8.1.0"
   },
   "scripts": {

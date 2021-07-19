@@ -1,24 +1,34 @@
 {
-  "name": "itch-core",
-  "version": "0.0.1",
+  "name": "@ftrprf/judge-core",
+  "version": "0.0.2",
   "description": "Core judge for Scratch projects",
   "main": "dist/js/judge.browser.js",
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/FTRPRF/scratch-judge",
+    "directory": "packages/core"
+  },
   "directories": {
     "test": "test",
     "lib": "src",
     "doc": "doc"
   },
+  "license": "UNLICENSED",
+  "files": [
+    "./dist",
+    "README.md"
+  ],
   "dependencies": {
     "lodash-es": "^4.17.21",
     "seed-random": "^2.2.0"
   },
   "peerDependencies": {
-    "scratch-audio": "0.1.0-prerelease.20200528195344",
-    "scratch-render": "0.1.0-prerelease.20201113223804",
+    "scratch-audio": "^0.1.0-prerelease.20200528195344",
+    "scratch-render": "0.1.0-prerelease.20210629213715",
     "scratch-storage": "^1.3.3",
-    "scratch-svg-renderer": "^0.2.0-prerelease.20210107222546",
-    "scratch-vm": "^0.2.0-prerelease.20201125065300"
+    "scratch-svg-renderer": "0.2.0-prerelease.20210511195415",
+    "scratch-vm": "0.2.0-prerelease.20210706190652"
   },
   "devDependencies": {
     "@babel/cli": "^7.14.8",
@@ -38,7 +48,7 @@
     "webpack-cli": "^4.7.2",
     "webpack-dev-server": "^3.1.4",
     "@types/lodash-es": "^4.17.4",
-    "@itch-types/scratch-vm": "^0.2.0",
+    "@ftrprf/judge-scratch-vm-types": "^0.2.0",
     "@types/seed-random": "^2.2.1",
     "rimraf": "^3.0.2"
   },

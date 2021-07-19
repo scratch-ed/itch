@@ -4,7 +4,7 @@
 
 const path = require('path');
 const fs = require('fs');
-const { runJudge } = require('itch-runner');
+const { runJudge } = require('@ftrprf/judge-runner');
 const { program, Option } = require('commander');
 
 const exercisePath = path.resolve(__dirname, '../../../exercises');

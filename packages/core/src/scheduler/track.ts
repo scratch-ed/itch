@@ -1,7 +1,7 @@
 import { ScheduledAction } from './action';
 import { Context } from '../context';
 
-import type Target from '@itch-types/scratch-vm/types/engine/target';
+import type Target from '@ftrprf/judge-scratch-vm-types/types/engine/target';
 import { BroadcastReceiver, BroadcastUpdate } from '../listener';
 import { LogEvent, LogFrame } from '../log';
 

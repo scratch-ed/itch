@@ -30,8 +30,8 @@ import { Project } from './project';
 import { Evaluation } from './evaluation';
 import { Sb3Block, Sb3Target } from './structures';
 
-import type VirtualMachine from '@itch-types/scratch-vm';
-import type BlockUtility from '@itch-types/scratch-vm/types/engine/block-utility';
+import type VirtualMachine from '@ftrprf/judge-scratch-vm-types';
+import type BlockUtility from '@ftrprf/judge-scratch-vm-types/types/engine/block-utility';
 import { LoggedSprite } from './log';
 import { cloneDeep } from 'lodash-es';
 

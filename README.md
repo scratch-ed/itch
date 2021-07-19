@@ -1,4 +1,4 @@
-# Itch
+# scratch-judge
 
 Repo for the Scratch judge.
 
@@ -87,4 +87,16 @@ Try cleaning your `node_modules` and reinstalling with following commands:
 npm run clean
 
 npm install
+```
+
+### Release
+
+```bash
+# Create a new version:
+# npm version [<newversion> | major | minor | patch | premajor | preminor | prepatch | prerelease | from-git]
+npm version minor
+npm version minor --workspaces
+
+# Publish
+npm publish --workspaces
 ```

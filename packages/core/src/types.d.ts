@@ -4,7 +4,7 @@
 // For now, use wildcard until everything is converted.
 declare module 'scratch-vm' {
   // We have the types, so export those.
-  import VirtualMachine from '@itch-types/scratch-vm';
+  import VirtualMachine from '@ftrprf/judge-scratch-vm-types';
   export default VirtualMachine;
 }
 

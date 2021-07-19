@@ -1,4 +1,4 @@
-import type VirtualMachine from '@itch-types/scratch-vm/types/virtual-machine';
+import type VirtualMachine from '@ftrprf/judge-scratch-vm-types/types/virtual-machine';
 import { Context } from './context';
 
 class ProfiledBlock {

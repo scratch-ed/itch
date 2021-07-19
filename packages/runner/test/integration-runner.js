@@ -1,6 +1,6 @@
 /* Copyright (C) 2020 Ghent University - All Rights Reserved */
 const path = require('path');
-const { executePlan } = require('itch-test-utils');
+const { executePlan } = require('@ftrprf/judge-test-utils');
 
 const defaultConfig = {
   debug: false,

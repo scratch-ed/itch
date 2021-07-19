@@ -1,6 +1,6 @@
 // Require for side-effects
 require('./matchers.js');
-const { runJudge } = require('itch-runner');
+const { runJudge } = require('@ftrprf/judge-runner');
 const puppeteer = require('puppeteer');
 const path = require('path');
 

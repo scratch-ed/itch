@@ -17,9 +17,9 @@ import {
 import { ensure } from './utils';
 import { Context } from './context';
 
-import type RenderedTarget from '@itch-types/scratch-vm/types/sprites/rendered-target';
-import type Target from '@itch-types/scratch-vm/types/engine/target';
-import type Variable from '@itch-types/scratch-vm/types/engine/variable';
+import type RenderedTarget from '@ftrprf/judge-scratch-vm-types/types/sprites/rendered-target';
+import type Target from '@ftrprf/judge-scratch-vm-types/types/engine/target';
+import type Variable from '@ftrprf/judge-scratch-vm-types/types/engine/variable';
 
 /**
  * Our own version of a variable. Basically a copy of a {@link Variable}.

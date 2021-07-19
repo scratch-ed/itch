@@ -4,7 +4,7 @@ import ScratchSVGRenderer from 'scratch-svg-renderer';
 import AudioEngine from 'scratch-audio';
 import ScratchRender from 'scratch-render';
 
-import type Runtime from '@itch-types/scratch-vm/types/engine/runtime';
+import type Runtime from '@ftrprf/judge-scratch-vm-types/types/engine/runtime';
 
 import { Log, LogEvent, LogFrame } from './log';
 import { Deferred } from './deferred';

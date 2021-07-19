@@ -16,9 +16,9 @@ jobs:
       - run: npm ci
       - run: npm run build
       - name: Test core
-        run: npm test --workspace itch-core
+        run: npm test --workspace @ftrprf/judge-core
       - name: Test runner
-        run: npm test --workspace itch-runner
+        run: npm test --workspace @ftrprf/judge-runner
       - name: Test zombiebal
         run: npm test --workspace @exercises/zombiebal
       - name: Test navigeer rommel

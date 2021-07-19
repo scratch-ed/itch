@@ -2,7 +2,7 @@
 
 const path = require('path');
 const pack = require('./package.json');
-//const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = [
   // Web-compatible
@@ -26,10 +26,10 @@ module.exports = [
     },
     target: 'web',
     entry: {
-      'itch-core': './src/index.ts',
+      '@ftrprf/judge-core': './src/index.ts',
     },
     output: {
-      library: 'itch-core',
+      library: '@ftrprf/judge-core',
       libraryTarget: 'umd',
       path: path.resolve(path.dirname(pack.main)),
       filename: path.basename(pack.main),

@@ -1,13 +1,8 @@
 {
-  "name": "itch",
-  "version": "0.3.0",
-  "description": "Scratch judge for Dodona",
-  "contributors": [
-    "Nils Mak",
-    "Niko Strijbol",
-    "Cedric Vanhaverbeke"
-  ],
+  "name": "@ftrprf/scratch-judge",
   "private": true,
+  "version": "0.3.0",
+  "description": "Scratch judge for FTRPRF",
   "workspaces": [
     "packages/**",
     "exercises/**",
@@ -28,10 +23,10 @@
     "rimraf": "^3.0.2"
   },
   "scripts": {
-    "watch": "npm run watch --workspace itch-core",
+    "watch": "npm run watch --workspace @ftrprf/judge-core",
     "dev:api": "npm run dev --workspace itch-api",
     "api": "npm start --workspace itch-api",
-    "start": "npm start --workspace itch-runner",
+    "start": "npm start --workspace @ftrprf/judge-runner",
     "build": "npm run build --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
     "clean": "npm run clean --workspaces --if-present && rimraf ./**/node_modules",
