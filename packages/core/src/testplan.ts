@@ -469,6 +469,18 @@ export class OneHatAllowedTest {
             })
             .toBe(true);
           if (solutionTree.size <= templateTree.size) {
+            // if (!isEqual(templateTree, solutionTree)) {
+            //   const d = difference(templateTree, solutionTree);
+            //   const t_a = Array.from(templateTree);
+            //   const s_a = Array.from(solutionTree);
+            //   for (let i = 0; i < t_a.length; i++) {
+            //     if (!isEqual(t_a[i], s_a[i])) {
+            //       const dd = difference(t_a[i], s_a[i]);
+            //       debugger;
+            //     }
+            //   }
+            //   console.log(d);
+            // }
             l.expect(isEqual(templateTree, solutionTree))
               .fatal()
               .with({
