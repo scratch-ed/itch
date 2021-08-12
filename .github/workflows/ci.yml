@@ -27,8 +27,6 @@ jobs:
         run: npm test --workspace @exercises/space
       - name: Test rommelopruimend
         run: npm test --workspace @exercises/rommelruimend
-      - name: Test vliegtest
-        run: npm test --workspace @exercises/vliegtest
       - name: Test geld inzamelen
         run: npm test --workspace @exercises/geld-inzamelen
       - name: Test Agar.io
