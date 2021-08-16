@@ -16,7 +16,7 @@
     "dotenv": "^10.0.0",
     "esdoc": "^1.1.0",
     "esdoc-standard-plugin": "^1.0.0",
-    "jszip": "^3.7.0",
+    "jszip": "^3.7.1",
     "lodash": "^4.17.21",
     "puppeteer-core": "^10.1.0",
     "scratch-audio": "0.1.0-prerelease.20200528195344",
