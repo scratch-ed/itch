@@ -23,7 +23,7 @@
     "scratch-render": "0.1.0-prerelease.20210727084512",
     "scratch-storage": "^1.3.5",
     "scratch-svg-renderer": "^0.2.0-prerelease.20210511195415",
-    "scratch-vm": "^0.2.0-prerelease.20210729092909"
+    "scratch-vm": "^0.2.0-prerelease.20210812043817"
   },
   "devDependencies": {
     "@ftrprf/judge-test-utils": "^0.0.2",
