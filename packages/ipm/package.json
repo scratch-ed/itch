@@ -1,0 +1,16 @@
+{
+  "name": "itch-package-manager",
+  "version": "0.0.1",
+  "description": "Utilities to sync testplans with those from the Studio.",
+  "private": true,
+  "main": "src/index.js",
+  "type": "module",
+  "dependencies": {
+    "commander": "^8.1.0",
+    "dotenv": "^10.0.0",
+    "node-fetch": "^2.6.1"
+  },
+  "scripts": {
+    "ipm": "node ./src/index.js"
+  }
+}
