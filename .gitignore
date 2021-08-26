@@ -17,3 +17,11 @@ node_modules/
 
 packages/core/dist
 config.json
+
+**/extra[0-9]-solution.sb3
+**/[0-9]-solution.sb3
+**/solution.sb3
+
+**/[0-9]-template.sb3
+**/template.sb3
+**/extra[0-9]-template.sb3
