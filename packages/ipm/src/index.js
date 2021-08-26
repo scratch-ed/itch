@@ -103,7 +103,7 @@ async function getVersions(id) {
  */
 async function getBytes(exercise, lock, onlyMissing) {
   const headers = {};
-  if (lock[exercise.localPath]) {
+  if (lock[exercise.localPath] && fs.existsSync(exercise.localPath)) {
     headers['If-None-Match'] = lock[exercise.localPath];
   }
 
