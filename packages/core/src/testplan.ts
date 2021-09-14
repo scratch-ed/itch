@@ -394,6 +394,18 @@ export class OneHatAllowedTest {
 
       for (const hatSprite of this.hatSprites) {
         const solutionHatSprite = cloneDeep(this.submission.sprite(hatSprite));
+
+        if (!solutionHatSprite) {
+          l.test(hatSprite, (l) => {
+            l.expect(true)
+              .fatal()
+              .with({
+                wrong: `Oei, je verwijderde de sprite ${hatSprite}. Je zal opnieuw moeten beginnen.`,
+              })
+              .toBe(false);
+          });
+        }
+
         const templateHatSprite = cloneDeep(this.template.sprite(hatSprite))!;
         // We test as follows: remove all blocks attached to the hat block.
         // The remaining blocks should be identical to the template sprite.
