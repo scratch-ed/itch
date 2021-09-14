@@ -4,7 +4,7 @@ import fetch from 'node-fetch';
 
 async function download(from, to, headers = {}) {
   const res = await fetch(from, { headers });
-  if (!res.ok) {
+  if (!res.ok && res.status !== 304) {
     console.error('Error while downloading sb3 file.');
     console.error('Code: ', response.status);
     console.error(await response.text());
@@ -187,7 +187,7 @@ async function downloadLevel(result, level, local, name, onlyMissing) {
   ]);
 
   if (updatedStarter || updatedSolution) {
-    fs.writeFileSync(lockPath, JSON.stringify(lock, null, 2), 'utf8');
+    fs.writeFileSync(lockPath, JSON.stringify(lock, null, 2) + "\n", 'utf8');
   }
 }
 

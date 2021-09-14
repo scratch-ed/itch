@@ -23,6 +23,7 @@
     "rimraf": "^3.0.2"
   },
   "scripts": {
+    "ipm": "npm run ipm --workspace itch-package-manager sync ./exercises",
     "watch": "npm run watch --workspace @ftrprf/judge-core",
     "dev:api": "npm run dev --workspace itch-api",
     "api": "npm start --workspace itch-api",
