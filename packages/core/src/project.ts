@@ -1,7 +1,7 @@
 import { Sb3Json, Sb3Target, Sb3Variable } from './structures';
 import isEqual from 'lodash-es/isEqual';
 import { asTree } from './blocks';
-import { difference } from './testplan';
+// import { difference } from './testplan';
 
 /**
  * A callback allowing comparison between two sprites.
