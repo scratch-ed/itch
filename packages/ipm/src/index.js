@@ -187,7 +187,7 @@ async function downloadLevel(result, level, local, name, onlyMissing) {
   ]);
 
   if (updatedStarter || updatedSolution) {
-    fs.writeFileSync(lockPath, JSON.stringify(lock, null, 2) + "\n", 'utf8');
+    fs.writeFileSync(lockPath, JSON.stringify(lock, null, 2) + '\n', 'utf8');
   }
 }
 
