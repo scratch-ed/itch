@@ -1,6 +1,7 @@
 import { Sb3Json, Sb3Target, Sb3Variable } from './structures';
 import isEqual from 'lodash-es/isEqual';
 import { asTree } from './blocks';
+import { difference } from './testplan';
 
 /**
  * A callback allowing comparison between two sprites.
@@ -113,6 +114,18 @@ export class Project {
     return this.hasChangedSprite(other, sprite, (s1, s2) => {
       const set1 = asTree(s1);
       const set2 = asTree(s2);
+      // if (!isEqual(set1, set2)) {
+      //   const d = difference(set1, set2);
+      //   const t_a = Array.from(set1).sort((a, b) => JSON.stringify(a) < JSON.stringify(b) ? -1 : 1);
+      //   const s_a = Array.from(set2).sort((a, b) => JSON.stringify(a) < JSON.stringify(b) ? -1 : 1);
+      //   for (let i = 0; i < t_a.length; i++) {
+      //     if (!isEqual(t_a[i], s_a[i])) {
+      //       const dd = difference(t_a[i], s_a[i]);
+      //       debugger;
+      //     }
+      //   }
+      //   console.log(d);
+      // }
       return !isEqual(set1, set2);
     });
   }

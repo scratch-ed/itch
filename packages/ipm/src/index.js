@@ -11,14 +11,13 @@ async function download(from, to, headers = {}) {
     throw new Error();
   }
   await new Promise((resolve, reject) => {
-    const fileStream = fs.createWriteStream(to);
+    if (fs.existsSync(to)) {
+      fs.unlinkSync(to);
+    }
+    const fileStream = fs.createWriteStream(to, 'utf8');
     res.body.pipe(fileStream);
-    res.body.on('error', (err) => {
-      reject(err);
-    });
-    fileStream.on('finish', function () {
-      resolve();
-    });
+    res.body.on('error', reject);
+    fileStream.on('finish', resolve);
   });
 
   return res.headers;
@@ -129,13 +128,14 @@ async function getBytes(exercise, lock, onlyMissing) {
 }
 
 async function downloadLevel(result, level, local, name, onlyMissing) {
+  const regex = new RegExp(`level${level ? ' ' + level : ''}[^0-9]*$`);
   // Attempt to find the starter project.
   const starterUri = result.findExercise.versions.find(
     (v) =>
       v.versionType === 'STARTER' &&
-      v.name.toLowerCase().includes(`level${level ? ' ' + level : ''}`) &&
+      regex.test(v.name.toLowerCase()) &&
       !v.name.toLowerCase().includes('oplossing'),
-  ).blobUri;
+  )?.blobUri;
 
   if (starterUri === undefined) {
     throw new Error(`Could not find starter project for level ${level}`);
@@ -144,9 +144,9 @@ async function downloadLevel(result, level, local, name, onlyMissing) {
   const solutionUri = result.findExercise.versions.find(
     (v) =>
       v.versionType === 'SOLUTION' &&
-      v.name.toLowerCase().includes(`level${level ? ' ' + level : ''}`) &&
+      regex.test(v.name.toLowerCase()) &&
       v.name.toLowerCase().includes('oplossing'),
-  ).blobUri;
+  )?.blobUri;
 
   if (solutionUri === undefined) {
     throw new Error(`Could not find solution project for level ${level}`);

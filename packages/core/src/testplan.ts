@@ -283,7 +283,7 @@ function fixHatBlock(filteredBlocks: Sb3Block[], hatBlock: Sb3Block) {
   filteredBlocks[solutionIndex] = hatBlock;
 }
 
-// function difference(object, base) {
+// export function difference(object, base) {
 //   function changes(object, base) {
 //     return _.transform(object, function(result, value, key) {
 //       if (!_.isEqual(value, base[key])) {
@@ -483,8 +483,8 @@ export class OneHatAllowedTest {
           if (solutionTree.size <= templateTree.size) {
             // if (!isEqual(templateTree, solutionTree)) {
             //   const d = difference(templateTree, solutionTree);
-            //   const t_a = Array.from(templateTree);
-            //   const s_a = Array.from(solutionTree);
+            //   const t_a = Array.from(templateTree).sort((a, b) => JSON.stringify(a) < JSON.stringify(b) ? -1 : 1);
+            //   const s_a = Array.from(solutionTree).sort((a, b) => JSON.stringify(a) < JSON.stringify(b) ? -1 : 1);
             //   for (let i = 0; i < t_a.length; i++) {
             //     if (!isEqual(t_a[i], s_a[i])) {
             //       const dd = difference(t_a[i], s_a[i]);
