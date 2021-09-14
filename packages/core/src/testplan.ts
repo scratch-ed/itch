@@ -419,7 +419,7 @@ export class OneHatAllowedTest {
 
         if (
           solutionHatBlocks.length === 0 ||
-          solutionHatBlocks.length !== templateHatBlocks.length
+          solutionHatBlocks.length < templateHatBlocks.length
         ) {
           l.test(hatSprite, (l) => {
             l.expect(true)
@@ -438,7 +438,11 @@ export class OneHatAllowedTest {
         const removedSolutionBlocks: Sb3Block[] = [];
         const removedTemplateBlocks: Sb3Block[] = [];
 
-        for (let i = 0; i < solutionHatBlocks.length; i++) {
+        for (
+          let i = 0;
+          i < Math.min(solutionHatBlocks.length, templateHatBlocks.length);
+          i++
+        ) {
           const solutionHatBlock = solutionHatBlocks[i];
           const templateHatBlock = templateHatBlocks[i];
 
