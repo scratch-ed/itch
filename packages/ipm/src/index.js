@@ -31,7 +31,7 @@ async function getVersions(id) {
     '"Chromium";v="92", " Not A;Brand";v="99", "Google Chrome";v="92"',
   );
   myHeaders.append('accept', '*/*');
-  myHeaders.append('authorization', `Bearer ${process.env.BEARER}`);
+  myHeaders.append('authorization', process.env.BEARER);
   myHeaders.append('sec-ch-ua-mobile', '?0');
   myHeaders.append('content-type', 'application/json');
   myHeaders.append('Origin', 'https://studio.ftrprf.be');
@@ -128,12 +128,12 @@ async function getBytes(exercise, lock, onlyMissing) {
 }
 
 async function downloadLevel(result, level, local, name, onlyMissing) {
-  const regex = new RegExp(`level${level ? ' ' + level : ''}[^0-9]*$`);
+  const regex = new RegExp(`level ${level}[^0-9]*$`);
   // Attempt to find the starter project.
   const starterUri = result.findExercise.versions.find(
     (v) =>
       v.versionType === 'STARTER' &&
-      regex.test(v.name.toLowerCase()) &&
+      (regex.test(v.name.toLowerCase()) || !level) &&
       !v.name.toLowerCase().includes('oplossing'),
   )?.blobUri;
 
@@ -144,7 +144,7 @@ async function downloadLevel(result, level, local, name, onlyMissing) {
   const solutionUri = result.findExercise.versions.find(
     (v) =>
       v.versionType === 'SOLUTION' &&
-      regex.test(v.name.toLowerCase()) &&
+      (regex.test(v.name.toLowerCase()) || !level) &&
       v.name.toLowerCase().includes('oplossing'),
   )?.blobUri;
 
