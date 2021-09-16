@@ -10,15 +10,17 @@ async function download(from, to, headers = {}) {
     console.error(await response.text());
     throw new Error();
   }
-  await new Promise((resolve, reject) => {
-    if (fs.existsSync(to)) {
-      fs.unlinkSync(to);
-    }
-    const fileStream = fs.createWriteStream(to, 'utf8');
-    res.body.pipe(fileStream);
-    res.body.on('error', reject);
-    fileStream.on('finish', resolve);
-  });
+  if (res.ok) {
+    await new Promise((resolve, reject) => {
+      if (fs.existsSync(to)) {
+        fs.unlinkSync(to);
+      }
+      const fileStream = fs.createWriteStream(to, 'utf8');
+      res.body.pipe(fileStream);
+      res.body.on('error', reject);
+      fileStream.on('finish', resolve);
+    });
+  }
 
   return res.headers;
 }
