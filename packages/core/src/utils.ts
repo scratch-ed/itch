@@ -65,3 +65,11 @@ export function format(source: string, ...args: string[]): string {
     return args[n];
   });
 }
+
+export function stringify(value: unknown): string {
+  if (typeof value === 'object' && typeof value?.toString === 'function') {
+    return value.toString();
+  } else {
+    return String(value);
+  }
+}

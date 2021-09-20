@@ -1,0 +1,39 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`new flow works 1`] = `
+Array [
+  Object {
+    "command": "start-judgement",
+    "version": 2,
+  },
+  Object {
+    "command": "start-group",
+    "name": "Groep 1",
+    "sprite": "Test",
+  },
+  Object {
+    "command": "start-group",
+    "name": "Groep 2",
+    "sprite": undefined,
+  },
+  Object {
+    "command": "start-test",
+    "name": "Test 1",
+  },
+  Object {
+    "command": "close-test",
+    "description": "No correct at all!",
+    "status": "wrong",
+  },
+  Object {
+    "command": "close-group",
+    "summary": undefined,
+    "visibility": "show",
+  },
+  Object {
+    "command": "close-group",
+    "summary": undefined,
+    "visibility": "show",
+  },
+]
+`;

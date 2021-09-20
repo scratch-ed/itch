@@ -15,6 +15,7 @@ import { EndAction } from './scheduler/end';
 import { BroadcastReceiver, ThreadListener } from './listener';
 import { EvalConfig } from './evaluation';
 import { AdvancedProfiler } from './profiler';
+import { GroupedResultManager } from './grouped-output';
 
 const Events: Record<string, string> = {
   SCRATCH_PROJECT_START: 'PROJECT_START',
@@ -161,6 +162,7 @@ export class Context {
   broadcastListeners: BroadcastReceiver[];
   event: ScheduledEvent;
   output: ResultManager;
+  groupedOutput: GroupedResultManager;
   // TODO: integrate with log.
   advancedProfiler: AdvancedProfiler;
 
@@ -186,6 +188,7 @@ export class Context {
     this.broadcastListeners = [];
     this.event = ScheduledEvent.create();
     this.output = new ResultManager(callback);
+    this.groupedOutput = new GroupedResultManager(callback);
     this.advancedProfiler = new AdvancedProfiler();
     this.accelerationFactor = {
       factor: 1,
