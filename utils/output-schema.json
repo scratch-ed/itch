@@ -1,0 +1,240 @@
+{
+  "$id": "itch/output.json",
+  "title": "Itch Output Schema",
+  "$ref": "#/definitions/update",
+  "definitions": {
+    "update": {
+      "oneOf": [
+        {
+          "$ref": "#/definitions/start-judgement"
+        },
+        {
+          "$ref": "#/definitions/start-group"
+        },
+        {
+          "$ref": "#/definitions/start-test"
+        },
+        {
+          "$ref": "#/definitions/append-message"
+        },
+        {
+          "$ref": "#/definitions/append-diff"
+        },
+        {
+          "$ref": "#/definitions/escalate-status"
+        },
+        {
+          "$ref": "#/definitions/close-test"
+        },
+        {
+          "$ref": "#/definitions/close-group"
+        },
+        {
+          "$ref": "#/definitions/close-judgement"
+        }
+      ]
+    },
+    "start-judgement": {
+      "type": "object",
+      "description": "Start a new judgement.",
+      "required": [
+        "command",
+        "version"
+      ],
+      "properties": {
+        "command": {
+          "const": "start-judgement"
+        },
+        "version": {
+          "description": "A version number for the output format.",
+          "type": "integer",
+          "const": 2
+        }
+      }
+    },
+    "start-group": {
+      "type": "object",
+      "description": "Start a new group in the output.",
+      "required": [
+        "command",
+        "name"
+      ],
+      "properties": {
+        "command": {
+          "const": "start-group"
+        },
+        "name": {
+          "type": "string",
+          "description": "Human-visible name of the group of tests."
+        },
+        "sprite": {
+          "type": "string",
+          "description": "Optionally link this group to a certain sprite."
+        }
+      }
+    },
+    "start-test": {
+      "type": "object",
+      "description": "A new test",
+      "required": [
+        "command",
+        "name"
+      ],
+      "properties": {
+        "command": {
+          "const": "start-test"
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the test, shown if no messages were received."
+        }
+      }
+    },
+    "append-message": {
+      "type": "object",
+      "description": "Append a message to the open object.",
+      "required": [
+        "command",
+        "message"
+      ],
+      "properties": {
+        "command": {
+          "const": "append-message"
+        },
+        "message": {
+          "$ref": "#/definitions/message"
+        }
+      }
+    },
+    "append-diff": {
+      "type": "object",
+      "description": "Append a diff to the open object.",
+      "required": [
+        "command",
+        "expected",
+        "actual"
+      ],
+      "properties": {
+        "command": {
+          "const": "append-diff"
+        },
+        "expected": {
+          "type": "string"
+        },
+        "actual": {
+          "type": "string"
+        }
+      }
+    },
+    "escalate-status": {
+      "type": "object",
+      "description": "Change the global status for the worse.",
+      "required": [
+        "command",
+        "status"
+      ],
+      "properties": {
+        "command": {
+          "const": "escalate-status"
+        },
+        "status": {
+          "$ref": "#/definitions/status"
+        }
+      }
+    },
+    "close-test": {
+      "type": "object",
+      "description": "Close the current test.",
+      "required": [
+        "command",
+        "status",
+        "description"
+      ],
+      "properties": {
+        "command": {
+          "const": "close-test"
+        },
+        "status": {
+          "$ref": "#/definitions/status"
+        },
+        "description": {
+          "$ref": "#/definitions/message"
+        }
+      }
+    },
+    "close-group": {
+      "type": "object",
+      "description": "Close the current context. Accepted iff all testcases are accepted, but you can overwrite this.",
+      "required": [
+        "command"
+      ],
+      "properties": {
+        "command": {
+          "const": "close-context"
+        },
+        "summary": {
+          "$ref": "#/definitions/message",
+          "description": "Optional summary. If added and correct, the group should only show the summary."
+        },
+        "visibility": {
+          "type": "string",
+          "enum": [
+            "show",
+            "collapse"
+          ]
+        }
+      }
+    },
+    "close-judgement": {
+      "type": "object",
+      "description": "Close the current judgement.",
+      "required": [
+        "command"
+      ],
+      "properties": {
+        "command": {
+          "const": "close-judgement"
+        },
+        "status": {
+          "$ref": "#/definitions/status"
+        }
+      }
+    },
+    "message": {
+      "type": [
+        "string",
+        "object"
+      ],
+      "description": "Possibly formatted string as a message to (some) users.",
+      "required": [
+        "format",
+        "description"
+      ],
+      "properties": {
+        "format": {
+          "$ref": "#/definitions/format"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "format": {
+      "type": "string",
+      "enum": [
+        "html",
+        "text"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "internal error",
+        "time limit exceeded",
+        "testplan error",
+        "wrong",
+        "correct"
+      ]
+    }
+  }
+}
