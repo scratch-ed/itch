@@ -5,6 +5,7 @@ class Processor {
   constructor(element) {
     this.stack = [];
     this.element = element;
+    this.groupStack = [];
   }
 
   process(message) {
@@ -26,61 +27,44 @@ class Processor {
       this.stack.push(message);
     }
 
-    if (command === 'start-tab') {
-      this.output(`<h2>${message.title || 'Tabblad'}</h2>`);
-    } else if (command === 'start-context') {
-      this.output(`<h3>${message.description || 'Context'}</h3>`);
-    } else if (command === 'start-testcase') {
-      this.case = message.description;
-      this.caseTests = [];
-    } else if (command === 'start-test') {
+    if (command === 'start-group') {
+      // Start a new group.
+      const details = document.createElement('details');
+      details.open = message.visibility === 'show';
+      const summary = document.createElement('summary');
+      summary.innerHTML = `<strong>${message.name}</strong>`;
+      details.appendChild(summary);
+      this.element.appendChild(details);
+      this.groupStack.push(this.element);
+      this.element = details;
+    }
+
+    if (command === 'close-group') {
+      if (message.description) {
+        const summary = this.element.querySelector('summary');
+        summary.innerHTML += '<br>';
+        summary.innerHTML += message.description;
+      }
+      this.element = this.groupStack.pop();
+    }
+
+    if (command === 'start-test') {
       this.currentTest = message;
-    } else if (command === 'close-test') {
-      const expected = this.currentTest;
-      const actual = message.generated;
-      const status = message.status.enum;
-      this.caseTests.push({
-        expected: expected,
-        actual: actual,
-        status: status,
-      });
-    } else if (command === 'close-testcase') {
-      const content = this.caseTests.map((test) => {
-        return `${test.status === 'correct' ? '✅' : '❌'} Expected ${
-          test.expected.expected
-        }, got: ${test.actual}`;
-      });
-      const merged = content.join('\n');
-      const allCorrect = this.caseTests.every((test) => test.status === 'correct');
-      this.output(
-        `<span title="${this.case}\n${merged}">${allCorrect ? '✅' : '❌'}</span><br>`,
-      );
-    } else if (command.startsWith('close')) {
+    }
+
+    if (command === 'close-test') {
+      this.element.innerHTML += `<span title='${this.currentTest.name}'>${
+        message.sattus === 'correct' ? '✅' : '❌'
+      } ${message.description}</span><br>`;
+    }
+
+    if (command.startsWith('close')) {
       this.stack.pop();
     } else if (command === 'append-message') {
-      this.output(`Message: ${message.message}`);
+      this.element.innerHTML += `Message: ${message.message}`;
     } else if (command === 'escalate-status') {
-      this.output(
-        `<br><strong>ESCALATION</strong>: status is now ${message.status.enum} (${message.status.human})`,
-      );
+      this.element.innerHTML += `<br><strong>ESCALATION</strong>: status is now ${message.status}`;
     }
-  }
-
-  output(res) {
-    this.element.innerHTML += this.prepareHtml(res);
-  }
-
-  info(res) {
-    this.element.innerHTML += this.prepareHtml(res);
-  }
-
-  error(res) {
-    this.element.innerHTML += this.prepareHtml(res);
-  }
-
-  /** @param {string} html */
-  prepareHtml(html) {
-    return html;
   }
 }
 

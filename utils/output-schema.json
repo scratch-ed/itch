@@ -64,6 +64,11 @@
         "sprite": {
           "type": "string",
           "description": "Optionally link this group to a certain sprite."
+        },
+        "visibility": {
+          "type": "string",
+          "enum": ["show", "collapse"],
+          "description": "Default visibility. If the group contains an error, it should be shown, regardless of this value."
         }
       }
     },
@@ -150,10 +155,6 @@
         "summary": {
           "$ref": "#/definitions/message",
           "description": "Optional summary. If added and correct, the group should only show the summary."
-        },
-        "visibility": {
-          "type": "string",
-          "enum": ["show", "collapse"]
         }
       }
     },

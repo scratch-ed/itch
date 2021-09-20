@@ -172,7 +172,6 @@ class TestOptions {
 export interface GroupOptions {
   sprite?: string;
   summary?: string;
-  visibility?: Visibility | 'show' | 'collapse';
 }
 
 export interface SpriteGroupOptions extends GroupOptions {
@@ -242,11 +241,8 @@ export class GroupLevel {
       spriteOrBlock = {};
     }
 
-    this.resultManager.startGroup(name, spriteOrBlock.sprite);
+    this.resultManager.startGroup(name, Visibility.Show, spriteOrBlock.sprite);
     block!();
-    this.resultManager.closeGroup(
-      spriteOrBlock.summary,
-      spriteOrBlock?.visibility as Visibility,
-    );
+    this.resultManager.closeGroup(spriteOrBlock.summary);
   }
 }
