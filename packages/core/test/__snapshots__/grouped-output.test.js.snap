@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`normal usage 1`] = `
+Array [
+  Object {
+    "command": "start-judgement",
+    "version": 2,
+  },
+  Object {
+    "command": "start-group",
+    "name": "Groep 1",
+    "sprite": "test-sprite",
+  },
+  Object {
+    "command": "start-test",
+    "name": "Hallo one test...",
+  },
+  Object {
+    "command": "append-message",
+    "message": "Hallo",
+  },
+  Object {
+    "actual": "actual",
+    "command": "append-diff",
+    "expected": "expected",
+  },
+  Object {
+    "command": "close-test",
+    "description": "Wrong",
+    "status": "wrong",
+  },
+  Object {
+    "command": "close-group",
+    "summary": "A nice summary",
+    "visibility": "show",
+  },
+  Object {
+    "command": "close-judgement",
+  },
+]
+`;
