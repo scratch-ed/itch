@@ -16,11 +16,10 @@ import {
   OneHatAllowedTest,
   TabLevel,
 } from './testplan';
-import { OutputHandler, ResultManager } from './output';
-// import { distSq } from './lines.js';
-
+import { ResultManager } from './output';
 import type VirtualMachine from '@ftrprf/judge-scratch-vm-types';
 import { angle, distSq, mergeLines } from './lines';
+import { GroupedResultManager, OutputHandler } from './grouped-output';
 import { initialiseTranslations, LanguageData, t } from './i18n';
 
 declare global {
@@ -156,7 +155,7 @@ export class Evaluation extends TabLevel {
   context: Context;
 
   constructor(context: Context) {
-    super(context.output);
+    super(context.groupedOutput);
     this.context = context;
     /**
      * Used to track the stage internally.
@@ -195,11 +194,13 @@ export class Evaluation extends TabLevel {
     this.context.answers = answers;
   }
 
-  /**
-   * Get the output manager.
-   */
+  /** @deprecated */
   get output(): ResultManager {
-    return this.context.output;
+    return new ResultManager(this.context.groupedOutput);
+  }
+
+  get groupedOutput(): GroupedResultManager {
+    return this.context.groupedOutput;
   }
 
   /**
@@ -345,7 +346,7 @@ export async function run(config: EvalConfig): Promise<void> {
   const duringExecution = window.duringExecution || ((e) => e.scheduler.end());
   const afterExecution = window.afterExecution || (() => {});
 
-  context.output.startJudgement();
+  context.groupedOutput.startJudgement();
 
   const judge = new Evaluation(context);
   judge.stage = EvaluationStage.before;
@@ -383,7 +384,7 @@ export async function run(config: EvalConfig): Promise<void> {
     }
   }
 
-  context.output.closeJudgement();
+  context.groupedOutput.closeJudgement();
   seed.resetGlobal();
   console.log('--- END OF EVALUATION ---');
 }

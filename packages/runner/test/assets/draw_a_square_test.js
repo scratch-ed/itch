@@ -15,8 +15,8 @@ function afterExecution(e) {
   });
 
   if (squares.length === 0) {
-    e.output.escalateStatus({ human: 'Verkeerd', enum: 'wrong' });
-    e.output.closeJudgement(false);
+    e.groupedOutput.escalateStatus('wrong');
+    e.groupedOutput.closeJudgement();
     return;
   }
 

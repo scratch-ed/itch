@@ -1,6 +1,5 @@
 import { GroupLevel } from '../src/hierarchy';
 import { GroupedResultManager } from '../src/grouped-output';
-import { ResultManager } from '../src/output';
 import { TabLevel } from '../src/testplan';
 
 test('new flow works', () => {

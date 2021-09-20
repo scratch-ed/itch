@@ -217,12 +217,12 @@ export class GroupedResultManager {
     this.out({ command: 'append-diff', expected: expected, actual: actual });
   }
 
-  escalateStatus(status: Status): void {
+  escalateStatus(status: Status | string): void {
     if (!this.hasOpenJudgement) {
       console.warn('Attempting to escalate status of closed judgement. Ignoring.');
       return;
     }
-    this.escalation = status;
+    this.escalation = status as Status;
     this.out({ command: 'escalate-status', status: status });
   }
 

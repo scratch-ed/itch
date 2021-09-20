@@ -13,6 +13,7 @@ import { Context } from '../context';
 import { SetVariableAction } from './variable';
 
 import type Target from '@ftrprf/judge-scratch-vm-types/types/engine/target';
+import { Status } from '../grouped-output';
 
 class InitialAction extends CallbackAction {
   constructor() {
@@ -218,23 +219,17 @@ export class ScheduledEvent {
           // escalate the status and stop the judgement.
           if (escalate) {
             console.warn(reason);
-            context.output.escalateStatus({
-              human: 'Tijdslimiet overschreden',
-              enum: 'time limit exceeded',
-            });
-            context.output.closeJudgement(false);
+            context.groupedOutput.escalateStatus(Status.TimeLimit);
+            context.groupedOutput.closeJudgement();
           }
         } else if (reason instanceof FatalErrorException) {
           console.warn('Fatal test failed, stopping execution of all tests.');
-          context.output.closeJudgement(false);
+          context.groupedOutput.closeJudgement();
         } else {
           console.error('Unexpected error:', reason);
-          context.output.escalateStatus({
-            human: 'Fout bij uitvoeren testplan.',
-            enum: 'runtime error',
-          });
-          context.output.appendMessage(reason);
-          context.output.closeJudgement(false);
+          context.groupedOutput.escalateStatus(Status.Runtime);
+          context.groupedOutput.appendMessage(reason);
+          context.groupedOutput.closeJudgement();
         }
 
         // Finish executing, ensuring we stop.
@@ -632,20 +627,14 @@ export class ScheduledEvent {
     };
 
     this.resolved((context) => {
-      context.output.startTest(true);
+      context.groupedOutput.startTest();
       const message = wrapped.correct();
-      if (message) {
-        context.output.appendMessage(message);
-      }
-      context.output.closeTest(true, true);
+      context.groupedOutput.closeTest(Status.Correct, message);
     });
     this.timedOut((context) => {
-      context.output.startTest(true);
+      context.groupedOutput.startTest();
       const message = wrapped.wrong();
-      if (message) {
-        context.output.appendMessage(message);
-      }
-      context.output.closeTest(false, false);
+      context.groupedOutput.closeTest(Status.Wrong, message);
       return true;
     });
 
