@@ -37,10 +37,7 @@
     "start-judgement": {
       "type": "object",
       "description": "Start a new judgement.",
-      "required": [
-        "command",
-        "version"
-      ],
+      "required": ["command", "version"],
       "properties": {
         "command": {
           "const": "start-judgement"
@@ -55,10 +52,7 @@
     "start-group": {
       "type": "object",
       "description": "Start a new group in the output.",
-      "required": [
-        "command",
-        "name"
-      ],
+      "required": ["command", "name"],
       "properties": {
         "command": {
           "const": "start-group"
@@ -76,10 +70,7 @@
     "start-test": {
       "type": "object",
       "description": "A new test",
-      "required": [
-        "command",
-        "name"
-      ],
+      "required": ["command", "name"],
       "properties": {
         "command": {
           "const": "start-test"
@@ -93,10 +84,7 @@
     "append-message": {
       "type": "object",
       "description": "Append a message to the open object.",
-      "required": [
-        "command",
-        "message"
-      ],
+      "required": ["command", "message"],
       "properties": {
         "command": {
           "const": "append-message"
@@ -109,11 +97,7 @@
     "append-diff": {
       "type": "object",
       "description": "Append a diff to the open object.",
-      "required": [
-        "command",
-        "expected",
-        "actual"
-      ],
+      "required": ["command", "expected", "actual"],
       "properties": {
         "command": {
           "const": "append-diff"
@@ -129,10 +113,7 @@
     "escalate-status": {
       "type": "object",
       "description": "Change the global status for the worse.",
-      "required": [
-        "command",
-        "status"
-      ],
+      "required": ["command", "status"],
       "properties": {
         "command": {
           "const": "escalate-status"
@@ -145,11 +126,7 @@
     "close-test": {
       "type": "object",
       "description": "Close the current test.",
-      "required": [
-        "command",
-        "status",
-        "description"
-      ],
+      "required": ["command", "status", "description"],
       "properties": {
         "command": {
           "const": "close-test"
@@ -165,9 +142,7 @@
     "close-group": {
       "type": "object",
       "description": "Close the current context. Accepted iff all testcases are accepted, but you can overwrite this.",
-      "required": [
-        "command"
-      ],
+      "required": ["command"],
       "properties": {
         "command": {
           "const": "close-context"
@@ -178,19 +153,14 @@
         },
         "visibility": {
           "type": "string",
-          "enum": [
-            "show",
-            "collapse"
-          ]
+          "enum": ["show", "collapse"]
         }
       }
     },
     "close-judgement": {
       "type": "object",
       "description": "Close the current judgement.",
-      "required": [
-        "command"
-      ],
+      "required": ["command"],
       "properties": {
         "command": {
           "const": "close-judgement"
@@ -201,15 +171,9 @@
       }
     },
     "message": {
-      "type": [
-        "string",
-        "object"
-      ],
+      "type": ["string", "object"],
       "description": "Possibly formatted string as a message to (some) users.",
-      "required": [
-        "format",
-        "description"
-      ],
+      "required": ["format", "description"],
       "properties": {
         "format": {
           "$ref": "#/definitions/format"
@@ -221,10 +185,7 @@
     },
     "format": {
       "type": "string",
-      "enum": [
-        "html",
-        "text"
-      ]
+      "enum": ["html", "text"]
     },
     "status": {
       "type": "string",

@@ -23,9 +23,8 @@
  * 4. The `tab` groups a bunch of `describe` statements. These are mainly for UI purposes.
  */
 import isEqual from 'lodash-es/isEqual';
-import { CORRECT, WRONG } from './output';
+import { CORRECT, ResultManager, WRONG } from './output';
 import { castCallback, MessageData, numericEquals } from './utils';
-import { Context } from './context';
 import { Project } from './project';
 import { Evaluation } from './evaluation';
 import { Sb3Block, Sb3Target } from './structures';
@@ -39,14 +38,14 @@ import { t } from './i18n';
 export class FatalErrorException extends Error {}
 
 class GenericMatcher {
-  context: Context;
+  context: ResultManager;
   actual: unknown;
   errorMessage?: (expected: unknown, actual: unknown) => string;
   successMessage?: (expected: unknown, actual: unknown) => string;
   terminate = false;
   expected: unknown;
 
-  constructor(context: Context, actual: unknown) {
+  constructor(context: ResultManager, actual: unknown) {
     this.context = context;
     this.actual = actual;
   }
@@ -59,7 +58,7 @@ class GenericMatcher {
    * @param [successMessage] - Optional success message.
    */
   private out(accepted: boolean, errorMessage?: string, successMessage?: string) {
-    this.context.output.startTest(this.expected);
+    this.context.startTest(this.expected);
     const status = accepted ? CORRECT : WRONG;
 
     if (accepted) {
@@ -67,18 +66,18 @@ class GenericMatcher {
         ? this.successMessage(this.expected, this.actual)
         : successMessage;
       if (message) {
-        this.context.output.appendMessage(message);
+        this.context.appendMessage(message);
       }
     } else {
       const message = this.errorMessage
         ? this.errorMessage(this.expected, this.actual)
         : errorMessage;
       if (message) {
-        this.context.output.appendMessage(message);
+        this.context.appendMessage(message);
       }
     }
 
-    this.context.output.closeTest(this.actual, accepted, status);
+    this.context.closeTest(this.actual, accepted, status);
 
     if (!accepted && this.terminate) {
       throw new FatalErrorException();
@@ -173,9 +172,9 @@ class GenericMatcher {
 }
 
 class ExpectLevel {
-  context: Context;
+  context: ResultManager;
 
-  constructor(context: Context) {
+  constructor(context: ResultManager) {
     this.context = context;
   }
 
@@ -190,16 +189,16 @@ class ExpectLevel {
    * Add a test that will always be accepted.
    */
   accept(): void {
-    this.context.output.startTest(true);
-    this.context.output.closeTest(true, true);
+    this.context.startTest(true);
+    this.context.closeTest(true, true);
   }
 }
 
 class TestLevel {
-  context: Context;
+  resultManager: ResultManager;
 
-  constructor(context: Context) {
-    this.context = context;
+  constructor(context: ResultManager) {
+    this.resultManager = context;
   }
 
   /**
@@ -220,9 +219,9 @@ class TestLevel {
    * This level results in a `testcase` in the output format.
    */
   test(name: string, block: (out: ExpectLevel) => void) {
-    this.context.output.startTestcase(name);
-    block(new ExpectLevel(this.context));
-    this.context.output.closeTestcase();
+    this.resultManager.startTestcase(name);
+    block(new ExpectLevel(this.resultManager));
+    this.resultManager.closeTestcase();
   }
 }
 
@@ -236,9 +235,9 @@ class DescribeLevel extends TestLevel {
    * @param block - The function if a name is passed.
    */
   describe(name: string, block: (out: TestLevel) => void) {
-    this.context.output.startContext(name);
+    this.resultManager.startContext(name);
     block(this);
-    this.context.output.closeContext();
+    this.resultManager.closeContext();
   }
 }
 
@@ -249,9 +248,9 @@ export class TabLevel extends DescribeLevel {
    * This level results in a `tab` in the output format.
    */
   tab(name: string, block: (out: DescribeLevel) => void): void {
-    this.context.output.startTab(name);
+    this.resultManager.startTab(name);
     block(this);
-    this.context.output.closeTab();
+    this.resultManager.closeTab();
   }
 }
 

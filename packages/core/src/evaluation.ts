@@ -153,9 +153,11 @@ enum EvaluationStage {
  */
 export class Evaluation extends TabLevel {
   public stage: EvaluationStage;
+  context: Context;
 
   constructor(context: Context) {
-    super(context);
+    super(context.output);
+    this.context = context;
     /**
      * Used to track the stage internally.
      * @type {number}

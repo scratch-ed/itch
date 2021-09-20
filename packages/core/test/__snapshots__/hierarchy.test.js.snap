@@ -37,3 +37,53 @@ Array [
   },
 ]
 `;
+
+exports[`old flow works 1`] = `
+Array [
+  Object {
+    "command": "start-judgement",
+  },
+  Object {
+    "command": "start-tab",
+    "hidden": undefined,
+    "title": "Groep 1",
+  },
+  Object {
+    "command": "start-context",
+    "description": "Groep 2",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Test 1",
+  },
+  Object {
+    "command": "start-test",
+    "description": undefined,
+    "expected": "\\"Hallo\\"",
+  },
+  Object {
+    "command": "append-message",
+    "message": "No correct at all!",
+  },
+  Object {
+    "accepted": false,
+    "command": "close-test",
+    "generated": "\\"No\\"",
+    "status": Object {
+      "enum": "wrong",
+      "human": "Wrong",
+    },
+  },
+  Object {
+    "accepted": undefined,
+    "command": "close-testcase",
+  },
+  Object {
+    "accepted": undefined,
+    "command": "close-context",
+  },
+  Object {
+    "command": "close-tab",
+  },
+]
+`;

@@ -169,7 +169,17 @@ class TestOptions {
   }
 }
 
-class ExpectLevel {
+export interface GroupOptions {
+  sprite?: string;
+  summary?: string;
+  visibility?: Visibility | 'show' | 'collapse';
+}
+
+export interface SpriteGroupOptions extends GroupOptions {
+  sprite: string;
+}
+
+export class GroupLevel {
   constructor(protected readonly resultManager: GroupedResultManager) {}
 
   /**
@@ -185,19 +195,7 @@ class ExpectLevel {
 
     return new TestOptions(this.resultManager);
   }
-}
 
-export interface GroupOptions {
-  sprite?: string;
-  summary?: string;
-  visibility?: Visibility | 'show' | 'collapse';
-}
-
-export interface SpriteGroupOptions extends GroupOptions {
-  sprite: string;
-}
-
-export class GroupLevel extends ExpectLevel {
   /**
    * Groups a bunch of related tests.
    *
