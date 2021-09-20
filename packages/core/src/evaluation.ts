@@ -16,7 +16,7 @@ import {
   OneHatAllowedTest,
   TabLevel,
 } from './testplan';
-import { ResultManager } from './output';
+import { OutputHandler, ResultManager } from './output';
 // import { distSq } from './lines.js';
 
 import type VirtualMachine from '@ftrprf/judge-scratch-vm-types';
@@ -51,6 +51,33 @@ declare global {
 }
 
 const object: Window = window;
+
+interface ModuleTestplanSource {
+  url: string;
+}
+
+interface StringTestplanSource {
+  data: string;
+}
+
+/**
+ * Allows importing a testplan as an ES6 module.
+ * The provided url will be dynamically imported by the judge.
+ *
+ * Note that while the module must be ES6, and export the 3 required functions,
+ * the testplan itself is not allowed to import additional modules; it must be
+ * without dependencies.
+ *
+ * A module must export three functions:
+ *
+ * - `beforeExecution`, see BeforeExecution
+ * - `duringExecution`, see DuringExecution
+ * - `afterExecution`, see AfterExecution
+ *
+ * If passing a string with code, the string will be base64'd and imported as
+ * a data uri.
+ */
+type TestplanSource = ModuleTestplanSource | StringTestplanSource;
 
 /**
  * Expose the some API in the global namespace.
@@ -88,6 +115,18 @@ export interface EvalConfig {
    * The canvas for the renderer.
    */
   canvas: HTMLCanvasElement;
+  /**
+   * Pass the testplan to the judge. This is possible in two ways:
+   *
+   * - A string, which is equivalent to the module system.
+   * - An object, see the object docs for details.
+   */
+  testplan: string | TestplanSource;
+  /**
+   * Optional callback for the results of the judge. This function will
+   * be called each time a result is available.
+   */
+  callback?: OutputHandler;
   /**
    * The language of the exercise.
    */
@@ -297,7 +336,7 @@ export async function run(config: EvalConfig): Promise<void> {
   // Set language from parameters.
   initialiseTranslations(config.language as 'nl' | 'en', config.translations);
 
-  const context = new Context();
+  const context = new Context(config.callback);
   const templateJson = await context.getProjectJson(config);
   const submissionJson = await context.prepareVm(config);
   const beforeExecution = window.beforeExecution || (() => {});

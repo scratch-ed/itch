@@ -9,7 +9,7 @@ import type Runtime from '@ftrprf/judge-scratch-vm-types/types/engine/runtime';
 import { Log, LogEvent, LogFrame } from './log';
 import { Deferred } from './deferred';
 import { makeProxiedRenderer } from './renderer';
-import { ResultManager, WRONG } from './output';
+import { OutputHandler, ResultManager, WRONG } from './output';
 import { ScheduledEvent } from './scheduler/scheduled-event';
 import { EndAction } from './scheduler/end';
 import { BroadcastReceiver, ThreadListener } from './listener';
@@ -173,7 +173,7 @@ export class Context {
    */
   accelerationFactor: Acceleration;
 
-  constructor() {
+  constructor(callback?: OutputHandler) {
     this.startTime = Date.now();
     this.numberOfRun = 0;
     this.log = new Log();
@@ -185,7 +185,7 @@ export class Context {
     this.threadListeners = [];
     this.broadcastListeners = [];
     this.event = ScheduledEvent.create();
-    this.output = new ResultManager();
+    this.output = new ResultManager(callback);
     this.advancedProfiler = new AdvancedProfiler();
     this.accelerationFactor = {
       factor: 1,
@@ -442,7 +442,7 @@ export class Context {
    * Create a context with a fully prepared VM.
    */
   static async create(config: EvalConfig): Promise<Context> {
-    const context = new Context();
+    const context = new Context(config.callback);
     await context.prepareVm(config);
     return context;
   }

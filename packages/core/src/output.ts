@@ -13,6 +13,16 @@ function toOutput(output: Record<string, unknown>): void {
   }
 }
 
+/**
+ * Interface for an output handler. Each time output is available,
+ * the function will be called with the given output.
+ *
+ * A default implementation is available as `toOutput`.
+ */
+export interface OutputHandler {
+  (obj: Record<string, unknown>): void;
+}
+
 interface Status {
   human: string;
   enum: 'time limit exceeded' | 'runtime error' | 'wrong' | 'correct';
@@ -43,22 +53,16 @@ export const WRONG: Status = { enum: 'wrong', human: 'Wrong' };
  * as the result manager has no way of knowing if the test is successful or not.
  */
 export class ResultManager {
-  out: (obj: Record<string, unknown>) => void;
-  hasOpenJudgement: boolean;
-  hasOpenTab: boolean;
-  hasOpenContext: boolean;
-  hasOpenCase: boolean;
-  hasOpenTest: boolean;
-  isFinished: boolean;
+  private readonly out: OutputHandler;
+  private hasOpenJudgement = false;
+  private hasOpenTab = false;
+  private hasOpenContext = false;
+  private hasOpenCase = false;
+  private hasOpenTest = false;
+  private isFinished = false;
 
-  constructor() {
-    this.out = toOutput;
-    this.hasOpenJudgement = false;
-    this.hasOpenTab = false;
-    this.hasOpenContext = false;
-    this.hasOpenCase = false;
-    this.hasOpenTest = false;
-    this.isFinished = false;
+  constructor(out: OutputHandler = toOutput) {
+    this.out = out;
   }
 
   /**
