@@ -25,7 +25,7 @@ test('new flow works', () => {
 
 test('old flow works', () => {
   const results = [];
-  const output = new ResultManager((r) => results.push(r));
+  const output = new GroupedResultManager((r) => results.push(r));
   const g = new TabLevel(output);
 
   g.tab('Groep 1', (l) => {
@@ -46,7 +46,7 @@ test('old flow works', () => {
 
 test('old flow is equivalent to new flow', () => {
   const oldResults = [];
-  const output = new ResultManager((r) => oldResults.push(r));
+  const output = new GroupedResultManager((r) => oldResults.push(r));
   const t = new TabLevel(output);
 
   t.tab('Groep 1', (l) => {
@@ -66,7 +66,7 @@ test('old flow is equivalent to new flow', () => {
   const newOutput = new GroupedResultManager((r) => newResults.push(r));
   const g = new GroupLevel(newOutput);
 
-  g.group('Groep 1', { sprite: 'Test', visibility: 'show' }, () => {
+  g.group('Groep 1', () => {
     g.group('Groep 2', () => {
       g.test('Test 1')
         .feedback({
@@ -79,5 +79,5 @@ test('old flow is equivalent to new flow', () => {
     });
   });
 
-  expect(oldResults).toBe(newResults);
+  expect(oldResults).toStrictEqual(newResults);
 });

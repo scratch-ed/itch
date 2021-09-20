@@ -42,48 +42,41 @@ exports[`old flow works 1`] = `
 Array [
   Object {
     "command": "start-judgement",
+    "version": 2,
   },
   Object {
-    "command": "start-tab",
-    "hidden": undefined,
-    "title": "Groep 1",
+    "command": "start-group",
+    "name": "Groep 1",
+    "sprite": undefined,
   },
   Object {
-    "command": "start-context",
-    "description": "Groep 2",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "Test 1",
+    "command": "start-group",
+    "name": "Groep 2",
+    "sprite": undefined,
   },
   Object {
     "command": "start-test",
-    "description": undefined,
-    "expected": "\\"Hallo\\"",
+    "name": "Test 1",
   },
   Object {
-    "command": "append-message",
-    "message": "No correct at all!",
+    "actual": "No",
+    "command": "append-diff",
+    "expected": "Hallo",
   },
   Object {
-    "accepted": false,
     "command": "close-test",
-    "generated": "\\"No\\"",
-    "status": Object {
-      "enum": "wrong",
-      "human": "Wrong",
-    },
+    "description": "No correct at all!",
+    "status": "wrong",
   },
   Object {
-    "accepted": undefined,
-    "command": "close-testcase",
+    "command": "close-group",
+    "summary": undefined,
+    "visibility": "show",
   },
   Object {
-    "accepted": undefined,
-    "command": "close-context",
-  },
-  Object {
-    "command": "close-tab",
+    "command": "close-group",
+    "summary": undefined,
+    "visibility": "show",
   },
 ]
 `;

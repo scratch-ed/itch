@@ -23,8 +23,7 @@
  * 4. The `tab` groups a bunch of `describe` statements. These are mainly for UI purposes.
  */
 import isEqual from 'lodash-es/isEqual';
-import { CORRECT, ResultManager, WRONG } from './output';
-import { castCallback, MessageData, numericEquals } from './utils';
+import { castCallback, MessageData, numericEquals, stringify } from './utils';
 import { Project } from './project';
 import { Evaluation } from './evaluation';
 import { Sb3Block, Sb3Target } from './structures';
@@ -33,21 +32,24 @@ import type VirtualMachine from '@ftrprf/judge-scratch-vm-types';
 import type BlockUtility from '@ftrprf/judge-scratch-vm-types/types/engine/block-utility';
 import { LoggedSprite } from './log';
 import { cloneDeep } from 'lodash-es';
+import { GroupedResultManager, Status } from './grouped-output';
 import { t } from './i18n';
 
 export class FatalErrorException extends Error {}
 
 class GenericMatcher {
-  context: ResultManager;
-  actual: unknown;
+  private readonly resultManager: GroupedResultManager;
+  private readonly actual: unknown;
+  private readonly name: string;
   errorMessage?: (expected: unknown, actual: unknown) => string;
   successMessage?: (expected: unknown, actual: unknown) => string;
   terminate = false;
   expected: unknown;
 
-  constructor(context: ResultManager, actual: unknown) {
-    this.context = context;
+  constructor(resultManager: GroupedResultManager, actual: unknown, name: string) {
+    this.resultManager = resultManager;
     this.actual = actual;
+    this.name = name;
   }
 
   /**
@@ -58,26 +60,28 @@ class GenericMatcher {
    * @param [successMessage] - Optional success message.
    */
   private out(accepted: boolean, errorMessage?: string, successMessage?: string) {
-    this.context.startTest(this.expected);
-    const status = accepted ? CORRECT : WRONG;
+    this.resultManager.startTest(this.name);
+    this.resultManager.appendDiff(stringify(this.expected), stringify(this.actual));
+    const status = accepted ? Status.Correct : Status.Wrong;
 
+    let description;
     if (accepted) {
       const message = this.successMessage
         ? this.successMessage(this.expected, this.actual)
         : successMessage;
       if (message) {
-        this.context.appendMessage(message);
+        description = message;
       }
     } else {
       const message = this.errorMessage
         ? this.errorMessage(this.expected, this.actual)
         : errorMessage;
       if (message) {
-        this.context.appendMessage(message);
+        description = message;
       }
     }
 
-    this.context.closeTest(this.actual, accepted, status);
+    this.resultManager.closeTest(status, description);
 
     if (!accepted && this.terminate) {
       throw new FatalErrorException();
@@ -172,34 +176,29 @@ class GenericMatcher {
 }
 
 class ExpectLevel {
-  context: ResultManager;
-
-  constructor(context: ResultManager) {
-    this.context = context;
-  }
+  constructor(
+    private readonly resultManager: GroupedResultManager,
+    private readonly name: string,
+  ) {}
 
   /**
    * Start an assertion be providing a value.
    */
   expect(value: unknown): GenericMatcher {
-    return new GenericMatcher(this.context, value);
+    return new GenericMatcher(this.resultManager, value, this.name);
   }
 
   /**
    * Add a test that will always be accepted.
    */
   accept(): void {
-    this.context.startTest(true);
-    this.context.closeTest(true, true);
+    this.resultManager.startTest(this.name);
+    this.resultManager.closeTest(Status.Correct);
   }
 }
 
 class TestLevel {
-  resultManager: ResultManager;
-
-  constructor(context: ResultManager) {
-    this.resultManager = context;
-  }
+  constructor(protected readonly resultManager: GroupedResultManager) {}
 
   /**
    * Check some properties as part of the same test.
@@ -219,9 +218,7 @@ class TestLevel {
    * This level results in a `testcase` in the output format.
    */
   test(name: string, block: (out: ExpectLevel) => void) {
-    this.resultManager.startTestcase(name);
-    block(new ExpectLevel(this.resultManager));
-    this.resultManager.closeTestcase();
+    block(new ExpectLevel(this.resultManager, name));
   }
 }
 
@@ -235,9 +232,9 @@ class DescribeLevel extends TestLevel {
    * @param block - The function if a name is passed.
    */
   describe(name: string, block: (out: TestLevel) => void) {
-    this.resultManager.startContext(name);
+    this.resultManager.startGroup(name);
     block(this);
-    this.resultManager.closeContext();
+    this.resultManager.closeGroup();
   }
 }
 
@@ -248,9 +245,9 @@ export class TabLevel extends DescribeLevel {
    * This level results in a `tab` in the output format.
    */
   tab(name: string, block: (out: DescribeLevel) => void): void {
-    this.resultManager.startTab(name);
+    this.resultManager.startGroup(name);
     block(this);
-    this.resultManager.closeTab();
+    this.resultManager.closeGroup();
   }
 }
 
