@@ -54,7 +54,7 @@ class Processor {
 
     if (command === 'close-test') {
       this.element.innerHTML += `<span title='${this.currentTest.name}'>${
-        message.sattus === 'correct' ? '✅' : '❌'
+        message.status === 'correct' ? '✅' : '❌'
       } ${message.description}</span><br>`;
     }
 
