@@ -37,6 +37,7 @@ import { t } from './i18n';
 
 export class FatalErrorException extends Error {}
 
+/** @deprecated */
 class GenericMatcher {
   private readonly resultManager: GroupedResultManager;
   private readonly actual: unknown;
@@ -88,10 +89,7 @@ class GenericMatcher {
     }
   }
 
-  /**
-   * Allows setting an error message.
-   * @deprecated
-   */
+  /** @deprecated */
   withError(
     message: string | ((expected: unknown, actual: unknown) => string),
   ): GenericMatcher {
@@ -99,37 +97,20 @@ class GenericMatcher {
     return this;
   }
 
-  /**
-   * Provide custom messages as output.
-   */
+  /** @deprecated */
   with(messages: MessageData): GenericMatcher {
     this.successMessage = castCallback(messages.correct);
     this.errorMessage = castCallback(messages.wrong);
     return this;
   }
 
-  /**
-   * Mark this test as fatal: if it fails, the testplan will stop.
-   */
+  /** @deprecated */
   fatal(): GenericMatcher {
     this.terminate = true;
     return this;
   }
 
-  /**
-   * Compares two values for equality.
-   *
-   * Most types of objects should be supported:
-   *
-   * - If both values are numbers, `numericEquals` is used, which supports floats.
-   * - Otherwise, the `isEqual` function from lodash is used. Quoting their docs:
-   *
-   *   > This method supports comparing arrays, array buffers, booleans,
-   *   > date objects, error objects, maps, numbers, `Object` objects, regexes,
-   *   > sets, strings, symbols, and typed arrays. `Object` objects are compared
-   *   > by their own, not inherited, enumerable properties. Functions and DOM
-   *   > nodes are **not** supported.
-   */
+  /** @deprecated */
   toBe(expected: unknown): void {
     this.expected = expected;
     if (typeof this.actual === 'number' && typeof expected === 'number') {
@@ -145,20 +126,7 @@ class GenericMatcher {
     }
   }
 
-  /**
-   * Compares two values for equality.
-   *
-   * Most types of objects should be supported:
-   *
-   * - If both values are numbers, `numericEquals` is used, which supports floats.
-   * - Otherwise, the `isEqual` function from lodash is used. Quoting their docs:
-   *
-   *   > This method supports comparing arrays, array buffers, booleans,
-   *   > date objects, error objects, maps, numbers, `Object` objects, regexes,
-   *   > sets, strings, symbols, and typed arrays. `Object` objects are compared
-   *   > by their own, not inherited, enumerable properties. Functions and DOM
-   *   > nodes are **not** supported.
-   */
+  /** @deprecated */
   toNotBe(expected: unknown): void {
     this.expected = expected;
     if (typeof this.actual === 'number' && typeof expected === 'number') {
@@ -175,22 +143,19 @@ class GenericMatcher {
   }
 }
 
+/** @deprecated */
 class ExpectLevel {
   constructor(
     private readonly resultManager: GroupedResultManager,
     private readonly name: string,
   ) {}
 
-  /**
-   * Start an assertion be providing a value.
-   */
+  /** @deprecated */
   expect(value: unknown): GenericMatcher {
     return new GenericMatcher(this.resultManager, value, this.name);
   }
 
-  /**
-   * Add a test that will always be accepted.
-   */
+  /** @deprecated */
   accept(): void {
     this.resultManager.startTest(this.name);
     this.resultManager.closeTest(Status.Correct);
@@ -200,37 +165,14 @@ class ExpectLevel {
 class TestLevel {
   constructor(protected readonly resultManager: GroupedResultManager) {}
 
-  /**
-   * Check some properties as part of the same test.
-   *
-   * ### Test vs expect
-   *
-   * A good guideline to decide whether testing multiple properties
-   * should happen in the same file or not: if it needs a name, it should
-   * be a separate test.
-   *
-   * For example, if you are testing that a sprite moves down when pressing a key,
-   * you might have one test, with two properties: one for x and one for y.
-   *
-   * On the other hand, you might want to have multiple tests: one for the position,
-   * one for the orientation, etc.
-   *
-   * This level results in a `testcase` in the output format.
-   */
+  /** @deprecated */
   test(name: string, block: (out: ExpectLevel) => void) {
     block(new ExpectLevel(this.resultManager, name));
   }
 }
 
 class DescribeLevel extends TestLevel {
-  /**
-   * Groups a bunch of related tests.
-   *
-   * This level results in a `context` in the output format.
-   *
-   * @param name - Either the name or the function.
-   * @param block - The function if a name is passed.
-   */
+  /** @deprecated */
   describe(name: string, block: (out: TestLevel) => void) {
     this.resultManager.startGroup(name);
     block(this);
@@ -239,11 +181,7 @@ class DescribeLevel extends TestLevel {
 }
 
 export class TabLevel extends DescribeLevel {
-  /**
-   * Run the tests in the block inside the tab.
-   *
-   * This level results in a `tab` in the output format.
-   */
+  /** @deprecated */
   tab(name: string, block: (out: DescribeLevel) => void): void {
     this.resultManager.startGroup(name);
     block(this);
@@ -251,7 +189,7 @@ export class TabLevel extends DescribeLevel {
   }
 }
 
-function removeAttached(block: Sb3Block, from: Sb3Target | null): Sb3Block[] {
+function removeAttached(block: Sb3Block, from?: Sb3Target): Sb3Block[] {
   // We remove all attached code from the hat block in the solution.
   const toCheck = new Set();
   toCheck.add(block.id);
@@ -291,6 +229,7 @@ function fixHatBlock(filteredBlocks: Sb3Block[], hatBlock: Sb3Block) {
 //   return changes(object, base);
 // }
 
+/** @deprecated */
 export class OneHatAllowedTest {
   private template: Project;
   private submission: Project;
@@ -317,16 +256,19 @@ export class OneHatAllowedTest {
 
   hatBlockSorter: (list: Sb3Block[]) => Sb3Block[] = (l) => l;
 
+  /** @deprecated */
   constructor(template: Project, submission: Project) {
     this.template = template;
     this.submission = submission;
     this.hatSprites = [];
   }
 
+  /** @deprecated */
   ignoredSprite(sprite: string): void {
     this.ignoredSprites.push(sprite);
   }
 
+  /** @deprecated */
   execute(e: Evaluation): void {
     if (this.hatSprite) {
       this.hatSprites = [this.hatSprite];
@@ -571,15 +513,7 @@ export function asRange(range: number | Range): Range {
   }
 }
 
-/**
- * Generate an error message for a sprite that is not in the correct position.
- *
- * @param sprite - The sprite from the log.
- * @param xRange - Range or number of allowed X values.
- * @param yRange - Range or number of allowed Y values.
- *
- * @return The message.
- * @deprecated
+/** @deprecated * @deprecated
  */
 export function generatePositionMessage(
   sprite: LoggedSprite,

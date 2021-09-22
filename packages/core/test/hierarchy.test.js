@@ -1,4 +1,4 @@
-import { GroupLevel } from '../src/hierarchy';
+import { GroupLevel } from '../src/testplan/hierarchy.js';
 import { GroupedResultManager } from '../src/grouped-output';
 import { TabLevel } from '../src/testplan';
 

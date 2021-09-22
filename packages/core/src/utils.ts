@@ -73,3 +73,11 @@ export function stringify(value: unknown): string {
     return String(value);
   }
 }
+
+/**
+ * A strictly type check, as the function itself does nothing.
+ * @param value
+ */
+export function assertType<T>(value: unknown): asserts value is T {
+  // Do nothing, this is a type check only.
+}

@@ -39,10 +39,7 @@ export interface Message {
   description: string;
 }
 
-export enum Visibility {
-  Show = 'show',
-  Collapse = 'collapse',
-}
+export type Visibility = 'show' | 'collapse';
 
 /**
  * Manages the output for the Dodona-inspired format.
@@ -128,11 +125,7 @@ export class GroupedResultManager {
    *        group must always be shown.
    * @param [sprite] Name of optionally linked sprite.
    */
-  startGroup(
-    name: string,
-    visibility: Visibility = Visibility.Show,
-    sprite?: string,
-  ): void {
+  startGroup(name: string, visibility: Visibility = 'show', sprite?: string): void {
     if (this.isFinished) {
       console.warn(
         'Attempting to open group after judgement has been completed. Ignoring.',

@@ -99,11 +99,11 @@ export class Project {
     const baseSprite = this.sprite(sprite);
     const comparisonSprite = other.sprite(sprite);
 
-    if (baseSprite === null && comparisonSprite === null) {
+    if (baseSprite === undefined && comparisonSprite === undefined) {
       return false;
     }
 
-    if (baseSprite === null || comparisonSprite === null) {
+    if (baseSprite === undefined || comparisonSprite === undefined) {
       return true;
     }
 
@@ -144,8 +144,8 @@ export class Project {
    *
    * @return The sprite or null if not found.
    */
-  sprite(name: string): Sb3Target | null {
-    return this.json.targets.find((t) => t.name === name) || null;
+  sprite(name: string): Sb3Target | undefined {
+    return this.json.targets.find((t) => t.name === name);
   }
 
   /**

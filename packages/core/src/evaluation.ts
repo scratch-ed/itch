@@ -20,34 +20,8 @@ import { ResultManager } from './output';
 import type VirtualMachine from '@ftrprf/judge-scratch-vm-types';
 import { angle, distSq, mergeLines } from './lines';
 import { GroupedResultManager, OutputHandler } from './grouped-output';
-import { initialiseTranslations, LanguageData, t } from './i18n';
-
-declare global {
-  interface Window {
-    numericEquals: typeof numericEquals;
-    searchFrames: typeof searchFrames;
-    sprite: typeof sprite;
-    broadcast: typeof broadcast;
-    delay: typeof delay;
-    OneHatAllowedTest: typeof OneHatAllowedTest;
-    ignoreWaitInProcedureFor: typeof ignoreWaitInProcedureFor;
-    generatePositionMessage: typeof generatePositionMessage;
-    asRange: typeof asRange;
-    angle: typeof angle;
-    mergeLines: typeof mergeLines;
-    distSq: typeof distSq;
-    format: typeof format;
-
-    beforeExecution?: BeforeExecution;
-    duringExecution?: DuringExecution;
-    afterExecution?: AfterExecution;
-
-    run: typeof run;
-    t: typeof t;
-  }
-
-  function t(key: string, ...values: string[]): string;
-}
+import { checkPredefinedBlocks } from './testplan/predefined-blocks';
+import { GroupLevel } from './testplan/hierarchy';
 
 const object: Window = window;
 
@@ -89,7 +63,6 @@ function expose() {
   object.sprite = sprite;
   object.broadcast = broadcast;
   object.delay = delay;
-  // object.distSq = distSq;
   object.OneHatAllowedTest = OneHatAllowedTest;
   object.ignoreWaitInProcedureFor = ignoreWaitInProcedureFor;
   object.generatePositionMessage = generatePositionMessage;
@@ -97,6 +70,9 @@ function expose() {
   object.angle = angle;
   object.mergeLines = mergeLines;
   object.distSq = distSq;
+  object.Itch = {
+    checkPredefinedBlocks: checkPredefinedBlocks,
+  };
   object.format = format;
   object.t = t;
 }
@@ -203,6 +179,10 @@ export class Evaluation extends TabLevel {
     return this.context.groupedOutput;
   }
 
+  get group(): GroupLevel {
+    return new GroupLevel(this.groupedOutput);
+  }
+
   /**
    * Get the event scheduler.
    */
@@ -282,49 +262,6 @@ export class Evaluation extends TabLevel {
       );
     }
   }
-}
-
-/**
- * Function that runs before the project is started. This can be used to
- * run static checks on the submitted project. For your convenience, the
- * template project is also provided. One example where this can be used
- * is to check if there were no sprites removed in the submission.
- */
-interface BeforeExecution {
-  /**
-   * @param template - The template project.
-   * @param submission - The submission project.
-   * @param e - Evaluation object.
-   */
-  (template: Project, submission: Project, e: Evaluation): void;
-}
-
-/**
- * Function that is run just before the project is executed, allowing to
- * schedule events, inputs and tests for during the execution. While you
- * have full access to the log in this stage, it might not be properly
- * filled. It is recommend to put tests using the log in the afterExecution
- * step.
- */
-interface DuringExecution {
-  /**
-   * @param e - Evaluation object.
-   */
-  (e: Evaluation): void;
-}
-
-/**
- * Function that is run after the project has been executed. At this
- * point the log is filled, and available for inspection. Mosts tests
- * in this stage are in the category of checking the end state of the
- * execution: checking how the project reacted to the instructions
- * scheduled in the "duringExecution" step.
- */
-interface AfterExecution {
-  /**
-   * @param e - Evaluation object.
-   */
-  (e: Evaluation): void;
 }
 
 /**

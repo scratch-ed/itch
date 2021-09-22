@@ -1,35 +1,27 @@
 /**
- * @file This file contains the testplan API, i.e. most of the stuff
- * you use when writing a test plan. This API is inspired by Jest, so
- * if you are familiar, it should be fairly easy to pick up.
+ * @file
  *
- * ## Structure
+ * This file contains the testplan API, i.e. most of the stuff
+ * you use when writing a test plan. This API is inspired by Jest.
  *
- * Itch provides 4 levels of groupings for tests:
+ * There are two primitives:
  *
- * 1. `group`   -> a group in the output
- * 2. `test` -> a test in the output
+ * 1. Groups
+ * 2. Tests
  *
- * When starting from the bottom, we begin simple:
- *
- * 1. The `expect` is used to compare two values. It does not have a name itself,
- *    but you can provide a custom error message. This is only shown when the
- *    assertion fails. (The values are always passed as well).
- * 2. The `test` is the lowest level with a name. It groups a bunch of related
- *    `expect` statements.
- * 3. The `describe` directive groups a bunch of related tests, e.g. for one sprite.
- * 4. The `tab` groups a bunch of `describe` statements. These are mainly for UI purposes.
+ * Groups are used to organise the tests, while tests actually compare two values
+ * to see if they are equal or not.
  */
 import isEqual from 'lodash-es/isEqual';
-import { castCallback, numericEquals, stringify } from './utils';
-import { GroupedResultManager, Status, Visibility } from './grouped-output';
+import { castCallback, numericEquals, stringify } from '../utils';
+import { GroupedResultManager, Status, Visibility } from '../grouped-output';
 
 export class FatalErrorException extends Error {}
 
 export class RuntimeException extends Error {}
 
 interface OutputCallback {
-  (accepted: boolean, expected?: unknown, actual?: unknown): void;
+  (accepted: boolean, expected?: unknown, actual?: unknown): boolean;
 }
 
 class Matcher {
@@ -62,9 +54,11 @@ class Matcher {
    *   > sets, strings, symbols, and typed arrays. `Object` objects are compared
    *   > by their own, not inherited, enumerable properties. Functions and DOM
    *   > nodes are **not** supported.
+   *
+   * @return The value of the test.
    */
-  toBe(expected: unknown): void {
-    this.callback(this.accepted(expected), expected, this.actual);
+  toBe(expected: unknown): boolean {
+    return this.callback(this.accepted(expected), expected, this.actual);
   }
 
   /**
@@ -80,9 +74,11 @@ class Matcher {
    *   > sets, strings, symbols, and typed arrays. `Object` objects are compared
    *   > by their own, not inherited, enumerable properties. Functions and DOM
    *   > nodes are **not** supported.
+   *
+   * @return The value of the test.
    */
-  toNotBe(expected: unknown): void {
-    this.callback(!this.accepted(expected), expected, this.actual);
+  toNotBe(expected: unknown): boolean {
+    return this.callback(!this.accepted(expected), expected, this.actual);
   }
 }
 
@@ -152,7 +148,7 @@ class TestOptions {
     return this;
   }
 
-  private out(accepted: boolean, expected?: unknown, actual?: unknown) {
+  private out(accepted: boolean, expected?: unknown, actual?: unknown): boolean {
     const status = accepted ? Status.Correct : Status.Wrong;
     const messageCallback = accepted ? this.correctMessage : this.errorMessage;
     const summary = messageCallback?.(expected, actual);
@@ -166,12 +162,15 @@ class TestOptions {
     if (!accepted && this.terminate) {
       throw new FatalErrorException();
     }
+
+    return accepted;
   }
 }
 
 export interface GroupOptions {
   sprite?: string;
   summary?: string;
+  visibility?: Visibility;
 }
 
 export interface SpriteGroupOptions extends GroupOptions {
@@ -241,7 +240,11 @@ export class GroupLevel {
       spriteOrBlock = {};
     }
 
-    this.resultManager.startGroup(name, Visibility.Show, spriteOrBlock.sprite);
+    this.resultManager.startGroup(
+      name,
+      spriteOrBlock.visibility ?? 'show',
+      spriteOrBlock.sprite,
+    );
     block!();
     this.resultManager.closeGroup(spriteOrBlock.summary);
   }
