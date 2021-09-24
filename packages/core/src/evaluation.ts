@@ -3,7 +3,7 @@ import 'regenerator-runtime/runtime';
 
 import seed from 'seed-random';
 import { Log, searchFrames } from './log';
-import { numericEquals } from './utils';
+import { numericEquals, format } from './utils';
 import { Context } from './context';
 import { Project } from './project';
 import { ScheduledEvent } from './scheduler/scheduled-event';
@@ -36,6 +36,7 @@ declare global {
     angle: typeof angle;
     mergeLines: typeof mergeLines;
     distSq: typeof distSq;
+    format: typeof format;
 
     beforeExecution?: BeforeExecution;
     duringExecution?: DuringExecution;
@@ -66,6 +67,7 @@ function expose() {
   object.angle = angle;
   object.mergeLines = mergeLines;
   object.distSq = distSq;
+  object.format = format;
 }
 
 export interface EvalConfig {

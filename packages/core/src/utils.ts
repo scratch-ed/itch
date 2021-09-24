@@ -47,3 +47,21 @@ interface WrongMessage {
 }
 
 export type MessageData = CorrectMessage | WrongMessage;
+
+export function format(source: string, ...args: string[]): string {
+  return source.replace(/{{|}}|{(\d+)}/g, (m, n) => {
+    if (m === '{{') {
+      return '{';
+    }
+    if (m === '}}') {
+      return '}';
+    }
+    const index = parseInt(n);
+    if (index >= args.length) {
+      throw new Error(
+        `You have not provided enough formatting values. Expected at least ${index}, got ${args.length}`,
+      );
+    }
+    return args[n];
+  });
+}
