@@ -48,7 +48,7 @@ export interface PredefinedBlockConfig {
 }
 
 const DEFAULT_CONFIG: Partial<PredefinedBlockConfig> = {
-  ignoredSprites: [],
+  ignoredSprites: ['Stage'],
   allowedBlocks: () => true,
   // TODO: a better default
   blockComparator: (a, b) => stringify(a).localeCompare(stringify(b)),

@@ -1,5 +1,5 @@
 function testStatuses(result) {
-  return result.map((obj) => obj.status?.enum).filter((status) => status !== undefined);
+  return result.map((obj) => obj.status).filter((status) => status !== undefined);
 }
 
 expect.extend({

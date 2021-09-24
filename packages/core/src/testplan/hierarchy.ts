@@ -134,12 +134,25 @@ class TestOptions {
   }
 
   /**
-   * Execute the test with
+   * Start a test with the actual value. This is terminal operation: you can
+   * no longer change the test after this.
+   *
    * @param actual
+   *
+   * @return The match, which allows to determine when the condition is true.
    */
   expect(actual: unknown): Matcher {
     // We pass a method, so set the "this" correctly.
     return new Matcher(this.out.bind(this), actual);
+  }
+
+  /**
+   * Accept the test if the passed boolean is correct.
+   *
+   * @param correct
+   */
+  acceptIf(correct: boolean): boolean {
+    return this.out(correct);
   }
 
   feedback(messages: Messages): TestOptions {
