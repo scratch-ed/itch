@@ -18,7 +18,7 @@
     "eslint-plugin-jest": "^24.4.2",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.1.0",
-    "nodemon": "^2.0.12",
+    "nodemon": "^2.0.13",
     "prettier": "^2.4.1",
     "rimraf": "^3.0.2"
   },
