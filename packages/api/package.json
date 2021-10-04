@@ -16,7 +16,7 @@
     "morgan": "^1.10.0",
     "node-fetch": "^2.6.1",
     "puppeteer": "^10.4.0",
-    "restify": "^8.5.1"
+    "restify": "^8.6.0"
   },
   "devDependencies": {
     "cross-env": "^7.0.3"
