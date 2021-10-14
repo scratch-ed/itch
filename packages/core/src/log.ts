@@ -23,6 +23,7 @@ import type Variable from '@ftrprf/judge-scratch-vm-types/types/engine/variable'
 
 /**
  * Our own version of a variable. Basically a copy of a {@link Variable}.
+ * @deprecated
  */
 export class LoggedVariable {
   id: string;
@@ -43,6 +44,7 @@ export class LoggedVariable {
 
 /**
  * Our own version of a sprite. Basically a copy of a {@link RenderedTarget}.
+ * @deprecated
  */
 export class LoggedSprite {
   id: string;
@@ -181,6 +183,8 @@ export class LoggedSprite {
  *
  * @example
  * let frame = new Frame('looks_nextcostume');
+ *
+ * @deprecated
  */
 export class LogFrame {
   /**
@@ -209,7 +213,9 @@ export class LogFrame {
     this.sprites = [];
     // For now we only save rendered targets.
     for (const target of context.vm!.runtime.targets) {
-      this.sprites.push(new LoggedSprite(target, context.vm!.runtime.targets));
+      this.sprites.push(
+        new LoggedSprite(target as RenderedTarget, context.vm!.runtime.targets),
+      );
     }
   }
 
@@ -265,6 +271,7 @@ export class LogFrame {
   }
 }
 
+/** @deprecated */
 interface Constraints {
   before: number | null;
   after: number | null;
@@ -294,6 +301,7 @@ export function searchFrames(frames: LogFrame[], constraints: Constraints): LogF
 /**
  * Saves render information.
  * TODO: review
+ * @deprecated
  */
 export class LogRenderer {
   index = 0;
@@ -303,7 +311,7 @@ export class LogRenderer {
   responses: unknown[] = [];
 }
 
-// TODO: review
+/** @deprecated */
 export class LogEvent {
   time: number;
   type: string;
@@ -328,6 +336,7 @@ export class LogEvent {
   }
 }
 
+/** @deprecated */
 class Events {
   list: LogEvent[];
   length: number;
@@ -378,6 +387,7 @@ class Events {
   }
 }
 
+/** @deprecated */
 class Blocks {
   blocks: Record<string, number>;
 
@@ -405,7 +415,7 @@ class Blocks {
   }
 }
 
-// TODO: review
+/** @deprecated */
 export class Log {
   frames: LogFrame[];
   events: Events;

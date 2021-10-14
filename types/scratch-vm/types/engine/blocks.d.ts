@@ -1,3 +1,5 @@
+import { Record } from 'immutable';
+
 export = Blocks;
 /**
  * @fileoverview
@@ -115,13 +117,13 @@ declare class Blocks {
      * @param {?object} block The block to query.
      * @return {?object} All fields and their values.
      */
-    getFields(block: object | null): object | null;
+    getFields(block: object | null): Record<string, Record<string, unknown>> | null;
     /**
      * Get all non-branch inputs for a block.
      * @param {?object} block the block to query.
      * @return {?Array.<object>} All non-branch inputs and their associated blocks.
      */
-    getInputs(block: object | null): Array<object> | null;
+    getInputs(block: object | null): Record<string, Record<string, unknown>> | null;
     /**
      * Get mutation data for a block.
      * @param {?object} block The block to query.

@@ -1,13 +1,13 @@
 import { ScheduledAction } from './action';
-import { LogEvent, LogFrame } from '../log';
 import { ThreadListener } from '../listener';
 import { Context } from '../context';
+import { Event } from '../new-log';
 
 export class GreenFlagAction extends ScheduledAction {
   execute(context: Context, resolve: (v: string) => void): void {
-    const event = new LogEvent(context, 'greenFlag');
-    event.previousFrame = new LogFrame(context, 'greenFlag');
-    context.log.addEvent(event);
+    const event = new Event('greenFlag');
+    event.previous = context.log.snap(context.vm!, 'event.greenFlag.start');
+    context.log.registerEvent(event);
 
     // Stuff from the greenFlag function.
     context.vm!.runtime.stopAll();
@@ -24,7 +24,7 @@ export class GreenFlagAction extends ScheduledAction {
     const action = new ThreadListener(list);
     context.threadListeners.push(action);
     action.promise.then(() => {
-      event.nextFrame = new LogFrame(context, 'greenFlagEnd');
+      event.next = context.log.snap(context.vm!, 'event.greenFlag.end');
       resolve(`finished ${this}`);
     });
   }

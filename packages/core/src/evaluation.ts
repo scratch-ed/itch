@@ -2,7 +2,6 @@
 import 'regenerator-runtime/runtime';
 
 import seed from 'seed-random';
-import { Log, searchFrames } from './log';
 import { numericEquals, format } from './utils';
 import { Context } from './context';
 import { Project } from './project';
@@ -22,6 +21,7 @@ import { angle, distSq, mergeLines } from './lines';
 import { GroupedResultManager, OutputHandler } from './grouped-output';
 import { checkPredefinedBlocks } from './testplan/predefined-blocks';
 import { GroupLevel } from './testplan/hierarchy';
+import { NewLog, snapshotFromSb3 } from './new-log';
 
 const object: Window = window;
 
@@ -59,7 +59,6 @@ type TestplanSource = ModuleTestplanSource | StringTestplanSource;
  */
 function expose() {
   object.numericEquals = numericEquals;
-  object.searchFrames = searchFrames;
   object.sprite = sprite;
   object.broadcast = broadcast;
   object.delay = delay;
@@ -144,7 +143,7 @@ export class Evaluation extends TabLevel {
   /**
    * Get access to the log.
    */
-  get log(): Log {
+  get log(): NewLog {
     return this.context.log;
   }
 
@@ -280,6 +279,7 @@ export async function run(config: EvalConfig): Promise<void> {
   const templateJson = await context.getProjectJson(config);
   const submissionJson = await context.prepareVm(config);
   const beforeExecution = window.beforeExecution || (() => {});
+  const beforeExecution2 = window.beforeExecution2;
   const duringExecution = window.duringExecution || ((e) => e.scheduler.end());
   const afterExecution = window.afterExecution || (() => {});
 
@@ -291,8 +291,17 @@ export async function run(config: EvalConfig): Promise<void> {
   try {
     expose();
 
-    // Run the tests before the execution.
-    beforeExecution(new Project(templateJson), new Project(submissionJson), judge);
+    // Generate the snapshot from the project before it starts.
+    const templateSnapshot = snapshotFromSb3(templateJson);
+    const submissionSnapshot = snapshotFromSb3(submissionJson);
+    context.log.registerStartSnapshots(templateSnapshot, submissionSnapshot);
+
+    if (!beforeExecution2) {
+      // Run the tests before the execution.
+      beforeExecution(new Project(templateJson), new Project(submissionJson), judge);
+    } else {
+      beforeExecution2(judge);
+    }
 
     await context.vmLoaded.promise;
     judge.stage = EvaluationStage.scheduling;

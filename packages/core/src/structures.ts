@@ -1,6 +1,7 @@
 import isEqual from 'lodash-es/isEqual';
 import { asTree, Node } from './blocks';
 
+/** @deprecated */
 export class Sb3Variable {
   name: string;
   value: unknown;
@@ -13,6 +14,7 @@ export class Sb3Variable {
   }
 }
 
+/** @deprecated */
 export interface Sb3Mutation {
   tagName: string;
   children: Array<unknown>;
@@ -20,11 +22,13 @@ export interface Sb3Mutation {
   argumentids: string;
 }
 
+/** @deprecated */
 export interface Sb3List {
   name: string;
   list: Array<unknown>;
 }
 
+/** @deprecated */
 export class Sb3Block {
   id: string;
   /**
@@ -126,6 +130,7 @@ export class Sb3Block {
 }
 
 /**
+ * @deprecated
  * @see https://en.scratch-wiki.info/wiki/Scratch_File_Format#Comments
  */
 interface Sb3Comment {
@@ -139,6 +144,7 @@ interface Sb3Comment {
 }
 
 /**
+ * @deprecated
  * @see https://en.scratch-wiki.info/wiki/Scratch_File_Format#Assets
  */
 interface Sb3Asset {
@@ -149,6 +155,7 @@ interface Sb3Asset {
 }
 
 /**
+ * @deprecated
  * @see https://en.scratch-wiki.info/wiki/Scratch_File_Format#Costumes
  */
 interface Sb3Costume extends Sb3Asset {
@@ -158,6 +165,7 @@ interface Sb3Costume extends Sb3Asset {
 }
 
 /**
+ * @deprecated
  * @see https://en.scratch-wiki.info/wiki/Scratch_File_Format#Sounds
  */
 interface Sb3Sound extends Sb3Asset {
@@ -165,6 +173,7 @@ interface Sb3Sound extends Sb3Asset {
   sampleCount: number;
 }
 
+/* @deprecated */
 interface Sb3Monitor {
   id: string;
   mode: 'default' | 'large' | 'slider' | 'list';
@@ -183,6 +192,7 @@ interface Sb3Monitor {
  * The base sprite class, used in the sb3 format.
  *
  * @see https://en.scratch-wiki.info/wiki/Scratch_File_Format#Targets
+ * @deprecated
  */
 export class Sb3Target {
   /**
@@ -302,6 +312,7 @@ export class Sb3Target {
   }
 }
 
+/* @deprecated */
 export class Sb3Stage extends Sb3Target {
   tempo: number;
   videoTransparency: number;
@@ -318,6 +329,7 @@ export class Sb3Stage extends Sb3Target {
   }
 }
 
+/* @deprecated */
 export class Sb3Sprite extends Sb3Target {
   visible: boolean;
   x: number;

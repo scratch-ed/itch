@@ -5,6 +5,7 @@ import { asTree } from './blocks';
 
 /**
  * A callback allowing comparison between two sprites.
+ * @deprecated
  */
 interface SpritePredicate {
   /**
@@ -21,6 +22,8 @@ interface SpritePredicate {
  *
  * Besides the query methods, the class also provides a bunch
  * of comparison methods, allowing for tests against two versions.
+ *
+ * @deprecated
  */
 export class Project {
   private json: Sb3Json;

@@ -1,9 +1,9 @@
+import type Target from '@ftrprf/judge-scratch-vm-types/types/engine/target';
+
 import { ScheduledAction } from './action';
 import { Context } from '../context';
-
-import type Target from '@ftrprf/judge-scratch-vm-types/types/engine/target';
 import { BroadcastReceiver, BroadcastUpdate } from '../listener';
-import { LogEvent, LogFrame } from '../log';
+import { Event } from '../new-log';
 
 export class TrackSpriteAction extends ScheduledAction {
   name: string;
@@ -19,7 +19,10 @@ export class TrackSpriteAction extends ScheduledAction {
       throw new Error(`Sprite ${this.name} was not found in the runtime.`);
     }
     sprite.addListener('EVENT_TARGET_VISUAL_CHANGE', (target: Target) => {
-      context.log.addFrame(context, `update_${target.getName()}`);
+      const event = new Event('target_update', { target: target.getName() });
+      event.previous = context.log.snap(context.vm!, `event.update_target`);
+      event.next = event.previous;
+      context.log.registerEvent(event);
     });
     resolve('register complete');
   }
@@ -40,9 +43,10 @@ class BroadcastLogger implements BroadcastReceiver {
 
   update(options: BroadcastUpdate): void {
     if (options?.matchFields?.BROADCAST_OPTION === this.name) {
-      const event = new LogEvent(this.context, 'broadcast_sent', { name: this.name });
-      event.previousFrame = new LogFrame(this.context, 'broadcast_sent');
-      this.context.log.addEvent(event);
+      const event = new Event('broadcast_sent', { name: this.name });
+      event.previous = this.context.log.snap(this.context, 'event.broadcast_sent');
+      event.next = event.previous;
+      this.context.log.registerEvent(event);
     }
   }
 }

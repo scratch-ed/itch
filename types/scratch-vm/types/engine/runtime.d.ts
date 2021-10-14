@@ -219,12 +219,12 @@ declare class Runtime extends EventEmitter {
      * Target management and storage.
      * @type {Array.<!Target>}
      */
-    targets: Array<any>;
+    targets: Array<Target>;
     /**
      * Targets in reverse order of execution. Shares its order with drawables.
      * @type {Array.<!Target>}
      */
-    executableTargets: Array<any>;
+    executableTargets: Array<Target>;
     /**
      * A list of threads that are currently running in the VM.
      * Threads are added when execution starts and pruned when execution ends.

@@ -1,7 +1,7 @@
 import { ScheduledAction } from './action';
-import { LogEvent, LogFrame } from '../log';
 import { ThreadListener } from '../listener';
 import { Context } from '../context';
+import { Event } from '../new-log';
 
 export class WhenPressKeyAction extends ScheduledAction {
   key: string;
@@ -13,9 +13,9 @@ export class WhenPressKeyAction extends ScheduledAction {
 
   execute(context: Context, resolve: (v: string) => void): void {
     // Save sprites state before key press.
-    const event = new LogEvent(context, 'key', { key: this.key });
-    event.previousFrame = new LogFrame(context, 'key');
-    context.log.addEvent(event);
+    const event = new Event('key', { key: this.key });
+    event.previous = context.log.snap(context.vm!, 'event.key.start');
+    context.log.registerEvent(event);
 
     const scratchKey = context.vm!.runtime.ioDevices.keyboard._keyStringToScratchKey(
       this.key,
@@ -40,7 +40,7 @@ export class WhenPressKeyAction extends ScheduledAction {
     action.promise.then(() => {
       console.log(`finished keyPress on ${this.key}`);
       // save sprites state after click
-      event.nextFrame = new LogFrame(context, 'keyEnd');
+      event.next = context.log.snap(context.vm!, 'event.key.end');
       resolve(`finished ${this}`);
     });
   }
@@ -75,6 +75,7 @@ export class KeyUseAction extends ScheduledAction {
   key: string;
   down: boolean | number;
   delay: number;
+
   constructor(key: string, down: boolean | number, delay: number) {
     super();
     this.key = key;
@@ -83,13 +84,13 @@ export class KeyUseAction extends ScheduledAction {
   }
 
   execute(context: Context, resolve: (v: string) => void): void {
-    const event = new LogEvent(context, 'useKey', {
+    const event = new Event('useKey', {
       key: this.key,
       down: this.down,
       delay: this.delay,
     });
-    event.previousFrame = new LogFrame(context, 'event');
-    context.log.addEvent(event);
+    event.previous = context.log.snap(context.vm!, 'event.keyUse.start');
+    context.log.registerEvent(event);
 
     context.vm!.postIOData('keyboard', {
       key: this.key,
@@ -101,7 +102,7 @@ export class KeyUseAction extends ScheduledAction {
 
     if (this.isDelayed()) {
       setTimeout(() => {
-        event.nextFrame = new LogFrame(context, 'event');
+        event.next = context.log.snap(context.vm!, 'event.keyUse.end');
         context.vm!.postIOData('keyboard', {
           key: this.key,
           isDown: false,
@@ -112,7 +113,7 @@ export class KeyUseAction extends ScheduledAction {
       }, accelDown as number);
     } else {
       setTimeout(() => {
-        event.nextFrame = new LogFrame(context, 'event');
+        event.next = context.log.snap(context.vm!, 'event.keyUse.end');
         resolve(`finished ${this}`);
       }, delay);
     }

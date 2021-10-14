@@ -1,7 +1,8 @@
+import type Target from '@ftrprf/judge-scratch-vm-types/types/engine/target';
+
 import { ScheduledAction } from './action';
-import { LogEvent, LogFrame } from '../log';
 import { Context } from '../context';
-import Target from '@ftrprf/judge-scratch-vm-types/types/engine/target';
+import { Event } from '../new-log';
 
 const STAGE = 'Stage';
 
@@ -19,15 +20,16 @@ export class SetVariableAction extends ScheduledAction {
 
   execute(context: Context, resolve: (v: string) => void): void {
     // Save sprites state before key press.
-    const event = new LogEvent(context, 'setVariable', { value: this.value });
-    event.previousFrame = new LogFrame(context, 'setVariable');
-    context.log.addEvent(event);
+    const event = new Event('set_variable', { value: this.value });
+    event.previous = context.log.snap(context.vm!, 'event.set_variable');
+    event.next = event.previous;
+    context.log.registerEvent(event);
 
     let sprite: Target;
     if (this.target !== STAGE) {
       sprite = context.vm!.runtime.getSpriteTargetByName(this.name);
     } else {
-      sprite = context.vm!.runtime.getTargetForStage();
+      sprite = context.vm!.runtime.getTargetForStage() as Target;
     }
 
     // Get the variable ID.

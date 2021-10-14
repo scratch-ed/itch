@@ -6,15 +6,15 @@ import ScratchRender from 'scratch-render';
 
 import type Runtime from '@ftrprf/judge-scratch-vm-types/types/engine/runtime';
 
-import { Log, LogEvent, LogFrame } from './log';
 import { Deferred } from './deferred';
 import { makeProxiedRenderer } from './renderer';
 import { ScheduledEvent } from './scheduler/scheduled-event';
 import { EndAction } from './scheduler/end';
 import { BroadcastReceiver, ThreadListener } from './listener';
 import { EvalConfig } from './evaluation';
-import { AdvancedProfiler } from './profiler';
+import { installAdvancedBlockProfiler } from './profiler';
 import { GroupedResultManager, OutputHandler, Status } from './grouped-output';
+import { Event, NewLog } from './new-log';
 
 const Events: Record<string, string> = {
   SCRATCH_PROJECT_START: 'PROJECT_START',
@@ -134,12 +134,8 @@ interface Acceleration {
  */
 export class Context {
   vm?: VirtualMachine;
-  /**
-   * When the execution started.
-   */
-  startTime: number;
   numberOfRun: number;
-  log: Log;
+  log: NewLog;
   answers: string[];
   providedAnswers: string[];
   /**
@@ -161,8 +157,6 @@ export class Context {
   broadcastListeners: BroadcastReceiver[];
   event: ScheduledEvent;
   groupedOutput: GroupedResultManager;
-  // TODO: integrate with log.
-  advancedProfiler: AdvancedProfiler;
 
   /**
    * The acceleration factor, used to speed up (or slow down)
@@ -174,9 +168,8 @@ export class Context {
   accelerationFactor: Acceleration;
 
   constructor(callback?: OutputHandler) {
-    this.startTime = Date.now();
     this.numberOfRun = 0;
-    this.log = new Log();
+    this.log = new NewLog();
     this.answers = [];
     this.providedAnswers = [];
     this.vmLoaded = new Deferred();
@@ -186,7 +179,6 @@ export class Context {
     this.broadcastListeners = [];
     this.event = ScheduledEvent.create();
     this.groupedOutput = new GroupedResultManager(callback);
-    this.advancedProfiler = new AdvancedProfiler();
     this.accelerationFactor = {
       factor: 1,
     };
@@ -195,9 +187,10 @@ export class Context {
   /**
    * Get a current timestamp.
    * @return {number}
+   * @deprecated Use the log instead.
    */
   timestamp(): number {
-    return Date.now() - this.startTime;
+    return this.log.timestamp();
   }
 
   /**
@@ -214,16 +207,15 @@ export class Context {
       // Only save it when something is actually being said.
       if (text !== '') {
         console.log(`${this.timestamp()}: say: ${text} with ${type}`);
-
-        const event = new LogEvent(this, 'say', {
+        const event = new Event('say', {
           text: text,
           target: target,
           type: type,
           sprite: target.sprite.name,
         });
-        event.previousFrame = new LogFrame(this, 'say');
-        event.nextFrame = new LogFrame(this, 'sayEnd');
-        this.log.addEvent(event);
+        event.previous = this.log.snap(this.vm!, 'event.say');
+        event.next = event.previous;
+        this.log.registerEvent(event);
       }
     });
 
@@ -240,13 +232,13 @@ export class Context {
 
         console.log(`${this.timestamp()}: input: ${x}`);
 
-        const event = new LogEvent(this, 'answer', {
+        const event = new Event('answer', {
           question: question,
           text: x,
         });
-        event.previousFrame = new LogFrame(this, 'answer');
-        event.nextFrame = new LogFrame(this, 'answerEnd');
-        this.log.addEvent(event);
+        event.previous = this.log.snap(this.vm!, 'event.answer');
+        event.next = event.previous;
+        this.log.registerEvent(event);
 
         this.vm!.runtime.emit(Events.SCRATCH_ANSWER, x);
       }
@@ -289,11 +281,11 @@ export class Context {
     const blockId = this.vm!.runtime.profiler.idByName('blockFunction');
     this.vm!.runtime.profiler.onFrame = (frame) => {
       if (frame.id === blockId) {
-        this.log.addFrame(this, frame.arg);
+        this.log.snap(this.vm!, 'profiler.basic');
       }
     };
 
-    this.advancedProfiler.register(this.vm!, this);
+    installAdvancedBlockProfiler(this.vm!, this.log);
   }
 
   /**

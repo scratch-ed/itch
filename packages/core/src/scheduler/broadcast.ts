@@ -1,8 +1,9 @@
 import { ScheduledAction } from './action';
-import { LogEvent, LogFrame } from '../log';
 import { ThreadListener } from '../listener';
 import { Context } from '../context';
-import Target from '@ftrprf/judge-scratch-vm-types/types/engine/target';
+import { Event } from '../new-log';
+
+import type Target from '@ftrprf/judge-scratch-vm-types/types/engine/target';
 
 export class SendBroadcastAction extends ScheduledAction {
   private readonly name: string;
@@ -20,12 +21,12 @@ export class SendBroadcastAction extends ScheduledAction {
     const restrictTo = this.targetRestriction
       ? this.targetRestriction(context)
       : undefined;
-    const event = new LogEvent(context, 'broadcast', {
+    const event = new Event('broadcast', {
       target: target.getName(),
       restrict: restrictTo?.getName(),
     });
-    event.previousFrame = new LogFrame(context, 'broadcast');
-    context.log.addEvent(event);
+    event.previous = context.log.snap(context.vm!, 'event.broadcast.start');
+    context.log.registerEvent(event);
 
     const threads = context.vm!.runtime.startHats(
       'event_whenbroadcastreceived',
@@ -40,7 +41,7 @@ export class SendBroadcastAction extends ScheduledAction {
 
     action.promise.then(() => {
       // save sprites state after click
-      event.nextFrame = new LogFrame(context, 'broadcastEnd');
+      event.next = context.log.snap(context.vm!, 'event.broadcast.end');
       resolve(`finished ${this}`);
     });
   }

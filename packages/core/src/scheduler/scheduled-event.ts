@@ -11,9 +11,9 @@ import { FatalErrorException } from '../testplan';
 import { ScheduledAction } from './action';
 import { Context } from '../context';
 import { SetVariableAction } from './variable';
+import { Status } from '../grouped-output';
 
 import type Target from '@ftrprf/judge-scratch-vm-types/types/engine/target';
-import { Status } from '../grouped-output';
 
 class InitialAction extends CallbackAction {
   constructor() {

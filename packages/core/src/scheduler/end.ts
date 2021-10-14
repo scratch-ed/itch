@@ -1,5 +1,4 @@
 import { ScheduledAction } from './action';
-import { LogFrame } from '../log';
 import { Deferred } from '../deferred';
 import { Context } from '../context';
 
@@ -7,9 +6,10 @@ import type { ScheduledEvent } from './scheduled-event';
 
 export class EndAction extends ScheduledAction {
   execute(context: Context, resolve: (v: string) => void): void {
-    for (const event of context.log.events.list) {
-      if (event.nextFrame == null) {
-        event.nextFrame = new LogFrame(context, 'programEnd');
+    const endFrame = context.log.snap(context.vm!, 'event.end');
+    for (const event of context.log.events) {
+      if (!event.hasNext()) {
+        event.next = endFrame;
       }
     }
     context.vm!.stopAll();

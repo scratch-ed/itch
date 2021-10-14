@@ -28,26 +28,28 @@ declare function beforeExecution(
 ): void;
 
 /**
+ * The callback function in the test plan. There are three kinds
+ * of callback functions.
+ *
+ * ## Before evaluation
+ * This is run before the VM is started, so you only have access to the static
+ * data.
+ *
+ * ## During execution
  * Function that is run just before the project is executed, allowing to
  * schedule events, inputs and tests for during the execution. While you
  * have full access to the log in this stage, it might not be properly
  * filled. It is recommend to put tests using the log in the afterExecution
  * step.
  *
- * @param e - Evaluation object.
- */
-declare function duringExecution(e: Evaluation): void;
-
-/**
+ * ## After execution
  * Function that is run after the project has been executed. At this
  * point the log is filled, and available for inspection. Mosts tests
  * in this stage are in the category of checking the end state of the
  * execution: checking how the project reacted to the instructions
  * scheduled in the "duringExecution" step.
- *
- * @param e - Evaluation object.
  */
-declare function afterExecution(e: Evaluation): void;
+declare type CallbackFunction = (e: Evaluation) => void;
 
 // Old stuff.
 declare global {
@@ -77,9 +79,11 @@ declare global {
     /** @deprecated */
     distSq: typeof distSq;
 
+    /** @deprecated */
     beforeExecution?: typeof beforeExecution;
-    duringExecution?: typeof duringExecution;
-    afterExecution?: typeof afterExecution;
+    duringExecution?: CallbackFunction;
+    afterExecution?: CallbackFunction;
+    beforeExecution2?: CallbackFunction;
 
     run: typeof run;
     format: typeof format;

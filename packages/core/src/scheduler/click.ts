@@ -1,7 +1,7 @@
 import { ScheduledAction } from './action';
-import { LogEvent, LogFrame } from '../log';
 import { ThreadListener } from '../listener';
 import { Context } from '../context';
+import { Event } from '../new-log';
 
 const STAGE = 'Stage';
 
@@ -23,9 +23,9 @@ export class ClickSpriteAction extends ScheduledAction {
     }
 
     // Save the state of the sprite before the click event.
-    const event = new LogEvent(context, 'click', { target: this.sprite });
-    event.previousFrame = new LogFrame(context, 'click');
-    context.log.addEvent(event);
+    const event = new Event('click', { target: this.sprite });
+    event.previous = context.log.snap(context.vm!, 'event.click.start');
+    context.log.registerEvent(event);
 
     // Simulate mouse click by explicitly triggering click event on the target
     let list;
@@ -45,7 +45,7 @@ export class ClickSpriteAction extends ScheduledAction {
     action.promise.then(() => {
       console.log(`finished click on ${this.sprite}`);
       // save sprites state after click
-      event.nextFrame = new LogFrame(context, 'clickEnd');
+      event.next = context.log.snap(context.vm!, 'event.click.end');
       resolve(`finished ${this}`);
     });
   }

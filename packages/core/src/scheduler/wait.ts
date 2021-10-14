@@ -1,14 +1,13 @@
-/* eslint-disable */
-import castArray from 'lodash-es/castArray';
+import type RenderedTarget from '@ftrprf/judge-scratch-vm-types/types/sprites/rendered-target';
+
+import { castArray } from 'lodash-es';
 import { ScheduledAction } from './action';
-import { LogEvent, LogFrame } from '../log';
 import { BroadcastListener } from '../listener';
 import { castCallback, numericEquals } from '../utils';
 import { Context } from '../context';
 import { WaitCondition } from './scheduled-event';
 import { Position } from '../lines';
-
-import type RenderedTarget from '@ftrprf/judge-scratch-vm-types/types/sprites/rendered-target';
+import { Event } from '../new-log';
 
 class WaitEvent extends ScheduledAction {
   delay: number;
@@ -74,13 +73,13 @@ class WaitForSpritePositionAction extends ScheduledAction {
     if (!sprite) {
       throw new Error(`Sprite ${this.name} was not found in the runtime.`);
     }
-    const event = new LogEvent(context, 'waitForSpritePosition');
-    event.previousFrame = new LogFrame(context, 'event');
-    context.log.addEvent(event);
+    const event = new Event('wait_sprite_position', { sprite: this.name });
+    event.previous = context.log.snap(context.vm!, 'event.wait.start');
+    context.log.registerEvent(event);
     const callback = (target: RenderedTarget) => {
       if (this.callback(target.x, target.y)) {
         sprite.removeListener('TARGET_MOVED', callback);
-        event.nextFrame = new LogFrame(context, 'event');
+        event.next = context.log.snap(context.vm!, 'event.wait.end');
         resolve(`finished ${this}`);
       }
     };
@@ -109,18 +108,18 @@ class WaitForSpriteTouchAction extends ScheduledAction {
       throw new Error(`Sprite ${this.name} was not found in the runtime.`);
     }
     this.targets = castArray(this.paramCallback());
-    const event = new LogEvent(context, 'waitForSpriteTouch', {
+    const event = new Event('wait_sprite_touch', {
       targets: this.targets,
       sprite: this.name,
     });
-    event.previousFrame = new LogFrame(context, 'event');
-    context.log.addEvent(event);
+    event.previous = context.log.snap(context.vm!, 'event.wait.start');
+    context.log.registerEvent(event);
     const callback = (target: RenderedTarget) => {
       for (const goal of this.targets!) {
         console.log('Checking...', goal);
         if (target.isTouchingObject(goal)) {
           sprite.removeListener('TARGET_MOVED', callback);
-          event.nextFrame = new LogFrame(context, 'event');
+          event.next = context.log.snap(context.vm!, 'event.wait.end');
           resolve(`finished ${this}`);
           return;
         }
@@ -151,16 +150,16 @@ class WaitForSpriteNotTouchAction extends ScheduledAction {
       throw new Error(`Sprite ${this.name} was not found in the runtime.`);
     }
     this.target = this.paramCallback();
-    const event = new LogEvent(context, 'waitForSpriteNotTouch', {
+    const event = new Event('wait_sprite_not_touch', {
       target: this.target,
       sprite: this.name,
     });
-    event.previousFrame = new LogFrame(context, 'event');
-    context.log.addEvent(event);
+    event.previous = context.log.snap(context.vm!, 'event.wait.start');
+    context.log.registerEvent(event);
     const callback = (target: RenderedTarget) => {
       if (!target.isTouchingObject(this.target!)) {
         sprite.removeListener('TARGET_MOVED', callback);
-        event.nextFrame = new LogFrame(context, 'event');
+        event.next = context.log.snap(context.vm!, 'event.wait.end');
         resolve(`finished ${this}`);
       }
     };
@@ -176,22 +175,23 @@ class WaitForSpriteNotTouchAction extends ScheduledAction {
 
 class WaitOnBroadcastAction extends ScheduledAction {
   name: string;
+
   constructor(name: string) {
     super();
     this.name = name;
   }
 
   execute(context: Context, resolve: (v: string) => void) {
-    const event = new LogEvent(context, 'broadcast_listener', {
+    const event = new Event('broadcast_listener', {
       name: this.name,
     });
-    event.previousFrame = new LogFrame(context, 'broadcast_listener');
-    context.log.addEvent(event);
+    event.previous = context.log.snap(context.vm!, 'event.broadcast_listener.start');
+    context.log.registerEvent(event);
 
     const listener = new BroadcastListener(this.name);
     context.broadcastListeners.push(listener);
     listener.promise.then(() => {
-      event.nextFrame = new LogFrame(context, 'broadcastReceived');
+      event.next = context.log.snap(context.vm!, 'event.broadcast_listener.end');
       resolve(`finished ${this}`);
     });
   }
@@ -206,6 +206,7 @@ class WaitOnBroadcastAction extends ScheduledAction {
  */
 export class SpriteCondition {
   name: string;
+
   constructor(name: string) {
     this.name = name;
   }
