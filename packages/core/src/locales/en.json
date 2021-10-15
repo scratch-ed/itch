@@ -1,0 +1,31 @@
+{
+  "predefined": {
+    "stage": "Stage",
+    "stage_correct": "Good job! You didn't change anything in the Stage.",
+    "stage_wrong": "Oops, you changed something in the Stage. You'll need to start again.",
+    "stage_correct_block": "Good job! You didn't change the blocks of the Stage.",
+    "stage_wrong_block": "Oops, you changed the blocks of the Stage. You'll need to start again.",
+    "existing": {
+      "name": "Checks on existing code",
+      "correct": "Good job! Je hebt niets veranderd aan de sprite {0}.",
+      "wrong": "Oops, you changed sprite {0}. You'll have to start again.",
+      "correct_block": "Good job! You didn't change the blocks of sprite {0}.",
+      "wrong_block": "Oops, you changed the blocks of sprite {0}. You'll need to start again."
+    },
+    "deleted": "Oh no, you removed sprite {0}. You'll need to start again.",
+    "necessary": "Oh no, you deleted a necessary block of sprite {0}.",
+    "around": {
+      "correct": "Good job! There were no unnecessary blocks lying around.",
+      "wrong": "Try to remove the blocks lying around or use them."
+    },
+    "preprogrammed": {
+      "wrong": "You made changes to the existing blocks of sprite {0}.",
+      "correct": "You didn't make changes to the existing blocks of sprite {0}."
+    },
+    "allowed": {
+      "name": "Correct blocks",
+      "correct": "Good job! You don't use any disallowed blocks.",
+      "wrong": "Oops, you use a block you're not supposed to. You can only use blocks from my blocks or loops."
+    }
+  }
+}

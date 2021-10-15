@@ -1,0 +1,31 @@
+{
+  "predefined": {
+    "stage": "Speelveld",
+    "stage_correct": "Top! Je hebt niets veranderd aan het speelveld.",
+    "stage_wrong": "Oops, je hebt iets veranderd aan het speelveld. Je gaat opnieuw moeten beginnen.",
+    "stage_correct_block": "Top! Je hebt niets veranderd aan de blokjes van het speelveld.",
+    "stage_wrong_block": "Oops, je hebt iets veranderd aan de blokjes van het speelveld. Je gaat opnieuw moeten beginnen.",
+    "existing": {
+      "name": "Controle op bestaande code",
+      "correct": "Top! Je hebt niets veranderd aan de sprite {0}.",
+      "wrong": "Oops, je hebt iets veranderd aan de sprite {0}. Je gaat opnieuw moeten beginnen.",
+      "correct_block": "Top! Je hebt niets veranderd aan de blokjes van sprite {0}.",
+      "wrong_block": "Oops, je hebt iets veranderd aan de blokjes sprite {0}. Je gaat opnieuw moeten beginnen."
+    },
+    "deleted": "Oei, je verwijderde de sprite {0}. Je zult opnieuw moeten beginnen.",
+    "necessary": "Oei, je verwijderde een noodzakelijk blokje bij de sprite {0}.",
+    "around": {
+      "correct": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+      "wrong": "Probeer je rondslingerende blokjes te verwijderen of te gebruiken."
+    },
+    "preprogrammed": {
+      "wrong": "Je hebt aan de voorgeprogrammeerde blokjes van de sprite {0} wijzigingen aangebracht.",
+      "correct": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite {0}."
+    },
+    "allowed": {
+      "name": "Juiste blokjes",
+      "correct": "Goed zo! Je gebruikt geen verkeerde blokjes.",
+      "wrong": "Oei, je gebruikt de verkeerde blokjes. Je mag enkel de blokjes uit mijn blokken en eindige lussen gebruiken."
+    }
+  }
+}

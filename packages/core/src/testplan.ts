@@ -34,6 +34,7 @@ import type VirtualMachine from '@ftrprf/judge-scratch-vm-types';
 import type BlockUtility from '@ftrprf/judge-scratch-vm-types/types/engine/block-utility';
 import { LoggedSprite } from './log';
 import { cloneDeep } from 'lodash-es';
+import { t } from './i18n';
 
 export class FatalErrorException extends Error {}
 
@@ -346,7 +347,7 @@ export class OneHatAllowedTest {
         this.allowedBlockChecks[sprite] = this.allowedBlockCheck!;
       });
     }
-    e.describe('Controle op bestaande code', (l) => {
+    e.describe(t('predefined.existing.name'), (l) => {
       this.template
         .sprites()
         .filter(
@@ -358,32 +359,32 @@ export class OneHatAllowedTest {
           l.test(sprite, (l) => {
             l.expect(this.template.hasChangedSprite(this.submission, sprite))
               .with({
-                correct: `Top! Je hebt niets veranderd aan de sprite ${sprite}.`,
-                wrong: `Oops, je hebt iets veranderd aan de sprite ${sprite}. Je gaat opnieuw moeten beginnen.`,
+                correct: t('predefined.existing.correct', sprite),
+                wrong: t('predefined.existing.wrong', sprite),
               })
               .toBe(false);
 
             l.expect(this.template.hasChangedBlocks(this.submission, sprite))
               .with({
-                correct: `Top! Je hebt niets veranderd aan de blokjes van sprite ${sprite}.`,
-                wrong: `Oops, je hebt iets veranderd aan de blokjes sprite ${sprite}. Je gaat opnieuw moeten beginnen.`,
+                correct: t('predefined.existing.correct_block', sprite),
+                wrong: t('predefined.existing.wrong_block', sprite),
               })
               .toBe(false);
           });
         });
 
-      l.test('Speelveld', (l) => {
+      l.test(t('predefined.stage'), (l) => {
         l.expect(this.template.hasChangedSprite(this.submission, 'Stage'))
           .with({
-            correct: `Top! Je hebt niets veranderd aan het speelveld.`,
-            wrong: `Oops, je hebt iets veranderd aan het speelveld. Je gaat opnieuw moeten beginnen.`,
+            correct: t('predefined.stage_correct'),
+            wrong: t('predefined.stage_wrong'),
           })
           .toBe(false);
 
         l.expect(this.template.hasChangedBlocks(this.submission, 'Stage'))
           .with({
-            correct: `Top! Je hebt niets veranderd aan de blokjes van het speelveld.`,
-            wrong: `Oops, je hebt iets veranderd aan de blokjes van het speelveld. Je gaat opnieuw moeten beginnen.`,
+            correct: t('predefined.stage_correct_block'),
+            wrong: t('predefined.stage_wrong_block'),
           })
           .toBe(false);
       });
@@ -400,7 +401,7 @@ export class OneHatAllowedTest {
             l.expect(true)
               .fatal()
               .with({
-                wrong: `Oei, je verwijderde de sprite ${hatSprite}. Je zal opnieuw moeten beginnen.`,
+                wrong: t('predefined.deleted', hatSprite),
               })
               .toBe(false);
           });
@@ -424,7 +425,7 @@ export class OneHatAllowedTest {
             l.expect(true)
               .fatal()
               .with({
-                wrong: `Oei, je verwijderde een noodzakelijk blokje bij de sprite ${hatSprite}`,
+                wrong: t('predefined.necessary', hatSprite),
               })
               .toBe(false);
           });
@@ -476,8 +477,8 @@ export class OneHatAllowedTest {
         l.test(hatSprite, (l) => {
           l.expect(solutionTree.size <= templateTree.size)
             .with({
-              wrong: 'Probeer je rondslingerende blokjes te verwijderen of te gebruiken.',
-              correct: 'Goed zo! Je hebt geen losse blokjes laten rondslingeren.',
+              wrong: t('predefined.around.wrong'),
+              correct: t('predefined.around.correct'),
             })
             .toBe(true);
           if (solutionTree.size <= templateTree.size) {
@@ -496,8 +497,8 @@ export class OneHatAllowedTest {
             l.expect(isEqual(templateTree, solutionTree))
               .fatal()
               .with({
-                wrong: `Je hebt aan de voorgeprogrammeerde blokjes van de sprite ${hatSprite} wijzigingen aangebracht.`,
-                correct: `Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite ${hatSprite}.`,
+                wrong: t('predefined.preprogrammed.wrong', hatSprite),
+                correct: t('predefined.preprogrammed.correct', hatSprite),
               })
               .toBe(true);
           }
@@ -510,13 +511,12 @@ export class OneHatAllowedTest {
           const usesAllowed = removedSolutionBlocks.every(allowedBlockCheck);
           // Don't show if no blocks.
           if (removedSolutionBlocks.length > 0) {
-            l.test('Juiste blokjes', (l) => {
+            l.test(t('predefined.allowed.name'), (l) => {
               l.expect(usesAllowed)
                 .fatal()
                 .with({
-                  wrong:
-                    'Oei, je gebruikt de verkeerde blokjes. Je mag enkel de blokjes uit mijn blokken en eindige lussen gebruiken.',
-                  correct: 'Goed zo! Je gebruikt geen verkeerde blokjes.',
+                  wrong: t('predefined.allowed.wrong'),
+                  correct: t('predefined.allowed.correct'),
                 })
                 .toBe(true);
             });
@@ -579,6 +579,7 @@ export function asRange(range: number | Range): Range {
  * @param yRange - Range or number of allowed Y values.
  *
  * @return The message.
+ * @deprecated
  */
 export function generatePositionMessage(
   sprite: LoggedSprite,

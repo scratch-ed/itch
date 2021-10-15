@@ -18,7 +18,7 @@ module.exports = [
       rules: [
         {
           include: [path.resolve(__dirname, 'src')],
-          test: /\.js|\.ts$/,
+          test: /\.js$|\.ts$/,
           exclude: /node_modules/,
           loader: 'babel-loader',
         },
