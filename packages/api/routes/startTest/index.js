@@ -4,7 +4,7 @@ const fetch = require('node-fetch');
 const parseCommands = require('../../utils/parseCommands');
 
 const test = async (req, reply, next, browser) => {
-  const { testplan, sessionId } = req.body;
+  const { testplan, sessionId, language } = req.body;
   const { templateFile, testFile } = req.files;
 
   const page = await browser.newPage();
@@ -19,6 +19,7 @@ const test = async (req, reply, next, browser) => {
       testplan: { content: testplan },
       template: templateFile.path,
       solution: testFile.path,
+      language: language,
       page,
       out: (judgeObject) =>
         parseCommands(judgeObject, {

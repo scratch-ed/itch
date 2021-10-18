@@ -69,7 +69,6 @@ function expose() {
   object.mergeLines = mergeLines;
   object.distSq = distSq;
   object.format = format;
-  initialiseTranslations();
 }
 
 export interface EvalConfig {
@@ -85,6 +84,10 @@ export interface EvalConfig {
    * The canvas for the renderer.
    */
   canvas: HTMLCanvasElement;
+  /**
+   * The language of the exercise.
+   */
+  language: string;
 }
 
 enum EvaluationStage {
@@ -284,6 +287,9 @@ interface AfterExecution {
 export async function run(config: EvalConfig): Promise<void> {
   // Seed random data.
   seed('itch-judge', { global: true });
+
+  // Set language from parameters.
+  initialiseTranslations(config.language as "nl" | "en");
 
   const context = new Context();
   const templateJson = await context.getProjectJson(config);

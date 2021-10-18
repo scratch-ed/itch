@@ -30,12 +30,13 @@ document.getElementById('template').addEventListener('change', (e) => {
 
 // This function is called by puppeteer to actually execute the tests.
 // eslint-disable-next-line no-unused-vars
-async function runTests() {
+async function runTests(language) {
   /** @type {EvalConfig} */
   const config = {
     submission: await submissionUpload.prom,
     template: await templateUpload.prom,
     canvas: document.getElementById('scratch-stage'),
+    language: language
   };
 
   // Hook up the output visualizer.

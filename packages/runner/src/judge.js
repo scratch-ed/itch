@@ -31,6 +31,7 @@ function toStdOut(output) {
  * @property {boolean} [debug] - If debug mode should be use.
  * @property {"debug"|"cli"|"normal"} [mode] - Start paused, implied by debug.
  * @property {function(Object):void} [out] - The output handle.
+ * @property {string} language - The language of the exercise
  */
 
 /**
@@ -68,6 +69,8 @@ async function runJudge(options) {
     /** @type {Page} */
     const page = options.page || (await browser.newPage());
 
+    const language = options.language || "nl";
+
     await page.setCacheEnabled(false);
 
     if (mode === 'debug') {
@@ -101,9 +104,9 @@ async function runJudge(options) {
       });
     }
 
-    await page.evaluate(() => {
-      return runTests();
-    });
+    await page.evaluate((language) => {
+      return runTests(language);
+    }, language);
   } finally {
     if (browser && mode === 'debug') {
       console.log('Closing browser...');

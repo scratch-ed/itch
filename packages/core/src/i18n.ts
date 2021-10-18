@@ -19,8 +19,8 @@ declare global {
   var i18nDisabled: boolean;
 }
 
-export function initialiseTranslations(): void {
-  window.scratchLanguage = 'nl';
+export function initialiseTranslations(language: 'nl' | 'en' = "nl"): void {
+  window.scratchLanguage = language;
   window.i18nDisabled = false;
 }
 
