@@ -69,7 +69,7 @@ async function runJudge(options) {
     /** @type {Page} */
     const page = options.page || (await browser.newPage());
 
-    const language = options.language || "nl";
+    const language = options.language || 'nl';
 
     await page.setCacheEnabled(false);
 

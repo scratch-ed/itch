@@ -18,7 +18,7 @@ fetch(configPath)
         submission: submission,
         template: template,
         canvas: document.getElementById('scratch-stage'),
-        language: config.language || "nl"
+        language: config.language || 'nl',
       };
 
       // Hook up the output visualizer.

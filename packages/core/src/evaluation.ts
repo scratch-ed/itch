@@ -289,7 +289,7 @@ export async function run(config: EvalConfig): Promise<void> {
   seed('itch-judge', { global: true });
 
   // Set language from parameters.
-  initialiseTranslations(config.language as "nl" | "en");
+  initialiseTranslations(config.language as 'nl' | 'en');
 
   const context = new Context();
   const templateJson = await context.getProjectJson(config);
