@@ -21,7 +21,7 @@ import { ResultManager } from './output';
 
 import type VirtualMachine from '@ftrprf/judge-scratch-vm-types';
 import { angle, distSq, mergeLines } from './lines';
-import { initialiseTranslations } from './i18n';
+import { initialiseTranslations, t } from './i18n';
 
 declare global {
   interface Window {
@@ -44,7 +44,10 @@ declare global {
     afterExecution?: AfterExecution;
 
     run: typeof run;
+    t: typeof t;
   }
+
+  function t(key: string, ...values: string[]): string;
 }
 
 const object: Window = window;
@@ -69,6 +72,7 @@ function expose() {
   object.mergeLines = mergeLines;
   object.distSq = distSq;
   object.format = format;
+  object.t = t;
 }
 
 export interface EvalConfig {

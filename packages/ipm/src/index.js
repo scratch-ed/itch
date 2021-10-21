@@ -136,7 +136,8 @@ async function downloadLevel(result, level, local, name, onlyMissing) {
     (v) =>
       v.versionType === 'STARTER' &&
       (regex.test(v.name.toLowerCase()) || !level) &&
-      !v.name.toLowerCase().includes('oplossing'),
+      !v.name.toLowerCase().includes('oplossing') &&
+      !v.name.toLowerCase().includes('v0'),
   )?.blobUri;
 
   if (starterUri === undefined) {
