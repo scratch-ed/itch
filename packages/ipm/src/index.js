@@ -132,24 +132,30 @@ async function getBytes(exercise, lock, onlyMissing) {
 async function downloadLevel(result, level, local, name, onlyMissing) {
   const regex = new RegExp(`level ${level}[^0-9]*$`);
   // Attempt to find the starter project.
-  const starterUri = result.findExercise.versions.find(
-    (v) =>
-      v.versionType === 'STARTER' &&
-      (regex.test(v.name.toLowerCase()) || !level) &&
-      !v.name.toLowerCase().includes('oplossing') &&
-      !v.name.toLowerCase().includes('v0'),
-  )?.blobUri;
+  const starterUri = result.findExercise.versions
+    .filter(
+      (v) =>
+        v.versionType === 'STARTER' &&
+        (regex.test(v.name.toLowerCase()) || !level) &&
+        !v.name.toLowerCase().includes('oplossing') &&
+        !v.name.toLowerCase().includes('v0'),
+    )
+    .sort((a, b) => b.id - a.id)
+    .find((_) => true)?.blobUri;
 
   if (starterUri === undefined) {
     throw new Error(`Could not find starter project for level ${level}`);
   }
 
-  const solutionUri = result.findExercise.versions.find(
-    (v) =>
-      v.versionType === 'SOLUTION' &&
-      (regex.test(v.name.toLowerCase()) || !level) &&
-      v.name.toLowerCase().includes('oplossing'),
-  )?.blobUri;
+  const solutionUri = result.findExercise.versions
+    .filter(
+      (v) =>
+        v.versionType === 'SOLUTION' &&
+        (regex.test(v.name.toLowerCase()) || !level) &&
+        v.name.toLowerCase().includes('oplossing'),
+    )
+    .sort((a, b) => b.id - a.id)
+    .find((_) => true)?.blobUri;
 
   if (solutionUri === undefined) {
     throw new Error(`Could not find solution project for level ${level}`);
