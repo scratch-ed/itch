@@ -10,7 +10,7 @@
       "correct": "Top! Je hebt niets veranderd aan de sprite {0}.",
       "wrong": "Oops, je hebt iets veranderd aan de sprite {0}. Je gaat opnieuw moeten beginnen.",
       "correct_block": "Top! Je hebt niets veranderd aan de blokjes van sprite {0}.",
-      "wrong_block": "Oops, je hebt iets veranderd aan de blokjes sprite {0}. Je gaat opnieuw moeten beginnen."
+      "wrong_block": "Oops, je hebt iets veranderd aan de blokjes van sprite {0}. Je gaat opnieuw moeten beginnen."
     },
     "deleted": "Oei, je verwijderde de sprite {0}. Je zal opnieuw moeten beginnen.",
     "necessary": "Oei, je verwijderde een noodzakelijk blokje bij de sprite {0}.",
