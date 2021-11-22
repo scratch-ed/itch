@@ -54,16 +54,3 @@ test('hasChangedCostumes', () => {
   expect(one.hasChangedCostumes(three, 'Test1')).toBe(true);
   expect(three.hasChangedCostumes(three, 'Test1')).toBe(false);
 });
-
-test('containsSprite', () => {
-  const one = new Project({
-    targets: [{ name: 'Test1' }, { name: 'Test2' }],
-  });
-
-  const two = new Project({ targets: [] });
-
-  expect(one.containsSprite('Test1')).toBe(true);
-  expect(one.containsSprite('Test2')).toBe(true);
-  expect(one.containsSprite('Test3')).toBe(false);
-  expect(two.containsSprite('Test1')).toBe(false);
-});

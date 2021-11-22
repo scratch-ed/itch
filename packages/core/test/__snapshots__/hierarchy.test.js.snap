@@ -10,11 +10,13 @@ Array [
     "command": "start-group",
     "name": "Groep 1",
     "sprite": "Test",
+    "visibility": "show",
   },
   Object {
     "command": "start-group",
     "name": "Groep 2",
     "sprite": undefined,
+    "visibility": "show",
   },
   Object {
     "command": "start-test",
@@ -28,12 +30,10 @@ Array [
   Object {
     "command": "close-group",
     "summary": undefined,
-    "visibility": "show",
   },
   Object {
     "command": "close-group",
     "summary": undefined,
-    "visibility": "show",
   },
 ]
 `;
@@ -48,11 +48,13 @@ Array [
     "command": "start-group",
     "name": "Groep 1",
     "sprite": undefined,
+    "visibility": "show",
   },
   Object {
     "command": "start-group",
     "name": "Groep 2",
     "sprite": undefined,
+    "visibility": "show",
   },
   Object {
     "command": "start-test",
@@ -71,12 +73,10 @@ Array [
   Object {
     "command": "close-group",
     "summary": undefined,
-    "visibility": "show",
   },
   Object {
     "command": "close-group",
     "summary": undefined,
-    "visibility": "show",
   },
 ]
 `;

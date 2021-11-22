@@ -5,7 +5,7 @@ test('normal usage', () => {
   const manager = new GroupedResultManager((r) => results.push(r));
 
   manager.startJudgement();
-  manager.startGroup('Groep 1', 'test-sprite');
+  manager.startGroup('Groep 1', 'show', 'test-sprite');
   manager.startTest('Hallo one test...');
   manager.appendMessage('Hallo');
   manager.appendDiff('expected', 'actual');

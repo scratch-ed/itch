@@ -10,6 +10,7 @@ Array [
     "command": "start-group",
     "name": "Groep 1",
     "sprite": "test-sprite",
+    "visibility": "show",
   },
   Object {
     "command": "start-test",
@@ -32,7 +33,6 @@ Array [
   Object {
     "command": "close-group",
     "summary": "A nice summary",
-    "visibility": "show",
   },
   Object {
     "command": "close-judgement",
