@@ -3,12 +3,14 @@
  *   this will replace the existing groups.
  */
 
+import { Status, Update, Visibility } from './schema';
+
 /**
  * Handle outputting. By default, all output is sent to stderr.
  * You can overwrite this by setting a global `handleOut` callback,
  * which will be used instead if present.
  */
-function toOutput(output: Record<string, unknown>): void {
+function toOutput(output: Update): void {
   // @ts-ignore
   if (typeof window.handleOut !== 'undefined') {
     // @ts-ignore
@@ -18,28 +20,9 @@ function toOutput(output: Record<string, unknown>): void {
   }
 }
 
-export enum Status {
-  TimeLimit = 'time limit exceeded',
-  Runtime = 'runtime error',
-  Wrong = 'wrong',
-  Correct = 'correct',
-}
-
-export enum Format {
-  Text = 'text',
-  Html = 'html',
-}
-
 export interface OutputHandler {
-  (obj: Record<string, unknown>): void;
+  (obj: Update): void;
 }
-
-export interface Message {
-  format: Format;
-  description: string;
-}
-
-export type Visibility = 'show' | 'collapse';
 
 /**
  * Manages the output for the Dodona-inspired format.
@@ -149,7 +132,7 @@ export class GroupedResultManager {
    *
    * @param summary
    */
-  closeGroup(summary?: string | Message): void {
+  closeGroup(summary?: string): void {
     if (this.isFinished) {
       console.warn(
         'Attempting to close group after judgement has been completed. Ignoring.',
@@ -174,7 +157,7 @@ export class GroupedResultManager {
       console.warn(
         'Attempting to start new test while open test exists, closing it as wrong.',
       );
-      this.closeTest(Status.Wrong);
+      this.closeTest('wrong');
     }
     if (this.openGroups <= 0) {
       console.warn('Attempting to start test while no group is open.');
@@ -187,7 +170,7 @@ export class GroupedResultManager {
     this.hasOpenTest = true;
   }
 
-  closeTest(status: Status, description?: string): void {
+  closeTest(status: Status, feedback?: string): void {
     if (this.isFinished) {
       console.warn('Attempting to close test after judgement has been completed.');
       return;
@@ -199,7 +182,7 @@ export class GroupedResultManager {
     this.out({
       command: 'close-test',
       status: status,
-      description: description,
+      feedback: feedback,
     });
     this.hasOpenTest = false;
   }
@@ -212,7 +195,7 @@ export class GroupedResultManager {
     this.out({ command: 'append-message', message: message });
   }
 
-  appendDiff(expected: string, actual: string | null = null): void {
+  appendDiff(expected: string, actual = 'null'): void {
     if (!this.hasOpenTest) {
       console.warn('Attempting to append diff while no test is open. Ignoring.');
       return;
@@ -220,16 +203,43 @@ export class GroupedResultManager {
     this.out({ command: 'append-diff', expected: expected, actual: actual });
   }
 
-  escalateStatus(status: Status | string): void {
+  escalateStatus(status: Status): void {
     if (!this.hasOpenJudgement) {
       console.warn('Attempting to escalate status of closed judgement. Ignoring.');
       return;
     }
-    this.escalation = status as Status;
+    this.escalation = status;
     this.out({ command: 'escalate-status', status: status });
   }
+}
 
-  whyEscalate(): Status | undefined {
-    return this.escalation;
+/** @deprecated */
+export class ResultManager {
+  /** @deprecated */
+  constructor(private readonly grouped: GroupedResultManager) {}
+
+  /** @deprecated */
+  startContext(description?: string): void {
+    this.grouped.startGroup(description ?? 'Unnamed context');
+  }
+
+  /** @deprecated */
+  closeContext(): void {
+    this.grouped.closeGroup();
+  }
+
+  /** @deprecated */
+  startTestcase(description?: string): void {
+    this.grouped.startGroup(description ?? 'Testcase');
+  }
+
+  /** @deprecated */
+  appendMessage(message: string): void {
+    this.grouped.appendMessage(message);
+  }
+
+  /** @deprecated */
+  escalateStatus(status: Status): void {
+    this.grouped.escalateStatus(status);
   }
 }

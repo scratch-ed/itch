@@ -11,6 +11,7 @@ import { angle, distSq, mergeLines } from './lines';
 import { checkPredefinedBlocks } from './testplan/predefined-blocks';
 import { Project } from './project';
 import { Evaluation, run } from './evaluation';
+import { t } from './i18n';
 
 declare interface Itch {
   checkPredefinedBlocks: typeof checkPredefinedBlocks;
@@ -88,5 +89,7 @@ declare global {
     run: typeof run;
     format: typeof format;
     Itch: Itch;
+
+    t: typeof t;
   }
 }

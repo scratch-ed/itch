@@ -24,7 +24,7 @@ Array [
   },
   Object {
     "command": "close-test",
-    "description": "No correct at all!",
+    "feedback": "No correct at all!",
     "status": "wrong",
   },
   Object {
@@ -67,7 +67,7 @@ Array [
   },
   Object {
     "command": "close-test",
-    "description": "No correct at all!",
+    "feedback": "No correct at all!",
     "status": "wrong",
   },
   Object {

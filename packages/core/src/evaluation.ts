@@ -15,13 +15,13 @@ import {
   OneHatAllowedTest,
   TabLevel,
 } from './testplan';
-import { ResultManager } from './output';
+import { ResultManager, GroupedResultManager, OutputHandler } from './output';
 import type VirtualMachine from '@ftrprf/judge-scratch-vm-types';
 import { angle, distSq, mergeLines } from './lines';
-import { GroupedResultManager, OutputHandler } from './grouped-output';
 import { checkPredefinedBlocks } from './testplan/predefined-blocks';
 import { GroupLevel } from './testplan/hierarchy';
 import { NewLog, snapshotFromSb3 } from './new-log';
+import { initialiseTranslations, t } from './i18n';
 
 const object: Window = window;
 

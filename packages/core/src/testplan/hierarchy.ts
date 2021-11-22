@@ -14,7 +14,8 @@
  */
 import isEqual from 'lodash-es/isEqual';
 import { castCallback, numericEquals, stringify } from '../utils';
-import { GroupedResultManager, Status, Visibility } from '../grouped-output';
+import { GroupedResultManager } from '../output';
+import { Visibility } from '../output/schema';
 
 export class FatalErrorException extends Error {}
 
@@ -162,7 +163,7 @@ class TestOptions {
   }
 
   private out(accepted: boolean, expected?: unknown, actual?: unknown): boolean {
-    const status = accepted ? Status.Correct : Status.Wrong;
+    const status = accepted ? 'correct' : 'wrong';
     const messageCallback = accepted ? this.correctMessage : this.errorMessage;
     const summary = messageCallback?.(expected, actual);
 

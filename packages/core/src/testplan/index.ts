@@ -23,17 +23,18 @@
  * 4. The `tab` groups a bunch of `describe` statements. These are mainly for UI purposes.
  */
 import isEqual from 'lodash-es/isEqual';
-import { castCallback, MessageData, numericEquals, stringify } from './utils';
-import { Project } from './project';
-import { Evaluation } from './evaluation';
-import { Sb3Block, Sb3Target } from './structures';
+import { castCallback, MessageData, numericEquals, stringify } from '../utils';
+import { Project } from '../project';
+import { Evaluation } from '../evaluation';
+import { Sb3Block, Sb3Target } from '../structures';
 
 import type VirtualMachine from '@ftrprf/judge-scratch-vm-types';
 import type BlockUtility from '@ftrprf/judge-scratch-vm-types/types/engine/block-utility';
-import { LoggedSprite } from './log';
+import { LoggedSprite } from '../log';
 import { cloneDeep } from 'lodash-es';
-import { GroupedResultManager, Status } from './grouped-output';
-import { t } from './i18n';
+import { GroupedResultManager } from '../output';
+import { t } from '../i18n';
+import { Status } from '../output/schema';
 
 export class FatalErrorException extends Error {}
 
@@ -63,7 +64,7 @@ class GenericMatcher {
   private out(accepted: boolean, errorMessage?: string, successMessage?: string) {
     this.resultManager.startTest(this.name);
     this.resultManager.appendDiff(stringify(this.expected), stringify(this.actual));
-    const status = accepted ? Status.Correct : Status.Wrong;
+    const status: Status = accepted ? 'correct' : 'wrong';
 
     let description;
     if (accepted) {
@@ -158,7 +159,7 @@ class ExpectLevel {
   /** @deprecated */
   accept(): void {
     this.resultManager.startTest(this.name);
-    this.resultManager.closeTest(Status.Correct);
+    this.resultManager.closeTest('correct');
   }
 }
 

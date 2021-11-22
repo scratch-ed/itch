@@ -1,6 +1,6 @@
 import { GroupLevel } from '../src/testplan/hierarchy';
-import { GroupedResultManager } from '../src/grouped-output';
-import { TabLevel } from '../src/testplan';
+import { GroupedResultManager } from '../src/output/index.ts';
+import { TabLevel } from '../src/testplan/index.ts';
 
 test('new flow works', () => {
   const results = [];

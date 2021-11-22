@@ -1,4 +1,4 @@
-import { GroupedResultManager, Status } from '../src/grouped-output';
+import { GroupedResultManager } from '../src/output/index.ts';
 
 test('normal usage', () => {
   const results = [];
@@ -9,7 +9,7 @@ test('normal usage', () => {
   manager.startTest('Hallo one test...');
   manager.appendMessage('Hallo');
   manager.appendDiff('expected', 'actual');
-  manager.closeTest(Status.Wrong, 'Wrong');
+  manager.closeTest('wrong', 'Wrong');
   manager.closeGroup('A nice summary');
   manager.closeJudgement();
 

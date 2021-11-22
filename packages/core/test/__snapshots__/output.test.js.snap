@@ -27,7 +27,7 @@ Array [
   },
   Object {
     "command": "close-test",
-    "description": "Wrong",
+    "feedback": "Wrong",
     "status": "wrong",
   },
   Object {

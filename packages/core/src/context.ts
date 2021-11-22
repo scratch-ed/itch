@@ -13,7 +13,7 @@ import { EndAction } from './scheduler/end';
 import { BroadcastReceiver, ThreadListener } from './listener';
 import { EvalConfig } from './evaluation';
 import { installAdvancedBlockProfiler } from './profiler';
-import { GroupedResultManager, OutputHandler, Status } from './grouped-output';
+import { GroupedResultManager, OutputHandler } from './output';
 import { Event, NewLog } from './new-log';
 
 const Events: Record<string, string> = {
@@ -226,7 +226,7 @@ export class Context {
           this.groupedOutput.appendMessage(
             'Er werd een vraag gesteld waarop geen antwoord voorzien is.',
           );
-          this.groupedOutput.escalateStatus(Status.Wrong);
+          this.groupedOutput.escalateStatus('wrong');
           x = undefined;
         }
 

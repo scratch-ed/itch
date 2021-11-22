@@ -11,7 +11,6 @@ import { FatalErrorException } from '../testplan';
 import { ScheduledAction } from './action';
 import { Context } from '../context';
 import { SetVariableAction } from './variable';
-import { Status } from '../grouped-output';
 
 import type Target from '@ftrprf/judge-scratch-vm-types/types/engine/target';
 
@@ -219,7 +218,7 @@ export class ScheduledEvent {
           // escalate the status and stop the judgement.
           if (escalate) {
             console.warn(reason);
-            context.groupedOutput.escalateStatus(Status.TimeLimit);
+            context.groupedOutput.escalateStatus('time limit exceeded');
             context.groupedOutput.closeJudgement();
           }
         } else if (reason instanceof FatalErrorException) {
@@ -227,7 +226,7 @@ export class ScheduledEvent {
           context.groupedOutput.closeJudgement();
         } else {
           console.error('Unexpected error:', reason);
-          context.groupedOutput.escalateStatus(Status.Runtime);
+          context.groupedOutput.escalateStatus('internal error');
           context.groupedOutput.appendMessage(reason);
           context.groupedOutput.closeJudgement();
         }
@@ -629,12 +628,12 @@ export class ScheduledEvent {
     this.resolved((context) => {
       context.groupedOutput.startTest();
       const message = wrapped.correct();
-      context.groupedOutput.closeTest(Status.Correct, message);
+      context.groupedOutput.closeTest('correct', message);
     });
     this.timedOut((context) => {
       context.groupedOutput.startTest();
       const message = wrapped.wrong();
-      context.groupedOutput.closeTest(Status.Wrong, message);
+      context.groupedOutput.closeTest('wrong', message);
       return true;
     });
 
