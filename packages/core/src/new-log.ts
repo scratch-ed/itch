@@ -199,6 +199,11 @@ export class Snapshot {
   }
 
   /** @deprecated */
+  getSprite(name: string): ScratchSprite | null {
+    return this.findSprite(name) || null;
+  }
+
+  /** @deprecated */
   getSpriteOr(name: string): ScratchSprite {
     return this.sprite(name);
   }

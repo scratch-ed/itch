@@ -283,4 +283,11 @@ export class ScratchSprite extends ScratchTarget {
       pos.y < top + padding
     );
   }
+
+  /**
+   * @deprecated
+   */
+  get costume(): string | undefined {
+    return this.costumes?.[this.currentCostume]?.name;
+  }
 }
