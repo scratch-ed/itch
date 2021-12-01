@@ -381,6 +381,13 @@ export class NewLog {
   }
 
   /**
+   * @deprecated
+   */
+  get current(): Snapshot {
+    return this.last;
+  }
+
+  /**
    * A read-only list of all events. The snapshots linked in the events are also
    * in the snapshot timeline.
    */
