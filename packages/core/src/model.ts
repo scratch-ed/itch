@@ -1,5 +1,6 @@
 import { asTree, Node } from './new-blocks';
 import { Position } from './lines';
+import { ensure } from './utils';
 
 export type VariableType = '' | 'list' | 'broadcast';
 
@@ -208,6 +209,10 @@ export class ScratchTarget {
 
   variable(name: string): ScratchVariable | undefined {
     return this.variables.find((v) => v.name === name);
+  }
+
+  block(id: string): ScratchBlock {
+    return ensure(this.blocks.find((b) => b.id === id));
   }
 }
 

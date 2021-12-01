@@ -193,6 +193,26 @@ export class Context {
     return this.log.timestamp();
   }
 
+  /** @deprecated */
+  get advancedProfiler(): unknown {
+    return {
+      executions: this.log.events
+        .filter((e) => e.type === 'block_execution')
+        .map((e) => {
+          const block = e.previous
+            .target(e.data.target as string)
+            .block(e.data.blockId as string);
+          return {
+            timestamp: e.timestamp,
+            opcode: block.opcode,
+            args: {
+              mutation: block.mutation,
+            },
+          };
+        }),
+    };
+  }
+
   /**
    * Set up the event handles for a the vm.
    * @private

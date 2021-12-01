@@ -198,6 +198,10 @@ export class Snapshot {
     return ensure(this.findSprite(name));
   }
 
+  target(name: string): ScratchTarget {
+    return ensure(this.targets.find((t) => t.name === name));
+  }
+
   /** @deprecated */
   getSprite(name: string): ScratchSprite | null {
     return this.findSprite(name) || null;
@@ -246,6 +250,16 @@ export class Event {
 
   get timestamp(): number {
     return this.previous.timestamp;
+  }
+
+  /** @deprecated */
+  get time(): number {
+    return this.timestamp;
+  }
+
+  /** @deprecated */
+  get nextFrame(): Snapshot {
+    return this.next;
   }
 }
 
@@ -397,6 +411,9 @@ export class NewLog {
    * in the snapshot timeline.
    */
   get events(): ReadonlyArray<Event> {
+    // Temporarily add compatability events.
+    // @ts-ignore
+    this.eventList.list = this.eventList;
     return this.eventList;
   }
 
