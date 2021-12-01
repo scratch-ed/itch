@@ -56,6 +56,10 @@
           "<rootDir>/exercises/koppel-motoren-los/*.test.js",
           "<rootDir>/exercises/vernietig-asteroiden/*.test.js"
         ]
+      },
+      {
+        "displayName": "convertedExercises",
+        "testMatch": []
       }
     ]
   }
