@@ -13,18 +13,18 @@ test('01_mad_hatter', () => {
 test('02_papegaai', () => {
   return runTest().then((result) => {
     expect(result).everyStatusToBe('correct');
-    expect(result).atLeastCommands('close-testcase', 10);
+    expect(result).toMatchSnapshot();
   });
 });
 
-test('03_teken_een_vierkant', () => {
+test.skip('03_teken_een_vierkant', () => {
   return runTest().then((result) => {
     expect(result).toMatchSnapshot();
     expect(result).everyStatusToBe('correct');
   });
 });
 
-test('04_teken_een_driehoek', () => {
+test.skip('04_teken_een_driehoek', () => {
   return runTest().then((result) => {
     expect(result).toMatchSnapshot();
     expect(result).everyStatusToBe('correct');
@@ -32,7 +32,7 @@ test('04_teken_een_driehoek', () => {
   });
 });
 
-test('05_teken_een_huis', () => {
+test.skip('05_teken_een_huis', () => {
   return runTest().then((result) => {
     expect(result).toMatchSnapshot();
     expect(result).everyStatusToBe('correct');
@@ -44,7 +44,6 @@ test('06_voetballende_kat', () => {
   return runTest().then((result) => {
     expect(result).toMatchSnapshot();
     expect(result).everyStatusToBe('correct');
-    expect(result).atLeastCommands('close-testcase', 1);
   });
 });
 

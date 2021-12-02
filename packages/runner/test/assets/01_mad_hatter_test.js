@@ -3,30 +3,17 @@
 /**
  * Controleer op welke manier de leerling het startproject heeft aangepast
  *
- * @param {Project} template - The template project.
- * @param {Project} submission - The submission project.
- * @param {Evaluation} output - The output manager.
+ * @param {Evaluation} e - The evaluation.
  */
-function beforeExecution(template, submission, output) {
-  output.describe('Controle op sprites', (l) => {
-    l.test('Toegevoegde sprites', (l) => {
-      l.expect(template.hasAddedSprites(submission)).toBe(false);
-    });
-    l.test('Verwijderde sprites', (l) => {
-      l.expect(template.hasRemovedSprites(submission)).toBe(false);
-    });
-    l.test('Gewijzigde costumes', (l) => {
-      for (const target of submission.sprites()) {
-        l.expect(template.hasChangedCostumes(submission, target.name)).toBe(false);
-      }
-    });
-    l.test('Code van Nori', (l) => {
-      const nori = submission.sprite('Nori');
-      l.expect(_.isEmpty(nori.blocks))
-        .withError('De codeblokken werden toegevoegd aan Nori en niet aan de hoed!')
-        .toBe(true);
-    });
-  });
+function beforeExecution(e) {
+  Itch.checkPredefinedBlocks(
+    {
+      hats: {
+        Hat: (_b) => true,
+      },
+    },
+    e,
+  );
 }
 
 /** @param {Evaluation} e */
@@ -35,14 +22,16 @@ function duringExecution(e) {
 
   e.scheduler
     .log(() => {
-      firstHat = e.log.sprites.getSprite('Hat');
+      firstHat = e.log.last.sprite('Hat');
     })
     .clickSprite('Hat')
     .log(() => {
-      const secondHat = e.log.sprites.getSprite('Hat');
-      e.test('Hoed verandert bij klikken', (l) => {
-        l.expect(firstHat.currentCostume).toNotBe(secondHat.currentCostume);
-      });
+      e.groupedOutput.startGroup('Testen voor de Hoed');
+      const secondHat = e.log.last.sprite('Hat');
+      e.group
+        .test('Hoed verandert bij klikken')
+        .expect(firstHat.costume)
+        .toNotBe(secondHat.costume);
     })
     .forEach(
       [
@@ -67,53 +56,58 @@ function duringExecution(e) {
 
 /** @param {Evaluation} e */
 function afterExecution(e) {
-  const numberOfCostumes = e.log.getNumberOfCostumes('Hat');
+  const costumes = new Set();
+  for (const snapshot of e.log.snapshots) {
+    const sprite = snapshot.sprite('Hat');
+    costumes.add(sprite.costume);
+  }
 
-  e.describe('Testen voor de Hoed', (l) => {
-    l.test('Kostuums van de hoed', (l) => {
-      l.expect(numberOfCostumes > 1)
-        .withError('De hoed moet meer dan 1 kostuum hebben')
-        .toBe(true);
-    });
+  const g = e.group;
 
-    l.test('Klikken op de hoed', (l) => {
-      // De hoed mag enkel van kostuum veranderen als er op de hoed geklikt wordt.
-      const clicks = e.log.events.filter({ type: 'click' });
-      for (const click of clicks) {
-        const costumeNrBefore = click
-          .getPreviousFrame()
-          .getSprite(click.data.target).currentCostume;
-        const costumeNrAfter = click
-          .getNextFrame()
-          .getSprite(click.data.target).currentCostume;
+  g.test('Kostuums van de hoed')
+    .feedback({
+      wrong: 'De hoed moet meer dan 1 kostuum hebben.',
+    })
+    .acceptIf(costumes.size > 1);
 
-        // Indien er op de hoed wordt geklikt
-        if (click.data.target === 'Hat') {
-          const correctCostumeNr = (costumeNrBefore + 1) % numberOfCostumes;
-          l.expect(costumeNrAfter)
-            .withError(
-              "Na 1 klik op de sprite met naam 'Hat' moet het volgende kostuum getoond worden.",
-            )
-            .toBe(correctCostumeNr);
-        }
-        // Indien er op een andere sprite wordt geklikt
-        else {
-          l.expect(costumeNrAfter)
-            .withError(
-              "Na 1 klik niet op de sprite met naam 'Hat' moet het kostuum gelijk blijven.",
-            )
-            .toBe(costumeNrBefore);
-        }
-      }
-    });
+  const clicks = e.log.events.filter((e) => e.type === 'click');
+  for (const click of clicks) {
+    const costumeNrBefore = click.previous.target(click.data.target).currentCostume;
+    const costumeNrAfter = click.next.target(click.data.target).currentCostume;
 
-    // Het gebruik van het blok 'looks_costume' is aan te raden.
-    l.test('Correcte blokken', (l) => {
-      l.expect(e.log.blocks.containsBlock('looks_nextcostume'))
-        .withError(
-          'Gebruik het blok looks_nextcostume om gemakkelijk het volgende kostuum van de sprite weer te geven.',
-        )
-        .toBe(true);
-    });
-  });
+    // Indien er op de hoed wordt geklikt
+    if (click.data.target === 'Hat') {
+      const correctCostumeNr = (costumeNrBefore + 1) % costumes.size;
+      g.test('Klikken op de hoed')
+        .feedback({
+          wrong:
+            "Na 1 klik op de sprite met naam 'Hat' moet het volgende kostuum getoond worden.",
+        })
+        .expect(costumeNrAfter)
+        .toBe(correctCostumeNr);
+    }
+    // Indien er op een andere sprite wordt geklikt
+    else {
+      g.test('Klikken op de hoed')
+        .feedback({
+          wrong:
+            "Na 1 klik niet op de sprite met naam 'Hat' moet het kostuum gelijk blijven.",
+        })
+        .expect(costumeNrAfter)
+        .toBe(costumeNrBefore);
+    }
+  }
+
+  const hatBlocks = e.log.events
+    .filter((e) => e.type === 'block_execution' && e.data.target === 'Hat')
+    .map((e) => e.data.block().opcode);
+
+  g.test('Correcte blokken')
+    .feedback({
+      wrong:
+        'Gebruik het blok looks_nextcostume om gemakkelijk het volgende kostuum van de sprite weer te geven.',
+    })
+    .acceptIf(hatBlocks.includes('looks_nextcostume'));
+
+  e.groupedOutput.closeGroup();
 }

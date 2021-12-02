@@ -1,5 +1,21 @@
 import type VirtualMachine from '@ftrprf/judge-scratch-vm-types/types/virtual-machine';
 import { Event, NewLog } from './new-log';
+import { ScratchBlock } from './model';
+
+export interface ProfileEventData {
+  /**
+   * The ID of the block that executed.
+   */
+  readonly blockId: string;
+  /**
+   * The name of the target that executed the block.
+   */
+  readonly target: string;
+  /**
+   * Shortcut to get the actual block.
+   */
+  block(): ScratchBlock;
+}
 
 /**
  * Install the advanced block profiler into the VM.
@@ -18,7 +34,11 @@ export function installAdvancedBlockProfiler(vm: VirtualMachine, log: NewLog): v
         const event = new Event('block_execution', {
           blockId: currentBlockId,
           target: targetId,
-        });
+          block: () => {
+            const target = log.last.target(targetId);
+            return target.block(currentBlockId);
+          },
+        } as ProfileEventData);
         event.previous = log.last;
         event.next = event.previous;
         log.registerEvent(event);

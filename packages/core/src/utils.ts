@@ -81,3 +81,5 @@ export function stringify(value: unknown): string {
 export function assertType<T>(value: unknown): asserts value is T {
   // Do nothing, this is a type check only.
 }
+
+export type Writeable<T> = { -readonly [P in keyof T]: T[P] };

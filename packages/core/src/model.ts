@@ -290,7 +290,7 @@ export class ScratchSprite extends ScratchTarget {
   }
 
   /**
-   * @deprecated
+   * Get the name of the current costume.
    */
   get costume(): string | undefined {
     return this.costumes?.[this.currentCostume]?.name;

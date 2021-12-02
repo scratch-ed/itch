@@ -71,6 +71,7 @@ function expose() {
   object.distSq = distSq;
   object.Itch = {
     checkPredefinedBlocks: checkPredefinedBlocks,
+    distSq: distSq,
   };
   object.format = format;
   object.t = t;
@@ -279,7 +280,6 @@ export async function run(config: EvalConfig): Promise<void> {
   const templateJson = await context.getProjectJson(config);
   const submissionJson = await context.prepareVm(config);
   const beforeExecution = window.beforeExecution || (() => {});
-  const beforeExecution2 = window.beforeExecution2;
   const duringExecution = window.duringExecution || ((e) => e.scheduler.end());
   const afterExecution = window.afterExecution || (() => {});
 
@@ -296,11 +296,13 @@ export async function run(config: EvalConfig): Promise<void> {
     const submissionSnapshot = snapshotFromSb3(submissionJson);
     context.log.registerStartSnapshots(templateSnapshot, submissionSnapshot);
 
-    if (!beforeExecution2) {
+    if (beforeExecution.length > 1) {
       // Run the tests before the execution.
+      // @ts-ignore
       beforeExecution(new Project(templateJson), new Project(submissionJson), judge);
     } else {
-      beforeExecution2(judge);
+      // @ts-ignore
+      beforeExecution(judge);
     }
 
     await context.vmLoaded.promise;

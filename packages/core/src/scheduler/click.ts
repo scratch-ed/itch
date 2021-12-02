@@ -5,6 +5,13 @@ import { Event } from '../new-log';
 
 const STAGE = 'Stage';
 
+export interface ClickEventData {
+  /**
+   * Name of the target that was clicked.
+   */
+  readonly target: string;
+}
+
 export class ClickSpriteAction extends ScheduledAction {
   sprite: string;
 
@@ -23,7 +30,7 @@ export class ClickSpriteAction extends ScheduledAction {
     }
 
     // Save the state of the sprite before the click event.
-    const event = new Event('click', { target: this.sprite });
+    const event = new Event('click', { target: this.sprite } as ClickEventData);
     event.previous = context.log.snap(context.vm!, 'event.click.start');
     context.log.registerEvent(event);
 

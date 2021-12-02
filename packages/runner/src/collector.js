@@ -55,7 +55,7 @@ class Processor {
     if (command === 'close-test') {
       this.element.innerHTML += `<span title='${this.currentTest.name}'>${
         message.status === 'correct' ? '✅' : '❌'
-      } ${message.feedback}</span><br>`;
+      } ${message.feedback || this.currentTest.name}</span><br>`;
     }
 
     if (command.startsWith('close')) {

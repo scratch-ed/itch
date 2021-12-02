@@ -15,6 +15,7 @@ import { t } from './i18n';
 
 declare interface Itch {
   checkPredefinedBlocks: typeof checkPredefinedBlocks;
+  distSq: typeof distSq;
 }
 
 /**
@@ -80,11 +81,9 @@ declare global {
     /** @deprecated */
     distSq: typeof distSq;
 
-    /** @deprecated */
-    beforeExecution?: typeof beforeExecution;
+    beforeExecution?: typeof beforeExecution | CallbackFunction;
     duringExecution?: CallbackFunction;
     afterExecution?: CallbackFunction;
-    beforeExecution2?: CallbackFunction;
 
     run: typeof run;
     format: typeof format;
@@ -92,4 +91,6 @@ declare global {
 
     t: typeof t;
   }
+
+  const Itch: Itch;
 }

@@ -95,6 +95,7 @@ function convertFields(
 
 /**
  * Convert one block to a tree node.
+ * @deprecated
  */
 function blockToNode(block: Sb3Block, blockmap: Map<string, Sb3Block>): Node {
   const next = getOrNull(block.next, blockmap);
@@ -126,6 +127,7 @@ function blockToNode(block: Sb3Block, blockmap: Map<string, Sb3Block>): Node {
  *
  * @param sprite
  * @param blocks - Top level blocks to filter.
+ * @deprecated
  */
 export function asTree(
   sprite: Sb3Target,

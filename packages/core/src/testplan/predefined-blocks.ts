@@ -4,15 +4,12 @@
  * Utilities to check if the students changed the predefined blocks and/or
  * sprites in their solution.
  */
+import { assertType, stringify, Writeable } from '../utils';
+import { cloneDeep, isEmpty, isObject, transform, isEqual } from 'lodash-es';
+import { Evaluation } from '../evaluation';
+import { ScratchBlock, ScratchTarget } from '../model';
 
-import { Sb3Block, Sb3Target } from '../structures';
-import { assertType, stringify } from '../utils';
-import { Project } from '../project';
-import { GroupLevel } from './hierarchy';
-import { cloneDeep, isEmpty, isObject, transform } from 'lodash-es';
-import isEqual from 'lodash-es/isEqual';
-
-type BlockFilter = (value: Sb3Block, index: number, array: Sb3Block[]) => boolean;
+type BlockFilter = (value: ScratchBlock, index: number, array: ScratchBlock[]) => boolean;
 
 /**
  * The configuration for the pre-defined block config.
@@ -25,8 +22,16 @@ export interface PredefinedBlockConfig {
 
   /**
    * The hat blocks. The name of the sprite is mapped to
-   * a filter method, that will must return true if the hat
+   * a filter method, that must return true if the hat block
    * in question is allowed to be modified.
+   *
+   * For example, a sprite might have some predefined blocks, and
+   * one hat block with a broadcast "start". The filter function
+   * should then only return true for the broadcast hat block.
+   *
+   * Another scenario is where the sprite has no blocks, and you
+   * want to allow all blocks: in that case the filter function can
+   * just always return true.
    */
   hats: Record<string, BlockFilter>;
 
@@ -42,7 +47,7 @@ export interface PredefinedBlockConfig {
    * to matched the blocks, so the order should be deterministic and unique for
    * blocks you want to consider the same.
    */
-  blockComparator?: Parameters<Array<Sb3Block>['sort']>[0];
+  blockComparator?: Parameters<Array<ScratchBlock>['sort']>[0];
 
   debug?: boolean;
 }
@@ -61,12 +66,12 @@ const DEFAULT_CONFIG: Partial<PredefinedBlockConfig> = {
  * @param block From which block to remove.
  * @param from The sprite to remove from.
  */
-function removeAttached(block: Sb3Block, from: Sb3Target): Sb3Block[] {
+function removeAttached(block: ScratchBlock, from: ScratchTarget): ScratchBlock[] {
   // We remove all attached code from the hat block in the solution.
   const toCheck = new Set();
   toCheck.add(block.id);
   const toRemoveIds = new Set();
-  const removedBlocks: Sb3Block[] = [];
+  const removedBlocks: ScratchBlock[] = [];
   while (toCheck.size !== 0) {
     const checking = toCheck.values().next().value;
     from.blocks
@@ -84,9 +89,9 @@ function removeAttached(block: Sb3Block, from: Sb3Target): Sb3Block[] {
   return removedBlocks;
 }
 
-function fixHatBlock(filteredBlocks: Sb3Block[], hatBlock: Sb3Block) {
+function fixHatBlock(filteredBlocks: ScratchBlock[], hatBlock: Writeable<ScratchBlock>) {
   const solutionIndex = filteredBlocks.findIndex((b) => b.id === hatBlock.id);
-  hatBlock.next = null;
+  hatBlock.next = undefined;
   filteredBlocks[solutionIndex] = hatBlock;
 }
 
@@ -109,19 +114,22 @@ export function difference(object: Dict, base: Dict): Dict {
 }
 
 /**
- * Check the predefined blocks of a solution against a template.
+ * Check the predefined blocks of a solution against a template. It can be used
+ * to ensure students only changed code of allowed sprites. See the docs on the
+ * config interfaces for more information.
+ *
  * @param userConfig The config to use.
- * @param template
- * @param submission
- * @param e
+ * @param evaluation The evaluation, from which the data is extracted.
  */
 export function checkPredefinedBlocks(
   userConfig: PredefinedBlockConfig,
-  template: Project,
-  submission: Project,
-  e: GroupLevel,
+  evaluation: Evaluation,
 ): void {
   const config = { ...DEFAULT_CONFIG, ...userConfig } as Required<PredefinedBlockConfig>;
+
+  const template = evaluation.log.template;
+  const submission = evaluation.log.submission;
+  const e = evaluation.group;
 
   if (typeof config.allowedBlocks === 'function') {
     const object: Record<string, BlockFilter> = {};
@@ -133,8 +141,8 @@ export function checkPredefinedBlocks(
 
   e.group('Controle op bestaande code', { visibility: 'collapse' }, () => {
     // We check each sprite.
-    for (const sprite of template.sprites()) {
-      const name = sprite.name;
+    for (const target of template.targets) {
+      const name = target.name;
       if (config.ignoredSprites.includes(name) || name in config.hats) {
         continue;
       }
@@ -144,7 +152,7 @@ export function checkPredefinedBlocks(
             correct: `Top! Je hebt niets veranderd aan de sprite ${name}.`,
             wrong: `Oops, je hebt iets veranderd aan de sprite ${name}. Je gaat opnieuw moeten beginnen.`,
           })
-          .expect(template.hasChangedSprite(submission, name))
+          .expect(template.hasChangedTarget(submission, name))
           .toBe(false);
         e.test()
           .feedback({
@@ -164,7 +172,7 @@ export function checkPredefinedBlocks(
           wrong:
             'Oops, je hebt iets veranderd aan het speelveld. Je gaat opnieuw moeten beginnen.',
         })
-        .expect(template.hasChangedSprite(submission, 'Stage'))
+        .expect(template.hasChangedTarget(submission, 'Stage'))
         .toBe(false);
       e.test()
         .feedback({
@@ -191,9 +199,6 @@ export function checkPredefinedBlocks(
           .expect(solutionSprite)
           .toNotBe(undefined);
 
-        // The solution hat can no longer be undefined.
-        assertType<Sb3Target>(solutionSprite);
-
         const templateSprite = cloneDeep(template.sprite(hat))!;
 
         // We test as follows: remove all blocks attached to the hat block.
@@ -209,7 +214,10 @@ export function checkPredefinedBlocks(
             correct: 'Goed zo, je hebt geen voorgeprogrammeerde blokjes verwijderd.',
           })
           .expect(
-            solutionBlocks.length > 0 && solutionBlocks.length >= templateBlocks.length,
+            // If there are no blocks in the template, it's fine as well.
+            templateBlocks.length === 0 ||
+              (solutionBlocks.length > 0 &&
+                solutionBlocks.length >= templateBlocks.length),
           )
           .toBe(true);
 
@@ -217,8 +225,8 @@ export function checkPredefinedBlocks(
         solutionBlocks = solutionBlocks.sort(config.blockComparator);
         templateBlocks = templateBlocks.sort(config.blockComparator);
 
-        const removedSolutionBlocks: Sb3Block[] = [];
-        const removedTemplateBlocks: Sb3Block[] = [];
+        const removedSolutionBlocks: ScratchBlock[] = [];
+        const removedTemplateBlocks: ScratchBlock[] = [];
         const until = Math.min(solutionBlocks.length, templateBlocks.length);
 
         for (let i = 0; i < until; i++) {

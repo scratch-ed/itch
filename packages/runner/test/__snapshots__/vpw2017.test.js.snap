@@ -4,389 +4,508 @@ exports[`01_mad_hatter 1`] = `
 Array [
   Object {
     "command": "start-judgement",
+    "version": 2,
   },
   Object {
-    "command": "start-tab",
-    "title": "Testen uit het testplan",
+    "command": "start-group",
+    "name": "Controle op bestaande code",
+    "visibility": "collapse",
   },
   Object {
-    "command": "start-context",
-    "description": "Controle op sprites",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "Toegevoegde sprites",
-  },
-  Object {
-    "command": "start-test",
-    "expected": "false",
-  },
-  Object {
-    "accepted": true,
-    "command": "close-test",
-    "generated": "false",
-    "status": Object {
-      "enum": "correct",
-      "human": "Correct",
-    },
-  },
-  Object {
-    "command": "close-testcase",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "Verwijderde sprites",
+    "command": "start-group",
+    "name": "Nori",
+    "sprite": "Nori",
+    "visibility": "collapse",
   },
   Object {
     "command": "start-test",
-    "expected": "false",
+    "name": "Test 0.055085085131258336",
   },
   Object {
-    "accepted": true,
     "command": "close-test",
-    "generated": "false",
-    "status": Object {
-      "enum": "correct",
-      "human": "Correct",
-    },
-  },
-  Object {
-    "command": "close-testcase",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "Gewijzigde costumes",
+    "feedback": "Top! Je hebt niets veranderd aan de sprite Nori.",
+    "status": "correct",
   },
   Object {
     "command": "start-test",
-    "expected": "false",
+    "name": "Test 0.6675940473163964",
   },
   Object {
-    "accepted": true,
     "command": "close-test",
-    "generated": "false",
-    "status": Object {
-      "enum": "correct",
-      "human": "Correct",
-    },
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Nori.",
+    "status": "correct",
+  },
+  Object {
+    "command": "close-group",
+  },
+  Object {
+    "command": "start-group",
+    "name": "Speelveld",
+    "sprite": "Speelveld",
+    "visibility": "collapse",
   },
   Object {
     "command": "start-test",
-    "expected": "false",
+    "name": "Gewijzigde sprite",
   },
   Object {
-    "accepted": true,
     "command": "close-test",
-    "generated": "false",
-    "status": Object {
-      "enum": "correct",
-      "human": "Correct",
-    },
+    "feedback": "Top! Je hebt niets veranderd aan het speelveld.",
+    "status": "correct",
   },
   Object {
     "command": "start-test",
-    "expected": "false",
+    "name": "Test 0.3017406753576552",
   },
   Object {
-    "accepted": true,
     "command": "close-test",
-    "generated": "false",
-    "status": Object {
-      "enum": "correct",
-      "human": "Correct",
-    },
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van het speelveld.",
+    "status": "correct",
   },
   Object {
-    "command": "close-testcase",
+    "command": "close-group",
   },
   Object {
-    "command": "start-testcase",
-    "description": "Code van Nori",
+    "command": "start-group",
+    "name": "Hat",
+    "sprite": "Hat",
+    "visibility": "collapse",
   },
   Object {
     "command": "start-test",
-    "expected": "true",
+    "name": "Test 0.26858494859270277",
   },
   Object {
-    "accepted": true,
     "command": "close-test",
-    "generated": "true",
-    "status": Object {
-      "enum": "correct",
-      "human": "Correct",
-    },
-  },
-  Object {
-    "command": "close-testcase",
-  },
-  Object {
-    "command": "close-context",
-  },
-  Object {
-    "command": "start-context",
-    "description": "Hoed verandert bij klikken",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "Hoed verandert bij klikken",
+    "feedback": "De sprite bestaat.",
+    "status": "correct",
   },
   Object {
     "command": "start-test",
-    "expected": "2",
+    "name": "Test 0.19415545140297377",
   },
   Object {
-    "accepted": true,
     "command": "close-test",
-    "generated": "1",
-    "status": Object {
-      "enum": "correct",
-      "human": "Correct",
-    },
-  },
-  Object {
-    "command": "close-testcase",
-  },
-  Object {
-    "command": "close-context",
-  },
-  Object {
-    "command": "start-context",
-    "description": "Testen voor de Hoed",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "Kostuums van de hoed",
+    "feedback": "Goed zo, je hebt geen voorgeprogrammeerde blokjes verwijderd.",
+    "status": "correct",
   },
   Object {
     "command": "start-test",
-    "expected": "true",
+    "name": "Test op rondslingerende blokjes",
   },
   Object {
-    "accepted": true,
     "command": "close-test",
-    "generated": "true",
-    "status": Object {
-      "enum": "correct",
-      "human": "Correct",
-    },
-  },
-  Object {
-    "command": "close-testcase",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "Klikken op de hoed",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
   },
   Object {
     "command": "start-test",
-    "expected": "2",
+    "name": "Test 0.9255796447261436",
   },
   Object {
-    "accepted": true,
     "command": "close-test",
-    "generated": "2",
-    "status": Object {
-      "enum": "correct",
-      "human": "Correct",
-    },
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Hat.",
+    "status": "correct",
+  },
+  Object {
+    "command": "close-group",
+  },
+  Object {
+    "command": "close-group",
+  },
+  Object {
+    "command": "start-group",
+    "name": "Testen voor de Hoed",
+    "visibility": "show",
   },
   Object {
     "command": "start-test",
-    "expected": "3",
+    "name": "Hoed verandert bij klikken",
   },
   Object {
-    "accepted": true,
     "command": "close-test",
-    "generated": "3",
-    "status": Object {
-      "enum": "correct",
-      "human": "Correct",
-    },
+    "status": "correct",
   },
   Object {
     "command": "start-test",
-    "expected": "0",
+    "name": "Kostuums van de hoed",
   },
   Object {
-    "accepted": true,
     "command": "close-test",
-    "generated": "0",
-    "status": Object {
-      "enum": "correct",
-      "human": "Correct",
-    },
+    "status": "correct",
   },
   Object {
     "command": "start-test",
-    "expected": "0",
+    "name": "Klikken op de hoed",
   },
   Object {
-    "accepted": true,
     "command": "close-test",
-    "generated": "0",
-    "status": Object {
-      "enum": "correct",
-      "human": "Correct",
-    },
+    "status": "correct",
   },
   Object {
     "command": "start-test",
-    "expected": "4",
+    "name": "Klikken op de hoed",
   },
   Object {
-    "accepted": true,
     "command": "close-test",
-    "generated": "4",
-    "status": Object {
-      "enum": "correct",
-      "human": "Correct",
-    },
+    "status": "correct",
   },
   Object {
     "command": "start-test",
-    "expected": "0",
+    "name": "Klikken op de hoed",
   },
   Object {
-    "accepted": true,
     "command": "close-test",
-    "generated": "0",
-    "status": Object {
-      "enum": "correct",
-      "human": "Correct",
-    },
+    "status": "correct",
   },
   Object {
     "command": "start-test",
-    "expected": "1",
+    "name": "Klikken op de hoed",
   },
   Object {
-    "accepted": true,
     "command": "close-test",
-    "generated": "1",
-    "status": Object {
-      "enum": "correct",
-      "human": "Correct",
-    },
+    "status": "correct",
   },
   Object {
     "command": "start-test",
-    "expected": "2",
+    "name": "Klikken op de hoed",
   },
   Object {
-    "accepted": true,
     "command": "close-test",
-    "generated": "2",
-    "status": Object {
-      "enum": "correct",
-      "human": "Correct",
-    },
+    "status": "correct",
   },
   Object {
     "command": "start-test",
-    "expected": "0",
+    "name": "Klikken op de hoed",
   },
   Object {
-    "accepted": true,
     "command": "close-test",
-    "generated": "0",
-    "status": Object {
-      "enum": "correct",
-      "human": "Correct",
-    },
+    "status": "correct",
   },
   Object {
     "command": "start-test",
-    "expected": "0",
+    "name": "Klikken op de hoed",
   },
   Object {
-    "accepted": true,
     "command": "close-test",
-    "generated": "0",
-    "status": Object {
-      "enum": "correct",
-      "human": "Correct",
-    },
+    "status": "correct",
   },
   Object {
     "command": "start-test",
-    "expected": "0",
+    "name": "Klikken op de hoed",
   },
   Object {
-    "accepted": true,
     "command": "close-test",
-    "generated": "0",
-    "status": Object {
-      "enum": "correct",
-      "human": "Correct",
-    },
+    "status": "correct",
   },
   Object {
     "command": "start-test",
-    "expected": "3",
+    "name": "Klikken op de hoed",
   },
   Object {
-    "accepted": true,
     "command": "close-test",
-    "generated": "3",
-    "status": Object {
-      "enum": "correct",
-      "human": "Correct",
-    },
+    "status": "correct",
   },
   Object {
     "command": "start-test",
-    "expected": "4",
+    "name": "Klikken op de hoed",
   },
   Object {
-    "accepted": true,
     "command": "close-test",
-    "generated": "4",
-    "status": Object {
-      "enum": "correct",
-      "human": "Correct",
-    },
+    "status": "correct",
   },
   Object {
     "command": "start-test",
-    "expected": "0",
+    "name": "Klikken op de hoed",
   },
   Object {
-    "accepted": true,
     "command": "close-test",
-    "generated": "0",
-    "status": Object {
-      "enum": "correct",
-      "human": "Correct",
-    },
-  },
-  Object {
-    "command": "close-testcase",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "Correcte blokken",
+    "status": "correct",
   },
   Object {
     "command": "start-test",
-    "expected": "true",
+    "name": "Klikken op de hoed",
   },
   Object {
-    "accepted": true,
     "command": "close-test",
-    "generated": "true",
-    "status": Object {
-      "enum": "correct",
-      "human": "Correct",
-    },
+    "status": "correct",
   },
   Object {
-    "command": "close-testcase",
+    "command": "start-test",
+    "name": "Klikken op de hoed",
   },
   Object {
-    "command": "close-context",
+    "command": "close-test",
+    "status": "correct",
   },
   Object {
-    "command": "close-tab",
+    "command": "start-test",
+    "name": "Klikken op de hoed",
+  },
+  Object {
+    "command": "close-test",
+    "status": "correct",
+  },
+  Object {
+    "command": "start-test",
+    "name": "Correcte blokken",
+  },
+  Object {
+    "command": "close-test",
+    "status": "correct",
+  },
+  Object {
+    "command": "close-group",
+  },
+  Object {
+    "command": "close-judgement",
+  },
+]
+`;
+
+exports[`02_papegaai 1`] = `
+Array [
+  Object {
+    "command": "start-judgement",
+    "version": 2,
+  },
+  Object {
+    "command": "start-group",
+    "name": "Testen voor de Papegaai",
+    "visibility": "show",
+  },
+  Object {
+    "command": "start-test",
+    "name": "Papegaai bestaat",
+  },
+  Object {
+    "command": "close-test",
+    "status": "correct",
+  },
+  Object {
+    "command": "start-test",
+    "name": "Papegaai beweegt niet",
+  },
+  Object {
+    "command": "close-test",
+    "status": "correct",
+  },
+  Object {
+    "command": "start-test",
+    "name": "Papegaai vliegt enkel horizontaal",
+  },
+  Object {
+    "command": "close-test",
+    "status": "correct",
+  },
+  Object {
+    "command": "start-test",
+    "name": "Test 0.2165789609714974",
+  },
+  Object {
+    "command": "close-test",
+    "feedback": "De papegaai raakt de rand bij het veranderen van richting.",
+    "status": "correct",
+  },
+  Object {
+    "command": "start-test",
+    "name": "Test 0.4983973001423014",
+  },
+  Object {
+    "command": "close-test",
+    "feedback": "De papegaai vliegt horizontaal.",
+    "status": "correct",
+  },
+  Object {
+    "command": "start-test",
+    "name": "Test 0.6150841434614063",
+  },
+  Object {
+    "command": "close-test",
+    "feedback": "De papegaai raakt de rand bij het veranderen van richting.",
+    "status": "correct",
+  },
+  Object {
+    "command": "start-test",
+    "name": "Test 0.19843879604101833",
+  },
+  Object {
+    "command": "close-test",
+    "feedback": "De papegaai vliegt horizontaal.",
+    "status": "correct",
+  },
+  Object {
+    "command": "start-test",
+    "name": "Test 0.8526033719101519",
+  },
+  Object {
+    "command": "close-test",
+    "feedback": "De papegaai raakt de rand bij het veranderen van richting.",
+    "status": "correct",
+  },
+  Object {
+    "command": "start-test",
+    "name": "Test 0.04642983889045595",
+  },
+  Object {
+    "command": "close-test",
+    "feedback": "De papegaai vliegt horizontaal.",
+    "status": "correct",
+  },
+  Object {
+    "command": "start-test",
+    "name": "Test 0.2316213679197999",
+  },
+  Object {
+    "command": "close-test",
+    "feedback": "De papegaai raakt de rand bij het veranderen van richting.",
+    "status": "correct",
+  },
+  Object {
+    "command": "start-test",
+    "name": "Test 0.36833606377437567",
+  },
+  Object {
+    "command": "close-test",
+    "feedback": "De papegaai vliegt horizontaal.",
+    "status": "correct",
+  },
+  Object {
+    "command": "start-test",
+    "name": "Test 0.19018709287663796",
+  },
+  Object {
+    "command": "close-test",
+    "feedback": "De papegaai raakt de rand bij het veranderen van richting.",
+    "status": "correct",
+  },
+  Object {
+    "command": "start-test",
+    "name": "Test 0.9481745606476195",
+  },
+  Object {
+    "command": "close-test",
+    "feedback": "De papegaai vliegt horizontaal.",
+    "status": "correct",
+  },
+  Object {
+    "command": "start-test",
+    "name": "Test 0.8620147969967875",
+  },
+  Object {
+    "command": "close-test",
+    "feedback": "De papegaai raakt de rand bij het veranderen van richting.",
+    "status": "correct",
+  },
+  Object {
+    "command": "start-test",
+    "name": "Test 0.9101281237480078",
+  },
+  Object {
+    "command": "close-test",
+    "feedback": "De papegaai vliegt horizontaal.",
+    "status": "correct",
+  },
+  Object {
+    "command": "start-test",
+    "name": "Test 0.25574210927832525",
+  },
+  Object {
+    "command": "close-test",
+    "feedback": "De papegaai raakt de rand bij het veranderen van richting.",
+    "status": "correct",
+  },
+  Object {
+    "command": "start-test",
+    "name": "Test 0.6061971077347643",
+  },
+  Object {
+    "command": "close-test",
+    "feedback": "De papegaai vliegt horizontaal.",
+    "status": "correct",
+  },
+  Object {
+    "command": "start-test",
+    "name": "Test 0.5376622109864118",
+  },
+  Object {
+    "command": "close-test",
+    "feedback": "De papegaai raakt de rand bij het veranderen van richting.",
+    "status": "correct",
+  },
+  Object {
+    "command": "start-test",
+    "name": "Test 0.8020192816528741",
+  },
+  Object {
+    "command": "close-test",
+    "feedback": "De papegaai vliegt horizontaal.",
+    "status": "correct",
+  },
+  Object {
+    "command": "start-test",
+    "name": "Test 0.7979942475379936",
+  },
+  Object {
+    "command": "close-test",
+    "feedback": "De papegaai raakt de rand bij het veranderen van richting.",
+    "status": "correct",
+  },
+  Object {
+    "command": "start-test",
+    "name": "Test 0.15364629595999688",
+  },
+  Object {
+    "command": "close-test",
+    "feedback": "De papegaai vliegt horizontaal.",
+    "status": "correct",
+  },
+  Object {
+    "command": "start-test",
+    "name": "Test 0.4573906342166515",
+  },
+  Object {
+    "command": "close-test",
+    "feedback": "De papegaai veranderde minimum 2 keer van richting.",
+    "status": "correct",
+  },
+  Object {
+    "command": "start-test",
+    "name": "Test 0.5512633986927363",
+  },
+  Object {
+    "command": "close-test",
+    "feedback": "De Papegaai klappert met vleugels.",
+    "status": "correct",
+  },
+  Object {
+    "command": "close-group",
+  },
+  Object {
+    "command": "start-group",
+    "name": "Blokjes",
+    "visibility": "show",
+  },
+  Object {
+    "command": "start-test",
+    "name": "Test 0.6020632743932764",
+  },
+  Object {
+    "command": "close-test",
+    "feedback": "Gebruik van een lus",
+    "status": "correct",
+  },
+  Object {
+    "command": "start-test",
+    "name": "Test 0.0036119185150366687",
+  },
+  Object {
+    "command": "close-test",
+    "feedback": "Correcte gebruik van de lus",
+    "status": "correct",
+  },
+  Object {
+    "command": "close-group",
   },
   Object {
     "command": "close-judgement",
@@ -593,40 +712,24 @@ exports[`06_voetballende_kat 1`] = `
 Array [
   Object {
     "command": "start-judgement",
+    "version": 2,
   },
   Object {
-    "command": "start-tab",
-    "title": "Testen uit het testplan",
-  },
-  Object {
-    "command": "start-context",
-    "description": "Afstand van kat tot voetbal wordt kleiner",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "Afstand van kat tot voetbal wordt kleiner",
+    "command": "start-group",
+    "name": "Groep 0.6675940473163964",
+    "visibility": "show",
   },
   Object {
     "command": "start-test",
-    "expected": "true",
+    "name": "Test 0.055085085131258336",
   },
   Object {
-    "accepted": true,
     "command": "close-test",
-    "generated": "true",
-    "status": Object {
-      "enum": "correct",
-      "human": "Correct",
-    },
+    "feedback": "Afstand van kat tot voetbal wordt kleiner",
+    "status": "correct",
   },
   Object {
-    "command": "close-testcase",
-  },
-  Object {
-    "command": "close-context",
-  },
-  Object {
-    "command": "close-tab",
+    "command": "close-group",
   },
   Object {
     "command": "close-judgement",

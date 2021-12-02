@@ -1,18 +1,15 @@
 /* Copyright (C) 2019 Ghent University - All Rights Reserved */
 
-/**
- * @param {Project} template - The template project.
- * @param {Project} submission - The submission project.
- * @param {Evaluation} output - The output manager.
- */
-function beforeExecution(template, submission, output) {
-  output.describe('Testen voor Papegaai', (l) => {
-    l.test('Papegaai bestaat', (l) => {
-      l.expect(submission.containsSprite('Papegaai'))
-        .withError('Er moet een sprite met de naam Papegaai bestaan in het project!')
-        .toBe(true);
-    });
-  });
+/** @param {Evaluation} e */
+function beforeExecution(e) {
+  const g = e.group;
+  e.groupedOutput.startGroup('Testen voor de Papegaai');
+  g.test('Papegaai bestaat')
+    .feedback({
+      wrong: 'Er moet een sprite met de naam Papegaai bestaan in het project!',
+    })
+    .expect(e.log.submission.findSprite('Papegaai'))
+    .toNotBe(undefined);
 }
 
 /** @param {Evaluation} e */
@@ -23,11 +20,19 @@ function duringExecution(e) {
   e.scheduler
     .wait(1000)
     .log(() => {
-      e.test('Papegaai beweegt niet', (l) => {
-        l.expect(e.log.hasSpriteMoved('Papegaai'))
-          .withError('De papegaai mag niet bewegen voor er op geklikt wordt')
-          .toBe(false);
-      });
+      // De papegaai mag niet bewegen voor er op geklikt wordt.
+      const positions = new Set();
+      for (const snapshot of e.log.snapshots) {
+        const sprite = snapshot.sprite('Papegaai');
+        positions.add({ x: sprite.x, y: sprite.y });
+      }
+      e.group
+        .test('Papegaai beweegt niet')
+        .feedback({
+          wrong: 'De papegaai mag niet bewegen voor er op geklikt wordt',
+        })
+        .expect(positions.size)
+        .toBe(1);
     })
     .clickSprite('Papegaai', false)
     .wait(3000)
@@ -36,81 +41,110 @@ function duringExecution(e) {
 
 /** @param {Evaluation} e */
 function afterExecution(e) {
-  e.describe('Testen voor papegaai', (l) => {
-    // We beschouwen enkel de frames na de klik
-    const klikEvent = e.log.events.filter({ type: 'click' })[0];
-    const frames = searchFrames(e.log.frames, { after: klikEvent.time });
-    const directions = []; // We slaan de richting van de papegaai op bij elke verandering van richting.
-    let previousFrame = frames[0];
-    let oldDirection = previousFrame.getSprite('Papegaai').direction;
+  // Only check snapshots after the clock.
+  const clickEvent = e.log.events.find((e) => e.type === 'click');
+  const snaps = e.log.snapshots
+    .filter((s) => s.timestamp >= clickEvent.timestamp)
+    .map((s) => s.sprite('Papegaai'));
+  const directions = []; // We slaan de richting van de papegaai op bij elke verandering van richting.
+  let previousSnapshot = snaps[0];
+  let oldDirection = previousSnapshot.direction;
 
-    l.test('Papegaai vliegt enkel horizontaal', (l) => {
-      l.expect(numericEquals(e.log.getMaxY('Papegaai'), e.log.getMinY('Papegaai')))
-        .withError('De y-coördinaat van de Papegaai blijft niet constant')
-        .toBe(true);
-    });
+  // Collect all positions
+  const yPositions = snaps.map((s) => s.y);
+  const maxY = Math.max(...yPositions);
+  const minY = Math.min(...yPositions);
 
-    // De papegaai moet (horizontaal) van richting veranderen, maar enkel als de papegaai zich bij rand van het speelveld bevindt.
-    for (const frame of frames) {
-      const sprite = frame.getSprite('Papegaai');
-      if (oldDirection !== sprite.direction) {
-        // De richting van de sprite is veranderd
-        directions.push(sprite.direction);
-        oldDirection = sprite.direction;
-        // Test of de papegaai de rand raakt
-        const papegaai = previousFrame.getSprite('Papegaai');
-        const raaktRand = papegaai.bounds.right > 220 || papegaai.bounds.left < -220;
-        l.test('De papegaai raakt de rand bij het veranderen van richting', (l) => {
-          l.expect(raaktRand)
-            .withError(
-              'De papegaai is veranderd van richting zonder de rand te raken van het speelveld',
-            )
-            .toBe(true);
-        });
-        l.test('De papegaai vliegt horizontaal', (l) => {
-          // Test of de papegaai altijd van links naar rechts en omgekeerd beweegt
-          l.expect(sprite.direction === 90 || sprite.direction === -90)
-            .withError(
-              'De richting van de papegaai is niet 90 of -90, de papegaai vliegt niet horizontaal.',
-            )
-            .toBe(true);
-        });
-      }
-      previousFrame = frame;
+  e.group
+    .test('Papegaai vliegt enkel horizontaal')
+    .feedback({
+      wrong: 'De y-coördinaat van de Papegaai blijft niet constant',
+    })
+    .expect(minY)
+    .toBe(maxY);
+
+  // De papegaai moet (horizontaal) van richting veranderen, maar enkel als de papegaai zich bij rand van het speelveld bevindt.
+  for (const sprite of snaps) {
+    if (oldDirection !== sprite.direction) {
+      // De richting van de sprite is veranderd
+      directions.push(sprite.direction);
+      oldDirection = sprite.direction;
+      // Test of de papegaai de rand raakt
+      const raaktRand =
+        previousSnapshot.bounds.right > 220 || previousSnapshot.bounds.left < -220;
+      e.group
+        .test()
+        .feedback({
+          correct: 'De papegaai raakt de rand bij het veranderen van richting.',
+          wrong:
+            'De papegaai is veranderd van richting zonder de rand te raken van het speelveld.',
+        })
+        .acceptIf(raaktRand);
+      // Test of de papegaai altijd van links naar rechts en omgekeerd beweegt
+      e.group
+        .test()
+        .feedback({
+          correct: 'De papegaai vliegt horizontaal.',
+          wrong:
+            'De richting van de papegaai is niet 90 of -90, de papegaai vliegt niet horizontaal.',
+        })
+        .acceptIf(sprite.direction === 90 || sprite.direction === -90);
     }
+    previousSnapshot = sprite;
+  }
 
-    l.test('De papegaai veranderde minimum 2 keer van richting', (l) => {
-      l.expect(directions.length > 2)
-        .withError(
-          `De papegaai moet minstens twee veranderen van richting, maar is maar ${directions.length} keer veranderd`,
-        )
-        .toBe(true);
-    });
+  e.group
+    .test()
+    .feedback({
+      correct: 'De papegaai veranderde minimum 2 keer van richting.',
+      wrong: `De papegaai moet minstens twee veranderen van richting, maar is maar ${directions.length} keer veranderd.`,
+    })
+    .acceptIf(directions.length > 2);
 
-    // De papegaai verandert van kostuum tijdens het vliegen
-    l.test('Papegaai klappert met vleugels', (l) => {
-      // De papegaai verandert van kostuum tijdens het vliegen
-      const costumeChanges = e.log.getCostumeChanges('Papegaai');
-      l.expect(costumeChanges.length > 4)
-        .withError(
-          `De Papegaai moet constant wisselen tussen de kostuums 'VleugelsOmhoog' en 'VleugelsOmlaag'`,
-        )
-        .toBe(true);
-    });
-  });
+  // Calculate how many costume changes there are.
+  const costumeChanges = [];
+  let oldCostume = '';
+  for (const sprite of snaps) {
+    if (oldCostume !== sprite.costume) {
+      costumeChanges.push(sprite.costume);
+      oldCostume = sprite.costume;
+    }
+  }
 
-  e.describe('Blokjes', (l) => {
-    l.test('Gebruik van een lus', (l) => {
-      // Gebruik best een lus de papegaai te bewegen en van kostuum te veranderen.
-      l.expect(e.log.blocks.containsLoop())
-        .withError('Er werd geen herhalingslus gebruikt')
-        .toBe(true);
-    });
+  e.group
+    .test()
+    .feedback({
+      correct: 'De Papegaai klappert met vleugels.',
+      wrong:
+        "De Papegaai moet constant wisselen tussen de kostuums 'VleugelsOmhoog' en 'VleugelsOmlaag'",
+    })
+    .acceptIf(costumeChanges.length > 4);
+
+  e.groupedOutput.closeGroup();
+
+  e.group.group('Blokjes', () => {
+    const blocks = e.log.events
+      .filter((e) => e.type === 'block_execution')
+      .map((b) => b.data.block());
+
+    e.group
+      .test()
+      .feedback({
+        correct: 'Gebruik van een lus',
+        wrong: 'Er werd geen herhalingslus gebruikt',
+      })
+      .acceptIf(
+        blocks.some((b) => ['control_repeat', 'control_forever'].includes(b.opcode)),
+      );
+
+    const counted = blocks.filter((b) => b.opcode === 'control_forever');
     // De code in de lus wordt minstens 2 keer herhaald
-    l.test('Correcte gebruik van de lus', (l) => {
-      l.expect(e.log.blocks.numberOfExecutions('control_forever') > 2)
-        .withError('De code in de lus werd minder dan 2 keer herhaald')
-        .toBe(true);
-    });
+    e.group
+      .test()
+      .feedback({
+        correct: 'Correcte gebruik van de lus',
+        wrong: 'De code in de lus werd minder dan 2 keer herhaald',
+      })
+      .acceptIf(counted.length > 2);
   });
 }

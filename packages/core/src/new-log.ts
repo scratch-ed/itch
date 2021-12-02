@@ -18,8 +18,10 @@ import {
   VideoState,
 } from './model';
 import { assertType, ensure } from './utils';
+import { last, isEqual } from 'lodash-es';
 import { LogRenderer } from './log';
-import { last } from 'lodash-es';
+import { ProfileEventData } from './profiler';
+import { ClickEventData } from './scheduler/click';
 
 /**
  * A lazy wrapper around a scratch block from the VM.
@@ -194,12 +196,16 @@ export class Snapshot {
     return this.sprites.find((s) => s.name === name);
   }
 
+  findTarget(name: string): ScratchTarget | undefined {
+    return this.targets.find((t) => t.name === name);
+  }
+
   sprite(name: string): ScratchSprite {
     return ensure(this.findSprite(name));
   }
 
   target(name: string): ScratchTarget {
-    return ensure(this.targets.find((t) => t.name === name));
+    return ensure(this.findTarget(name));
   }
 
   /** @deprecated */
@@ -211,7 +217,72 @@ export class Snapshot {
   getSpriteOr(name: string): ScratchSprite {
     return this.sprite(name);
   }
+
+  /**
+   * Check if a target has changed between this snapshot and another snapshot,
+   * as defined by the predicate. This allows for every flexible checks.
+   *
+   * The function handles cases where sprites are missing:
+   * - If missing in both, returns false.
+   * - If missing in one, but not the other, returns true.
+   * - Else pass to the predicate.
+   *
+   * The default predicate checks the target itself, but not it's blocks.
+   *
+   * @param other - Snapshot to compare to.
+   * @param target - Name of the target.
+   * @param predicate - Return true if the target has changed.
+   *
+   * @return True if the target satisfies the change predicate.
+   */
+  hasChangedTarget(
+    other: Snapshot,
+    target: string,
+    predicate = (s1: ScratchTarget, s2: ScratchTarget) =>
+      !isEqual(s1.comparableObject(), s2.comparableObject()),
+  ): boolean {
+    const baseSprite = this.target(target);
+    const comparisonSprite = other.target(target);
+
+    if (baseSprite === undefined && comparisonSprite === undefined) {
+      return false;
+    }
+
+    if (baseSprite === undefined || comparisonSprite === undefined) {
+      return true;
+    }
+
+    return predicate(baseSprite, comparisonSprite);
+  }
+
+  /**
+   * Check if the blocks of a target have changed compared to another snapshot.
+   *
+   * @param other - The other snapshot to compare to.
+   * @param target - The name of the target to check.
+   */
+  hasChangedBlocks(other: Snapshot, target: string): boolean {
+    return this.hasChangedTarget(other, target, (s1, s2) => {
+      const set1 = s1.blockTree();
+      const set2 = s2.blockTree();
+      // if (!isEqual(set1, set2)) {
+      //   const d = difference(set1, set2);
+      //   const t_a = Array.from(set1).sort((a, b) => JSON.stringify(a) < JSON.stringify(b) ? -1 : 1);
+      //   const s_a = Array.from(set2).sort((a, b) => JSON.stringify(a) < JSON.stringify(b) ? -1 : 1);
+      //   for (let i = 0; i < t_a.length; i++) {
+      //     if (!isEqual(t_a[i], s_a[i])) {
+      //       const dd = difference(t_a[i], s_a[i]);
+      //       debugger;
+      //     }
+      //   }
+      //   console.log(d);
+      // }
+      return !isEqual(set1, set2);
+    });
+  }
 }
+
+type EventData = ProfileEventData | ClickEventData | Record<string, unknown>;
 
 /**
  * An event is a high-level event in the VM.
@@ -226,7 +297,7 @@ export class Event {
   private previousSnapshot?: Snapshot;
   private nextSnapshot?: Snapshot;
 
-  constructor(readonly type: string, readonly data: Record<string, unknown> = {}) {}
+  constructor(readonly type: string, readonly data: EventData) {}
 
   get previous(): Snapshot {
     return ensure(this.previousSnapshot, 'The previous snapshot is not available yet.');
