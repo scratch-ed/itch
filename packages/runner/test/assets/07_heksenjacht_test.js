@@ -6,11 +6,19 @@ function duringExecution(e) {
   e.scheduler
     .wait(500)
     .log(() => {
-      e.test('De Heks beweegt niet voor de klik', (l) => {
-        l.expect(e.log.hasSpriteMoved('Heks'))
-          .withError('De heks bewoog nog voor er op geklikt werd')
-          .toBe(false);
-      });
+      const positions = new Set();
+      for (const snapshot of e.log.snapshots) {
+        const sprite = snapshot.sprite('Heks');
+        positions.add({ x: sprite.x, y: sprite.y });
+      }
+      e.group
+        .test()
+        .feedback({
+          correct: 'De Heks beweegt niet voor de klik',
+          wrong: 'De heks bewoog nog voor er op geklikt werd',
+        })
+        .expect(positions.size)
+        .toBe(1);
     })
     .clickSprite('Heks', false) // De eerste klik laat heks starten met bewegen.
     .forEach(_.range(0, 4000, 50), (event) => event.wait(50).log()) // Manueel elke 50 ms, 4000 ms lang, de sprites loggen.
@@ -19,66 +27,76 @@ function duringExecution(e) {
 
 /** @param {Evaluation} e */
 function afterExecution(e) {
-  const places = e.log.getSpritePositions('Heks');
+  const positions = new Set();
+  for (const snapshot of e.log.snapshots) {
+    const sprite = snapshot.sprite('Heks');
+    positions.add({ x: sprite.x, y: sprite.y });
+  }
 
-  e.test('De heks heeft bewogen', (l) => {
-    l.expect(places.length > 2)
-      .withError(
+  e.group
+    .test()
+    .feedback({
+      correct: 'De heks heeft bewogen',
+      wrong:
         'Na een klik moet de heks van positie veranderen en elke seconde opnieuw veranderen van positie',
-      )
-      .toBe(true);
-  });
+    })
+    .acceptIf(positions.size > 2);
 
-  /** @type {number} */
-  const clickTime = e.log.events.filter({ type: 'click' })[0].time;
+  const clickTime = e.log.events.find((e) => e.type === 'click').timestamp;
 
   // Na clickTime moet de positie van de heks veranderd zijn en daarna constant blijven voor een seconde
-  const frames1 = searchFrames(e.log.frames, {
-    after: clickTime + 200,
-    before: clickTime + 800,
-  });
-  const frames2 = searchFrames(e.log.frames, {
-    after: clickTime + 1200,
-    before: clickTime + 1800,
-  });
-  const frames3 = searchFrames(e.log.frames, {
-    after: clickTime + 2200,
-    before: clickTime + 2800,
-  });
-  const heks1 = frames1[0].getSprite('Heks');
-  const heks2 = frames2[0].getSprite('Heks');
-  const heks3 = frames3[0].getSprite('Heks');
+  const frames1 = e.log.snapshots.filter(
+    (s) => clickTime + 200 < s.timestamp && s.timestamp < clickTime + 800,
+  );
+  const frames2 = e.log.snapshots.filter(
+    (s) => clickTime + 1200 < s.timestamp && s.timestamp < clickTime + 1800,
+  );
+  const frames3 = e.log.snapshots.filter(
+    (s) => clickTime + 2200 < s.timestamp && s.timestamp < clickTime + 2800,
+  );
+  const heks1 = frames1[0].sprite('Heks');
+  const heks2 = frames2[0].sprite('Heks');
+  const heks3 = frames3[0].sprite('Heks');
 
   // Controleer of de heks elke seconde een andere positie heeft
-  e.test('na 1 seconde', (l) => {
-    l.expect(heks1.x !== heks2.x || heks1.y !== heks2.y)
-      .withError('De heks is na 1 seconde nog niet veranderd van positie')
-      .toBe(true);
-  });
-  e.test('na 2 seconden', (l) => {
-    l.expect(heks2.x !== heks3.x || heks2.y !== heks3.y)
-      .withError('De heks is na nog 1 seconde nog niet veranderd van positie')
-      .toBe(true);
-  });
+  e.group
+    .test('na 1 seconde')
+    .feedback({
+      wrong: 'De heks is na 1 seconde nog niet veranderd van positie',
+    })
+    .acceptIf(heks1.x !== heks2.x || heks1.y !== heks2.y);
+
+  e.group
+    .test('na 2 seconden')
+    .feedback({
+      wrong: 'De heks is na nog 1 seconde nog niet veranderd van positie',
+    })
+    .acceptIf(heks2.x !== heks3.x || heks2.y !== heks3.y);
 
   // Controleer of de heks niet van positie verandert in voor een seconde:
-  const place1 = e.log.getSpritePositions('Heks', frames1);
-  const place2 = e.log.getSpritePositions('Heks', frames2);
-  const place3 = e.log.getSpritePositions('Heks', frames3);
+  const place1 = new Set(frames1.map((s) => s.sprite('Heks').position));
+  const place2 = new Set(frames2.map((s) => s.sprite('Heks').position));
+  const place3 = new Set(frames3.map((s) => s.sprite('Heks').position));
 
-  e.test('tijdens een seconde', (l) => {
-    l.expect(place1.length)
-      .withError('De heks mag maar eenmalig veranderen van positie elke seconde')
-      .toBe(1);
-  });
-  e.test('tijdens een seconde', (l) => {
-    l.expect(place2.length)
-      .withError('De heks mag maar eenmalig veranderen van positie elke seconde')
-      .toBe(1);
-  });
-  e.test('tijdens een seconde', (l) => {
-    l.expect(place3.length)
-      .withError('De heks mag maar eenmalig veranderen van positie elke seconde')
-      .toBe(1);
-  });
+  e.group
+    .test('tijdens een seconde')
+    .feedback({
+      wrong: 'De heks mag maar eenmalig veranderen van positie elke seconde',
+    })
+    .expect(place1.size)
+    .toBe(1);
+  e.group
+    .test('tijdens een seconde')
+    .feedback({
+      wrong: 'De heks mag maar eenmalig veranderen van positie elke seconde',
+    })
+    .expect(place2.size)
+    .toBe(1);
+  e.group
+    .test('tijdens een seconde')
+    .feedback({
+      wrong: 'De heks mag maar eenmalig veranderen van positie elke seconde',
+    })
+    .expect(place3.size)
+    .toBe(1);
 }

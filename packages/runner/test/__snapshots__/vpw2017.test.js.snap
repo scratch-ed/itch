@@ -741,160 +741,73 @@ exports[`07_heksenjacht 1`] = `
 Array [
   Object {
     "command": "start-judgement",
+    "version": 2,
   },
   Object {
-    "command": "start-tab",
-    "title": "Testen uit het testplan",
-  },
-  Object {
-    "command": "start-context",
-    "description": "De Heks beweegt niet voor de klik",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "De Heks beweegt niet voor de klik",
+    "command": "start-group",
+    "name": "Groep 0.36172273738152844",
+    "visibility": "show",
   },
   Object {
     "command": "start-test",
-    "expected": "false",
+    "name": "Test 0.41008109820294864",
   },
   Object {
-    "accepted": true,
     "command": "close-test",
-    "generated": "false",
-    "status": Object {
-      "enum": "correct",
-      "human": "Correct",
-    },
-  },
-  Object {
-    "command": "close-testcase",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "De heks heeft bewogen",
+    "feedback": "De Heks beweegt niet voor de klik",
+    "status": "correct",
   },
   Object {
     "command": "start-test",
-    "expected": "true",
+    "name": "Test 0.5855631229422033",
   },
   Object {
-    "accepted": true,
     "command": "close-test",
-    "generated": "true",
-    "status": Object {
-      "enum": "correct",
-      "human": "Correct",
-    },
-  },
-  Object {
-    "command": "close-testcase",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "na 1 seconde",
+    "feedback": "De heks heeft bewogen",
+    "status": "correct",
   },
   Object {
     "command": "start-test",
-    "expected": "true",
+    "name": "na 1 seconde",
   },
   Object {
-    "accepted": true,
     "command": "close-test",
-    "generated": "true",
-    "status": Object {
-      "enum": "correct",
-      "human": "Correct",
-    },
-  },
-  Object {
-    "command": "close-testcase",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "na 2 seconden",
+    "status": "correct",
   },
   Object {
     "command": "start-test",
-    "expected": "true",
+    "name": "na 2 seconden",
   },
   Object {
-    "accepted": true,
     "command": "close-test",
-    "generated": "true",
-    "status": Object {
-      "enum": "correct",
-      "human": "Correct",
-    },
-  },
-  Object {
-    "command": "close-testcase",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "tijdens een seconde",
+    "status": "correct",
   },
   Object {
     "command": "start-test",
-    "expected": "1",
+    "name": "tijdens een seconde",
   },
   Object {
-    "accepted": true,
     "command": "close-test",
-    "generated": "1",
-    "status": Object {
-      "enum": "correct",
-      "human": "Correct",
-    },
-  },
-  Object {
-    "command": "close-testcase",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "tijdens een seconde",
+    "status": "correct",
   },
   Object {
     "command": "start-test",
-    "expected": "1",
+    "name": "tijdens een seconde",
   },
   Object {
-    "accepted": true,
     "command": "close-test",
-    "generated": "1",
-    "status": Object {
-      "enum": "correct",
-      "human": "Correct",
-    },
-  },
-  Object {
-    "command": "close-testcase",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "tijdens een seconde",
+    "status": "correct",
   },
   Object {
     "command": "start-test",
-    "expected": "1",
+    "name": "tijdens een seconde",
   },
   Object {
-    "accepted": true,
     "command": "close-test",
-    "generated": "1",
-    "status": Object {
-      "enum": "correct",
-      "human": "Correct",
-    },
+    "status": "correct",
   },
   Object {
-    "command": "close-testcase",
-  },
-  Object {
-    "command": "close-context",
-  },
-  Object {
-    "command": "close-tab",
+    "command": "close-group",
   },
   Object {
     "command": "close-judgement",
@@ -906,147 +819,76 @@ exports[`07_heksenjacht_eenvoudig 1`] = `
 Array [
   Object {
     "command": "start-judgement",
+    "version": 2,
   },
   Object {
-    "command": "start-tab",
-    "title": "Testen uit het testplan",
-  },
-  Object {
-    "command": "start-context",
-    "description": "Heks bestaat",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "Heks bestaat",
+    "command": "start-group",
+    "name": "Groep 0.41008109820294864",
+    "visibility": "show",
   },
   Object {
     "command": "start-test",
-    "expected": "true",
+    "name": "Heks bestaat",
   },
   Object {
-    "accepted": true,
     "command": "close-test",
-    "generated": "true",
-    "status": Object {
-      "enum": "correct",
-      "human": "Correct",
-    },
-  },
-  Object {
-    "command": "close-testcase",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "De Heks beweegt niet voor de klik",
+    "status": "correct",
   },
   Object {
     "command": "start-test",
-    "expected": "false",
+    "name": "Test 0.36172273738152844",
   },
   Object {
-    "accepted": true,
     "command": "close-test",
-    "generated": "false",
-    "status": Object {
-      "enum": "correct",
-      "human": "Correct",
-    },
-  },
-  Object {
-    "command": "close-testcase",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "De heks is veranderd van positie",
+    "feedback": "De Heks beweegt niet voor de klik",
+    "status": "correct",
   },
   Object {
     "command": "start-test",
-    "expected": "true",
+    "name": "Test 0.7645544980796037",
   },
   Object {
-    "accepted": true,
     "command": "close-test",
-    "generated": "true",
-    "status": Object {
-      "enum": "correct",
-      "human": "Correct",
-    },
-  },
-  Object {
-    "command": "close-testcase",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "De heks is veranderd van positie",
+    "feedback": "De heks is veranderd van positie.",
+    "status": "correct",
   },
   Object {
     "command": "start-test",
-    "expected": "true",
+    "name": "Test 0.5723172829972989",
   },
   Object {
-    "accepted": true,
     "command": "close-test",
-    "generated": "true",
-    "status": Object {
-      "enum": "correct",
-      "human": "Correct",
-    },
+    "feedback": "De heks is veranderd van positie.",
+    "status": "correct",
   },
   Object {
-    "command": "close-testcase",
-  },
-  Object {
-    "command": "close-context",
-  },
-  Object {
-    "command": "start-context",
-    "description": "Blokjes",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "Gebruik van een lus",
+    "command": "start-group",
+    "name": "Blokjes",
+    "visibility": "show",
   },
   Object {
     "command": "start-test",
-    "expected": "true",
+    "name": "Test 0.845811020808493",
   },
   Object {
-    "accepted": true,
     "command": "close-test",
-    "generated": "true",
-    "status": Object {
-      "enum": "correct",
-      "human": "Correct",
-    },
-  },
-  Object {
-    "command": "close-testcase",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "Correcte gebruik van de lus",
+    "feedback": "Gebruik van een lus",
+    "status": "correct",
   },
   Object {
     "command": "start-test",
-    "expected": "true",
+    "name": "Test 0.723699281338507",
   },
   Object {
-    "accepted": true,
     "command": "close-test",
-    "generated": "true",
-    "status": Object {
-      "enum": "correct",
-      "human": "Correct",
-    },
+    "feedback": "Correcte gebruik van de lus",
+    "status": "correct",
   },
   Object {
-    "command": "close-testcase",
+    "command": "close-group",
   },
   Object {
-    "command": "close-context",
-  },
-  Object {
-    "command": "close-tab",
+    "command": "close-group",
   },
   Object {
     "command": "close-judgement",

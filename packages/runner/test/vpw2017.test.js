@@ -52,7 +52,6 @@ test('07_heksenjacht_eenvoudig', () => {
     (result) => {
       expect(result).toMatchSnapshot();
       expect(result).everyStatusToBe('correct');
-      expect(result).atLeastCommands('close-testcase', 5);
     },
   );
 });
@@ -61,7 +60,6 @@ test('07_heksenjacht', () => {
   return runTest().then((result) => {
     expect(result).toMatchSnapshot();
     expect(result).everyStatusToBe('correct');
-    expect(result).atLeastCommands('close-testcase', 7);
   });
 });
 

@@ -289,6 +289,10 @@ export class ScratchSprite extends ScratchTarget {
     );
   }
 
+  get position(): Position {
+    return { x: this.x, y: this.y };
+  }
+
   /**
    * Get the name of the current costume.
    */
