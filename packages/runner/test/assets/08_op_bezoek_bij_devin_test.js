@@ -21,6 +21,21 @@ function afterExecution(e) {
 
   // Controleer of de eerste tekstballon 2 seconden wordt weergegeven
   e.test('Devin stelt zich minstens 2 seconden lang voor', (l) => {
+    // const createTextSkinEvents = e.log.events.filter(
+    //   (e) => e.type === 'renderer' && e.data.name === 'createTextSkin',
+    // );
+    // const destroyTextSkinEvents = e.log.events.filter(
+    //   (e) => e.type === 'renderer' && e.data.name === 'destroySkin',
+    // );
+
+    // const created = createTextSkinEvents.find(
+    //   (e) => e.data.text === 'Hallo, ik ben Devin.',
+    // );
+    // const other = _.findLast(
+    //   destroyTextSkinEvents,
+    //   (e) => e.data.text === 'Hallo, ik ben Devin.',
+    // );
+
     l.expect(e.log.getSkinDuration('Hallo, ik ben Devin.') >= 2000)
       .withError('De eerste tekstballon moet minimum 2 seconden getoond worden.')
       .toBe(true);

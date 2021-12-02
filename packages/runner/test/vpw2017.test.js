@@ -63,35 +63,35 @@ test('07_heksenjacht', () => {
   });
 });
 
-test('08_op_bezoek_bij_devin', () => {
+test.skip('08_op_bezoek_bij_devin', () => {
   return runTest().then((result) => {
     expect(result).toMatchSnapshot();
     expect(result).everyStatusToBe('correct');
   });
 });
 
-test('09_flauw_mopje', () => {
+test.skip('09_flauw_mopje', () => {
   return runTest().then((result) => {
     expect(result).toMatchSnapshot();
     expect(result).everyStatusToBe('correct');
   });
 });
 
-test('11_vang_de_appels', () => {
+test.skip('11_vang_de_appels', () => {
   return runTest().then((result) => {
     expect(result).atLeastCommands('close-test', 8);
     expect(result).everyStatusToBe('correct');
   });
 });
 
-test('13_cijfersom', () => {
+test.skip('13_cijfersom', () => {
   return runTest().then((result) => {
     expect(result).toMatchSnapshot();
     expect(result).everyStatusToBe('correct');
   });
 });
 
-test('draw_a_square', () => {
+test.skip('draw_a_square', () => {
   return runTest().then((result) => {
     expect(result).toMatchSnapshot();
   });
