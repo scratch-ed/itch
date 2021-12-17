@@ -32,12 +32,12 @@ export function initialiseTranslations(language: 'nl' | 'en' = 'nl'): void {
  */
 export function t(key: string, ...values: string[]): string {
   if (window.i18nDisabled) {
-    return key;
+    return format(key, ...values);
   }
   const currentLang = window.scratchLanguage;
   const string = get(data[currentLang], key) as string | undefined;
   if (!string) {
-    return key;
+    return format(key, ...values);
   }
   return format(string, ...values);
 }
