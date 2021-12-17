@@ -1,5 +1,8 @@
 import { program } from 'commander';
 import fs from 'fs';
+// eslint-disable-next-line import/no-duplicates
+import { Headers } from 'node-fetch';
+// eslint-disable-next-line import/no-duplicates
 import fetch from 'node-fetch';
 
 async function download(from, to, headers = {}) {
@@ -26,7 +29,7 @@ async function download(from, to, headers = {}) {
 }
 
 async function getVersions(id) {
-  const myHeaders = new fetch.Headers();
+  const myHeaders = new Headers();
   myHeaders.append('Connection', 'keep-alive');
   myHeaders.append(
     'sec-ch-ua',
