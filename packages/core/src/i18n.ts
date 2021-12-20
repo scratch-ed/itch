@@ -3,11 +3,12 @@ import * as nl from './locales/nl.json';
 import { format } from './utils';
 import { get } from 'lodash-es';
 
-type LanguageData = {
+export type LanguageData = {
   [P in string]: string | LanguageData;
 };
 
-const data = {
+// @ts-ignore
+window.data = {
   en: en as LanguageData,
   nl: nl as LanguageData,
 };
@@ -19,9 +20,19 @@ declare global {
   var i18nDisabled: boolean;
 }
 
-export function initialiseTranslations(language: 'nl' | 'en' = 'nl'): void {
+export function initialiseTranslations(
+  language: 'nl' | 'en' = 'nl',
+  translations?: LanguageData,
+): void {
   window.scratchLanguage = language;
   window.i18nDisabled = false;
+
+  if (translations) {
+    // @ts-ignore
+    window.data.en = { ...window.data.en, ...translations.en };
+    // @ts-ignore
+    window.data.nl = { ...window.data.nl, ...translations.nl };
+  }
 }
 
 /**
@@ -35,7 +46,8 @@ export function t(key: string, ...values: string[]): string {
     return format(key, ...values);
   }
   const currentLang = window.scratchLanguage;
-  const string = get(data[currentLang], key) as string | undefined;
+  // @ts-ignore
+  const string = get(window.data[currentLang], key) as string | undefined;
   if (!string) {
     return format(key, ...values);
   }

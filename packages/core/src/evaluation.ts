@@ -21,7 +21,7 @@ import { ResultManager } from './output';
 
 import type VirtualMachine from '@ftrprf/judge-scratch-vm-types';
 import { angle, distSq, mergeLines } from './lines';
-import { initialiseTranslations, t } from './i18n';
+import { initialiseTranslations, LanguageData, t } from './i18n';
 
 declare global {
   interface Window {
@@ -92,6 +92,8 @@ export interface EvalConfig {
    * The language of the exercise.
    */
   language: string;
+
+  translations?: LanguageData;
 }
 
 enum EvaluationStage {
@@ -293,7 +295,7 @@ export async function run(config: EvalConfig): Promise<void> {
   seed('itch-judge', { global: true });
 
   // Set language from parameters.
-  initialiseTranslations(config.language as 'nl' | 'en');
+  initialiseTranslations(config.language as 'nl' | 'en', config.translations);
 
   const context = new Context();
   const templateJson = await context.getProjectJson(config);

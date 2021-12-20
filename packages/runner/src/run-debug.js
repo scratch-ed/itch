@@ -13,12 +13,17 @@ fetch(configPath)
     script.onload = async () => {
       const template = await fetch(config.template).then((r) => r.arrayBuffer());
       const submission = await fetch(config.source).then((r) => r.arrayBuffer());
+      let translations = {};
+      if (config.language) {
+        translations = await fetch(config.translations).then((r) => r.json());
+      }
 
       const inputs = {
         submission: submission,
         template: template,
         canvas: document.getElementById('scratch-stage'),
         language: config.language || 'nl',
+        translations: translations,
       };
 
       // Hook up the output visualizer.
