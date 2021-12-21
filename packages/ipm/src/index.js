@@ -4,6 +4,7 @@ import fs from 'fs';
 import { Headers } from 'node-fetch';
 // eslint-disable-next-line import/no-duplicates
 import fetch from 'node-fetch';
+import { Blob } from 'buffer';
 
 async function download(from, to, headers = {}) {
   const res = await fetch(from, { headers });
@@ -94,6 +95,47 @@ async function getVersions(id) {
   return await response.json();
 }
 
+async function getTranslatedVersionInformation(id, language) {
+  const myHeaders = new Headers();
+  myHeaders.append('Connection', 'keep-alive');
+  myHeaders.append(
+    'sec-ch-ua',
+    '"Chromium";v="92", " Not A;Brand";v="99", "Google Chrome";v="92"',
+  );
+  myHeaders.append('accept', '*/*');
+  myHeaders.append('authorization', process.env.BEARER_TEACHER);
+  myHeaders.append('content-type', 'application/json');
+  myHeaders.append('Origin', 'https://school.ftrprf.be');
+  myHeaders.append('Referer', 'https://school.ftrprf.be/');
+
+  const requestOptions = {
+    method: 'GET',
+    headers: myHeaders,
+    redirect: 'follow',
+  };
+
+  const response = await fetch(
+    `https://education-backend.ftrprf.be/api/exercises/start/${id}?new=true&language=${language}`,
+    requestOptions,
+  );
+
+  if (!response.ok) {
+    console.error('Error while getting exercise translation details.');
+    console.error('Code: ', response.status);
+    console.error(await response.text());
+    throw new Error();
+  }
+
+  return await response.json();
+}
+
+// From mono repo
+// data:application/pdf;base64,
+function base64ToBuffer(dataUrl) {
+  const byteString = dataUrl.split(',')[1];
+  return Buffer.from(byteString, 'base64');
+}
+
 /**
  * Download the actual file and store it. If onlyMissing is true and there is a
  * file, do nothing. If downloading and an etag is found, skip if possible.
@@ -132,10 +174,24 @@ async function getBytes(exercise, lock, onlyMissing) {
   return updated;
 }
 
-async function downloadLevel(result, level, local, name, onlyMissing) {
+async function downloadTranslation(localPrefix, id, language) {
+  const path = `${localPrefix}-${language}.sb3`;
+  const information = await getTranslatedVersionInformation(id, language);
+  const buffer = base64ToBuffer(information.base64EncodedBlob);
+  fs.writeFileSync(path, buffer);
+}
+
+async function downloadLevel(
+  result,
+  level,
+  local,
+  name,
+  onlyMissing,
+  includeTranslations,
+) {
   const regex = new RegExp(`level ${level}[^0-9]*$`);
   // Attempt to find the starter project.
-  const starterUri = result.findExercise.versions
+  const starterData = result.findExercise.versions
     .filter(
       (v) =>
         v.versionType === 'STARTER' &&
@@ -144,13 +200,15 @@ async function downloadLevel(result, level, local, name, onlyMissing) {
         !v.name.toLowerCase().includes('v0'),
     )
     .sort((a, b) => b.id - a.id)
-    .find((_) => true)?.blobUri;
+    .find((_) => true);
+
+  const starterUri = starterData?.blobUri;
 
   if (starterUri === undefined) {
     throw new Error(`Could not find starter project for level ${level}`);
   }
 
-  const solutionUri = result.findExercise.versions
+  const solutionData = result.findExercise.versions
     .filter(
       (v) =>
         v.versionType === 'SOLUTION' &&
@@ -158,7 +216,9 @@ async function downloadLevel(result, level, local, name, onlyMissing) {
         v.name.toLowerCase().includes('oplossing'),
     )
     .sort((a, b) => b.id - a.id)
-    .find((_) => true)?.blobUri;
+    .find((_) => true);
+
+  const solutionUri = solutionData?.blobUri;
 
   if (solutionUri === undefined) {
     throw new Error(`Could not find solution project for level ${level}`);
@@ -173,9 +233,13 @@ async function downloadLevel(result, level, local, name, onlyMissing) {
     lock = {};
   }
 
+  const starterPrefix = `${local}/projects/${name || ''}${
+    level ? level + '-' : ''
+  }template`;
+
   const starterPromise = getBytes(
     {
-      localPath: `${local}/projects/${name || ''}${level ? level + '-' : ''}template.sb3`,
+      localPath: `${starterPrefix}.sb3`,
       log: `${local}/${level}`,
       url: starterUri,
     },
@@ -183,9 +247,13 @@ async function downloadLevel(result, level, local, name, onlyMissing) {
     onlyMissing,
   );
 
+  const solutionPrefix = `${local}/projects/${name || ''}${
+    level ? level + '-' : ''
+  }solution`;
+
   const solutionPromise = getBytes(
     {
-      localPath: `${local}/projects/${name || ''}${level ? level + '-' : ''}solution.sb3`,
+      localPath: `${solutionPrefix}.sb3`,
       log: `${local}/${level}`,
       url: solutionUri,
     },
@@ -201,9 +269,20 @@ async function downloadLevel(result, level, local, name, onlyMissing) {
   if (updatedStarter || updatedSolution) {
     fs.writeFileSync(lockPath, JSON.stringify(lock, null, 2) + '\n', 'utf8');
   }
+
+  if (includeTranslations) {
+    console.info(`[${local}/${level}] starter: downloading English translation...`);
+    await downloadTranslation(starterPrefix, starterData.id, 'EN');
+    console.info(`[${local}/${level}] starter: downloading Dutch translation...`);
+    await downloadTranslation(starterPrefix, starterData.id, 'NL');
+    console.info(`[${local}/${level}] solution: downloading English translation...`);
+    await downloadTranslation(solutionPrefix, solutionData.id, 'EN');
+    console.info(`[${local}/${level}] solution: downloading Dutch translation...`);
+    await downloadTranslation(solutionPrefix, solutionData.id, 'NL');
+  }
 }
 
-async function downloadExercise(local, onlyMissing = false) {
+async function downloadExercise(local, onlyMissing = false, translations = true) {
   const packageJson = JSON.parse(fs.readFileSync(`${local}/package.json`, 'utf8'));
 
   if (packageJson.itch === undefined) {
@@ -219,10 +298,17 @@ async function downloadExercise(local, onlyMissing = false) {
       }.`,
     );
     if (exercise.levels === undefined) {
-      await downloadLevel(result, undefined, local, exercise.name, onlyMissing);
+      await downloadLevel(
+        result,
+        undefined,
+        local,
+        exercise.name,
+        onlyMissing,
+        translations,
+      );
     } else {
       for (let i = 1; i <= exercise.levels; i++) {
-        await downloadLevel(result, i, local, exercise.name, onlyMissing);
+        await downloadLevel(result, i, local, exercise.name, onlyMissing, translations);
       }
     }
   }
@@ -327,9 +413,10 @@ async function downloadTranslations(local) {
 program
   .command('down')
   .option('-m, --missing', 'only download missing projects')
+  .option('-t, --translations', 'include translated versions')
   .argument('<local>', 'path to the local exercise')
   .action(async (local, options) => {
-    await downloadExercise(local, options.missing);
+    await downloadExercise(local, options.missing, options.translations);
   });
 
 program
