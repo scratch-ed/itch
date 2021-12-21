@@ -271,14 +271,14 @@ async function downloadLevel(
   }
 
   if (includeTranslations) {
-    console.info(`[${local}/${level}] starter: downloading English translation...`);
-    await downloadTranslation(starterPrefix, starterData.id, 'EN');
     console.info(`[${local}/${level}] starter: downloading Dutch translation...`);
     await downloadTranslation(starterPrefix, starterData.id, 'NL');
-    console.info(`[${local}/${level}] solution: downloading English translation...`);
-    await downloadTranslation(solutionPrefix, solutionData.id, 'EN');
+    console.info(`[${local}/${level}] starter: downloading English translation...`);
+    await downloadTranslation(starterPrefix, starterData.id, 'EN');
     console.info(`[${local}/${level}] solution: downloading Dutch translation...`);
     await downloadTranslation(solutionPrefix, solutionData.id, 'NL');
+    console.info(`[${local}/${level}] solution: downloading English translation...`);
+    await downloadTranslation(solutionPrefix, solutionData.id, 'EN');
   }
 }
 
