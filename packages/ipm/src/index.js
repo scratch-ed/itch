@@ -271,14 +271,30 @@ async function downloadLevel(
   }
 
   if (includeTranslations) {
-    console.info(`[${local}/${level}] starter: downloading Dutch translation...`);
-    await downloadTranslation(starterPrefix, starterData.id, 'NL');
-    console.info(`[${local}/${level}] starter: downloading English translation...`);
-    await downloadTranslation(starterPrefix, starterData.id, 'EN');
-    console.info(`[${local}/${level}] solution: downloading Dutch translation...`);
-    await downloadTranslation(solutionPrefix, solutionData.id, 'NL');
-    console.info(`[${local}/${level}] solution: downloading English translation...`);
-    await downloadTranslation(solutionPrefix, solutionData.id, 'EN');
+    try {
+      console.info(`[${local}/${level}] starter: downloading Dutch translation...`);
+      await downloadTranslation(starterPrefix, starterData.id, 'NL');
+    } catch (e) {
+      console.warn(`[${local}/${level}/starter] skipping Dutch due to error...`);
+    }
+    try {
+      console.info(`[${local}/${level}] starter: downloading English translation...`);
+      await downloadTranslation(starterPrefix, starterData.id, 'EN');
+    } catch (e) {
+      console.warn(`[${local}/${level}/starter] skipping English due to error...`);
+    }
+    try {
+      console.info(`[${local}/${level}] solution: downloading Dutch translation...`);
+      await downloadTranslation(solutionPrefix, solutionData.id, 'NL');
+    } catch (e) {
+      console.warn(`[${local}/${level}/solution] skipping Dutch due to error...`);
+    }
+    try {
+      console.info(`[${local}/${level}] solution: downloading English translation...`);
+      await downloadTranslation(solutionPrefix, solutionData.id, 'EN');
+    } catch (e) {
+      console.warn(`[${local}/${level}/solution] skipping English due to error...`);
+    }
   }
 }
 
