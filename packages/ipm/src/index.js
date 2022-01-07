@@ -4,7 +4,6 @@ import fs from 'fs';
 import { Headers } from 'node-fetch';
 // eslint-disable-next-line import/no-duplicates
 import fetch from 'node-fetch';
-import { Blob } from 'buffer';
 
 async function download(from, to, headers = {}) {
   const res = await fetch(from, { headers });
