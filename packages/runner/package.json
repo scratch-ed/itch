@@ -27,7 +27,7 @@
   },
   "devDependencies": {
     "@ftrprf/judge-test-utils": "^0.0.2",
-    "jest": "^27.4.1",
+    "jest": "^27.4.7",
     "puppeteer": "^11.0.0"
   },
   "scripts": {
