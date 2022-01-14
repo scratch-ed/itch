@@ -1,6 +1,7 @@
 import fetch, { Headers } from 'node-fetch';
 import fs from 'fs';
 import { translateSb3 } from './translate.js';
+import { getBearerToken } from './authenticate-user.js';
 
 async function download(from, to, headers = {}) {
   const res = await fetch(from, { headers });
@@ -26,20 +27,12 @@ async function download(from, to, headers = {}) {
 }
 
 async function getVersions(id) {
+  const token = await getBearerToken();
+
   const myHeaders = new Headers();
-  myHeaders.append('Connection', 'keep-alive');
-  myHeaders.append(
-    'sec-ch-ua',
-    '"Chromium";v="92", " Not A;Brand";v="99", "Google Chrome";v="92"',
-  );
-  myHeaders.append('accept', '*/*');
-  myHeaders.append('authorization', process.env.BEARER);
-  myHeaders.append('sec-ch-ua-mobile', '?0');
+  myHeaders.append('authorization', token);
   myHeaders.append('content-type', 'application/json');
   myHeaders.append('Origin', 'https://studio.ftrprf.be');
-  myHeaders.append('Sec-Fetch-Site', 'same-site');
-  myHeaders.append('Sec-Fetch-Mode', 'cors');
-  myHeaders.append('Sec-Fetch-Dest', 'empty');
   myHeaders.append('Referer', 'https://studio.ftrprf.be/');
 
   const raw = JSON.stringify({

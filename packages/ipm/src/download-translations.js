@@ -1,21 +1,12 @@
 import fetch, { Headers } from 'node-fetch';
 import fs from 'fs';
+import { getBearerToken } from './authenticate-user.js';
 
-async function executeTranslationRequest(page) {
+async function executeTranslationRequest(page, token) {
   const myHeaders = new Headers();
-  myHeaders.append('Connection', 'keep-alive');
-  myHeaders.append(
-    'sec-ch-ua',
-    '"Chromium";v="92", " Not A;Brand";v="99", "Google Chrome";v="92"',
-  );
-  myHeaders.append('accept', '*/*');
-  myHeaders.append('authorization', process.env.BEARER);
-  myHeaders.append('sec-ch-ua-mobile', '?0');
+  myHeaders.append('authorization', token);
   myHeaders.append('content-type', 'application/json');
   myHeaders.append('Origin', 'https://studio.ftrprf.be');
-  myHeaders.append('Sec-Fetch-Site', 'same-site');
-  myHeaders.append('Sec-Fetch-Mode', 'cors');
-  myHeaders.append('Sec-Fetch-Dest', 'empty');
   myHeaders.append('Referer', 'https://studio.ftrprf.be/');
 
   const raw = JSON.stringify({
@@ -83,13 +74,15 @@ export async function downloadTranslations(local) {
     en: {},
   };
 
+  const token = await getBearerToken();
+
   console.info('Downloading first translations page.');
-  const firstPage = await executeTranslationRequest(0);
+  const firstPage = await executeTranslationRequest(0, token);
   resultToTranslationObject(translations, firstPage);
 
   for (let i = 0; i < firstPage.data.findAllTranslations.pages; i++) {
     console.info(`Downloading page ${i}...`);
-    const page = await executeTranslationRequest(i);
+    const page = await executeTranslationRequest(i, token);
     resultToTranslationObject(translations, page);
   }
 
