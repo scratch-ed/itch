@@ -110,8 +110,6 @@ async function runJudge(options) {
       });
     }
 
-    console.log(translations);
-
     await page.evaluate((language, translations) => {
       return runTests(language, translations);
     }, language, translations);
