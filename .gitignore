@@ -17,3 +17,14 @@ node_modules/
 
 packages/core/dist
 config.json
+
+# Ignore sb3 files in exercises, that we should not keep.
+exercises/**/projects/*.sb3
+# Do allow to keep execeptions.
+!exercises/**/projects/keep-*.sb3
+
+# Ignore translations file.
+exercises/translations.json
+
+# Ignore lock file
+exercises/exercise-lock.json
