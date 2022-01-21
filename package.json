@@ -58,8 +58,10 @@
         ]
       },
       {
-        "displayName": "testedExercises",
-        "testMatch": []
+        "displayName": "convertedTestplans",
+        "testMatch": [
+          "<rootDir>/exercises/agario/*.test.js"
+        ]
       }
     ]
   }

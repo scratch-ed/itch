@@ -75,7 +75,7 @@ function run(dir, solutionName, language, level, planLevel = level) {
   const translations = path.resolve(dir, "../translations.json");
   // console.debug("Used paths are", template, solution, plan);
   return executePlan(template, solution, plan, {
-    debug: true,
+    debug: false,
     translations: translations
   });
 }
