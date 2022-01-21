@@ -146,11 +146,11 @@
     },
     "close-group": {
       "type": "object",
-      "description": "Close the current context. Accepted iff all testcases are accepted, but you can overwrite this.",
+      "description": "Close the current group.",
       "required": ["command"],
       "properties": {
         "command": {
-          "const": "close-context"
+          "const": "close-group"
         },
         "summary": {
           "$ref": "#/definitions/message",
@@ -165,9 +165,6 @@
       "properties": {
         "command": {
           "const": "close-judgement"
-        },
-        "status": {
-          "$ref": "#/definitions/status"
         }
       }
     },
