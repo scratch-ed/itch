@@ -21,7 +21,7 @@ config.json
 # Ignore sb3 files in exercises, that we should not keep.
 exercises/**/projects/*
 # Do allow to keep execeptions.
-!exercises/**/projects/keep-*
+!exercises/**/projects/*keep*
 
 # Ignore translations file.
 exercises/translations.json
