@@ -50,8 +50,8 @@ async function executePlan(template, solution, testplan, options = {}) {
     solution: solution,
     out: collector,
     page: page,
-    translations: "../translations.json",
-    language: "nl",
+    translations: '../translations.json',
+    language: 'nl',
     ...options,
   });
 
@@ -70,13 +70,15 @@ function run(dir, solutionName, language, level, planLevel = level) {
   const plan = path.resolve(dir, planLevel ? `plan-${planLevel}.js` : 'plan.js');
   const solution = path.resolve(
     dir,
-    level ? `projects/${level}-${solutionName}-NL.sb3` : `projects/${solutionName}-NL.sb3`,
+    level
+      ? `projects/${level}-${solutionName}-NL.sb3`
+      : `projects/${solutionName}-NL.sb3`,
   );
-  const translations = path.resolve(dir, "../translations.json");
+  const translations = path.resolve(dir, '../translations.json');
   // console.debug("Used paths are", template, solution, plan);
   return executePlan(template, solution, plan, {
     debug: false,
-    translations: translations
+    translations: translations,
   });
 }
 

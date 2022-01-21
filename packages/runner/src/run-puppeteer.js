@@ -37,7 +37,7 @@ async function runTests(language, translations = undefined) {
     template: await templateUpload.prom,
     canvas: document.getElementById('scratch-stage'),
     language: language,
-    translations: translations
+    translations: translations,
   };
 
   // Hook up the output visualizer.

@@ -12,9 +12,10 @@ import { ScheduledEvent } from './scheduler/scheduled-event';
 import { EndAction } from './scheduler/end';
 import { BroadcastReceiver, ThreadListener } from './listener';
 import { EvalConfig } from './evaluation';
-import { installAdvancedBlockProfiler } from './profiler';
+import { installAdvancedBlockProfiler, ProfileEventData } from './profiler';
 import { GroupedResultManager, OutputHandler } from './output';
 import { Event, NewLog } from './new-log';
+import { assertType } from './utils';
 
 const Events: Record<string, string> = {
   SCRATCH_PROJECT_START: 'PROJECT_START',
@@ -199,6 +200,7 @@ export class Context {
       executions: this.log.events
         .filter((e) => e.type === 'block_execution')
         .map((e) => {
+          assertType<ProfileEventData>(e.data);
           const block = e.previous
             .target(e.data.target as string)
             .block(e.data.blockId as string);

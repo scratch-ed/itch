@@ -106,13 +106,17 @@ async function runJudge(options) {
     if (mode === 'debug') {
       await page.evaluate(() => {
         // eslint-disable-next-line no-debugger
-        debugger;
+        // debugger;
       });
     }
 
-    await page.evaluate((language, translations) => {
-      return runTests(language, translations);
-    }, language, translations);
+    await page.evaluate(
+      (language, translations) => {
+        return runTests(language, translations);
+      },
+      language,
+      translations,
+    );
   } finally {
     if (browser && mode !== 'debug') {
       console.log('Closing browser...');

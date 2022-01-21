@@ -99,9 +99,7 @@ declare class Profiler {
      * @return {{count: number}} A ProfilerFrame-like whose count should be
      *   incremented for each call.
      */
-    frame(id: number, arg: any): {
-        count: number;
-    };
+    frame(id: number, arg: any): ProfilerFrame;
     /**
      * Decode records and report all frames to `this.onFrame`.
      */

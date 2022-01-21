@@ -28,6 +28,7 @@
     "start": "npm start --workspace @ftrprf/judge-runner",
     "build": "npm run build --workspaces --if-present",
     "test:exercises": "jest --selectProjects stableExercises",
+    "test:exercises:converted": "jest --selectProjects convertedTestplans",
     "test:exercises:all": "jest --runInBand --selectProjects exercise",
     "clean": "npm run clean --workspaces --if-present && rimraf ./**/node_modules",
     "lint": "eslint .",
@@ -60,7 +61,8 @@
       {
         "displayName": "convertedTestplans",
         "testMatch": [
-          "<rootDir>/exercises/agario/*.test.js"
+          "<rootDir>/exercises/agario/*.test.js",
+          "<rootDir>/exercises/bouw-de-raket/*.test.js"
         ]
       }
     ]

@@ -11,6 +11,7 @@ export interface ProfileEventData {
    * The name of the target that executed the block.
    */
   readonly target: string;
+
   /**
    * Shortcut to get the actual block.
    */
@@ -29,19 +30,23 @@ export function installAdvancedBlockProfiler(vm: VirtualMachine, log: NewLog): v
   for (const [opcode, blockFunction] of Object.entries(vm.runtime._primitives)) {
     vm.runtime._primitives[opcode] = new Proxy(blockFunction, {
       apply: function (target, thisArg, argumentsList) {
-        const targetId = argumentsList[1].target.getName();
+        const vmTarget = argumentsList[1].target;
+        const targetName = vmTarget.getName();
         const currentBlockId = argumentsList[1].thread.peekStack();
-        const event = new Event('block_execution', {
-          blockId: currentBlockId,
-          target: targetId,
-          block: () => {
-            const target = log.last.target(targetId);
-            return target.block(currentBlockId);
-          },
-        } as ProfileEventData);
-        event.previous = log.last;
-        event.next = event.previous;
-        log.registerEvent(event);
+        // Only register block executions that exist; other blocks we don't care about.
+        if (vmTarget.blocks.getBlock(currentBlockId)) {
+          const event = new Event('block_execution', {
+            blockId: currentBlockId,
+            target: targetName,
+            block: () => {
+              const target = log.last.target(targetName);
+              return target.block(currentBlockId);
+            },
+          } as ProfileEventData);
+          event.previous = log.last;
+          event.next = event.previous;
+          log.registerEvent(event);
+        }
         return target.apply(thisArg, argumentsList);
       },
     });

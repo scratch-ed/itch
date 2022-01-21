@@ -280,6 +280,10 @@ export class Snapshot {
       return !isEqual(set1, set2);
     });
   }
+
+  get time(): number {
+    return this.timestamp;
+  }
 }
 
 type EventData = ProfileEventData | ClickEventData | Record<string, unknown>;
