@@ -17,6 +17,13 @@
     "status": {
       "description": "Optional status. If present, overrides the statuses of the groups/tests.",
       "$ref": "#/definitions/status"
+    },
+    "messages": {
+      "description": "Optional messages for the judgement.",
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
     }
   },
   "required": ["groups"],
@@ -58,7 +65,7 @@
               "$ref": "#/definitions/test"
             }
           },
-          "required": ["name", "tests"]
+          "required": ["name", "visibility", "tests"]
         },
         {
           "properties": {
@@ -67,14 +74,14 @@
               "$ref": "#/definitions/group"
             }
           },
-          "required": ["name", "groups"]
+          "required": ["name", "visibility", "groups"]
         }
       ]
     },
     "test": {
       "description": "A test in the test plan. Tests one thing.",
       "type": "object",
-      "required": ["status", "feedback"],
+      "required": ["status", "feedback", "name"],
       "properties": {
         "status": {
           "$ref": "#/definitions/status"

@@ -26,10 +26,10 @@ export interface StartGroup {
   readonly command: 'start-group';
   /** Human-visible name of the group of tests. */
   name: string;
-  /** Optionally link this group to a certain sprite. */
-  sprite?: string;
   /** Visibility of the group. */
   visibility: Visibility;
+  /** Optionally link this group to a certain sprite. */
+  sprite?: string;
 }
 
 export interface StartTest {
@@ -78,7 +78,7 @@ export interface EscalateStatus {
 export interface CloseTest {
   readonly command: 'close-test';
   status: Status;
-  feedback?: string;
+  feedback: string;
 }
 
 /**

@@ -1,0 +1,621 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Collector works correctly 1`] = `
+Judgement {
+  "groups": Array [
+    TestGroup {
+      "messages": Array [],
+      "name": "Controle op bestaande code",
+      "sprite": undefined,
+      "status": "runtime error",
+      "summary": undefined,
+      "tests": Array [
+        Test {
+          "diff": Diff {
+            "actual": "false",
+            "expected": "false",
+          },
+          "feedback": "Top! Je hebt niets veranderd aan de sprite Scherm.",
+          "messages": Array [],
+          "name": "Scherm",
+          "status": "correct",
+        },
+        Test {
+          "diff": Diff {
+            "actual": "false",
+            "expected": "false",
+          },
+          "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Scherm.",
+          "messages": Array [],
+          "name": "Scherm",
+          "status": "correct",
+        },
+        Test {
+          "diff": Diff {
+            "actual": "false",
+            "expected": "false",
+          },
+          "feedback": "Top! Je hebt niets veranderd aan de sprite Boodschap 1.",
+          "messages": Array [],
+          "name": "Boodschap 1",
+          "status": "correct",
+        },
+        Test {
+          "diff": Diff {
+            "actual": "false",
+            "expected": "false",
+          },
+          "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Boodschap 1.",
+          "messages": Array [],
+          "name": "Boodschap 1",
+          "status": "correct",
+        },
+        Test {
+          "diff": Diff {
+            "actual": "false",
+            "expected": "false",
+          },
+          "feedback": "Top! Je hebt niets veranderd aan het speelveld.",
+          "messages": Array [],
+          "name": "Speelveld",
+          "status": "correct",
+        },
+        Test {
+          "diff": Diff {
+            "actual": "false",
+            "expected": "false",
+          },
+          "feedback": "Top! Je hebt niets veranderd aan de blokjes van het speelveld.",
+          "messages": Array [],
+          "name": "Speelveld",
+          "status": "correct",
+        },
+        Test {
+          "diff": Diff {
+            "actual": "true",
+            "expected": "true",
+          },
+          "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+          "messages": Array [],
+          "name": "Planeet",
+          "status": "correct",
+        },
+        Test {
+          "diff": Diff {
+            "actual": "true",
+            "expected": "true",
+          },
+          "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Planeet.",
+          "messages": Array [],
+          "name": "Planeet",
+          "status": "correct",
+        },
+        Test {
+          "diff": Diff {
+            "actual": "true",
+            "expected": "true",
+          },
+          "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+          "messages": Array [],
+          "name": "Vijand 1",
+          "status": "correct",
+        },
+        Test {
+          "diff": Diff {
+            "actual": "true",
+            "expected": "true",
+          },
+          "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Vijand 1.",
+          "messages": Array [],
+          "name": "Vijand 1",
+          "status": "correct",
+        },
+        Test {
+          "diff": Diff {
+            "actual": "true",
+            "expected": "true",
+          },
+          "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+          "messages": Array [],
+          "name": "Vijand 2",
+          "status": "correct",
+        },
+        Test {
+          "diff": Diff {
+            "actual": "true",
+            "expected": "true",
+          },
+          "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Vijand 2.",
+          "messages": Array [],
+          "name": "Vijand 2",
+          "status": "runtime error",
+        },
+        Test {
+          "diff": Diff {
+            "actual": "true",
+            "expected": "true",
+          },
+          "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+          "messages": Array [],
+          "name": "Voedsel 1",
+          "status": "correct",
+        },
+        Test {
+          "diff": Diff {
+            "actual": "true",
+            "expected": "true",
+          },
+          "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Voedsel 1.",
+          "messages": Array [],
+          "name": "Voedsel 1",
+          "status": "correct",
+        },
+        Test {
+          "diff": Diff {
+            "actual": "true",
+            "expected": "true",
+          },
+          "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+          "messages": Array [],
+          "name": "Voedsel 2",
+          "status": "correct",
+        },
+        Test {
+          "diff": Diff {
+            "actual": "true",
+            "expected": "true",
+          },
+          "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Voedsel 2.",
+          "messages": Array [],
+          "name": "Voedsel 2",
+          "status": "correct",
+        },
+        Test {
+          "diff": Diff {
+            "actual": "true",
+            "expected": "true",
+          },
+          "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+          "messages": Array [],
+          "name": "Voedsel 3",
+          "status": "correct",
+        },
+        Test {
+          "diff": Diff {
+            "actual": "true",
+            "expected": "true",
+          },
+          "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Voedsel 3.",
+          "messages": Array [],
+          "name": "Voedsel 3",
+          "status": "correct",
+        },
+        Test {
+          "diff": Diff {
+            "actual": "true",
+            "expected": "true",
+          },
+          "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+          "messages": Array [],
+          "name": "Voedsel 4",
+          "status": "correct",
+        },
+        Test {
+          "diff": Diff {
+            "actual": "true",
+            "expected": "true",
+          },
+          "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Voedsel 4.",
+          "messages": Array [],
+          "name": "Voedsel 4",
+          "status": "correct",
+        },
+      ],
+      "visibility": "show",
+    },
+    TestGroup {
+      "messages": Array [],
+      "name": "Test voor Planeet.",
+      "sprite": undefined,
+      "status": undefined,
+      "summary": undefined,
+      "tests": Array [
+        Test {
+          "diff": Diff {
+            "actual": "control_forever",
+            "expected": "control_forever",
+          },
+          "feedback": "De planeet kan oneindig lang bewegen.",
+          "messages": Array [],
+          "name": "Juiste lus",
+          "status": "correct",
+        },
+        Test {
+          "diff": Diff {
+            "actual": "true",
+            "expected": "true",
+          },
+          "feedback": "De planeet richt zich naar de muis.",
+          "messages": Array [],
+          "name": "Richt naar de muis",
+          "status": "correct",
+        },
+        Test {
+          "diff": Diff {
+            "actual": "true",
+            "expected": "true",
+          },
+          "feedback": "De planeet zet 5 stappen.",
+          "messages": Array [],
+          "name": "Beweegt",
+          "status": "correct",
+        },
+        Test {
+          "diff": Diff {
+            "actual": "true",
+            "expected": "true",
+          },
+          "feedback": "De planeet verandert zijn grootte.",
+          "messages": Array [],
+          "name": "Planeet verandert grootte",
+          "status": "correct",
+        },
+        Test {
+          "diff": Diff {
+            "actual": "true",
+            "expected": "true",
+          },
+          "feedback": "De planeet verandert zijn snelheid.",
+          "messages": Array [],
+          "name": "Planeet verandert snelheid",
+          "status": "correct",
+        },
+      ],
+      "visibility": "show",
+    },
+    TestGroup {
+      "messages": Array [],
+      "name": "Test voor Vijand 1.",
+      "sprite": undefined,
+      "status": undefined,
+      "summary": undefined,
+      "tests": Array [
+        Test {
+          "diff": Diff {
+            "actual": "control_forever",
+            "expected": "control_forever",
+          },
+          "feedback": "De planeet kan oneindig lang bewegen.",
+          "messages": Array [],
+          "name": "Juiste lus",
+          "status": "correct",
+        },
+        Test {
+          "diff": Diff {
+            "actual": "true",
+            "expected": "true",
+          },
+          "feedback": "Vijand 1 beweegt zich binnen de 5 seconden naar een willekeurige positie.",
+          "messages": Array [],
+          "name": "Richt naar de muis",
+          "status": "correct",
+        },
+      ],
+      "visibility": "show",
+    },
+    TestGroup {
+      "messages": Array [],
+      "name": "Test voor Vijand 2.",
+      "sprite": undefined,
+      "status": undefined,
+      "summary": undefined,
+      "tests": Array [
+        Test {
+          "diff": Diff {
+            "actual": "control_forever",
+            "expected": "control_forever",
+          },
+          "feedback": "De planeet kan oneindig lang bewegen.",
+          "messages": Array [],
+          "name": "Juiste lus",
+          "status": "correct",
+        },
+        Test {
+          "diff": Diff {
+            "actual": "true",
+            "expected": "true",
+          },
+          "feedback": "Vijand 2 beweegt zich binnen de 5 seconden naar een willekeurige positie.",
+          "messages": Array [],
+          "name": "Richt naar de muis",
+          "status": "correct",
+        },
+      ],
+      "visibility": "show",
+    },
+    TestGroup {
+      "messages": Array [],
+      "name": "Test voor Voedsel 1",
+      "sprite": undefined,
+      "status": undefined,
+      "summary": undefined,
+      "tests": Array [
+        Test {
+          "diff": Diff {
+            "actual": "control_forever",
+            "expected": "control_forever",
+          },
+          "feedback": "De planeet kan oneindig lang bewegen.",
+          "messages": Array [],
+          "name": "Juiste lus",
+          "status": "correct",
+        },
+        Test {
+          "diff": Diff {
+            "actual": "looks_hide",
+            "expected": "looks_hide",
+          },
+          "feedback": "Voedsel 1 begint onzichtbaar.",
+          "messages": Array [],
+          "name": "Verdwijnt",
+          "status": "correct",
+        },
+        Test {
+          "diff": Diff {
+            "actual": "true",
+            "expected": "true",
+          },
+          "feedback": "Voedsel 1 wacht één seconde.",
+          "messages": Array [],
+          "name": "Wacht",
+          "status": "correct",
+        },
+        Test {
+          "diff": Diff {
+            "actual": "true",
+            "expected": "true",
+          },
+          "feedback": "Voedsel 1 gaat naar een willekeurige positie.",
+          "messages": Array [],
+          "name": "Willekeurige positie",
+          "status": "correct",
+        },
+        Test {
+          "diff": Diff {
+            "actual": "looks_show",
+            "expected": "looks_show",
+          },
+          "feedback": ":AIO_TP_VerschijntJuist",
+          "messages": Array [],
+          "name": "Verschijn",
+          "status": "correct",
+        },
+        Test {
+          "diff": Diff {
+            "actual": "true",
+            "expected": "true",
+          },
+          "feedback": "Voedsel 1 beweegt in een willekeurige richting tot het de planeet raakt.",
+          "messages": Array [],
+          "name": "Beweeg tot raak",
+          "status": "correct",
+        },
+      ],
+      "visibility": "show",
+    },
+    TestGroup {
+      "messages": Array [],
+      "name": "Test voor Voedsel 2",
+      "sprite": undefined,
+      "status": undefined,
+      "summary": undefined,
+      "tests": Array [
+        Test {
+          "diff": Diff {
+            "actual": "control_forever",
+            "expected": "control_forever",
+          },
+          "feedback": "De planeet kan oneindig lang bewegen.",
+          "messages": Array [],
+          "name": "Juiste lus",
+          "status": "correct",
+        },
+        Test {
+          "diff": Diff {
+            "actual": "looks_hide",
+            "expected": "looks_hide",
+          },
+          "feedback": "Voedsel 2 begint onzichtbaar.",
+          "messages": Array [],
+          "name": "Verdwijnt",
+          "status": "correct",
+        },
+        Test {
+          "diff": Diff {
+            "actual": "true",
+            "expected": "true",
+          },
+          "feedback": "Voedsel 2 wacht één seconde.",
+          "messages": Array [],
+          "name": "Wacht",
+          "status": "correct",
+        },
+        Test {
+          "diff": Diff {
+            "actual": "true",
+            "expected": "true",
+          },
+          "feedback": "Voedsel 2 gaat naar een willekeurige positie.",
+          "messages": Array [],
+          "name": "Willekeurige positie",
+          "status": "correct",
+        },
+        Test {
+          "diff": Diff {
+            "actual": "looks_show",
+            "expected": "looks_show",
+          },
+          "feedback": ":AIO_TP_VerschijntJuist",
+          "messages": Array [],
+          "name": "Verschijn",
+          "status": "correct",
+        },
+        Test {
+          "diff": Diff {
+            "actual": "true",
+            "expected": "true",
+          },
+          "feedback": "Voedsel 2 beweegt in een willekeurige richting tot het de planeet raakt.",
+          "messages": Array [],
+          "name": "Beweeg tot raak",
+          "status": "correct",
+        },
+      ],
+      "visibility": "show",
+    },
+    TestGroup {
+      "messages": Array [],
+      "name": "Test voor Voedsel 3",
+      "sprite": undefined,
+      "status": undefined,
+      "summary": undefined,
+      "tests": Array [
+        Test {
+          "diff": Diff {
+            "actual": "control_forever",
+            "expected": "control_forever",
+          },
+          "feedback": "De planeet kan oneindig lang bewegen.",
+          "messages": Array [],
+          "name": "Juiste lus",
+          "status": "correct",
+        },
+        Test {
+          "diff": Diff {
+            "actual": "looks_hide",
+            "expected": "looks_hide",
+          },
+          "feedback": "Voedsel 3 begint onzichtbaar.",
+          "messages": Array [],
+          "name": "Verdwijnt",
+          "status": "correct",
+        },
+        Test {
+          "diff": Diff {
+            "actual": "true",
+            "expected": "true",
+          },
+          "feedback": "Voedsel 3 wacht één seconde.",
+          "messages": Array [],
+          "name": "Wacht",
+          "status": "correct",
+        },
+        Test {
+          "diff": Diff {
+            "actual": "true",
+            "expected": "true",
+          },
+          "feedback": "Voedsel 3 gaat naar een willekeurige positie.",
+          "messages": Array [],
+          "name": "Willekeurige positie",
+          "status": "correct",
+        },
+        Test {
+          "diff": Diff {
+            "actual": "looks_show",
+            "expected": "looks_show",
+          },
+          "feedback": ":AIO_TP_VerschijntJuist",
+          "messages": Array [],
+          "name": "Verschijn",
+          "status": "correct",
+        },
+        Test {
+          "diff": Diff {
+            "actual": "true",
+            "expected": "true",
+          },
+          "feedback": "Voedsel 3 beweegt in een willekeurige richting tot het de planeet raakt.",
+          "messages": Array [],
+          "name": "Beweeg tot raak",
+          "status": "correct",
+        },
+      ],
+      "visibility": "show",
+    },
+    TestGroup {
+      "messages": Array [],
+      "name": "Test voor Voedsel 4",
+      "sprite": undefined,
+      "status": undefined,
+      "summary": undefined,
+      "tests": Array [
+        Test {
+          "diff": Diff {
+            "actual": "control_forever",
+            "expected": "control_forever",
+          },
+          "feedback": "De planeet kan oneindig lang bewegen.",
+          "messages": Array [],
+          "name": "Juiste lus",
+          "status": "correct",
+        },
+        Test {
+          "diff": Diff {
+            "actual": "looks_hide",
+            "expected": "looks_hide",
+          },
+          "feedback": "Voedsel 4 begint onzichtbaar.",
+          "messages": Array [],
+          "name": "Verdwijnt",
+          "status": "correct",
+        },
+        Test {
+          "diff": Diff {
+            "actual": "true",
+            "expected": "true",
+          },
+          "feedback": "Voedsel 4 wacht één seconde.",
+          "messages": Array [],
+          "name": "Wacht",
+          "status": "correct",
+        },
+        Test {
+          "diff": Diff {
+            "actual": "true",
+            "expected": "true",
+          },
+          "feedback": "Voedsel 4 gaat naar een willekeurige positie.",
+          "messages": Array [],
+          "name": "Willekeurige positie",
+          "status": "correct",
+        },
+        Test {
+          "diff": Diff {
+            "actual": "looks_show",
+            "expected": "looks_show",
+          },
+          "feedback": ":AIO_TP_VerschijntJuist",
+          "messages": Array [],
+          "name": "Verschijn",
+          "status": "correct",
+        },
+        Test {
+          "diff": Diff {
+            "actual": "true",
+            "expected": "true",
+          },
+          "feedback": "Voedsel 4 beweegt in een willekeurige richting tot het de planeet raakt.",
+          "messages": Array [],
+          "name": "Beweeg tot raak",
+          "status": "correct",
+        },
+      ],
+      "visibility": "show",
+    },
+  ],
+  "messages": Array [],
+  "status": "runtime error",
+  "version": 2,
+}
+`;

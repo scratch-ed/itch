@@ -1,0 +1,819 @@
+[
+  {
+    "command": "start-judgement",
+    "version": 2
+  },
+  {
+    "command": "start-group",
+    "name": "Controle op bestaande code",
+    "visibility": "show"
+  },
+  {
+    "command": "start-test",
+    "name": "Scherm"
+  },
+  {
+    "command": "append-diff",
+    "expected": "false",
+    "actual": "false"
+  },
+  {
+    "command": "close-test",
+    "status": "correct",
+    "feedback": "Top! Je hebt niets veranderd aan de sprite Scherm."
+  },
+  {
+    "command": "start-test",
+    "name": "Scherm"
+  },
+  {
+    "command": "append-diff",
+    "expected": "false",
+    "actual": "false"
+  },
+  {
+    "command": "close-test",
+    "status": "correct",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Scherm."
+  },
+  {
+    "command": "start-test",
+    "name": "Boodschap 1"
+  },
+  {
+    "command": "append-diff",
+    "expected": "false",
+    "actual": "false"
+  },
+  {
+    "command": "close-test",
+    "status": "correct",
+    "feedback": "Top! Je hebt niets veranderd aan de sprite Boodschap 1."
+  },
+  {
+    "command": "start-test",
+    "name": "Boodschap 1"
+  },
+  {
+    "command": "append-diff",
+    "expected": "false",
+    "actual": "false"
+  },
+  {
+    "command": "close-test",
+    "status": "correct",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Boodschap 1."
+  },
+  {
+    "command": "start-test",
+    "name": "Speelveld"
+  },
+  {
+    "command": "append-diff",
+    "expected": "false",
+    "actual": "false"
+  },
+  {
+    "command": "close-test",
+    "status": "correct",
+    "feedback": "Top! Je hebt niets veranderd aan het speelveld."
+  },
+  {
+    "command": "start-test",
+    "name": "Speelveld"
+  },
+  {
+    "command": "append-diff",
+    "expected": "false",
+    "actual": "false"
+  },
+  {
+    "command": "close-test",
+    "status": "correct",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van het speelveld."
+  },
+  {
+    "command": "start-test",
+    "name": "Planeet"
+  },
+  {
+    "command": "append-diff",
+    "expected": "true",
+    "actual": "true"
+  },
+  {
+    "command": "close-test",
+    "status": "correct",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren."
+  },
+  {
+    "command": "start-test",
+    "name": "Planeet"
+  },
+  {
+    "command": "append-diff",
+    "expected": "true",
+    "actual": "true"
+  },
+  {
+    "command": "close-test",
+    "status": "correct",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Planeet."
+  },
+  {
+    "command": "start-test",
+    "name": "Vijand 1"
+  },
+  {
+    "command": "append-diff",
+    "expected": "true",
+    "actual": "true"
+  },
+  {
+    "command": "close-test",
+    "status": "correct",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren."
+  },
+  {
+    "command": "start-test",
+    "name": "Vijand 1"
+  },
+  {
+    "command": "append-diff",
+    "expected": "true",
+    "actual": "true"
+  },
+  {
+    "command": "close-test",
+    "status": "correct",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Vijand 1."
+  },
+  {
+    "command": "start-test",
+    "name": "Vijand 2"
+  },
+  {
+    "command": "append-diff",
+    "expected": "true",
+    "actual": "true"
+  },
+  {
+    "command": "close-test",
+    "status": "correct",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren."
+  },
+  {
+    "command": "start-test",
+    "name": "Vijand 2"
+  },
+  {
+    "command": "escalate-status",
+    "status": "runtime error"
+  },
+  {
+    "command": "append-diff",
+    "expected": "true",
+    "actual": "true"
+  },
+  {
+    "command": "close-test",
+    "status": "correct",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Vijand 2."
+  },
+  {
+    "command": "start-test",
+    "name": "Voedsel 1"
+  },
+  {
+    "command": "append-diff",
+    "expected": "true",
+    "actual": "true"
+  },
+  {
+    "command": "close-test",
+    "status": "correct",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren."
+  },
+  {
+    "command": "start-test",
+    "name": "Voedsel 1"
+  },
+  {
+    "command": "append-diff",
+    "expected": "true",
+    "actual": "true"
+  },
+  {
+    "command": "close-test",
+    "status": "correct",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Voedsel 1."
+  },
+  {
+    "command": "start-test",
+    "name": "Voedsel 2"
+  },
+  {
+    "command": "append-diff",
+    "expected": "true",
+    "actual": "true"
+  },
+  {
+    "command": "close-test",
+    "status": "correct",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren."
+  },
+  {
+    "command": "start-test",
+    "name": "Voedsel 2"
+  },
+  {
+    "command": "append-diff",
+    "expected": "true",
+    "actual": "true"
+  },
+  {
+    "command": "close-test",
+    "status": "correct",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Voedsel 2."
+  },
+  {
+    "command": "start-test",
+    "name": "Voedsel 3"
+  },
+  {
+    "command": "append-diff",
+    "expected": "true",
+    "actual": "true"
+  },
+  {
+    "command": "close-test",
+    "status": "correct",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren."
+  },
+  {
+    "command": "start-test",
+    "name": "Voedsel 3"
+  },
+  {
+    "command": "append-diff",
+    "expected": "true",
+    "actual": "true"
+  },
+  {
+    "command": "close-test",
+    "status": "correct",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Voedsel 3."
+  },
+  {
+    "command": "start-test",
+    "name": "Voedsel 4"
+  },
+  {
+    "command": "append-diff",
+    "expected": "true",
+    "actual": "true"
+  },
+  {
+    "command": "close-test",
+    "status": "correct",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren."
+  },
+  {
+    "command": "start-test",
+    "name": "Voedsel 4"
+  },
+  {
+    "command": "append-diff",
+    "expected": "true",
+    "actual": "true"
+  },
+  {
+    "command": "close-test",
+    "status": "correct",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Voedsel 4."
+  },
+  {
+    "command": "close-group"
+  },
+  {
+    "command": "start-group",
+    "name": "Test voor Planeet.",
+    "visibility": "show"
+  },
+  {
+    "command": "start-test",
+    "name": "Juiste lus"
+  },
+  {
+    "command": "append-diff",
+    "expected": "control_forever",
+    "actual": "control_forever"
+  },
+  {
+    "command": "close-test",
+    "status": "correct",
+    "feedback": "De planeet kan oneindig lang bewegen."
+  },
+  {
+    "command": "start-test",
+    "name": "Richt naar de muis"
+  },
+  {
+    "command": "append-diff",
+    "expected": "true",
+    "actual": "true"
+  },
+  {
+    "command": "close-test",
+    "status": "correct",
+    "feedback": "De planeet richt zich naar de muis."
+  },
+  {
+    "command": "start-test",
+    "name": "Beweegt"
+  },
+  {
+    "command": "append-diff",
+    "expected": "true",
+    "actual": "true"
+  },
+  {
+    "command": "close-test",
+    "status": "correct",
+    "feedback": "De planeet zet 5 stappen."
+  },
+  {
+    "command": "start-test",
+    "name": "Planeet verandert grootte"
+  },
+  {
+    "command": "append-diff",
+    "expected": "true",
+    "actual": "true"
+  },
+  {
+    "command": "close-test",
+    "status": "correct",
+    "feedback": "De planeet verandert zijn grootte."
+  },
+  {
+    "command": "start-test",
+    "name": "Planeet verandert snelheid"
+  },
+  {
+    "command": "append-diff",
+    "expected": "true",
+    "actual": "true"
+  },
+  {
+    "command": "close-test",
+    "status": "correct",
+    "feedback": "De planeet verandert zijn snelheid."
+  },
+  {
+    "command": "close-group"
+  },
+  {
+    "command": "start-group",
+    "name": "Test voor Vijand 1.",
+    "visibility": "show"
+  },
+  {
+    "command": "start-test",
+    "name": "Juiste lus"
+  },
+  {
+    "command": "append-diff",
+    "expected": "control_forever",
+    "actual": "control_forever"
+  },
+  {
+    "command": "close-test",
+    "status": "correct",
+    "feedback": "De planeet kan oneindig lang bewegen."
+  },
+  {
+    "command": "start-test",
+    "name": "Richt naar de muis"
+  },
+  {
+    "command": "append-diff",
+    "expected": "true",
+    "actual": "true"
+  },
+  {
+    "command": "close-test",
+    "status": "correct",
+    "feedback": "Vijand 1 beweegt zich binnen de 5 seconden naar een willekeurige positie."
+  },
+  {
+    "command": "close-group"
+  },
+  {
+    "command": "start-group",
+    "name": "Test voor Vijand 2.",
+    "visibility": "show"
+  },
+  {
+    "command": "start-test",
+    "name": "Juiste lus"
+  },
+  {
+    "command": "append-diff",
+    "expected": "control_forever",
+    "actual": "control_forever"
+  },
+  {
+    "command": "close-test",
+    "status": "correct",
+    "feedback": "De planeet kan oneindig lang bewegen."
+  },
+  {
+    "command": "start-test",
+    "name": "Richt naar de muis"
+  },
+  {
+    "command": "append-diff",
+    "expected": "true",
+    "actual": "true"
+  },
+  {
+    "command": "close-test",
+    "status": "correct",
+    "feedback": "Vijand 2 beweegt zich binnen de 5 seconden naar een willekeurige positie."
+  },
+  {
+    "command": "close-group"
+  },
+  {
+    "command": "start-group",
+    "name": "Test voor Voedsel 1",
+    "visibility": "show"
+  },
+  {
+    "command": "start-test",
+    "name": "Juiste lus"
+  },
+  {
+    "command": "append-diff",
+    "expected": "control_forever",
+    "actual": "control_forever"
+  },
+  {
+    "command": "close-test",
+    "status": "correct",
+    "feedback": "De planeet kan oneindig lang bewegen."
+  },
+  {
+    "command": "start-test",
+    "name": "Verdwijnt"
+  },
+  {
+    "command": "append-diff",
+    "expected": "looks_hide",
+    "actual": "looks_hide"
+  },
+  {
+    "command": "close-test",
+    "status": "correct",
+    "feedback": "Voedsel 1 begint onzichtbaar."
+  },
+  {
+    "command": "start-test",
+    "name": "Wacht"
+  },
+  {
+    "command": "append-diff",
+    "expected": "true",
+    "actual": "true"
+  },
+  {
+    "command": "close-test",
+    "status": "correct",
+    "feedback": "Voedsel 1 wacht één seconde."
+  },
+  {
+    "command": "start-test",
+    "name": "Willekeurige positie"
+  },
+  {
+    "command": "append-diff",
+    "expected": "true",
+    "actual": "true"
+  },
+  {
+    "command": "close-test",
+    "status": "correct",
+    "feedback": "Voedsel 1 gaat naar een willekeurige positie."
+  },
+  {
+    "command": "start-test",
+    "name": "Verschijn"
+  },
+  {
+    "command": "append-diff",
+    "expected": "looks_show",
+    "actual": "looks_show"
+  },
+  {
+    "command": "close-test",
+    "status": "correct",
+    "feedback": ":AIO_TP_VerschijntJuist"
+  },
+  {
+    "command": "start-test",
+    "name": "Beweeg tot raak"
+  },
+  {
+    "command": "append-diff",
+    "expected": "true",
+    "actual": "true"
+  },
+  {
+    "command": "close-test",
+    "status": "correct",
+    "feedback": "Voedsel 1 beweegt in een willekeurige richting tot het de planeet raakt."
+  },
+  {
+    "command": "close-group"
+  },
+  {
+    "command": "start-group",
+    "name": "Test voor Voedsel 2",
+    "visibility": "show"
+  },
+  {
+    "command": "start-test",
+    "name": "Juiste lus"
+  },
+  {
+    "command": "append-diff",
+    "expected": "control_forever",
+    "actual": "control_forever"
+  },
+  {
+    "command": "close-test",
+    "status": "correct",
+    "feedback": "De planeet kan oneindig lang bewegen."
+  },
+  {
+    "command": "start-test",
+    "name": "Verdwijnt"
+  },
+  {
+    "command": "append-diff",
+    "expected": "looks_hide",
+    "actual": "looks_hide"
+  },
+  {
+    "command": "close-test",
+    "status": "correct",
+    "feedback": "Voedsel 2 begint onzichtbaar."
+  },
+  {
+    "command": "start-test",
+    "name": "Wacht"
+  },
+  {
+    "command": "append-diff",
+    "expected": "true",
+    "actual": "true"
+  },
+  {
+    "command": "close-test",
+    "status": "correct",
+    "feedback": "Voedsel 2 wacht één seconde."
+  },
+  {
+    "command": "start-test",
+    "name": "Willekeurige positie"
+  },
+  {
+    "command": "append-diff",
+    "expected": "true",
+    "actual": "true"
+  },
+  {
+    "command": "close-test",
+    "status": "correct",
+    "feedback": "Voedsel 2 gaat naar een willekeurige positie."
+  },
+  {
+    "command": "start-test",
+    "name": "Verschijn"
+  },
+  {
+    "command": "append-diff",
+    "expected": "looks_show",
+    "actual": "looks_show"
+  },
+  {
+    "command": "close-test",
+    "status": "correct",
+    "feedback": ":AIO_TP_VerschijntJuist"
+  },
+  {
+    "command": "start-test",
+    "name": "Beweeg tot raak"
+  },
+  {
+    "command": "append-diff",
+    "expected": "true",
+    "actual": "true"
+  },
+  {
+    "command": "close-test",
+    "status": "correct",
+    "feedback": "Voedsel 2 beweegt in een willekeurige richting tot het de planeet raakt."
+  },
+  {
+    "command": "close-group"
+  },
+  {
+    "command": "start-group",
+    "name": "Test voor Voedsel 3",
+    "visibility": "show"
+  },
+  {
+    "command": "start-test",
+    "name": "Juiste lus"
+  },
+  {
+    "command": "append-diff",
+    "expected": "control_forever",
+    "actual": "control_forever"
+  },
+  {
+    "command": "close-test",
+    "status": "correct",
+    "feedback": "De planeet kan oneindig lang bewegen."
+  },
+  {
+    "command": "start-test",
+    "name": "Verdwijnt"
+  },
+  {
+    "command": "append-diff",
+    "expected": "looks_hide",
+    "actual": "looks_hide"
+  },
+  {
+    "command": "close-test",
+    "status": "correct",
+    "feedback": "Voedsel 3 begint onzichtbaar."
+  },
+  {
+    "command": "start-test",
+    "name": "Wacht"
+  },
+  {
+    "command": "append-diff",
+    "expected": "true",
+    "actual": "true"
+  },
+  {
+    "command": "close-test",
+    "status": "correct",
+    "feedback": "Voedsel 3 wacht één seconde."
+  },
+  {
+    "command": "start-test",
+    "name": "Willekeurige positie"
+  },
+  {
+    "command": "append-diff",
+    "expected": "true",
+    "actual": "true"
+  },
+  {
+    "command": "close-test",
+    "status": "correct",
+    "feedback": "Voedsel 3 gaat naar een willekeurige positie."
+  },
+  {
+    "command": "start-test",
+    "name": "Verschijn"
+  },
+  {
+    "command": "append-diff",
+    "expected": "looks_show",
+    "actual": "looks_show"
+  },
+  {
+    "command": "close-test",
+    "status": "correct",
+    "feedback": ":AIO_TP_VerschijntJuist"
+  },
+  {
+    "command": "start-test",
+    "name": "Beweeg tot raak"
+  },
+  {
+    "command": "append-diff",
+    "expected": "true",
+    "actual": "true"
+  },
+  {
+    "command": "close-test",
+    "status": "correct",
+    "feedback": "Voedsel 3 beweegt in een willekeurige richting tot het de planeet raakt."
+  },
+  {
+    "command": "close-group"
+  },
+  {
+    "command": "start-group",
+    "name": "Test voor Voedsel 4",
+    "visibility": "show"
+  },
+  {
+    "command": "start-test",
+    "name": "Juiste lus"
+  },
+  {
+    "command": "append-diff",
+    "expected": "control_forever",
+    "actual": "control_forever"
+  },
+  {
+    "command": "close-test",
+    "status": "correct",
+    "feedback": "De planeet kan oneindig lang bewegen."
+  },
+  {
+    "command": "start-test",
+    "name": "Verdwijnt"
+  },
+  {
+    "command": "append-diff",
+    "expected": "looks_hide",
+    "actual": "looks_hide"
+  },
+  {
+    "command": "close-test",
+    "status": "correct",
+    "feedback": "Voedsel 4 begint onzichtbaar."
+  },
+  {
+    "command": "start-test",
+    "name": "Wacht"
+  },
+  {
+    "command": "append-diff",
+    "expected": "true",
+    "actual": "true"
+  },
+  {
+    "command": "close-test",
+    "status": "correct",
+    "feedback": "Voedsel 4 wacht één seconde."
+  },
+  {
+    "command": "start-test",
+    "name": "Willekeurige positie"
+  },
+  {
+    "command": "append-diff",
+    "expected": "true",
+    "actual": "true"
+  },
+  {
+    "command": "close-test",
+    "status": "correct",
+    "feedback": "Voedsel 4 gaat naar een willekeurige positie."
+  },
+  {
+    "command": "start-test",
+    "name": "Verschijn"
+  },
+  {
+    "command": "append-diff",
+    "expected": "looks_show",
+    "actual": "looks_show"
+  },
+  {
+    "command": "close-test",
+    "status": "correct",
+    "feedback": ":AIO_TP_VerschijntJuist"
+  },
+  {
+    "command": "start-test",
+    "name": "Beweeg tot raak"
+  },
+  {
+    "command": "append-diff",
+    "expected": "true",
+    "actual": "true"
+  },
+  {
+    "command": "close-test",
+    "status": "correct",
+    "feedback": "Voedsel 4 beweegt in een willekeurige richting tot het de planeet raakt."
+  },
+  {
+    "command": "close-group"
+  },
+  {
+    "command": "close-judgement"
+  }
+]
