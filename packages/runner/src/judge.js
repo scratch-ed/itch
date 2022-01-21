@@ -1,6 +1,7 @@
 /* Copyright (C) 2019 Ghent University - All Rights Reserved */
 const path = require('path');
 const puppeteer = require('puppeteer');
+const fs = require('fs');
 
 // Path to the HTML to run.
 const url = path.resolve(__dirname, 'environment.html');
@@ -94,6 +95,11 @@ async function runJudge(options) {
     const templateHandle = await page.$('#template');
     await templateHandle.uploadFile(options.template);
 
+    let translations = {};
+    if (options.language) {
+      translations = JSON.parse(fs.readFileSync(options.translations));
+    }
+
     await page.setViewport({ height: 1080, width: 960 });
     await page.waitForTimeout(50);
 
@@ -104,11 +110,13 @@ async function runJudge(options) {
       });
     }
 
-    await page.evaluate((language) => {
-      return runTests(language);
-    }, language);
+    console.log(translations);
+
+    await page.evaluate((language, translations) => {
+      return runTests(language, translations);
+    }, language, translations);
   } finally {
-    if (browser && mode === 'debug') {
+    if (browser && mode !== 'debug') {
       console.log('Closing browser...');
       const pages = await browser.pages();
       await Promise.all(pages.map((page) => page.close()));
