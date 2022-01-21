@@ -66,15 +66,18 @@ function resultToTranslationObject(object, result) {
  * Download all translations.
  *
  * @param {string} local - Where to put them.
+ * @param {?string} token
  * @returns {Promise<void>}
  */
-export async function downloadTranslations(local) {
+export async function downloadTranslations(local, token = undefined) {
   const translations = {
     nl: {},
     en: {},
   };
 
-  const token = await getBearerToken();
+  if (!token) {
+    token = await getBearerToken();
+  }
 
   console.info('Downloading first translations page.');
   const firstPage = await executeTranslationRequest(0, token);

@@ -21,38 +21,38 @@ Ofwel volledig formaat:
 
 ```json
 {
- "version": 2,
- "groups": [
-  {
-   "name": "Controle op bestaande code",
-   "visibility": "show",
-   "tests": [
+  "version": 2,
+  "groups": [
     {
-     "name": ":Schip:",
-     "feedback": "Top! Je hebt niets veranderd aan de sprite :Schip:.",
-     "status": "correct",
-     "diff": {
-      "expected": "false",
-      "actual": "false"
-     }
-    }
-   ]
-  },
-  {
-   "name": "Controle op bestaande sprites",
-   "visibility": "show",
-   "tests": [
+      "name": "Controle op bestaande code",
+      "visibility": "show",
+      "tests": [
+        {
+          "name": ":Schip:",
+          "feedback": "Top! Je hebt niets veranderd aan de sprite :Schip:.",
+          "status": "correct",
+          "diff": {
+            "expected": "false",
+            "actual": "false"
+          }
+        }
+      ]
+    },
     {
-     "name": ":Schip:",
-     "feedback": "Top! Je hebt niets veranderd aan de blokjes",
-     "status": "wrong",
-     "diff": {
-      "expected": "true",
-      "actual": "false"
-     }
+      "name": "Controle op bestaande sprites",
+      "visibility": "show",
+      "tests": [
+        {
+          "name": ":Schip:",
+          "feedback": "Top! Je hebt niets veranderd aan de blokjes",
+          "status": "wrong",
+          "diff": {
+            "expected": "true",
+            "actual": "false"
+          }
+        }
+      ]
     }
-   ]
-  }
- ]
+  ]
 }
 ```

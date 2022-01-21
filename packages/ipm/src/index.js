@@ -2,26 +2,28 @@ import { program } from 'commander';
 import fs from 'fs';
 import { downloadTranslations } from './download-translations.js';
 import { downloadExercise } from './download-exercises.js';
+import { getBearerToken } from './authenticate-user.js';
 
 program
   .command('down')
-  .option('-m, --missing', 'only download missing projects')
   .option('-t, --translations', 'include translated versions')
   .argument('<local>', 'path to the local exercise')
   .action(async (local, options) => {
-    await downloadExercise(local, options.missing, options.translations);
+    await downloadExercise(local, options.translations);
   });
 
 program
   .command('sync')
   .argument('<local>', 'location of the exercises folder')
-  .option('-m, --missing', 'only download missing projects')
-  .action(async (local, options) => {
+  .action(async (local, _options) => {
+    const token = await getBearerToken();
+    // Download translations
+    await downloadTranslations(local, token);
     const exercises = fs
       .readdirSync(local, { withFileTypes: true })
       .filter((p) => p.isDirectory());
     for (const exercise of exercises) {
-      await downloadExercise(exercise.name, options.missing);
+      await downloadExercise(exercise.name, true, token, true);
     }
   });
 

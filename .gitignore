@@ -19,9 +19,9 @@ packages/core/dist
 config.json
 
 # Ignore sb3 files in exercises, that we should not keep.
-exercises/**/projects/*.sb3
+exercises/**/projects/*
 # Do allow to keep execeptions.
-!exercises/**/projects/keep-*.sb3
+!exercises/**/projects/keep-*
 
 # Ignore translations file.
 exercises/translations.json

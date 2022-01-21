@@ -26,9 +26,7 @@ async function download(from, to, headers = {}) {
   return res.headers;
 }
 
-async function getVersions(id) {
-  const token = await getBearerToken();
-
+async function getVersions(id, token) {
   const myHeaders = new Headers();
   myHeaders.append('authorization', token);
   myHeaders.append('content-type', 'application/json');
@@ -85,51 +83,36 @@ async function getVersions(id) {
 }
 
 /**
- * Download the actual file and store it. If onlyMissing is true and there is a
- * file, do nothing. If downloading and an etag is found, skip if possible.
- * The `lock` will be updated with the new etag if available. You should save it
- * afterwards.
+ * Download the actual file and store it. If downloading and an etag is found,
+ * skip if possible. The `lock` will be updated with the new etag if available.
+ * You should save it afterwards.
  *
  * @param {{localPath: string, log: string, url: string}} exercise
  * @param {Object} lock - lock file
- * @param {boolean} onlyMissing - if downloading if locally available is needed
  * @return {boolean} True if the file was actually updated, false otherwise.
  */
-async function getBytes(exercise, lock, onlyMissing) {
+async function getBytes(exercise, lock) {
   const headers = {};
   if (lock[exercise.localPath] && fs.existsSync(exercise.localPath)) {
     headers['If-None-Match'] = lock[exercise.localPath];
   }
 
   let updated = false;
-  if (onlyMissing && fs.existsSync(exercise.localPath)) {
-    console.debug(
-      `[${exercise.log}] ${exercise.localPath}: exists and onlyMissing mode, skipping.`,
-    );
+  const responseHeaders = await download(exercise.url, exercise.localPath, headers);
+  if (responseHeaders.has('etag')) {
+    console.debug(`[${exercise.log}] ${exercise.localPath}: downloaded new version.`);
+    updated = true;
+    lock[exercise.localPath] = responseHeaders.get('etag');
   } else {
-    const responseHeaders = await download(exercise.url, exercise.localPath, headers);
-    if (responseHeaders.has('etag')) {
-      console.debug(`[${exercise.log}] ${exercise.localPath}: downloaded new version.`);
-      updated = true;
-      lock[exercise.localPath] = responseHeaders.get('etag');
-    } else {
-      console.debug(
-        `[${exercise.log}] ${exercise.localPath}: local version is up-to-date.`,
-      );
-    }
+    console.debug(
+      `[${exercise.log}] ${exercise.localPath}: local version is up-to-date.`,
+    );
   }
 
   return updated;
 }
 
-async function downloadLevel(
-  result,
-  level,
-  local,
-  name,
-  onlyMissing,
-  includeTranslations,
-) {
+async function downloadLevel(result, level, local, name, includeTranslations, quiet) {
   const regex = new RegExp(`level ${level}[^0-9]*$`);
   // Attempt to find the starter project.
   const starterData = result.findExercise.versions
@@ -166,7 +149,7 @@ async function downloadLevel(
   }
 
   // Check cache.
-  const lockPath = `${local}/projects/lock.json`;
+  const lockPath = `./exercise-lock.json`;
   let lock;
   try {
     lock = JSON.parse(fs.readFileSync(lockPath, 'utf8'));
@@ -185,7 +168,6 @@ async function downloadLevel(
       url: starterUri,
     },
     lock,
-    onlyMissing,
   );
 
   const solutionPrefix = `${local}/projects/${name || ''}${
@@ -199,7 +181,6 @@ async function downloadLevel(
       url: solutionUri,
     },
     lock,
-    onlyMissing,
   );
 
   const [updatedStarter, updatedSolution] = await Promise.allSettled([
@@ -218,30 +199,43 @@ async function downloadLevel(
       `${starterPrefix}-NL.sb3`,
       translationPath,
       'nl',
+      quiet,
     );
     await translateSb3(
       `${solutionPrefix}.sb3`,
       `${solutionPrefix}-NL.sb3`,
       translationPath,
       'nl',
+      quiet,
     );
     await translateSb3(
       `${starterPrefix}.sb3`,
       `${starterPrefix}-EN.sb3`,
       translationPath,
       'en',
+      quiet,
     );
     await translateSb3(
       `${solutionPrefix}.sb3`,
       `${solutionPrefix}-EN.sb3`,
       translationPath,
       'en',
+      quiet,
     );
   }
 }
 
-export async function downloadExercise(local, onlyMissing = false, translations = true) {
+export async function downloadExercise(
+  local,
+  translations = true,
+  token = undefined,
+  quiet = false,
+) {
   const packageJson = JSON.parse(fs.readFileSync(`${local}/package.json`, 'utf8'));
+
+  if (!token) {
+    token = await getBearerToken();
+  }
 
   if (packageJson.itch === undefined) {
     console.warn(`[${local}] Skipping due to missing itch config in package.json`);
@@ -249,24 +243,17 @@ export async function downloadExercise(local, onlyMissing = false, translations 
   }
 
   for (const exercise of packageJson.itch) {
-    const result = (await getVersions(exercise.id)).data;
+    const result = (await getVersions(exercise.id, token)).data;
     console.info(
       `[${local}] Downloading information for ${result.findExercise.title}${
         exercise.name ? '/' + exercise.name : ''
       }.`,
     );
     if (exercise.levels === undefined) {
-      await downloadLevel(
-        result,
-        undefined,
-        local,
-        exercise.name,
-        onlyMissing,
-        translations,
-      );
+      await downloadLevel(result, undefined, local, exercise.name, translations);
     } else {
       for (let i = 1; i <= exercise.levels; i++) {
-        await downloadLevel(result, i, local, exercise.name, onlyMissing, translations);
+        await downloadLevel(result, i, local, exercise.name, translations, quiet);
       }
     }
   }
