@@ -29,6 +29,7 @@
     "watch": "npm run watch --workspace @ftrprf/judge-core",
     "start": "npm start --workspace @ftrprf/judge-runner",
     "build": "npm run build --workspaces --if-present",
+    "type-check": "npm run type-check --workspaces --if-present",
     "test:exercises": "jest --selectProjects stableExercises",
     "test:exercises:converted": "jest --selectProjects convertedTestplans",
     "test:exercises:all": "jest --runInBand --selectProjects exercise",
