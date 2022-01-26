@@ -14,7 +14,7 @@ export class WhenPressKeyAction extends ScheduledAction {
   execute(context: Context, resolve: (v: string) => void): void {
     // Save sprites state before key press.
     const event = new Event('key', { key: this.key });
-    event.previous = context.log.snap(context.vm!, 'event.key.start');
+    event.previous = context.log.snap('event.key.start');
     context.log.registerEvent(event);
 
     const scratchKey = context.vm!.runtime.ioDevices.keyboard._keyStringToScratchKey(
@@ -40,7 +40,7 @@ export class WhenPressKeyAction extends ScheduledAction {
     action.promise.then(() => {
       console.log(`finished keyPress on ${this.key}`);
       // save sprites state after click
-      event.next = context.log.snap(context.vm!, 'event.key.end');
+      event.next = context.log.snap('event.key.end');
       resolve(`finished ${this}`);
     });
   }
@@ -89,7 +89,7 @@ export class KeyUseAction extends ScheduledAction {
       down: this.down,
       delay: this.delay,
     });
-    event.previous = context.log.snap(context.vm!, 'event.keyUse.start');
+    event.previous = context.log.snap('event.keyUse.start');
     context.log.registerEvent(event);
 
     context.vm!.postIOData('keyboard', {
@@ -102,7 +102,7 @@ export class KeyUseAction extends ScheduledAction {
 
     if (this.isDelayed()) {
       setTimeout(() => {
-        event.next = context.log.snap(context.vm!, 'event.keyUse.end');
+        event.next = context.log.snap('event.keyUse.end');
         context.vm!.postIOData('keyboard', {
           key: this.key,
           isDown: false,
@@ -113,7 +113,7 @@ export class KeyUseAction extends ScheduledAction {
       }, accelDown as number);
     } else {
       setTimeout(() => {
-        event.next = context.log.snap(context.vm!, 'event.keyUse.end');
+        event.next = context.log.snap('event.keyUse.end');
         resolve(`finished ${this}`);
       }, delay);
     }

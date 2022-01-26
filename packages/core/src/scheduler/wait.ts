@@ -74,12 +74,12 @@ class WaitForSpritePositionAction extends ScheduledAction {
       throw new Error(`Sprite ${this.name} was not found in the runtime.`);
     }
     const event = new Event('wait_sprite_position', { sprite: this.name });
-    event.previous = context.log.snap(context.vm!, 'event.wait.start');
+    event.previous = context.log.snap('event.wait.start');
     context.log.registerEvent(event);
     const callback = (target: RenderedTarget) => {
       if (this.callback(target.x, target.y)) {
         sprite.removeListener('TARGET_MOVED', callback);
-        event.next = context.log.snap(context.vm!, 'event.wait.end');
+        event.next = context.log.snap('event.wait.end');
         resolve(`finished ${this}`);
       }
     };
@@ -112,14 +112,14 @@ class WaitForSpriteTouchAction extends ScheduledAction {
       targets: this.targets,
       sprite: this.name,
     });
-    event.previous = context.log.snap(context.vm!, 'event.wait.start');
+    event.previous = context.log.snap('event.wait.start');
     context.log.registerEvent(event);
     const callback = (target: RenderedTarget) => {
       for (const goal of this.targets!) {
         console.log('Checking...', goal);
         if (target.isTouchingObject(goal)) {
           sprite.removeListener('TARGET_MOVED', callback);
-          event.next = context.log.snap(context.vm!, 'event.wait.end');
+          event.next = context.log.snap('event.wait.end');
           resolve(`finished ${this}`);
           return;
         }
@@ -154,12 +154,12 @@ class WaitForSpriteNotTouchAction extends ScheduledAction {
       target: this.target,
       sprite: this.name,
     });
-    event.previous = context.log.snap(context.vm!, 'event.wait.start');
+    event.previous = context.log.snap('event.wait.start');
     context.log.registerEvent(event);
     const callback = (target: RenderedTarget) => {
       if (!target.isTouchingObject(this.target!)) {
         sprite.removeListener('TARGET_MOVED', callback);
-        event.next = context.log.snap(context.vm!, 'event.wait.end');
+        event.next = context.log.snap('event.wait.end');
         resolve(`finished ${this}`);
       }
     };
@@ -185,13 +185,13 @@ class WaitOnBroadcastAction extends ScheduledAction {
     const event = new Event('broadcast_listener', {
       name: this.name,
     });
-    event.previous = context.log.snap(context.vm!, 'event.broadcast_listener.start');
+    event.previous = context.log.snap('event.broadcast_listener.start');
     context.log.registerEvent(event);
 
     const listener = new BroadcastListener(this.name);
     context.broadcastListeners.push(listener);
     listener.promise.then(() => {
-      event.next = context.log.snap(context.vm!, 'event.broadcast_listener.end');
+      event.next = context.log.snap('event.broadcast_listener.end');
       resolve(`finished ${this}`);
     });
   }

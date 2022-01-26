@@ -17,7 +17,7 @@ export interface StartJudgement {
  *   error occurs.
  * - Hide means do not display this group, unless an error occurs.
  */
-export type Visibility = 'show' | 'collapse';
+export type Visibility = 'show' | 'collapse' | 'hide';
 
 /**
  * Start a new group in the output.
@@ -60,9 +60,9 @@ export interface AppendDiff {
 export type Status =
   | 'internal error'
   | 'testplan error'
+  | 'time limit exceeded'
   | 'wrong'
-  | 'correct'
-  | 'time limit exceeded';
+  | 'correct';
 
 /**
  * Change the global status for the worse.

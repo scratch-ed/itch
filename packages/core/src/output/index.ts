@@ -182,7 +182,7 @@ export class GroupedResultManager {
     this.out({
       command: 'close-test',
       status: status,
-      feedback: feedback,
+      feedback: feedback || status,
     });
     this.hasOpenTest = false;
   }

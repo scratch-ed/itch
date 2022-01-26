@@ -20,10 +20,12 @@
     "eslint-plugin-promise": "^6.0.0",
     "jest": "^27.4.7",
     "prettier": "^2.5.1",
-    "rimraf": "^3.0.2"
+    "rimraf": "^3.0.2",
+    "typescript-json-schema": "^0.53.0"
   },
   "scripts": {
     "ipm": "npm run ipm --workspace itch-package-manager sync ./exercises",
+    "generate:output": "npm run generate:output --workspace @ftrprf/judge-core",
     "watch": "npm run watch --workspace @ftrprf/judge-core",
     "start": "npm start --workspace @ftrprf/judge-runner",
     "build": "npm run build --workspaces --if-present",

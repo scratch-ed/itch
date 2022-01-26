@@ -20,7 +20,7 @@ export class TrackSpriteAction extends ScheduledAction {
     }
     sprite.addListener('EVENT_TARGET_VISUAL_CHANGE', (target: Target) => {
       const event = new Event('target_update', { target: target.getName() });
-      event.previous = context.log.snap(context.vm!, `event.update_target`);
+      event.previous = context.log.snap(`event.update_target`);
       event.next = event.previous;
       context.log.registerEvent(event);
     });
@@ -44,7 +44,7 @@ class BroadcastLogger implements BroadcastReceiver {
   update(options: BroadcastUpdate): void {
     if (options?.matchFields?.BROADCAST_OPTION === this.name) {
       const event = new Event('broadcast_sent', { name: this.name });
-      event.previous = this.context.log.snap(this.context, 'event.broadcast_sent');
+      event.previous = this.context.log.snap('event.broadcast_sent');
       event.next = event.previous;
       this.context.log.registerEvent(event);
     }

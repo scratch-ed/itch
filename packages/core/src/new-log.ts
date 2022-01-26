@@ -303,7 +303,7 @@ export class Event {
   private previousSnapshot?: Snapshot;
   private nextSnapshot?: Snapshot;
 
-  constructor(readonly type: string, readonly data: EventData) {}
+  constructor(readonly type: string, readonly data: EventData = {}) {}
 
   get previous(): Snapshot {
     return ensure(this.previousSnapshot, 'The previous snapshot is not available yet.');
@@ -323,6 +323,12 @@ export class Event {
 
   hasNext(): boolean {
     return this.nextSnapshot !== undefined;
+  }
+
+  // eslint-disable-next-line accessor-pairs
+  set snapshot(snap: Snapshot) {
+    this.next = snap;
+    this.previous = snap;
   }
 
   get timestamp(): number {
@@ -450,7 +456,13 @@ export class NewLog {
   private readonly snapshotList: Snapshot[] = [];
   private readonly eventList: Event[] = [];
   private readonly startTime: number = Date.now();
+  private readonly vm: VirtualMachine;
   private templateSnapshot?: Snapshot;
+
+  constructor(vm: VirtualMachine) {
+    this.vm = vm;
+  }
+
 
   /** @deprecated */
   // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -531,12 +543,11 @@ export class NewLog {
    * Create a new snapshot from the current state of the VM.
    *
    * @internal
-   * @param vm The VM to take a snapshot of.
    * @param origin Why the snapshot is being taken.
    */
-  snap(vm: VirtualMachine, origin: string): Snapshot {
-    const stage = vm.runtime.getTargetForStage()!;
-    const targets = vm.runtime.targets.map((t) => {
+  snap(origin: string): Snapshot {
+    const stage = this.vm.runtime.getTargetForStage()!;
+    const targets = this.vm.runtime.targets.map((t) => {
       return vmTargetToScratchTarget(t as RenderedTarget, t.id === stage.id);
     });
 

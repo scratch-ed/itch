@@ -6,7 +6,7 @@ import { Event } from '../new-log';
 export class GreenFlagAction extends ScheduledAction {
   execute(context: Context, resolve: (v: string) => void): void {
     const event = new Event('greenFlag');
-    event.previous = context.log.snap(context.vm!, 'event.greenFlag.start');
+    event.previous = context.log.snap('event.greenFlag.start');
     context.log.registerEvent(event);
 
     // Stuff from the greenFlag function.
@@ -24,7 +24,7 @@ export class GreenFlagAction extends ScheduledAction {
     const action = new ThreadListener(list);
     context.threadListeners.push(action);
     action.promise.then(() => {
-      event.next = context.log.snap(context.vm!, 'event.greenFlag.end');
+      event.next = context.log.snap('event.greenFlag.end');
       resolve(`finished ${this}`);
     });
   }

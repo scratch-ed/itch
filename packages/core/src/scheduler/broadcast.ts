@@ -25,7 +25,7 @@ export class SendBroadcastAction extends ScheduledAction {
       target: target.getName(),
       restrict: restrictTo?.getName(),
     });
-    event.previous = context.log.snap(context.vm!, 'event.broadcast.start');
+    event.previous = context.log.snap('event.broadcast.start');
     context.log.registerEvent(event);
 
     const threads = context.vm!.runtime.startHats(
@@ -41,7 +41,7 @@ export class SendBroadcastAction extends ScheduledAction {
 
     action.promise.then(() => {
       // save sprites state after click
-      event.next = context.log.snap(context.vm!, 'event.broadcast.end');
+      event.next = context.log.snap('event.broadcast.end');
       resolve(`finished ${this}`);
     });
   }

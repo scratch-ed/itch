@@ -136,7 +136,7 @@ interface Acceleration {
 export class Context {
   vm?: VirtualMachine;
   numberOfRun: number;
-  log: NewLog;
+  newLog?: NewLog;
   answers: string[];
   providedAnswers: string[];
   /**
@@ -170,7 +170,6 @@ export class Context {
 
   constructor(callback?: OutputHandler) {
     this.numberOfRun = 0;
-    this.log = new NewLog();
     this.answers = [];
     this.providedAnswers = [];
     this.vmLoaded = new Deferred();
@@ -235,7 +234,7 @@ export class Context {
           type: type,
           sprite: target.sprite.name,
         });
-        event.previous = this.log.snap(this.vm!, 'event.say');
+        event.previous = this.log.snap('event.say');
         event.next = event.previous;
         this.log.registerEvent(event);
       }
@@ -258,7 +257,7 @@ export class Context {
           question: question,
           text: x,
         });
-        event.previous = this.log.snap(this.vm!, 'event.answer');
+        event.previous = this.log.snap('event.answer');
         event.next = event.previous;
         this.log.registerEvent(event);
 
@@ -303,11 +302,11 @@ export class Context {
     const blockId = this.vm!.runtime.profiler.idByName('blockFunction');
     this.vm!.runtime.profiler.onFrame = (frame) => {
       if (frame.id === blockId) {
-        this.log.snap(this.vm!, 'profiler.basic');
+        this.log.snap('profiler.basic');
       }
     };
 
-    installAdvancedBlockProfiler(this.vm!, this.log);
+    installAdvancedBlockProfiler(this.vm!, this.log!);
   }
 
   /**
@@ -321,6 +320,7 @@ export class Context {
   async getProjectJson(config: EvalConfig): Promise<Record<string, any>> {
     if (!this.vm) {
       this.vm = new VirtualMachine();
+      this.newLog = new NewLog(this.vm);
     }
     await loadVm(this.vm, config.template, config.canvas);
     return JSON.parse(this.vm.toJSON());
@@ -334,6 +334,7 @@ export class Context {
   async prepareVm(config: EvalConfig): Promise<Record<string, any>> {
     if (!this.vm) {
       this.vm = new VirtualMachine();
+      this.newLog = new NewLog(this.vm);
     }
     /**
      * The scratch virtual machine.
@@ -459,5 +460,9 @@ export class Context {
     const context = new Context(config.callback);
     await context.prepareVm(config);
     return context;
+  }
+
+  get log(): NewLog {
+    return this.newLog!;
   }
 }

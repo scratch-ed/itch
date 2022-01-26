@@ -21,7 +21,7 @@ export class SetVariableAction extends ScheduledAction {
   execute(context: Context, resolve: (v: string) => void): void {
     // Save sprites state before key press.
     const event = new Event('set_variable', { value: this.value });
-    event.previous = context.log.snap(context.vm!, 'event.set_variable');
+    event.previous = context.log.snap('event.set_variable');
     event.next = event.previous;
     context.log.registerEvent(event);
 

@@ -50,11 +50,14 @@
     "@types/lodash-es": "^4.17.5",
     "@ftrprf/judge-scratch-vm-types": "^0.2.0",
     "@types/seed-random": "^2.2.1",
-    "rimraf": "^3.0.2"
+    "rimraf": "^3.0.2",
+    "typescript-json-schema": "^0.53.0"
   },
   "scripts": {
     "test": "jest",
     "build": "webpack --progress",
+    "generate:output": "typescript-json-schema ./tsconfig.json Judgement",
+    "type-check": "tsc --noEmit",
     "docs": "jsdoc -c jsdoc.config.json",
     "watch": "webpack --progress --watch",
     "clean": "rimraf dist"

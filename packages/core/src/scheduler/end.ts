@@ -6,7 +6,7 @@ import type { ScheduledEvent } from './scheduled-event';
 
 export class EndAction extends ScheduledAction {
   execute(context: Context, resolve: (v: string) => void): void {
-    const endFrame = context.log.snap(context.vm!, 'event.end');
+    const endFrame = context.log.snap('event.end');
     for (const event of context.log.events) {
       if (!event.hasNext()) {
         event.next = endFrame;

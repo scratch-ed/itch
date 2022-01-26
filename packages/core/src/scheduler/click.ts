@@ -31,7 +31,7 @@ export class ClickSpriteAction extends ScheduledAction {
 
     // Save the state of the sprite before the click event.
     const event = new Event('click', { target: this.sprite } as ClickEventData);
-    event.previous = context.log.snap(context.vm!, 'event.click.start');
+    event.previous = context.log.snap('event.click.start');
     context.log.registerEvent(event);
 
     // Simulate mouse click by explicitly triggering click event on the target
@@ -52,7 +52,7 @@ export class ClickSpriteAction extends ScheduledAction {
     action.promise.then(() => {
       console.log(`finished click on ${this.sprite}`);
       // save sprites state after click
-      event.next = context.log.snap(context.vm!, 'event.click.end');
+      event.next = context.log.snap('event.click.end');
       resolve(`finished ${this}`);
     });
   }
