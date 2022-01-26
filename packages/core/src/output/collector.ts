@@ -141,8 +141,8 @@ export class OutputCollector {
         tests,
         startUpdate.name,
         startUpdate.visibility,
-        startUpdate.sprite,
         messages,
+        startUpdate.sprite,
         escalatedStatus?.status,
         finalUpdate.summary,
       );
@@ -151,8 +151,8 @@ export class OutputCollector {
         groups,
         startUpdate.name,
         startUpdate.visibility,
-        startUpdate.sprite,
         messages,
+        startUpdate.sprite,
         escalatedStatus?.status,
         finalUpdate.summary,
       );
