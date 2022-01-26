@@ -21,7 +21,7 @@ import { angle, distSq, mergeLines } from './lines';
 import { checkPredefinedBlocks } from './testplan/predefined-blocks';
 import { GroupLevel } from './testplan/hierarchy';
 import { NewLog, snapshotFromSb3 } from './new-log';
-import { initialiseTranslations, t } from './i18n';
+import {initialiseTranslations, LanguageData, t} from './i18n';
 
 const object: Window = window;
 

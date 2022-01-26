@@ -1,4 +1,3 @@
-import isNumber from 'lodash-es/isNumber';
 import { ensure } from './utils';
 import { ScratchBlock, ScratchMutation, ScratchTarget } from './model';
 
@@ -12,25 +11,6 @@ function getOrNull(
     return blockToNode(parentBlock, blockmap);
   } else {
     return null;
-  }
-}
-
-function convertInput(inputArray: unknown[], blockmap: Map<string, ScratchBlock>) {
-  // We ignore shadows, as they are not that relevant for us.
-  // As such, we always convert the second element in the input array.
-  if (Array.isArray(inputArray[1])) {
-    const input = inputArray[1];
-    return input[1];
-  } else {
-    // ID of a block.
-    const id = inputArray[1];
-    const block = blockmap.get(<string>id);
-    if (!block) {
-      return undefined;
-    } else {
-      // eslint-disable-next-line @typescript-eslint/no-use-before-define
-      return blockToNode(block, blockmap);
-    }
   }
 }
 
@@ -50,42 +30,16 @@ export interface Node {
   mutation: string | null;
 }
 
-function convertFields(
-  fields: Record<string, unknown[]> | null,
-): Record<string, unknown> {
-  const object: Record<string, unknown> = {};
-  if (!fields) {
-    return object;
-  }
-  for (const [name, description] of Object.entries(fields)) {
-    object[name] = description[0];
-  }
-  return object;
-}
-
 /**
  * Convert one block to a tree node.
  */
 function blockToNode(block: ScratchBlock, blockmap: Map<string, ScratchBlock>): Node {
   const next = getOrNull(block.next, blockmap);
-
-  const input: Record<string, unknown> = {};
-  for (const [key, value] of Object.entries(block.inputs || {})) {
-    const converted = convertInput(value, blockmap);
-    if (value[0] === 1 && !converted) {
-      continue;
-    }
-    input[key] = converted;
-    if (isNumber(input[key])) {
-      input[key] = (<number>input[key]).toString();
-    }
-  }
-
   return {
     opcode: block.opcode,
     next: next,
-    input: input,
-    fields: convertFields(block.fields),
+    input: block.inputs,
+    fields: block.fields,
     mutation: convertMutation(block.mutation),
   };
 }

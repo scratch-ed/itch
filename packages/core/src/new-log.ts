@@ -29,6 +29,8 @@ import { ClickEventData } from './scheduler/click';
  * This wrapper is necessary to keep the VM running fast;
  * converting all blocks to our structure up front is too
  * much work.
+ *
+ * TODO: is this still needed with the new log?
  */
 class LazyScratchBlock implements ScratchBlock {
   constructor(readonly id: string, private readonly block: Record<string, unknown>) {}
