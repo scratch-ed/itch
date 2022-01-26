@@ -463,7 +463,6 @@ export class NewLog {
     this.vm = vm;
   }
 
-
   /** @deprecated */
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   addEvent(): void {}

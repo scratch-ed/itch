@@ -1,7 +1,7 @@
 /* Copyright (C) 2019 Ghent University - All Rights Reserved */
 import ScratchRender from 'scratch-render';
-import {Context} from './context';
-import {Event} from "./new-log";
+import { Context } from './context';
+import { Event } from './new-log';
 
 /**
  * Intercept events from pen extension.
@@ -18,9 +18,9 @@ function interceptPen(context: Context, renderer: ScratchRender) {
   const oldLine = renderer.penLine;
   renderer.penLine = new Proxy(oldLine, {
     apply: function (target, thisArg, argumentsList) {
-      const p1 = {x: argumentsList[2], y: argumentsList[3]};
-      const p2 = {x: argumentsList[4], y: argumentsList[5]};
-      const line = {start: p1, end: p2};
+      const p1 = { x: argumentsList[2], y: argumentsList[3] };
+      const p2 = { x: argumentsList[4], y: argumentsList[5] };
+      const line = { start: p1, end: p2 };
       context.log.renderer.lines.push(line);
       const event = new Event('renderer', {
         name: 'penLine',
@@ -38,7 +38,7 @@ function interceptPen(context: Context, renderer: ScratchRender) {
   const penPointOld = renderer.penPoint;
   renderer.penPoint = new Proxy(penPointOld, {
     apply: function (target, thisArg, argumentsList) {
-      const point = {x: argumentsList[2], y: argumentsList[3]};
+      const point = { x: argumentsList[2], y: argumentsList[3] };
       context.log.renderer.points.push(point);
       const event = new Event('renderer', {
         name: 'penPoint',

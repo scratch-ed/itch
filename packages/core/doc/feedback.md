@@ -8,13 +8,12 @@ document; see below where to find more detailed documentation.
 There are three structural objects in the feedback:
 
 - `Judgement` - the top level object.
-- `Group` - groups one or more tests or subgroups. Note that the children of a 
+- `Group` - groups one or more tests or subgroups. Note that the children of a
   group must either be all `Group`s or all `Test`s. A mix is not allowed.
 - `Test` - one condition or test that is evaluated.
 
 For example, the structure might look like this for a very simple test plan.
 All 4 tests are in one group.
-
 
 ```yaml
 # The judgement object
@@ -74,12 +73,12 @@ groups. For example, assume we have the following structure of groups:
 ```yaml
 groups:
   - name: Group 1
-    visibility: "show"
+    visibility: 'show'
     groups:
       - name: Group 1.1
-        visibility: "collapse"
+        visibility: 'collapse'
       - name: Group 1.2
-        visibility: "hide"
+        visibility: 'hide'
 ```
 
 Counting of tests should be done recursively, and on each level applying the
@@ -130,10 +129,9 @@ For more information about every attribute, you can do two things:
 - Read the source & docs in `src/output/full-schema.ts`.
 - Generate a JSON Schema file from that source code, using the following
   command, which will generate a JSON Schema on stdout:
-   
-   ```bash
-   $ npm run generate:output 
-   ```
+  ```bash
+  $ npm run generate:output
+  ```
 
 The reason the JSON Schema is generated from the source code is to ensure it is
 (more) up to date, as it is very easy to forget to update a separate JSON Schema
