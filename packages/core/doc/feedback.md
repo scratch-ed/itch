@@ -13,7 +13,7 @@ There are three structural objects in the feedback:
 - `Test` - one condition or test that is evaluated.
 
 For example, the structure might look like this for a very simple test plan.
-All 4 tests are in one group.
+All 5 tests are in one group.
 
 ```yaml
 # The judgement object
