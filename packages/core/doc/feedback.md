@@ -55,13 +55,13 @@ groups:
 The format does not limit the amount of nesting, but of course very deeply
 nested groups may not be practical.
 
-## Visibility of tests
+## Visibility & collapsibility of groups
 
 There are currently 3 visibility modes. From the docs:
 
-- `show` means display this group and show its children by default.
+- `show` means display this group.
 - `collapse` means display this group, collapse the children by default, unless
-  one of the tests in this group (or its subgroups) fails.
+  one of the tests in this group (or its subgroups) fails. You could also hide the tests.
 - `hide` means do not show the group by default, unless one of the tests in
   this group (or its subgroups) fails.
 
