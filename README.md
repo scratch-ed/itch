@@ -103,6 +103,9 @@ To deploy the judge, you'll need to do 3 things:
 Some presets are available: `npm run prerelease|patch|minor|major`.
 Otherwise, use `npm version` to do it.
 
+Until https://github.com/npm/cli/issues/4017 is fixed, you'll need to manually
+commit all changed files and tag the commit with the version.
+
 #### Creating a new package
 
 After pushing the tag to GitHub, a new version will be made automatically.
