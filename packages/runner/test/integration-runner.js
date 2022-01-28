@@ -12,13 +12,19 @@ const defaultConfig = {
  *
  * @param projectName
  * @param testName
- * @param configuration
+ * @param config
  */
-async function runTest(projectName = expect.getState().currentTestName, testName = null) {
+async function runTest(
+  projectName = expect.getState().currentTestName,
+  testName = null,
+  config = {},
+) {
   const sourceFile = path.resolve(__dirname, `assets/${projectName}.sb3`);
   const planFile = path.resolve(__dirname, `assets/${testName || projectName}_test.js`);
 
-  return executePlan(sourceFile, sourceFile, planFile, defaultConfig);
+  const merged = { ...defaultConfig, ...config };
+
+  return executePlan(sourceFile, sourceFile, planFile, merged);
 }
 
 module.exports = {

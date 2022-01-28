@@ -95,8 +95,8 @@ export class OutputCollector {
     return new Test(
       startUpdate.name,
       escalatedStatus?.status || finalUpdate.status,
-      finalUpdate.feedback,
       messages,
+      finalUpdate.feedback,
       diff,
     );
   }

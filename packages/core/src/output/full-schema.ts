@@ -28,8 +28,8 @@ export class Test {
   constructor(
     public readonly name: string,
     public readonly status: Status,
-    public readonly feedback: string,
     public readonly messages: string[],
+    public readonly feedback?: string,
     public readonly diff?: Diff,
   ) {}
 }

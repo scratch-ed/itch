@@ -96,7 +96,7 @@ async function runJudge(options) {
     await templateHandle.uploadFile(options.template);
 
     let translations = {};
-    if (options.language) {
+    if (options.translations) {
       translations = JSON.parse(fs.readFileSync(options.translations));
     }
 

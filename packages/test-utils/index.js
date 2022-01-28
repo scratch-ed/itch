@@ -44,7 +44,7 @@ async function executePlan(template, solution, testplan, options = {}) {
     await page.setCacheEnabled(false);
   }
 
-  await runJudge({
+  const judgeOptions = {
     testplan: { url: testplan },
     template: template,
     solution: solution,
@@ -53,7 +53,13 @@ async function executePlan(template, solution, testplan, options = {}) {
     translations: '../translations.json',
     language: 'nl',
     ...options,
-  });
+  };
+
+  if (options.skipTranslations) {
+    judgeOptions.translations = undefined;
+  }
+
+  await runJudge(judgeOptions);
 
   if (page && !options?.debug) {
     await page.close();

@@ -78,7 +78,7 @@ export interface EscalateStatus {
 export interface CloseTest {
   readonly command: 'close-test';
   status: Status;
-  feedback: string;
+  feedback?: string;
 }
 
 /**
