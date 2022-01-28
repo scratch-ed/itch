@@ -3,16 +3,18 @@ on: push
 jobs:
   test:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [15.x]
     steps:
       - uses: actions/checkout@v2.4.0
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js 15
         uses: actions/setup-node@v2.5.1
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: '15'
           cache: 'npm'
+      - name: Cache exercises
+        uses: actions/cache@v2
+        with:
+          path: exercises/**/projects
+          key: ${{ runner.os }}
       - run: npm ci
       - run: npm run type-check
       - run: npm run build
@@ -20,8 +22,13 @@ jobs:
         run: npm test --workspace @ftrprf/judge-core
       - name: Test runner
         run: npm test --workspace @ftrprf/judge-runner
+      - name: Download exercises
+        run: 'npm run sync exercises/'
+        env:
+          USERNAME: ${{ secrets.USERNAME }}
+          PASSWORD: ${{ secrets.PASSWORD }}
       - name: Test exercises
-        run: 'npm run test:exercises'
+        run: 'npm run test:exercises:converted'
   lint:
     runs-on: ubuntu-latest
     strategy:
