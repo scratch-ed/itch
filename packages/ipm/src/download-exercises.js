@@ -252,6 +252,10 @@ export async function downloadExercise(
     return;
   }
 
+  // Check if project dir exists, and create it otherwise.
+  const projectDir = `${absolutePath}/projects`;
+  fs.mkdirSync(projectDir, { recursive: true });
+
   for (const exercise of packageJson.itch) {
     const result = (await getVersions(exercise.id, token)).data;
     console.info(
