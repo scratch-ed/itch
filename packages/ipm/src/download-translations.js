@@ -89,6 +89,7 @@ export async function downloadTranslations(local, token = undefined) {
     resultToTranslationObject(translations, page);
   }
 
-  const jsonPath = local + '/translations.json';
+  const jsonPath = `${local}/translations.json`;
+  console.log(jsonPath);
   fs.writeFileSync(jsonPath, JSON.stringify(translations, null, 2) + '\n', 'utf8');
 }

@@ -9,7 +9,7 @@ program
   .option('-t, --translations', 'include translated versions')
   .argument('<local>', 'path to the local exercise')
   .action(async (local, options) => {
-    await downloadExercise(local, options.translations);
+    await downloadExercise(local, local, options.translations);
   });
 
 program
@@ -23,7 +23,9 @@ program
       .readdirSync(local, { withFileTypes: true })
       .filter((p) => p.isDirectory());
     for (const exercise of exercises) {
-      await downloadExercise(exercise.name, true, token, true);
+      const absolutePath = `${local}/${exercise.name}`;
+      const relativePath = exercise.name;
+      await downloadExercise(absolutePath, relativePath, true, token, true);
     }
   });
 

@@ -87,32 +87,40 @@ async function getVersions(id, token) {
  * skip if possible. The `lock` will be updated with the new etag if available.
  * You should save it afterwards.
  *
- * @param {{localPath: string, log: string, url: string}} exercise
+ * @param {{relativePath: string, log: string, url: string, absolutePath: string}} exercise
  * @param {Object} lock - lock file
  * @return {boolean} True if the file was actually updated, false otherwise.
  */
 async function getBytes(exercise, lock) {
   const headers = {};
-  if (lock[exercise.localPath] && fs.existsSync(exercise.localPath)) {
-    headers['If-None-Match'] = lock[exercise.localPath];
+  if (lock[exercise.relativePath] && fs.existsSync(exercise.absolutePath)) {
+    headers['If-None-Match'] = lock[exercise.relativePath];
   }
 
   let updated = false;
-  const responseHeaders = await download(exercise.url, exercise.localPath, headers);
+  const responseHeaders = await download(exercise.url, exercise.absolutePath, headers);
   if (responseHeaders.has('etag')) {
-    console.debug(`[${exercise.log}] ${exercise.localPath}: downloaded new version.`);
+    console.debug(`[${exercise.log}] ${exercise.relativePath}: downloaded new version.`);
     updated = true;
-    lock[exercise.localPath] = responseHeaders.get('etag');
+    lock[exercise.relativePath] = responseHeaders.get('etag');
   } else {
     console.debug(
-      `[${exercise.log}] ${exercise.localPath}: local version is up-to-date.`,
+      `[${exercise.log}] ${exercise.absolutePath}: local version is up-to-date.`,
     );
   }
 
   return updated;
 }
 
-async function downloadLevel(result, level, local, name, includeTranslations, quiet) {
+async function downloadLevel(
+  relativePath,
+  result,
+  level,
+  absolutePath,
+  name,
+  includeTranslations,
+  quiet,
+) {
   const regex = new RegExp(`level ${level}[^0-9]*$`);
   // Attempt to find the starter project.
   const starterData = result.findExercise.versions
@@ -149,7 +157,7 @@ async function downloadLevel(result, level, local, name, includeTranslations, qu
   }
 
   // Check cache.
-  const lockPath = `./exercise-lock.json`;
+  const lockPath = `${absolutePath}/../exercise-lock.json`;
   let lock;
   try {
     lock = JSON.parse(fs.readFileSync(lockPath, 'utf8'));
@@ -157,27 +165,28 @@ async function downloadLevel(result, level, local, name, includeTranslations, qu
     lock = {};
   }
 
-  const starterPrefix = `${local}/projects/${name || ''}${
-    level ? level + '-' : ''
-  }template`;
+  const startSuffix = `projects/${name || ''}${level ? level + '-' : ''}template`;
+
+  const startDisplayPath = `${relativePath}/${startSuffix}`;
 
   const starterPromise = getBytes(
     {
-      localPath: `${starterPrefix}.sb3`,
-      log: `${local}/${level}`,
+      absolutePath: `${absolutePath}/${startSuffix}.sb3`,
+      relativePath: `${startDisplayPath}.sb3`,
+      log: level ? `${relativePath}/${level}` : relativePath,
       url: starterUri,
     },
     lock,
   );
 
-  const solutionPrefix = `${local}/projects/${name || ''}${
-    level ? level + '-' : ''
-  }solution`;
+  const solutionSuffix = `projects/${name || ''}${level ? level + '-' : ''}solution`;
+  const solutionDisplayPath = `${relativePath}/${solutionSuffix}`;
 
   const solutionPromise = getBytes(
     {
-      localPath: `${solutionPrefix}.sb3`,
-      log: `${local}/${level}`,
+      absolutePath: `${absolutePath}/${solutionSuffix}.sb3`,
+      relativePath: `${solutionDisplayPath}.sb3`,
+      log: level ? `${relativePath}/${level}` : relativePath,
       url: solutionUri,
     },
     lock,
@@ -193,31 +202,31 @@ async function downloadLevel(result, level, local, name, includeTranslations, qu
   }
 
   if (includeTranslations) {
-    const translationPath = `${local}/../translations.json`;
+    const translationPath = `${absolutePath}/../translations.json`;
     await translateSb3(
-      `${starterPrefix}.sb3`,
-      `${starterPrefix}-NL.sb3`,
+      `${absolutePath}/${startSuffix}.sb3`,
+      `${absolutePath}/${startSuffix}-NL.sb3`,
       translationPath,
       'nl',
       quiet,
     );
     await translateSb3(
-      `${solutionPrefix}.sb3`,
-      `${solutionPrefix}-NL.sb3`,
+      `${absolutePath}/${solutionSuffix}.sb3`,
+      `${absolutePath}/${solutionSuffix}-NL.sb3`,
       translationPath,
       'nl',
       quiet,
     );
     await translateSb3(
-      `${starterPrefix}.sb3`,
-      `${starterPrefix}-EN.sb3`,
+      `${absolutePath}/${startSuffix}.sb3`,
+      `${absolutePath}/${startSuffix}-EN.sb3`,
       translationPath,
       'en',
       quiet,
     );
     await translateSb3(
-      `${solutionPrefix}.sb3`,
-      `${solutionPrefix}-EN.sb3`,
+      `${absolutePath}/${solutionSuffix}.sb3`,
+      `${absolutePath}/${solutionSuffix}-EN.sb3`,
       translationPath,
       'en',
       quiet,
@@ -226,34 +235,50 @@ async function downloadLevel(result, level, local, name, includeTranslations, qu
 }
 
 export async function downloadExercise(
-  local,
+  absolutePath,
+  relativePath,
   translations = true,
   token = undefined,
   quiet = false,
 ) {
-  const packageJson = JSON.parse(fs.readFileSync(`${local}/package.json`, 'utf8'));
+  const packageJson = JSON.parse(fs.readFileSync(`${absolutePath}/package.json`, 'utf8'));
 
   if (!token) {
     token = await getBearerToken();
   }
 
   if (packageJson.itch === undefined) {
-    console.warn(`[${local}] Skipping due to missing itch config in package.json`);
+    console.warn(`[${relativePath}] Skipping due to missing itch config in package.json`);
     return;
   }
 
   for (const exercise of packageJson.itch) {
     const result = (await getVersions(exercise.id, token)).data;
     console.info(
-      `[${local}] Downloading information for ${result.findExercise.title}${
+      `[${relativePath}] Downloading information for ${result.findExercise.title}${
         exercise.name ? '/' + exercise.name : ''
       }.`,
     );
     if (exercise.levels === undefined) {
-      await downloadLevel(result, undefined, local, exercise.name, translations);
+      await downloadLevel(
+        relativePath,
+        result,
+        undefined,
+        absolutePath,
+        exercise.name,
+        translations,
+      );
     } else {
       for (let i = 1; i <= exercise.levels; i++) {
-        await downloadLevel(result, i, local, exercise.name, translations, quiet);
+        await downloadLevel(
+          relativePath,
+          result,
+          i,
+          absolutePath,
+          exercise.name,
+          translations,
+          quiet,
+        );
       }
     }
   }

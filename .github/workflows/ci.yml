@@ -12,7 +12,9 @@ jobs:
       - name: Cache exercises
         uses: actions/cache@v2
         with:
-          path: exercises/**/projects
+          path: |
+            exercises/**/projects
+            exercises/exercise-lock.json
           key: ${{ runner.os }}
       - run: npm ci
       - run: npm run type-check
@@ -22,8 +24,7 @@ jobs:
       - name: Test runner
         run: npm test --workspace @ftrprf/judge-runner
       - name: Download exercises
-        run: 'npm run ipm --workspace @ftrprf/ipm -- sync .'
-        working-directory: ./exercises
+        run: 'npm run ipm --workspace @ftrprf/ipm -- sync ${GITHUB_WORKSPACE}/exercises'
         env:
           USERNAME: ${{ secrets.USERNAME }}
           PASSWORD: ${{ secrets.PASSWORD }}
