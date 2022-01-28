@@ -15,7 +15,7 @@ jobs:
           path: |
             exercises/**/projects
             exercises/exercise-lock.json
-          key: ${{ runner.os }}
+          key: v2-${{ runner.os }}
       - run: npm ci
       - run: npm run type-check
       - run: npm run build
