@@ -1,6 +1,6 @@
 {
   "name": "@ftrprf/judge-test-utils",
-  "version": "1.0.0-development.0",
+  "version": "1.0.0-development.1",
   "description": "Some utilities to test testplans",
   "main": "./index.js",
   "repository": {

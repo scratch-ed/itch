@@ -1,6 +1,6 @@
 {
   "name": "@ftrprf/ipm",
-  "version": "1.0.0-development.0",
+  "version": "1.0.0-development.1",
   "description": "Utilities to sync test plans with those from the Studio.",
   "private": true,
   "main": "src/index.js",
