@@ -37,9 +37,12 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "release:prerelease": "npm version prerelease --workspace packages --include-workspace-root --preid=development",
+    "release:prepminor": "npm version preminor --workspace packages --include-workspace-root --preid=development",
+    "release:premajor": "npm version premajor --workspace packages --include-workspace-root --preid=development",
     "release:patch": "npm version patch --workspace packages --include-workspace-root",
     "release:minor": "npm version minor --workspace packages --include-workspace-root",
-    "release:major": "npm version major --workspace packages --include-workspace-root"
+    "release:major": "npm version major --workspace packages --include-workspace-root",
+    "version": "git add packages/**/package.json"
   },
   "jest": {
     "projects": [
