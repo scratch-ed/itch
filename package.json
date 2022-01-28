@@ -1,7 +1,7 @@
 {
   "name": "@ftrprf/scratch-judge",
   "private": true,
-  "version": "0.3.0",
+  "version": "0.3.2",
   "description": "Scratch judge for FTRPRF",
   "workspaces": [
     "packages/**",
@@ -24,7 +24,6 @@
     "typescript-json-schema": "^0.53.0"
   },
   "scripts": {
-    "ipm": "npm run ipm --workspace itch-package-manager sync ./exercises",
     "generate:output": "npm run generate:output --workspace @ftrprf/judge-core",
     "watch": "npm run watch --workspace @ftrprf/judge-core",
     "start": "npm start --workspace @ftrprf/judge-runner",
