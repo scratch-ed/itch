@@ -35,7 +35,11 @@
     "clean": "npm run clean --workspaces --if-present && rimraf ./**/node_modules",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "release:prerelease": "npm version prerelease --workspace packages --include-workspace-root --preid=development",
+    "release:patch": "npm version patch --workspace packages --include-workspace-root",
+    "release:minor": "npm version minor --workspace packages --include-workspace-root",
+    "release:major": "npm version major --workspace packages --include-workspace-root"
   },
   "jest": {
     "projects": [

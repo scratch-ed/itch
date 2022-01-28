@@ -89,14 +89,20 @@ npm run clean
 npm install
 ```
 
-### Release
+## Deployment
 
-```bash
-# Create a new version:
-# npm version [<newversion> | major | minor | patch | premajor | preminor | prepatch | prerelease | from-git]
-npm version minor
-npm version minor --workspaces
+To deploy the judge, you'll need to do 3 things:
 
-# Publish
-npm publish --workspaces
-```
+1. Tag a new version
+2. Create and publish that version as an npm package
+3. Update the AWS repo to point to that version
+4. Publish to AWS
+
+#### Tagging a new version
+
+Some presets are available: `npm run prerelease|patch|minor|major`.
+Otherwise, use `npm version` to do it.
+
+#### Creating a new package
+
+After pushing the tag to GitHub, a new version will be made automatically.
