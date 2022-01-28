@@ -5,8 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2.4.0
-      - name: Use Node.js 15
-        uses: actions/setup-node@v2.5.1
+      - uses: actions/setup-node@v2.5.1
         with:
           node-version: '15'
           cache: 'npm'
@@ -31,29 +30,21 @@ jobs:
         run: 'npm run test:exercises:converted'
   lint:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [15.x]
     steps:
       - uses: actions/checkout@v2.4.0
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2.5.1
+      - uses: actions/setup-node@v2.5.1
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: '15'
           cache: 'npm'
       - run: npm ci
       - run: npm run lint
   format:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [15.x]
     steps:
       - uses: actions/checkout@v2.4.0
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2.5.1
+      - uses: actions/setup-node@v2.5.1
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: '15'
           cache: 'npm'
       - run: npm ci
       - run: npm run format:check
