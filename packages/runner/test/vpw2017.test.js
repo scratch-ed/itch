@@ -14,7 +14,7 @@ test('01_mad_hatter', () => {
   });
 });
 
-test('02_papegaai', () => {
+test.skip('02_papegaai', () => {
   return runTest().then((result) => {
     expect(result).everyStatusToBe('correct');
     expect(result).toMatchSnapshot();
