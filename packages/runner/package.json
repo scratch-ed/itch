@@ -1,6 +1,6 @@
 {
   "name": "@ftrprf/judge-runner",
-  "version": "0.3.2",
+  "version": "1.0.0-development.0",
   "description": "Judge runner",
   "main": "src/judge.js",
   "repository": {
