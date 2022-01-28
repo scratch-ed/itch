@@ -68,7 +68,8 @@
         "displayName": "convertedTestplans",
         "testMatch": [
           "<rootDir>/exercises/agario/*.test.js",
-          "<rootDir>/exercises/bouw-de-raket/*.test.js"
+          "<rootDir>/exercises/bouw-de-raket/*.test.js",
+          "<rootDir>/exercises/chaos-in-de-raket/*.test.js"
         ]
       }
     ]
