@@ -139,14 +139,14 @@ export function checkPredefinedBlocks(
     config.allowedBlocks = object;
   }
 
-  e.group('Controle op bestaande code', { visibility: 'collapse' }, () => {
+  e.group('Controle op bestaande code', { visibility: 'summary' }, () => {
     // We check each sprite.
     for (const target of template.targets) {
       const name = target.name;
       if (config.ignoredSprites.includes(name) || name in config.hats) {
         continue;
       }
-      e.group(name, { sprite: name, visibility: 'collapse' }, () => {
+      e.group(name, { sprite: name, visibility: 'summary' }, () => {
         e.test()
           .feedback({
             correct: `Top! Je hebt niets veranderd aan de sprite ${name}.`,
@@ -165,7 +165,7 @@ export function checkPredefinedBlocks(
     }
 
     // Do the same for the stage.
-    e.group('Speelveld', { sprite: 'Speelveld', visibility: 'collapse' }, () => {
+    e.group('Speelveld', { sprite: 'Speelveld', visibility: 'summary' }, () => {
       e.test('Gewijzigde sprite')
         .feedback({
           correct: 'Top! Je hebt niets veranderd aan het speelveld.',
@@ -188,7 +188,7 @@ export function checkPredefinedBlocks(
     }
 
     for (const [hat, finder] of Object.entries(config.hats)) {
-      e.group(hat, { sprite: hat, visibility: 'collapse' }, () => {
+      e.group(hat, { sprite: hat, visibility: 'summary' }, () => {
         const solutionSprite = cloneDeep(submission.sprite(hat));
         e.test()
           .fatal()

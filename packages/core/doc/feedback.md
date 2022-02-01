@@ -60,13 +60,13 @@ nested groups may not be practical.
 There are currently 3 visibility modes. From the docs:
 
 - `show` means display this group.
-- `collapse` means display this group, collapse the children by default, unless
-  one of the tests in this group (or its subgroups) fails. You could also hide the tests.
+- `summary` means display this group, collapse or hide the children by default, unless
+  one of the tests in this group (or its subgroups) fails.
 - `hide` means do not show the group by default, unless one of the tests in
   this group (or its subgroups) fails.
 
 When counting tests, the recommended way is to always count all groups that are
-visible. For example, groups with `show` and `collaps` are both counted, while
+visible. For example, groups with `show` and `summary` are both counted, while
 groups with `hide` are only counted if displayed. This works the same for nested
 groups. For example, assume we have the following structure of groups:
 
@@ -76,7 +76,7 @@ groups:
     visibility: 'show'
     groups:
       - name: Group 1.1
-        visibility: 'collapse'
+        visibility: 'summary'
       - name: Group 1.2
         visibility: 'hide'
 ```

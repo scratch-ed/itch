@@ -17,7 +17,7 @@ export interface StartJudgement {
  *   error occurs.
  * - Hide means do not display this group, unless an error occurs.
  */
-export type Visibility = 'show' | 'collapse' | 'hide';
+export type Visibility = 'show' | 'summary' | 'hide';
 
 /**
  * Start a new group in the output.

@@ -9,13 +9,13 @@ Array [
   Object {
     "command": "start-group",
     "name": "Controle op bestaande code",
-    "visibility": "collapse",
+    "visibility": "summary",
   },
   Object {
     "command": "start-group",
     "name": "Nori",
     "sprite": "Nori",
-    "visibility": "collapse",
+    "visibility": "summary",
   },
   Object {
     "command": "start-test",
@@ -42,7 +42,7 @@ Array [
     "command": "start-group",
     "name": "Speelveld",
     "sprite": "Speelveld",
-    "visibility": "collapse",
+    "visibility": "summary",
   },
   Object {
     "command": "start-test",
@@ -69,7 +69,7 @@ Array [
     "command": "start-group",
     "name": "Hat",
     "sprite": "Hat",
-    "visibility": "collapse",
+    "visibility": "summary",
   },
   Object {
     "command": "start-test",
