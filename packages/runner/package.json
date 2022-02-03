@@ -19,5 +19,17 @@
   },
   "devDependencies": {
     "puppeteer": "^11.0.0"
-  }
+  },
+  "files": [
+    "src/**"
+  ],
+  "bundledDependencies": [
+    "@ftrprf/judge-core",
+    "scratch-audio",
+    "scratch-render",
+    "scratch-storage",
+    "scratch-svg-renderer",
+    "scratch-vm",
+    "lodash"
+  ]
 }
