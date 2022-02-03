@@ -83,7 +83,7 @@ function wrapStartHats(vm: VirtualMachine) {
  */
 async function loadVm(
   vm: VirtualMachine,
-  project: string | ArrayBuffer,
+  project: ArrayBuffer,
   canvas: HTMLCanvasElement,
   context?: Context,
 ) {

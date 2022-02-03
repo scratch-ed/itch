@@ -22,6 +22,8 @@ import { checkPredefinedBlocks } from './testplan/predefined-blocks';
 import { GroupLevel } from './testplan/hierarchy';
 import { NewLog, snapshotFromSb3 } from './new-log';
 import { initialiseTranslations, LanguageData, t } from './i18n';
+import { OutputCollector } from './output/collector';
+import { Judgement } from './output/full-schema';
 
 const object: Window = window;
 
@@ -81,11 +83,18 @@ export interface EvalConfig {
   /**
    * The submission sb3 data.
    */
-  submission: string | ArrayBuffer;
+  submission: ArrayBuffer;
   /**
    * The template sb3 file.
    */
-  template: string | ArrayBuffer;
+  template: ArrayBuffer;
+  /**
+   * If the output should be partial or full. If using the partial
+   * output, the callback will be called for each output. If using
+   * the full format, the callback will not be called; the result
+   * will be returned instead.
+   */
+  fullFormat: boolean;
   /**
    * The canvas for the renderer.
    */
@@ -105,7 +114,7 @@ export interface EvalConfig {
   /**
    * The language of the exercise.
    */
-  language: string;
+  language: 'nl' | 'en';
 
   translations?: LanguageData;
 }
@@ -269,12 +278,18 @@ export class Evaluation extends TabLevel {
  *
  * @param config - The config with the inputs for the judge.
  */
-export async function run(config: EvalConfig): Promise<void> {
+export async function run(config: EvalConfig): Promise<void | Judgement> {
   // Seed random data.
   seed('itch-judge', { global: true });
 
   // Set language from parameters.
-  initialiseTranslations(config.language as 'nl' | 'en', config.translations);
+  initialiseTranslations(config.language, config.translations);
+
+  let handler: OutputCollector;
+  if (config.fullFormat) {
+    handler = new OutputCollector();
+    config.callback = handler.handle;
+  }
 
   const context = new Context(config.callback);
   const templateJson = await context.getProjectJson(config);
@@ -335,6 +350,10 @@ export async function run(config: EvalConfig): Promise<void> {
   context.groupedOutput.closeJudgement();
   seed.resetGlobal();
   console.log('--- END OF EVALUATION ---');
+
+  if (config.fullFormat) {
+    return handler!.judgement;
+  }
 }
 
 // Main function in the judge.

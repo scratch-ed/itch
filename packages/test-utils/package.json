@@ -1,21 +1,26 @@
 {
   "name": "@ftrprf/judge-test-utils",
   "version": "1.0.0-development.2",
-  "description": "Some utilities to test testplans",
-  "main": "./index.js",
+  "description": "Some utilities to run tests for exercises",
+  "main": "src/index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/FTRPRF/scratch-judge",
     "directory": "packages/test-utils"
   },
   "files": [
-    "./index.js",
-    "./index.d.ts",
-    "./matchers.js"
+    "src/index.js",
+    "src/index.d.ts",
+    "src/matchers.js"
   ],
-  "peerDependencies": {
-    "jest": "^27.0.6",
-    "@ftrprf/judge-core": "*",
+  "dependencies": {
+    "@ftrprf/judge-runner": "*",
     "puppeteer": "^10.1.0"
+  },
+  "devDependencies": {
+    "jest": "^27.4.7"
+  },
+  "directories": {
+    "test": "test"
   }
 }

@@ -1,8 +1,9 @@
 // Require for side-effects
 require('./matchers.js');
-const { runJudge } = require('@ftrprf/judge-runner');
+const { runOnPage } = require('@ftrprf/judge-runner');
 const puppeteer = require('puppeteer');
 const path = require('path');
+const fs = require('fs');
 
 let browser;
 
@@ -16,6 +17,8 @@ beforeAll(async () => {
       '--disable-setuid-sandbox',
       '--disable-dev-shm-usage',
       '--disable-web-security',
+      '--allow-file-access-from-files',
+      '--allow-file-access',
     ],
   });
 });
@@ -28,40 +31,61 @@ afterAll(async () => {
  * Execute a test plan for a certain exercise.
  *
  * @param {string} template - Path to the template sb3 file.
- * @param {string} solution - Path to the solution sb3 file.
+ * @param {string} submission - Path to the solution sb3 file.
  * @param {string} testplan - Path to the testplan.
  * @param {Object} options - Optional options.
  *
  * @return {Promise<Object[]>} A promise which resolves to an array of output objects.
  */
-async function executePlan(template, solution, testplan, options = {}) {
+async function executePlan(template, submission, testplan, options = {}) {
   const results = [];
   const collector = (output) => results.push(output);
 
-  let page;
-  if (browser && !options?.debug) {
-    page = await browser.newPage();
-    await page.setCacheEnabled(false);
+  if (options.debug) {
+    await browser.close();
+    browser = await puppeteer.launch({
+      ...(process.env.PUPPETEER_BROWSER_PATH && {
+        executablePath: process.env.PUPPETEER_BROWSER_PATH,
+      }),
+      args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-dev-shm-usage',
+        '--disable-web-security',
+        '--allow-file-access-from-files',
+        '--allow-file-access',
+      ],
+      headless: false,
+      devtools: options.debug,
+    });
   }
 
-  const judgeOptions = {
-    testplan: { url: testplan },
-    template: template,
-    solution: solution,
-    out: collector,
-    page: page,
-    translations: '../translations.json',
+  const page = await browser.newPage();
+
+  let translations;
+  if (!options.skipTranslations) {
+    translations = fs.readFileSync('../translations.json');
+    translations = JSON.parse(translations);
+  }
+
+  const data = fs.readFileSync(testplan).toString();
+
+  await runOnPage(page, {
+    templatePath: template,
+    testplanData: data,
+    submissionPath: submission,
     language: 'nl',
-    ...options,
-  };
+    translations: translations,
+    outputHandler: collector,
+    pause: options.debug,
+  });
 
-  if (options.skipTranslations) {
-    judgeOptions.translations = undefined;
-  }
-
-  await runJudge(judgeOptions);
-
-  if (page && !options?.debug) {
+  if (options.debug) {
+    await page.evaluate(() => {
+      // eslint-disable-next-line no-debugger
+      debugger;
+    });
+  } else {
     await page.close();
   }
 
@@ -80,11 +104,9 @@ function run(dir, solutionName, language, level, planLevel = level) {
       ? `projects/${level}-${solutionName}-NL.sb3`
       : `projects/${solutionName}-NL.sb3`,
   );
-  const translations = path.resolve(dir, '../translations.json');
-  // console.debug("Used paths are", template, solution, plan);
+
   return executePlan(template, solution, plan, {
     debug: false,
-    translations: translations,
   });
 }
 

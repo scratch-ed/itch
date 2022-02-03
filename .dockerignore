@@ -2,4 +2,4 @@ exercises
 demo
 **/node_modules
 .env
-packages/runner/test
+packages/test-utils/test

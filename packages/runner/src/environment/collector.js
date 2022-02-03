@@ -70,10 +70,9 @@ class Processor {
 
 // eslint-disable-next-line no-unused-vars
 function init(element) {
-  const old = window.handleOut;
   const processor = new Processor(element);
   window.handleOut = (result) => {
     processor.process(result);
-    old(result);
+    console.debug(result);
   };
 }

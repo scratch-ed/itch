@@ -1,5 +1,5 @@
 /* Copyright (C) 2020 Ghent University - All Rights Reserved */
-const { runTest: originalRunner } = require('./integration-runner');
+const { runTest: originalRunner } = require('./integration-runner.js');
 
 function runTest() {
   return originalRunner(undefined, null, { skipTranslations: true });

@@ -1,6 +1,6 @@
 /* Copyright (C) 2020 Ghent University - All Rights Reserved */
 const path = require('path');
-const { executePlan } = require('@ftrprf/judge-test-utils');
+const { executePlan } = require('../src/index.js');
 
 const defaultConfig = {
   debug: false,
