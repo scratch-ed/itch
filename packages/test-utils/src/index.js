@@ -64,7 +64,8 @@ async function executePlan(template, submission, testplan, options = {}) {
 
   let translations;
   if (!options.skipTranslations) {
-    translations = fs.readFileSync('../translations.json');
+    const expectedPath = path.resolve(__dirname, '../../../exercises/translations.json');
+    translations = fs.readFileSync(expectedPath);
     translations = JSON.parse(translations);
   }
 
