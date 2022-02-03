@@ -20,7 +20,7 @@
   "devDependencies": {
     "jest": "^27.4.7"
   },
-  "directories": {
-    "test": "test"
+  "scripts": {
+    "test": "jest --silent"
   }
 }

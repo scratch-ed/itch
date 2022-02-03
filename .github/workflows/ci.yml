@@ -25,7 +25,7 @@ jobs:
       - name: Test core
         run: npm test --workspace @ftrprf/judge-core
       - name: Test runner
-        run: npm test --workspace @ftrprf/judge-runner
+        run: npm test --workspace @ftrprf/judge-test-utils
       - name: Download exercises
         run: 'npm run ipm --workspace @ftrprf/ipm -- sync ${GITHUB_WORKSPACE}/exercises'
         env:
