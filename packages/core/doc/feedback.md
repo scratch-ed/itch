@@ -124,6 +124,9 @@ status attribute on the group itself.
 
 ## Detailed documentation
 
+For ease of use, there is also a generated version committed in this folder.
+There is also a full example in `schema.json`.
+
 For more information about every attribute, you can do two things:
 
 - Read the source & docs in `src/output/full-schema.ts`.
