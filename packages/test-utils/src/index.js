@@ -72,9 +72,10 @@ async function executePlan(template, submission, testplan, options = {}) {
   const data = fs.readFileSync(testplan).toString();
 
   await runOnPage(page, {
-    templatePath: template,
+    template: template,
     testplanData: data,
-    submissionPath: submission,
+    submission: submission,
+    isLocalFile: true,
     language: 'nl',
     translations: translations,
     outputHandler: collector,

@@ -45,26 +45,11 @@ async function download(url, token) {
 }
 
 /**
- * The options for the judge.
- *
- * @typedef {Object} JudgeOptions
- * @property {string} templateUrl - Url to the template sb3 file.
- * @property {string} submissionUrl - Url to the submission sb3 file.
- * @property {string} templatePath - Path to the template sb3 file.
- * @property {string} submissionPath - Path to the submission sb3 file.
- * @property {"en"|"nl"} language - The language of the exercise.
- * @property {LanguageData|string} [translations] - Optional object with the translations
- *           if you want the judge to do the translations of the testplan.
- * @property {string} [token] - Optional token for sb3 download.
- * @property {boolean} [fullFormat] - Set to true for full format use.
- */
-
-/**
  * Run the tests for a given testplan. It is assumed the testplan is available
  * in the environment.
  *
  * @param {JudgeOptions} config
- * @returns {Promise<void>}
+ * @returns {Promise<void|Judgement>}
  */
 async function runTests(config) {
   console.info('Running tests...');
@@ -72,12 +57,12 @@ async function runTests(config) {
   let template;
   let submission;
 
-  if (config.templatePath || config.submissionPath) {
+  if (config.isLocalFile) {
     template = await fileUploads.template;
     submission = await fileUploads.submission;
   } else {
-    template = await download(config.templateUrl, config.token);
-    submission = await download(config.submissionUrl, config.token);
+    template = await download(config.template, config.token);
+    submission = await download(config.submission, config.token);
   }
 
   console.info('Starting judgement...');
@@ -133,7 +118,7 @@ async function manualRun() {
     console.error('Could not find config.json file; check the paths.');
   }
 
-  /** @type JudgeOptions| {testplan: string} */
+  /** @type JudgeOptions */
   const config = await configResponse.json();
 
   // In debug mode, the translations need to be available, if running with

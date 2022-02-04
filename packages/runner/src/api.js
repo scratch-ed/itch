@@ -27,7 +27,7 @@ async function loadModuleInPage(page, moduleName, internalPath) {
  * This function does not manage puppeteer.
  *
  * @param {Page} page
- * @param {JudgeOptions | {testplanData: string, outputHandler: function(Object):void, pause: bool}} options
+ * @param {JudgeOptions | {outputHandler: function(Update): void, pause: boolean}} options
  *
  * @returns {Promise<void|Judgement>} The result of the judge.
  */
@@ -54,17 +54,21 @@ async function runOnPage(page, options) {
   await loadModuleInPage(page, 'lodash', 'lodash.min.js');
   await loadModuleInPage(page, '@ftrprf/judge-core');
 
-  await page.addScriptTag({ content: options.testplanData });
+  if (options.testplanData) {
+    await page.addScriptTag({ content: options.testplanData });
+  } else {
+    await page.addScriptTag({ url: options.testplan });
+  }
 
   // Load the data if needed.
-  if (options.templatePath || options.submissionPath) {
+  if (options.isLocalFile) {
     await page.evaluate(() => {
       registerFileUploads();
     });
     const templateHandle = await page.waitForSelector('#template');
-    await templateHandle.uploadFile(options.templatePath);
+    await templateHandle.uploadFile(options.template);
     const submissionHandle = await page.waitForSelector('#submission');
-    await submissionHandle.uploadFile(options.submissionPath);
+    await submissionHandle.uploadFile(options.submission);
   }
 
   await page.exposeFunction('handleOut', options.outputHandler);

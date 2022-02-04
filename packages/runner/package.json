@@ -3,13 +3,13 @@
   "version": "1.0.0-development.2",
   "description": "Judge runner",
   "main": "src/api.js",
+  "types": "src/api.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/FTRPRF/scratch-judge",
     "directory": "packages/runner"
   },
   "dependencies": {
-    "@ftrprf/judge-core": "*",
     "scratch-audio": "0.1.0-prerelease.20200528195344",
     "scratch-render": "0.1.0-prerelease.20211028200436",
     "scratch-storage": "^1.3.5",
@@ -17,19 +17,15 @@
     "scratch-vm": "^0.2.0-prerelease.20220111074529",
     "lodash": "^4.17.21"
   },
+  "//": "This is set as a peer dependency, so you can install the wanted version yourself.",
+  "peerDependencies": {
+    "@ftrprf/judge-core": "*"
+  },
   "devDependencies": {
-    "puppeteer": "^11.0.0"
+    "puppeteer": "^10.1.0",
+    "puppeteer-core": "^10.1.0"
   },
   "files": [
     "src/**"
-  ],
-  "bundledDependencies": [
-    "@ftrprf/judge-core",
-    "scratch-audio",
-    "scratch-render",
-    "scratch-storage",
-    "scratch-svg-renderer",
-    "scratch-vm",
-    "lodash"
   ]
 }
