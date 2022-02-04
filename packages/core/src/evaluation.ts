@@ -24,6 +24,7 @@ import { NewLog, snapshotFromSb3 } from './new-log';
 import { initialiseTranslations, LanguageData, t } from './i18n';
 import { OutputCollector } from './output/collector';
 import { Judgement } from './output/full-schema';
+import { Update } from './output/schema';
 
 const object: Window = window;
 
@@ -288,7 +289,11 @@ export async function run(config: EvalConfig): Promise<void | Judgement> {
   let handler: OutputCollector;
   if (config.fullFormat) {
     handler = new OutputCollector();
-    config.callback = handler.handle;
+    config.callback = (update: Update) => {
+      // Output partial updates for debug purposes.
+      console.debug(update);
+      handler.handle(update);
+    };
   }
 
   const context = new Context(config.callback);

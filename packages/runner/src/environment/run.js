@@ -69,11 +69,10 @@ async function runTests(config) {
 
   // Run the actual judge.
   return await window.run({
+    ...config,
     template,
     submission,
     canvas: document.getElementById('scratch-stage'),
-    language: config.language,
-    translations: config.translations,
   });
 }
 

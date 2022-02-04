@@ -1,4 +1,4 @@
-// import type { Page as PuppeteerPage } from 'puppeteer';
+import type { Page as PuppeteerPage } from 'puppeteer';
 import type { Page as CorePage } from 'puppeteer-core';
 import type { LanguageData } from '@ftrprf/judge-core/src/i18n';
 import type { Judgement } from '@ftrprf/judge-core/src/output/full-schema';
@@ -49,7 +49,7 @@ type JudgeOptions = UrlOptions | DataOption;
  * @returns The result of the judge or nothing if using partial format.
  */
 export function runOnPage(
-  page: CorePage,
+  page: CorePage | PuppeteerPage,
   options: JudgeOptions,
 ): Promise<Judgement | undefined>;
 
@@ -63,4 +63,7 @@ export function runOnPage(
  *
  * @returns The result of the judge.
  */
-export function runFullJudgement(page: CorePage, options: JudgeOptions): Promise<Judgement>;
+export function runFullJudgement(
+  page: CorePage | PuppeteerPage,
+  options: JudgeOptions,
+): Promise<Judgement>;
