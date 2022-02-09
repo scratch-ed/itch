@@ -97,6 +97,10 @@ export class TestGroup extends BasicGroup {
 
 export type Group = NestedGroup | TestGroup;
 
+export class Meta {
+  constructor(public totalTests = 0, public correctTests = 0) {}
+}
+
 /**
  * Top level object, containing a number of groups.
  */
@@ -109,11 +113,13 @@ export class Judgement {
   /**
    * @param groups - The groups in this judgement.
    * @param messages - Optional additional messages.
+   * @param meta - Metadata about the judgement.
    * @param status - Optional status override.
    */
   constructor(
     public readonly groups: Group[],
     public readonly messages: string[],
+    public readonly meta: Meta,
     public readonly status?: Status,
   ) {}
 }

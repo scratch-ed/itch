@@ -615,6 +615,10 @@ Judgement {
     },
   ],
   "messages": Array [],
+  "meta": Meta {
+    "correctTests": 53,
+    "totalTests": 53,
+  },
   "status": "runtime error",
   "version": 2,
 }

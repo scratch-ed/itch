@@ -25,6 +25,19 @@
         }
       ]
     },
+    "Meta": {
+      "properties": {
+        "correctTests": {
+          "default": 0,
+          "type": "number"
+        },
+        "totalTests": {
+          "default": 0,
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
     "NestedGroup": {
       "description": "A group containing other groups as children.",
       "properties": {
@@ -183,6 +196,10 @@
         "type": "string"
       },
       "type": "array"
+    },
+    "meta": {
+      "$ref": "#/definitions/Meta",
+      "description": "- Metadata about the judgement."
     },
     "status": {
       "description": "- Optional status override.",

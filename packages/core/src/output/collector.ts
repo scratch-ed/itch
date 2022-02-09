@@ -1,4 +1,12 @@
-import { Diff, Group, Judgement, NestedGroup, Test, TestGroup } from './full-schema';
+import {
+  Diff,
+  Group,
+  Judgement,
+  Meta,
+  NestedGroup,
+  Test,
+  TestGroup,
+} from './full-schema';
 import {
   AppendDiff,
   AppendMessage,
@@ -19,6 +27,8 @@ export class OutputCollector {
 
   private startCloseStack: Array<StartJudgement | StartGroup | StartTest> = [];
 
+  private meta = new Meta();
+
   public judgement?: Judgement;
 
   public handle(update: Update) {
@@ -37,6 +47,10 @@ export class OutputCollector {
       case 'close-test': {
         const test = this.handleTestLevel(update);
         this.currentLevel().push(test);
+        this.meta.totalTests++;
+        if (update.status === 'correct') {
+          this.meta.correctTests++;
+        }
         break;
       }
       case 'close-group': {
@@ -184,6 +198,6 @@ export class OutputCollector {
       }
     }
 
-    return new Judgement(groups, messages, escalatedStatus?.status);
+    return new Judgement(groups, messages, this.meta, escalatedStatus?.status);
   }
 }
