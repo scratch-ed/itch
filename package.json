@@ -29,7 +29,6 @@
     "build": "npm run build --workspaces --if-present",
     "type-check": "npm run type-check --workspaces --if-present",
     "test:exercises": "jest --selectProjects stableExercises --silent",
-    "test:exercises:converted": "jest --selectProjects convertedTestplans --silent",
     "test:exercises:all": "jest --runInBand --selectProjects exercise",
     "clean": "npm run clean --workspaces --if-present && rimraf ./**/node_modules",
     "lint": "eslint .",
@@ -53,12 +52,6 @@
       {
         "displayName": "stableExercises",
         "testMatch": [
-          "<rootDir>/exercises/zombiebal/*.test.js"
-        ]
-      },
-      {
-        "displayName": "convertedTestplans",
-        "testMatch": [
           "<rootDir>/exercises/agario/*.test.js",
           "<rootDir>/exercises/bouw-de-raket/*.test.js",
           "<rootDir>/exercises/chaos-in-de-raket/*.test.js",
@@ -67,7 +60,8 @@
           "<rootDir>/exercises/koppel-motoren-los/*.test.js",
           "<rootDir>/exercises/navigeer-rommel/*.test.js",
           "<rootDir>/exercises/rommelruimend/*.test.js",
-          "<rootDir>/exercises/vernietig-asteroiden/*.test.js"
+          "<rootDir>/exercises/vernietig-asteroiden/*.test.js",
+          "<rootDir>/exercises/zombiebal/*.test.js"
         ]
       }
     ]

@@ -32,7 +32,7 @@ jobs:
           USERNAME: ${{ secrets.USERNAME }}
           PASSWORD: ${{ secrets.PASSWORD }}
       - name: Test exercises
-        run: 'npm run test:exercises:converted'
+        run: 'npm run test:exercises'
   lint:
     runs-on: ubuntu-latest
     steps:
