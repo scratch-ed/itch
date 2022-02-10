@@ -61,7 +61,6 @@
           "<rootDir>/exercises/agario/*.test.js",
           "<rootDir>/exercises/eerste-testvlucht/*.test.js",
           "<rootDir>/exercises/chaos-in-de-raket/*.test.js",
-          "<rootDir>/exercises/koppel-motoren-los/*.test.js",
           "<rootDir>/exercises/vernietig-asteroiden/*.test.js"
         ]
       },
@@ -72,7 +71,8 @@
           "<rootDir>/exercises/bouw-de-raket/*.test.js",
           "<rootDir>/exercises/chaos-in-de-raket/*.test.js",
           "<rootDir>/exercises/eerste-testvlucht/*.test.js",
-          "<rootDir>/exercises/geld-inzamelen/*.test.js"
+          "<rootDir>/exercises/geld-inzamelen/*.test.js",
+          "<rootDir>/exercises/koppel-motoren-los/*.test.js"
         ]
       }
     ]
