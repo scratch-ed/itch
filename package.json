@@ -54,7 +54,6 @@
         "displayName": "stableExercises",
         "testMatch": [
           "<rootDir>/exercises/zombiebal/*.test.js",
-          "<rootDir>/exercises/space/*.test.js",
           "<rootDir>/exercises/rommelruimend/*.test.js",
           "<rootDir>/exercises/geld-inzamelen/*.test.js",
           "<rootDir>/exercises/vernietig-asteroiden/*.test.js"
