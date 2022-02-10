@@ -53,9 +53,7 @@
       {
         "displayName": "stableExercises",
         "testMatch": [
-          "<rootDir>/exercises/zombiebal/*.test.js",
-          "<rootDir>/exercises/rommelruimend/*.test.js",
-          "<rootDir>/exercises/geld-inzamelen/*.test.js"
+          "<rootDir>/exercises/zombiebal/*.test.js"
         ]
       },
       {
@@ -68,6 +66,7 @@
           "<rootDir>/exercises/geld-inzamelen/*.test.js",
           "<rootDir>/exercises/koppel-motoren-los/*.test.js",
           "<rootDir>/exercises/navigeer-rommel/*.test.js",
+          "<rootDir>/exercises/rommelruimend/*.test.js",
           "<rootDir>/exercises/vernietig-asteroiden/*.test.js"
         ]
       }
