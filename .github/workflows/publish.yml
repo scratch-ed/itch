@@ -26,6 +26,9 @@ jobs:
       - run: npm publish --workspace @ftrprf/judge-core
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - run: npm publish --workspace @ftrprf/judge-runner
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - uses: softprops/action-gh-release@v1
         with:
           prerelease: ${{ contains(steps.get_version.outputs.VERSION, 'development') }}
