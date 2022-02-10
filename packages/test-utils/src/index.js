@@ -94,7 +94,7 @@ async function executePlan(template, submission, testplan, options = {}) {
   return results;
 }
 
-function run(dir, solutionName, language, level, planLevel = level) {
+function run(dir, solutionName, level, planLevel = level) {
   const template = path.resolve(
     dir,
     level ? `projects/${level}-template-NL.sb3` : `projects/template-NL.sb3`,
