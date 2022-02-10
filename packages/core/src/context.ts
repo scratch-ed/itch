@@ -193,26 +193,41 @@ export class Context {
     return this.log.timestamp();
   }
 
+  private tempAdvancedProfiler = {
+    advanced: undefined,
+    at: 0,
+  };
+
   /** @deprecated */
   get advancedProfiler(): unknown {
-    return {
-      executions: this.log.events
-        .filter((e) => e.type === 'block_execution')
-        .map((e) => {
-          assertType<ProfileEventData>(e.data);
-          const block = e.previous
-            .target(e.data.target as string)
-            .block(e.data.blockId as string);
-          return {
-            timestamp: e.timestamp,
-            opcode: block.opcode,
-            args: {
-              mutation: block.mutation,
-            },
-            target: e.data.target,
-          };
-        }),
-    };
+    if (
+      this.tempAdvancedProfiler.advanced === undefined ||
+      this.log.events.length > this.tempAdvancedProfiler.at
+    ) {
+      this.tempAdvancedProfiler = {
+        // @ts-ignore
+        advanced: {
+          executions: this.log.events
+            .filter((e) => e.type === 'block_execution')
+            .map((e) => {
+              assertType<ProfileEventData>(e.data);
+              const block = e.previous
+                .target(e.data.target as string)
+                .block(e.data.blockId as string);
+              return {
+                timestamp: e.timestamp,
+                opcode: block.opcode,
+                args: {
+                  mutation: block.mutation,
+                },
+                target: e.data.target,
+              };
+            }),
+        },
+        at: this.log.events.length,
+      };
+    }
+    return this.tempAdvancedProfiler.advanced;
   }
 
   /**
