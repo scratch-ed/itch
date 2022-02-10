@@ -343,6 +343,11 @@ export class Event {
   get nextFrame(): Snapshot {
     return this.next;
   }
+
+  /** @deprecated */
+  get previousFrame(): Snapshot {
+    return this.previous;
+  }
 }
 
 function targetFromSb3(
