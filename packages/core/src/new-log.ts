@@ -469,6 +469,7 @@ export class NewLog {
   private readonly startTime: number = Date.now();
   private readonly vm: VirtualMachine;
   private templateSnapshot?: Snapshot;
+  public started = false;
 
   constructor(vm: VirtualMachine) {
     this.vm = vm;
@@ -546,6 +547,9 @@ export class NewLog {
    * Register a snapshot into the log.
    */
   private registerSnapshot(snapshot: Snapshot): void {
+    if (!this.started) {
+      return;
+    }
     this.snapshotList.push(snapshot);
   }
 
@@ -579,6 +583,9 @@ export class NewLog {
    * @internal
    */
   registerEvent(event: Event): void {
+    if (!this.started) {
+      return;
+    }
     this.eventList.push(event);
   }
 

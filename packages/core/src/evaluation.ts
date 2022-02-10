@@ -314,6 +314,7 @@ export async function run(config: EvalConfig): Promise<void | Judgement> {
     // Generate the snapshot from the project before it starts.
     const templateSnapshot = snapshotFromSb3(templateJson);
     const submissionSnapshot = snapshotFromSb3(submissionJson);
+    context.log.started = true;
     context.log.registerStartSnapshots(templateSnapshot, submissionSnapshot);
 
     if (beforeExecution.length > 1) {
