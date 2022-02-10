@@ -92,13 +92,12 @@ function vmTargetToScratchTarget(
   const variables: ScratchVariable[] = [];
   for (const id in target.variables) {
     const variable: Variable = target.variables[id];
+    let value = variable.value;
+    if (Array.isArray(value)) {
+      value = value.slice();
+    }
     variables.push(
-      new ScratchVariable(
-        id,
-        variable.name,
-        variable.type as VariableType,
-        variable.value,
-      ),
+      new ScratchVariable(id, variable.name, variable.type as VariableType, value),
     );
   }
   const blocks: ScratchBlock[] = [];
@@ -216,8 +215,8 @@ export class Snapshot {
   }
 
   /** @deprecated */
-  getSpriteOr(name: string): ScratchSprite {
-    return this.sprite(name);
+  getSpriteOr(name: string): ScratchTarget {
+    return this.target(name);
   }
 
   /**
@@ -356,6 +355,18 @@ function targetFromSb3(
   for (const id in target.variables) {
     const variable = target.variables[id];
     variables.push(new ScratchVariable(id, variable[0] as string, '', variable[1]));
+  }
+  // Includes lists as variables
+  assertType<Record<string, unknown[]>>(target.lists);
+  for (const id in target.lists) {
+    const list = target.lists[id];
+    variables.push(new ScratchVariable(id, list[0] as string, 'list', list[1]));
+  }
+  // Includes broadcasts as variables
+  assertType<Record<string, string>>(target.broadcasts);
+  for (const id in target.broadcasts) {
+    const broadcast = target.broadcasts[id];
+    variables.push(new ScratchVariable(id, broadcast, 'broadcast_msg', broadcast));
   }
   assertType<Record<string, Record<string, unknown>>>(target.blocks);
   const blocks: ScratchBlock[] = [];
@@ -569,5 +580,9 @@ export class NewLog {
    */
   registerEvent(event: Event): void {
     this.eventList.push(event);
+  }
+
+  get frames(): ReadonlyArray<Snapshot> {
+    return this.snapshots;
   }
 }

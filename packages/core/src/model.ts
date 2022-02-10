@@ -2,7 +2,7 @@ import { asTree, Node } from './new-blocks';
 import { Position } from './lines';
 import { ensure } from './utils';
 
-export type VariableType = '' | 'list' | 'broadcast';
+export type VariableType = '' | 'list' | 'broadcast_msg';
 
 export class ScratchVariable {
   constructor(
@@ -213,6 +213,11 @@ export class ScratchTarget {
 
   block(id: string): ScratchBlock {
     return ensure(this.blocks.find((b) => b.id === id));
+  }
+
+  /** @deprecated */
+  getVariable(name: string): ScratchVariable | undefined {
+    return this.variable(name);
   }
 }
 
