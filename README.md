@@ -91,7 +91,7 @@ npm install
 
 ## Deployment
 
-To deploy the judge, you'll need to do 3 things:
+To deploy the judge, you'll need to do 4 things:
 
 1. Tag a new version
 2. Create and publish that version as an npm package
@@ -100,7 +100,7 @@ To deploy the judge, you'll need to do 3 things:
 
 #### Tagging a new version
 
-Some presets are available: `npm run prerelease|patch|minor|major`.
+Some presets are available: `npm run release:prerelease|patch|minor|major`.
 Otherwise, use `npm version` to do it.
 
 Until https://github.com/npm/cli/issues/4017 is fixed, you'll need to manually
