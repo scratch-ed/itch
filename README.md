@@ -13,24 +13,11 @@ If you use `nvm`, you can simply execute `nvm use` to get the desired `node` and
 
 ## Running the judge
 
-The repo contains some exercises:
-
-- packages/runner/test/assets/\*\*
-
-  These are used to run basic integration tests.
-
-- demo/\*\*
-
-  More in-depth exercises & test plans, used with students. They are not tested automatically at the moment, but we
-  might add that in the future.
-
 To start, run `npm run build`.
 
-Then, there are three ways to run the judge, depending on what you want:
+To run the judge in debug mode:
 
-- As an API: `npm run api`. You can send projects and testplans to the API and receive a response.
-- As a command line tool: `npm run start`. This will execute a project based on the `config.json` file.
-- As a webpage: open `packages/runner/src/environment.html` in your browser. This will load and execute a project based on the `config.json` file.
+- Open `packages/runner/src/environment.html` in your browser. This will load and execute a project based on the `config.json` file.
 
 ### Config
 
@@ -40,7 +27,7 @@ An example can be found in `config.example.json`:
 ```json
 {
   "template": "tests/projects/status/01.space_mission.sb3",
-  "source": "tests/projects/status/01.space_mission.sb3",
+  "submission": "tests/projects/status/01.space_mission.sb3",
   "plan": "plans/status/01.space_mission_test.js",
   "debug": false
 }
@@ -49,24 +36,9 @@ An example can be found in `config.example.json`:
 The properties are:
 
 - **template**: path to the template sb3 file, relative to the root of the repo.
-- **source**: path to the solution sb3 file, relative to the root of the repo.
+- **submission**: path to the solution sb3 file, relative to the root of the repo.
 - **plan**: plan to the testplan, relative to the root of the repo.
 - **debug**: if true and run with puppeteer, the browser will open, otherwise it will be headless.
-
-## Docker
-
-The judge also supports some docker config if you're in a hurry. These docker commands start a judge service, with an endpoint exposed on port 8000.
-
-```bash
-docker build --build-arg PORT=8000  -t judge . # Build judge image
-docker run --publish 8000:8000 judge # runs the image
-```
-
-Or, without any setup at all with `docker-compose`
-
-```bash
-docker-compose up
-```
 
 ## Troubleshooting
 
@@ -94,7 +66,7 @@ npm install
 To deploy the judge, you'll need to do 4 things:
 
 1. Tag a new version
-2. Create and publish that version as an npm package
+2. Create and publish that version as a npm package
 3. Update the AWS repo to point to that version
 4. Publish to AWS
 

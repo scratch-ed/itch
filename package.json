@@ -25,7 +25,6 @@
   "scripts": {
     "generate:output": "npm run generate:output --workspace @ftrprf/judge-core",
     "watch": "npm run watch --workspace @ftrprf/judge-core",
-    "start": "npm start --workspace @ftrprf/judge-runner",
     "build": "npm run build --workspaces --if-present",
     "type-check": "npm run type-check --workspaces --if-present",
     "test:exercises": "jest --selectProjects stableExercises --silent",
