@@ -14,7 +14,7 @@
     "scratch-render": "0.1.0-prerelease.20211028200436",
     "scratch-storage": "^1.3.5",
     "scratch-svg-renderer": "^0.2.0-prerelease.20210511195415",
-    "scratch-vm": "^0.2.0-prerelease.20220111074529",
+    "scratch-vm": "^0.2.0-prerelease.20220214082923",
     "lodash": "^4.17.21"
   },
   "//": "This is set as a peer dependency, so you can install the wanted version yourself.",
