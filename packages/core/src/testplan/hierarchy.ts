@@ -214,10 +214,10 @@ export class GroupLevel {
    * This level results in a `context` in the output format.
    *
    * @param name - Either the name or the function.
-   * @param options - The name of the sprite that is linked to this group.
+   * @param options - The options for this function.
    * @param block - The function if a name is passed.
    */
-  group(name: string, options: GroupOptions | string, block: () => void): void;
+  group(name: string, options: GroupOptions, block: () => void): void;
 
   /**
    * Groups a bunch of related tests.
@@ -238,28 +238,43 @@ export class GroupLevel {
   group(options: SpriteGroupOptions, block: () => void): void;
 
   group(
-    name: string | SpriteGroupOptions,
-    spriteOrBlock: string | GroupOptions | (() => void),
-    block?: () => void,
+    nameOrOptions: string | SpriteGroupOptions,
+    optionsOrBlock: GroupOptions | (() => void),
+    maybeBlock?: () => void,
   ): void {
-    if (typeof spriteOrBlock === 'string') {
-      spriteOrBlock = { sprite: spriteOrBlock };
-    }
-    if (typeof name !== 'string') {
-      spriteOrBlock = name;
-      name = `Testen voor ${name.sprite}`;
-    }
-    if (typeof spriteOrBlock !== 'object') {
-      block = spriteOrBlock;
-      spriteOrBlock = {};
+    let name: string;
+    let block: () => void;
+    let options: GroupOptions | undefined = undefined;
+
+    if (
+      typeof nameOrOptions === 'string' &&
+      typeof optionsOrBlock === 'object' &&
+      typeof maybeBlock === 'function'
+    ) {
+      // First case; three parameters.
+      name = nameOrOptions;
+      block = maybeBlock;
+      options = optionsOrBlock;
+    } else if (
+      typeof nameOrOptions === 'object' &&
+      typeof optionsOrBlock === 'function'
+    ) {
+      // Third case; sprite & block.
+      name = `Testen voor ${nameOrOptions.sprite}`;
+      block = optionsOrBlock;
+    } else if (
+      typeof nameOrOptions === 'string' &&
+      typeof optionsOrBlock === 'function'
+    ) {
+      // Second case; name & block.
+      name = nameOrOptions;
+      block = optionsOrBlock;
+    } else {
+      throw new Error('Wrong arguments to group function.');
     }
 
-    this.resultManager.startGroup(
-      name,
-      spriteOrBlock.visibility ?? 'show',
-      spriteOrBlock.sprite,
-    );
+    this.resultManager.startGroup(name, options?.visibility ?? 'show', options?.sprite);
     block!();
-    this.resultManager.closeGroup(spriteOrBlock.summary);
+    this.resultManager.closeGroup(options?.summary);
   }
 }
