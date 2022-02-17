@@ -375,9 +375,7 @@ function targetFromSb3(
   }
   assertType<Record<string, Record<string, unknown>>>(target.blocks);
   const blocks: ScratchBlock[] = [];
-  for (const id in target.blocks._blocks) {
-    // @ts-ignore
-    const block = target.blocks.getBlock(id) as Record<string, unknown>;
+  for (const [id, block] of Object.entries(target.blocks)) {
     blocks.push(new LazyScratchBlock(id, block));
   }
 
