@@ -5,13 +5,13 @@ import {
   asRange,
   generatePositionMessage,
   ignoreWaitInProcedureFor,
-  OneHatAllowedTest,
+  OneHatAllowedTest as AllowedTest,
 } from './testplan';
 import { angle, distSq, mergeLines } from './lines';
 import { checkPredefinedBlocks } from './testplan/predefined-blocks';
 import { Project } from './project';
 import { Evaluation, run } from './evaluation';
-import { t } from './i18n';
+import { t as translate } from './i18n';
 
 declare interface Itch {
   checkPredefinedBlocks: typeof checkPredefinedBlocks;
@@ -67,7 +67,7 @@ declare global {
     /** @deprecated */
     delay: typeof delay;
     /** @deprecated */
-    OneHatAllowedTest: typeof OneHatAllowedTest;
+    OneHatAllowedTest: typeof AllowedTest;
     /** @deprecated */
     ignoreWaitInProcedureFor: typeof ignoreWaitInProcedureFor;
     /** @deprecated */
@@ -89,8 +89,13 @@ declare global {
     format: typeof format;
     Itch: Itch;
 
-    t: typeof t;
+    t: typeof translate;
   }
 
   const Itch: Itch;
+
+  /** @deprecated */
+  const OneHatAllowedTest: typeof AllowedTest;
+
+  const t: typeof translate;
 }
