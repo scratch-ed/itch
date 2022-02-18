@@ -15,7 +15,7 @@
 import isEqual from 'lodash-es/isEqual';
 import { castCallback, numericEquals, stringify } from '../utils';
 import { GroupedResultManager } from '../output';
-import { Visibility } from '../output/schema';
+import { Visibility } from '../output/partial-schema';
 
 export class FatalErrorException extends Error {}
 

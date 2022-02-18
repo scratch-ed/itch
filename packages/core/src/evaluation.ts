@@ -24,7 +24,7 @@ import { NewLog } from './new-log';
 import { initialiseTranslations, LanguageData, t } from './i18n';
 import { OutputCollector } from './output/collector';
 import { Judgement } from './output/full-schema';
-import { Update } from './output/schema';
+import { Update } from './output/partial-schema';
 import { createContext } from './vm';
 
 const object: Window = window;

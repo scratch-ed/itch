@@ -1,4 +1,4 @@
-import { Status, Visibility } from './schema';
+import { Status, Visibility } from './partial-schema';
 
 /**
  * Includes an expected and actual value. Can be used to display the difference

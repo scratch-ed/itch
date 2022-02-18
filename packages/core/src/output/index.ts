@@ -3,7 +3,7 @@
  *   this will replace the existing groups.
  */
 
-import { Status, Update, Visibility } from './schema';
+import { Status, Update, Visibility } from './partial-schema';
 
 /**
  * Handle outputting. By default, all output is sent to stderr.
@@ -24,27 +24,6 @@ export interface OutputHandler {
   (obj: Update): void;
 }
 
-/**
- * Manages the output for the Dodona-inspired format.
- *
- * While this class is exposed in testplans, in most cases
- * you should use the high-level testplan API instead of this one.
- *
- * ### Dodona format
- *
- * Some more information on the Dodona format. The format is a partial format.
- * The judge basically sends updates to the test result state via commands, e.g.
- * "start testcase X", "start test Y", "close testcase X", etc.
- *
- * For ease of use, the result manager will automatically open higher levels when
- * opening lower levels. For example, if you open a testcase without opening a
- * context first, the result manager will do so for you. Previous levels are also
- * closed when appropriate. For example, when starting a new tab, all previous tabs
- * will be closed.
- *
- * There is one exception: a test. If an open test is detected, an error will be thrown,
- * as the result manager has no way of knowing if the test is successful or not.
- */
 export class GroupedResultManager {
   private readonly out: OutputHandler;
   private hasOpenJudgement = false;

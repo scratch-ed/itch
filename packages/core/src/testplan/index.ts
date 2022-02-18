@@ -34,7 +34,7 @@ import { LoggedSprite } from '../log';
 import { cloneDeep } from 'lodash-es';
 import { GroupedResultManager } from '../output';
 import { t } from '../i18n';
-import { Status } from '../output/schema';
+import { Status } from '../output/partial-schema';
 
 export class FatalErrorException extends Error {}
 

@@ -18,8 +18,11 @@ import {
   StartJudgement,
   StartTest,
   Update,
-} from './schema';
+} from './partial-schema';
 
+/**
+ * Converts the partial output schema to the full output schema.
+ */
 export class OutputCollector {
   private levelStack: Array<
     Array<Test | Group | AppendMessage | AppendDiff | EscalateStatus>
