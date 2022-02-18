@@ -36,8 +36,8 @@ export interface ScratchBlock {
   readonly opcode: string;
   readonly next?: string;
   readonly parent?: string;
-  readonly inputs: Record<string, Record<string, unknown>>;
-  readonly fields: Record<string, Record<string, unknown>>;
+  readonly inputs: Record<string, Array<unknown>>;
+  readonly fields: Record<string, Array<unknown>>;
   readonly shadow: boolean;
   readonly topLevel: boolean;
   readonly x?: number;
@@ -82,8 +82,8 @@ class Sb3ScratchBlock implements ScratchBlock {
     readonly opcode: string,
     readonly next: string | undefined,
     readonly parent: string | undefined,
-    readonly inputs: Record<string, Record<string, unknown>>,
-    readonly fields: Record<string, Record<string, unknown>>,
+    readonly inputs: Record<string, Array<unknown>>,
+    readonly fields: Record<string, Array<unknown>>,
     readonly shadow: boolean,
     readonly topLevel: boolean,
     readonly x?: number,
@@ -114,8 +114,8 @@ export function blockFromSb3(id: string, data: Record<string, unknown>): Scratch
     data.opcode as string,
     data.next as string,
     data.parent as string,
-    data.inputs as Record<string, Record<string, unknown>>,
-    data.fields as Record<string, Record<string, unknown>>,
+    data.inputs as Record<string, Array<unknown>>,
+    data.fields as Record<string, Array<unknown>>,
     data.shadow as boolean,
     data.topLevel as boolean,
     data.x as number,

@@ -1,121 +1,15 @@
-import VirtualMachine from 'scratch-vm';
-import ScratchStorage from 'scratch-storage';
-import ScratchSVGRenderer from 'scratch-svg-renderer';
-import AudioEngine from 'scratch-audio';
-import ScratchRender from 'scratch-render';
-
+import type VirtualMachine from 'scratch-vm';
 import type Runtime from '@ftrprf/judge-scratch-vm-types/types/engine/runtime';
 
 import { Deferred } from './deferred';
-import { makeProxiedRenderer } from './renderer';
 import { ScheduledEvent } from './scheduler/scheduled-event';
 import { EndAction } from './scheduler/end';
 import { BroadcastReceiver, ThreadListener } from './listener';
-import { EvalConfig } from './evaluation';
 import { installAdvancedBlockProfiler, ProfileEventData } from './profiler';
 import { GroupedResultManager, OutputHandler } from './output';
 import { Event, NewLog } from './new-log';
 import { assertType } from './utils';
-
-const Events: Record<string, string> = {
-  SCRATCH_PROJECT_START: 'PROJECT_START',
-  SCRATCH_PROJECT_RUN_STOP: 'PROJECT_RUN_STOP',
-  SCRATCH_SAY_OR_THINK: 'SAY',
-  SCRATCH_QUESTION: 'QUESTION',
-  SCRATCH_ANSWER: 'ANSWER',
-  // Custom events,
-  DONE_THREADS_UPDATE: 'DONE_THREADS_UPDATE',
-  BEFORE_HATS_START: 'BEFORE_HATS_START',
-};
-
-/**
- * Wrap the stepper function.
- *
- * @param {VirtualMachine} vm
- */
-function wrapStep(vm: VirtualMachine) {
-  const oldFunction = vm.runtime._step.bind(vm.runtime);
-
-  // let time = Date.now();
-  vm.runtime._step = () => {
-    const oldResult = oldFunction();
-    if (vm.runtime._lastStepDoneThreads.length > 0) {
-      vm.runtime.emit(Events.DONE_THREADS_UPDATE, vm.runtime._lastStepDoneThreads);
-    }
-    // const newTime = Date.now();
-    // if (time && newTime) {
-    //   console.log(`Step took ${newTime - time}`, {
-    //     currentStep: vm.runtime.currentStepTime
-    //   });
-    // }
-    // time = newTime;
-    return oldResult;
-  };
-}
-
-/**
- * Wrap the start hats function to emit an event when this happens.
- * @param {VirtualMachine} vm
- */
-function wrapStartHats(vm: VirtualMachine) {
-  const oldFunction = vm.runtime.startHats.bind(vm.runtime);
-
-  vm.runtime.startHats = (requestedHatOpcode, optMatchFields, optTarget) => {
-    vm.runtime.emit(Events.BEFORE_HATS_START, {
-      requestedHatOpcode,
-      optMatchFields,
-      optTarget,
-    });
-    return oldFunction(requestedHatOpcode, optMatchFields, optTarget);
-  };
-}
-
-/**
- * Load the VM. The returned VM is completely prepared: listeners
- * are attached, dependencies loaded and the project is loaded into
- * the VM.
- *
- * @param vm - The VM to load.
- * @param project - The project to load.
- * @param canvas - The canvas for the renderer.
- * @param context - The context. The VM part of the context is not loaded yet.
- * @return The virtual machine.
- */
-async function loadVm(
-  vm: VirtualMachine,
-  project: ArrayBuffer,
-  canvas: HTMLCanvasElement,
-  context?: Context,
-) {
-  vm.setTurboMode(false);
-
-  // Set up the components.
-  const storage = new ScratchStorage();
-  vm.attachStorage(storage);
-  const audioEngine = new AudioEngine();
-  vm.attachAudioEngine(audioEngine);
-  vm.attachV2SVGAdapter(new ScratchSVGRenderer.SVGRenderer());
-  vm.attachV2BitmapAdapter(new ScratchSVGRenderer.BitmapAdapter());
-
-  // Set up the renderer, and inject our proxy.
-  if (typeof context !== 'undefined') {
-    const renderer = makeProxiedRenderer(context, canvas);
-    vm.attachRenderer(renderer);
-  } else {
-    vm.attachRenderer(new ScratchRender(canvas));
-  }
-
-  if (context !== null) {
-    // Wrap the step function.
-    wrapStep(vm);
-    wrapStartHats(vm);
-  }
-
-  // Load the project.
-  await vm.loadProject(project);
-
-  return vm;
-}
+import { Events } from './vm';
 
 /**
  * @typedef {object} Acceleration
@@ -134,15 +28,11 @@ interface Acceleration {
  * judge. This is passed around in lieu of using globals.
  */
 export class Context {
-  vm?: VirtualMachine;
+  readonly vm: VirtualMachine;
   numberOfRun: number;
-  newLog?: NewLog;
+  readonly newLog: NewLog;
   answers: string[];
   providedAnswers: string[];
-  /**
-   * Resolves once the scratch files have been loaded.
-   */
-  vmLoaded: Deferred<string>;
   /**
    * Resolves once the simulation has ended.
    */
@@ -159,6 +49,11 @@ export class Context {
   event: ScheduledEvent;
   groupedOutput: GroupedResultManager;
 
+  /** @deprecated */
+  readonly submissionJson: Record<string, unknown>;
+  /** @deprecated */
+  readonly templateJson: Record<string, unknown>;
+
   /**
    * The acceleration factor, used to speed up (or slow down)
    * execution in the VM.
@@ -168,11 +63,16 @@ export class Context {
    */
   accelerationFactor: Acceleration;
 
-  constructor(callback?: OutputHandler) {
+  constructor(
+    vm: VirtualMachine,
+    log: NewLog,
+    templateJson: Record<string, unknown>,
+    submissionJson: Record<string, unknown>,
+    callback?: OutputHandler,
+  ) {
     this.numberOfRun = 0;
     this.answers = [];
     this.providedAnswers = [];
-    this.vmLoaded = new Deferred();
     this.simulationEnd = new Deferred();
     this.actionTimeout = 5000;
     this.threadListeners = [];
@@ -182,6 +82,10 @@ export class Context {
     this.accelerationFactor = {
       factor: 1,
     };
+    this.vm = vm;
+    this.newLog = log;
+    this.submissionJson = submissionJson;
+    this.templateJson = templateJson;
   }
 
   /**
@@ -236,14 +140,14 @@ export class Context {
    */
   attachEventHandles(): void {
     this.vm!.runtime.on(Events.SCRATCH_PROJECT_START, () => {
-      console.log(`${this.timestamp()}: run number: ${this.numberOfRun}`);
+      console.log(`${this.log.timestamp()}: run number: ${this.numberOfRun}`);
       this.numberOfRun++;
     });
 
     this.vm!.runtime.on(Events.SCRATCH_SAY_OR_THINK, (target, type, text) => {
       // Only save it when something is actually being said.
       if (text !== '') {
-        console.log(`${this.timestamp()}: say: ${text} with ${type}`);
+        console.log(`${this.log.timestamp()}: say: ${text} with ${type}`);
         const event = new Event('say', {
           text: text,
           target: target,
@@ -267,7 +171,7 @@ export class Context {
           x = undefined;
         }
 
-        console.log(`${this.timestamp()}: input: ${x}`);
+        console.log(`${this.log.timestamp()}: input: ${x}`);
 
         const event = new Event('answer', {
           question: question,
@@ -282,7 +186,7 @@ export class Context {
     });
 
     this.vm!.runtime.on(Events.SCRATCH_PROJECT_RUN_STOP, () => {
-      console.log(`${this.timestamp()}: Ended run`);
+      console.log(`${this.log.timestamp()}: Ended run`);
     });
 
     this.vm!.runtime.on(Events.DONE_THREADS_UPDATE, (threads) => {
@@ -326,56 +230,13 @@ export class Context {
   }
 
   /**
-   * Extract the project.json from a sb3 project.
-   *
-   * If you need the project JSON from the actual project you want to test,
-   * it's more efficient to use `prepareVm`, since that will re-use the created
-   * VM.
-   */
-  // eslint-disable-next-line
-  async getProjectJson(config: EvalConfig): Promise<Record<string, any>> {
-    if (!this.vm) {
-      this.vm = new VirtualMachine();
-      this.newLog = new NewLog(this.vm);
-    }
-    await loadVm(this.vm, config.template, config.canvas);
-    return JSON.parse(this.vm.toJSON());
-  }
-
-  /**
-   * Set-up the scratch vm. After calling this function,
-   * the vmLoaded promise will be resolved.
-   */
-  // eslint-disable-next-line
-  async prepareVm(config: EvalConfig): Promise<Record<string, any>> {
-    if (!this.vm) {
-      this.vm = new VirtualMachine();
-      this.newLog = new NewLog(this.vm);
-    }
-    /**
-     * The scratch virtual machine.
-     *
-     * @type {VirtualMachine};
-     */
-    await loadVm(this.vm, config.submission, config.canvas, this);
-    // Attach handlers
-    this.attachEventHandles();
-
-    // Enable profiling.
-    this.createProfiler();
-
-    console.log('Loading is finished.');
-    this.vmLoaded.resolve('loading is finished');
-
-    return JSON.parse(this.vm.toJSON());
-  }
-
-  /**
    * Prepare the VM for execution. This will prepare the answers for
    * questions (if applicable) and instrument the VM to take the
    * acceleration factor into account.
    */
   prepareAndRunVm(): void {
+    this.attachEventHandles();
+
     this.providedAnswers = this.answers.slice();
 
     // Optimisation.
@@ -467,15 +328,6 @@ export class Context {
   terminate(): void {
     const action = new EndAction();
     action.execute(this, () => {});
-  }
-
-  /**
-   * Create a context with a fully prepared VM.
-   */
-  static async create(config: EvalConfig): Promise<Context> {
-    const context = new Context(config.callback);
-    await context.prepareVm(config);
-    return context;
   }
 
   get log(): NewLog {

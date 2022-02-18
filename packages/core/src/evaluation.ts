@@ -20,11 +20,12 @@ import type VirtualMachine from '@ftrprf/judge-scratch-vm-types';
 import { angle, distSq, mergeLines } from './lines';
 import { checkPredefinedBlocks } from './testplan/predefined-blocks';
 import { GroupLevel } from './testplan/hierarchy';
-import { NewLog, snapshotFromSb3 } from './new-log';
+import { NewLog } from './new-log';
 import { initialiseTranslations, LanguageData, t } from './i18n';
 import { OutputCollector } from './output/collector';
 import { Judgement } from './output/full-schema';
 import { Update } from './output/schema';
+import { createContext } from './vm';
 
 const object: Window = window;
 
@@ -296,12 +297,11 @@ export async function run(config: EvalConfig): Promise<void | Judgement> {
     };
   }
 
-  const context = new Context(config.callback);
-  const templateJson = await context.getProjectJson(config);
-  const submissionJson = await context.prepareVm(config);
   const beforeExecution = window.beforeExecution || (() => {});
   const duringExecution = window.duringExecution || ((e) => e.scheduler.end());
   const afterExecution = window.afterExecution || (() => {});
+
+  const context = await createContext(config);
 
   context.groupedOutput.startJudgement();
 
@@ -311,22 +311,19 @@ export async function run(config: EvalConfig): Promise<void | Judgement> {
   try {
     expose();
 
-    // Generate the snapshot from the project before it starts.
-    const templateSnapshot = snapshotFromSb3(templateJson);
-    const submissionSnapshot = snapshotFromSb3(submissionJson);
-    context.log.started = true;
-    context.log.registerStartSnapshots(templateSnapshot, submissionSnapshot);
-
     if (beforeExecution.length > 1) {
       // Run the tests before the execution.
-      // @ts-ignore
-      beforeExecution(new Project(templateJson), new Project(submissionJson), judge);
+      beforeExecution(
+        // @ts-ignore
+        new Project(context.templateJson),
+        new Project(context.submissionJson),
+        judge,
+      );
     } else {
       // @ts-ignore
       beforeExecution(judge);
     }
 
-    await context.vmLoaded.promise;
     judge.stage = EvaluationStage.scheduling;
 
     // Schedule the commands for the duration.

@@ -4,12 +4,12 @@ import type VirtualMachine from '@ftrprf/judge-scratch-vm-types/types/virtual-ma
 import type RenderedTarget from '@ftrprf/judge-scratch-vm-types/types/sprites/rendered-target';
 
 import {
+  blockFromSb3,
   Bounds,
   RotationStyle,
   ScratchBlock,
   ScratchComment,
   ScratchCostume,
-  ScratchMutation,
   ScratchSprite,
   ScratchStage,
   ScratchTarget,
@@ -24,70 +24,16 @@ import { ProfileEventData } from './profiler';
 import { ClickEventData } from './scheduler/click';
 
 /**
- * A lazy wrapper around a scratch block from the VM.
+ * Convert a scratch target from the VM to one we save in the log.
  *
- * This wrapper is necessary to keep the VM running fast;
- * converting all blocks to our structure up front is too
- * much work.
- *
- * TODO: is this still needed with the new log?
+ * @param target The target to save.
+ * @param isStage If the target is the stage or not.
+ * @param blocks Existing blocks.
  */
-class LazyScratchBlock implements ScratchBlock {
-  constructor(readonly id: string, private readonly block: Record<string, unknown>) {}
-
-  get fields(): Record<string, Record<string, unknown>> {
-    return (this.block.fields || {}) as Record<string, Record<string, unknown>>;
-  }
-
-  get inputs(): Record<string, Record<string, unknown>> {
-    const inputs: Record<string, Record<string, unknown>> = {};
-    for (const input in this.block.inputs as Record<string, Record<string, unknown>>) {
-      // Ignore blocks prefixed with branch prefix.
-      if (!input.startsWith('SUBSTACK')) {
-        inputs[input] = (this.block.inputs as Record<string, Record<string, unknown>>)[
-          input
-        ];
-      }
-    }
-    return inputs;
-  }
-
-  get mutation(): ScratchMutation {
-    return this.block.mutation as ScratchMutation;
-  }
-
-  get next(): string | undefined {
-    return (this.block.next as string) ?? undefined;
-  }
-
-  get parent(): string | undefined {
-    return (this.block.parent as string) ?? undefined;
-  }
-
-  get opcode(): string {
-    return this.block.opcode as string;
-  }
-
-  get shadow(): boolean {
-    return this.block.shadow as boolean;
-  }
-
-  get topLevel(): boolean {
-    return this.block.topLevel as boolean;
-  }
-
-  get x(): number | undefined {
-    return (this.block.x as number) ?? undefined;
-  }
-
-  get y(): number | undefined {
-    return (this.block.y as number) ?? undefined;
-  }
-}
-
 function vmTargetToScratchTarget(
   target: RenderedTarget,
   isStage: boolean,
+  blocks: Array<ScratchBlock>,
 ): ScratchTarget {
   const variables: ScratchVariable[] = [];
   for (const id in target.variables) {
@@ -99,11 +45,6 @@ function vmTargetToScratchTarget(
     variables.push(
       new ScratchVariable(id, variable.name, variable.type as VariableType, value),
     );
-  }
-  const blocks: ScratchBlock[] = [];
-  for (const id in target.blocks._blocks) {
-    const block = target.blocks.getBlock(id) as Record<string, unknown>;
-    blocks.push(new LazyScratchBlock(id, block));
   }
 
   const comments = [];
@@ -376,7 +317,7 @@ function targetFromSb3(
   assertType<Record<string, Record<string, unknown>>>(target.blocks);
   const blocks: ScratchBlock[] = [];
   for (const [id, block] of Object.entries(target.blocks)) {
-    blocks.push(new LazyScratchBlock(id, block));
+    blocks.push(blockFromSb3(id, block));
   }
 
   assertType<Record<string, Comment>>(target.comments);
@@ -565,7 +506,8 @@ export class NewLog {
   snap(origin: string): Snapshot {
     const stage = this.vm.runtime.getTargetForStage()!;
     const targets = this.vm.runtime.targets.map((t) => {
-      return vmTargetToScratchTarget(t as RenderedTarget, t.id === stage.id);
+      const blocks = this.submission.target(t.getName()).blocks;
+      return vmTargetToScratchTarget(t as RenderedTarget, t.id === stage.id, blocks);
     });
 
     const snapshot = new Snapshot(this.timestamp(), origin, targets);

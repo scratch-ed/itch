@@ -81,7 +81,7 @@ declare global {
     /** @deprecated */
     distSq: typeof distSq;
 
-    beforeExecution?: typeof beforeExecution | CallbackFunction;
+    beforeExecution?: (typeof beforeExecution) | CallbackFunction;
     duringExecution?: CallbackFunction;
     afterExecution?: CallbackFunction;
 

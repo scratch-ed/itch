@@ -1,17 +1,16 @@
 /* Copyright (C) 2019 Ghent University - All Rights Reserved */
 import ScratchRender from 'scratch-render';
-import { Context } from './context';
-import { Event } from './new-log';
+import { Event, NewLog } from './new-log';
 
 /**
  * Intercept events from pen extension.
  *
- * @param {Context} context - The vm to intercept info from.
+ * @param {NewLog} log - The vm to intercept info from.
  * @param {ScratchRender} renderer - Renderer
  *
  * @see https://en.scratch-wiki.info/wiki/Pen_Extension
  */
-function interceptPen(context: Context, renderer: ScratchRender) {
+function interceptPen(log: NewLog, renderer: ScratchRender) {
   console.log('Intercepting pen events...');
 
   // Intercept lines
@@ -21,14 +20,14 @@ function interceptPen(context: Context, renderer: ScratchRender) {
       const p1 = { x: argumentsList[2], y: argumentsList[3] };
       const p2 = { x: argumentsList[4], y: argumentsList[5] };
       const line = { start: p1, end: p2 };
-      context.log.renderer.lines.push(line);
+      log.renderer.lines.push(line);
       const event = new Event('renderer', {
         name: 'penLine',
         line: line,
         color: argumentsList[1].color4f,
       });
-      event.snapshot = context.log.snap('renderer.penLine');
-      context.log.registerEvent(event);
+      event.snapshot = log.snap('renderer.penLine');
+      log.registerEvent(event);
 
       return target.apply(thisArg, argumentsList);
     },
@@ -39,14 +38,14 @@ function interceptPen(context: Context, renderer: ScratchRender) {
   renderer.penPoint = new Proxy(penPointOld, {
     apply: function (target, thisArg, argumentsList) {
       const point = { x: argumentsList[2], y: argumentsList[3] };
-      context.log.renderer.points.push(point);
+      log.renderer.points.push(point);
       const event = new Event('renderer', {
         name: 'penPoint',
         point: point,
         color: argumentsList[1].color4f,
       });
-      event.snapshot = context.log.snap('renderer.penPoint');
-      context.log.registerEvent(event);
+      event.snapshot = log.snap('renderer.penPoint');
+      log.registerEvent(event);
 
       return target.apply(thisArg, argumentsList);
     },
@@ -59,14 +58,14 @@ function interceptPen(context: Context, renderer: ScratchRender) {
       const event = new Event('renderer', {
         name: 'penClear',
         previous: {
-          lines: context.log.renderer.lines.slice(),
-          points: context.log.renderer.points.slice(),
+          lines: log.renderer.lines.slice(),
+          points: log.renderer.points.slice(),
         },
       });
-      context.log.renderer.lines = [];
-      context.log.renderer.points = [];
-      event.snapshot = context.log.snap('renderer.penClear');
-      context.log.registerEvent(event);
+      log.renderer.lines = [];
+      log.renderer.points = [];
+      event.snapshot = log.snap('renderer.penClear');
+      log.registerEvent(event);
 
       return target.apply(thisArg, argumentsList);
     },
@@ -76,19 +75,19 @@ function interceptPen(context: Context, renderer: ScratchRender) {
 /**
  * Create a proxied renderer, allowing us to intercept various stuff.
  *
- * @param {Context} context - The context.
+ * @param {NewLog} log - The context.
  * @param {HTMLCanvasElement} canvas - The canvas where the renderer should work.
  *
  * @return {ScratchRender}
  */
 export function makeProxiedRenderer(
-  context: Context,
+  log: NewLog,
   canvas: HTMLCanvasElement,
 ): ScratchRender {
   const render = new ScratchRender(canvas);
   console.log('renderer created');
 
-  interceptPen(context, render);
+  interceptPen(log, render);
 
   // text bubble creation
   const createTextSkinOld = render.createTextSkin;
@@ -96,14 +95,14 @@ export function makeProxiedRenderer(
     apply: function (target, thisArg, argumentsList) {
       const skinId = target.apply(thisArg, argumentsList);
 
-      context.log.renderer.responses.push(argumentsList[1]);
+      log.renderer.responses.push(argumentsList[1]);
       const event = new Event('renderer', {
         id: skinId,
         name: 'createTextSkin',
         text: argumentsList[1],
       });
-      event.snapshot = context.log.snap('renderer.createTextSkin');
-      context.log.registerEvent(event);
+      event.snapshot = log.snap('renderer.createTextSkin');
+      log.registerEvent(event);
 
       return skinId;
     },
@@ -112,13 +111,13 @@ export function makeProxiedRenderer(
   const updateTextSkinOld = render.updateTextSkin;
   render.updateTextSkin = new Proxy(updateTextSkinOld, {
     apply: function (target, thisArg, argumentsList) {
-      context.log.renderer.responses.push(argumentsList[2]);
+      log.renderer.responses.push(argumentsList[2]);
       const event = new Event('renderer', {
         name: 'updateTextSkin',
         text: argumentsList[2],
       });
-      event.snapshot = context.log.snap('renderer.updateTextSkin');
-      context.log.registerEvent(event);
+      event.snapshot = log.snap('renderer.updateTextSkin');
+      log.registerEvent(event);
 
       return target.apply(thisArg, argumentsList);
     },
@@ -132,8 +131,8 @@ export function makeProxiedRenderer(
         name: 'destroySkin',
         id: skinId,
       });
-      event.snapshot = context.log.snap('renderer.destroySkin');
-      context.log.registerEvent(event);
+      event.snapshot = log.snap('renderer.destroySkin');
+      log.registerEvent(event);
 
       return target.apply(thisArg, argumentsList);
     },

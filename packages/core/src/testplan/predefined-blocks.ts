@@ -5,7 +5,7 @@
  * sprites in their solution.
  */
 import { assertType, stringify, Writeable } from '../utils';
-import { cloneDeep, isEmpty, isObject, transform, isEqual } from 'lodash-es';
+import { cloneDeep, isEmpty, isEqual } from 'lodash-es';
 import { Evaluation } from '../evaluation';
 import { ScratchBlock, ScratchTarget } from '../model';
 
@@ -95,22 +95,73 @@ function fixHatBlock(filteredBlocks: ScratchBlock[], hatBlock: Writeable<Scratch
   filteredBlocks[solutionIndex] = hatBlock;
 }
 
-type Dict = Record<string, unknown>;
+const Delta = {
+  VALUE_CREATED: 'created',
+  VALUE_UPDATED: 'updated',
+  VALUE_DELETED: 'deleted',
+  VALUE_UNCHANGED: 'unchanged',
+};
 
-export function difference(object: Dict, base: Dict): Dict {
-  function changes(object: Dict, base: Dict): Dict {
-    return transform(object, (result, value, key: string) => {
-      if (!isEqual(value, base[key])) {
-        if (isObject(value) && isObject(base[key])) {
-          result[key] = changes(value as Dict, base[key] as Dict);
-        } else {
-          result[key] = value;
-        }
-      }
-    });
+function deepDiff(obj1: unknown, obj2: unknown) {
+  function compareValues(value1: unknown, value2: unknown) {
+    if (value1 === value2) {
+      return Delta.VALUE_UNCHANGED;
+    }
+    if (value1 === undefined) {
+      return Delta.VALUE_CREATED;
+    }
+    if (value2 === undefined) {
+      return Delta.VALUE_DELETED;
+    }
+    return Delta.VALUE_UPDATED;
   }
 
-  return changes(object, base);
+  function isFunction(x: unknown) {
+    return typeof x === 'function';
+  }
+
+  function isArray(x: unknown) {
+    return Array.isArray(x);
+  }
+  function isObject(x: unknown) {
+    return typeof x === 'object';
+  }
+  function isValue(x: unknown) {
+    return !isObject(x) && !isArray(x);
+  }
+
+  if (isValue(obj1) || isValue(obj2)) {
+    return {
+      type: compareValues(obj1, obj2),
+      data: obj1 === undefined ? obj2 : obj1,
+    };
+  }
+
+  assertType<Record<string, unknown>>(obj1);
+  assertType<Record<string, unknown>>(obj2);
+
+  const diff: Record<string, unknown> = {};
+  for (const key in obj1) {
+    if (isFunction(obj1[key])) {
+      continue;
+    }
+
+    let value2 = undefined;
+    if (obj2[key] !== undefined) {
+      value2 = obj2[key];
+    }
+
+    diff[key] = deepDiff(obj1[key], value2);
+  }
+  for (const key in obj2) {
+    if (isFunction(obj2[key]) || diff[key] !== undefined) {
+      continue;
+    }
+
+    diff[key] = deepDiff(undefined, obj2[key]);
+  }
+
+  return diff;
 }
 
 /**
@@ -139,184 +190,186 @@ export function checkPredefinedBlocks(
     config.allowedBlocks = object;
   }
 
-  e.group('Controle op bestaande code', { visibility: 'summary' }, () => {
-    // We check each sprite.
-    for (const target of template.targets) {
-      const name = target.name;
-      if (config.ignoredSprites.includes(name) || name in config.hats) {
-        continue;
+  e.group(
+    'Controle op bestaande code',
+    { visibility: 'summary', summary: 'De bestaande code is nog steeds juist.' },
+    () => {
+      // We check each sprite.
+      for (const target of template.targets) {
+        const name = target.name;
+        if (config.ignoredSprites.includes(name) || name in config.hats) {
+          continue;
+        }
+        e.group(name, { sprite: name, visibility: 'summary' }, () => {
+          e.test()
+            .feedback({
+              correct: `Top! Je hebt niets veranderd aan de sprite ${name}.`,
+              wrong: `Oops, je hebt iets veranderd aan de sprite ${name}. Je gaat opnieuw moeten beginnen.`,
+            })
+            .expect(template.hasChangedTarget(submission, name))
+            .toBe(false);
+          e.test()
+            .feedback({
+              correct: `Top! Je hebt niets veranderd aan de blokjes van sprite ${name}.`,
+              wrong: `Oops, je hebt iets veranderd aan de blokjes sprite ${name}. Je gaat opnieuw moeten beginnen.`,
+            })
+            .expect(template.hasChangedBlocks(submission, name))
+            .toBe(false);
+        });
       }
-      e.group(name, { sprite: name, visibility: 'summary' }, () => {
-        e.test()
+
+      // Do the same for the stage.
+      e.group('Speelveld', { sprite: 'Speelveld', visibility: 'summary' }, () => {
+        e.test('Gewijzigde sprite')
           .feedback({
-            correct: `Top! Je hebt niets veranderd aan de sprite ${name}.`,
-            wrong: `Oops, je hebt iets veranderd aan de sprite ${name}. Je gaat opnieuw moeten beginnen.`,
+            correct: 'Top! Je hebt niets veranderd aan het speelveld.',
+            wrong:
+              'Oops, je hebt iets veranderd aan het speelveld. Je gaat opnieuw moeten beginnen.',
           })
-          .expect(template.hasChangedTarget(submission, name))
+          .expect(template.hasChangedTarget(submission, 'Stage'))
           .toBe(false);
         e.test()
           .feedback({
-            correct: `Top! Je hebt niets veranderd aan de blokjes van sprite ${name}.`,
-            wrong: `Oops, je hebt iets veranderd aan de blokjes sprite ${name}. Je gaat opnieuw moeten beginnen.`,
+            correct: `Top! Je hebt niets veranderd aan de blokjes van het speelveld.`,
+            wrong: `Oops, je hebt iets veranderd aan de blokjes van het speelveld. Je gaat opnieuw moeten beginnen.`,
           })
-          .expect(template.hasChangedBlocks(submission, name))
+          .expect(template.hasChangedBlocks(submission, 'Stage'))
           .toBe(false);
       });
-    }
 
-    // Do the same for the stage.
-    e.group('Speelveld', { sprite: 'Speelveld', visibility: 'summary' }, () => {
-      e.test('Gewijzigde sprite')
-        .feedback({
-          correct: 'Top! Je hebt niets veranderd aan het speelveld.',
-          wrong:
-            'Oops, je hebt iets veranderd aan het speelveld. Je gaat opnieuw moeten beginnen.',
-        })
-        .expect(template.hasChangedTarget(submission, 'Stage'))
-        .toBe(false);
-      e.test()
-        .feedback({
-          correct: `Top! Je hebt niets veranderd aan de blokjes van het speelveld.`,
-          wrong: `Oops, je hebt iets veranderd aan de blokjes van het speelveld. Je gaat opnieuw moeten beginnen.`,
-        })
-        .expect(template.hasChangedBlocks(submission, 'Stage'))
-        .toBe(false);
-    });
+      if (isEmpty(config.hats)) {
+        throw new Error('You must define a hat sprite before executing these tests.');
+      }
 
-    if (isEmpty(config.hats)) {
-      throw new Error('You must define a hat sprite before executing these tests.');
-    }
-
-    for (const [hat, finder] of Object.entries(config.hats)) {
-      e.group(hat, { sprite: hat, visibility: 'summary' }, () => {
-        const solutionSprite = cloneDeep(submission.sprite(hat));
-        e.test()
-          .fatal()
-          .feedback({
-            wrong: `Oei, je verwijderde de sprite ${hat}. Je zal opnieuw moeten beginnen.`,
-            correct: 'De sprite bestaat.',
-          })
-          .expect(solutionSprite)
-          .toNotBe(undefined);
-
-        const templateSprite = cloneDeep(template.sprite(hat))!;
-
-        // We test as follows: remove all blocks attached to the hat block.
-        // The remaining blocks should be identical to the template sprite.
-        // Start by finding the hat block (in the template, guaranteed to exist).
-        let solutionBlocks = solutionSprite.blocks.filter(finder) ?? [];
-        let templateBlocks = templateSprite.blocks.filter(finder);
-
-        e.test()
-          .fatal()
-          .feedback({
-            wrong: 'Oei, je verwijderde een voorgeprogrammeerde blokje.',
-            correct: 'Goed zo, je hebt geen voorgeprogrammeerde blokjes verwijderd.',
-          })
-          .expect(
-            // If there are no blocks in the template, it's fine as well.
-            templateBlocks.length === 0 ||
-              (solutionBlocks.length > 0 &&
-                solutionBlocks.length >= templateBlocks.length),
-          )
-          .toBe(true);
-
-        // We remove all attached code from the hat block in the solution.
-        solutionBlocks = solutionBlocks.sort(config.blockComparator);
-        templateBlocks = templateBlocks.sort(config.blockComparator);
-
-        const removedSolutionBlocks: ScratchBlock[] = [];
-        const removedTemplateBlocks: ScratchBlock[] = [];
-        const until = Math.min(solutionBlocks.length, templateBlocks.length);
-
-        for (let i = 0; i < until; i++) {
-          removedSolutionBlocks.push(
-            ...removeAttached(solutionBlocks[i], solutionSprite),
-          );
-          removedTemplateBlocks.push(
-            ...removeAttached(templateBlocks[i], templateSprite),
-          );
-        }
-
-        const removedSolutionIds = new Set(removedSolutionBlocks.map((b) => b.id));
-        const removedTemplateIds = new Set(removedTemplateBlocks.map((b) => b.id));
-
-        const filteredSolutionBlocks = solutionSprite.blocks.filter(
-          (b) => !removedSolutionIds.has(b.id),
-        );
-        // Fix next block. Needed because the solution might contain a next block.
-        if (filteredSolutionBlocks) {
-          for (const solutionBlock of solutionBlocks) {
-            fixHatBlock(filteredSolutionBlocks, solutionBlock);
-          }
-        }
-
-        const filteredTemplateBlocks = templateSprite.blocks.filter(
-          (b) => !removedTemplateIds.has(b.id),
-        );
-        for (const templateBlock of templateBlocks) {
-          fixHatBlock(filteredTemplateBlocks, templateBlock);
-        }
-
-        const solutionTree = solutionSprite.blockTree(filteredSolutionBlocks || []);
-        const templateTree = templateSprite.blockTree(filteredTemplateBlocks);
-
-        const result = e
-          .test('Test op rondslingerende blokjes')
-          .feedback({
-            wrong: 'Probeer je rondslingerende blokjes te verwijderen of te gebruiken.',
-            correct: 'Goed zo! Je hebt geen losse blokjes laten rondslingeren.',
-          })
-          .expect(solutionTree.size <= templateTree.size)
-          .toBe(true);
-
-        if (result) {
-          const areEqual = e
-            .test()
+      for (const [hat, finder] of Object.entries(config.hats)) {
+        e.group(hat, { sprite: hat, visibility: 'summary' }, () => {
+          const solutionSprite = cloneDeep(submission.sprite(hat));
+          e.test()
             .fatal()
             .feedback({
-              wrong: `Je hebt aan de voorgeprogrammeerde blokjes van de sprite ${hat} wijzigingen aangebracht.`,
-              correct: `Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite ${hat}.`,
+              wrong: `Oei, je verwijderde de sprite ${hat}. Je zal opnieuw moeten beginnen.`,
+              correct: 'De sprite bestaat.',
             })
-            .expect(isEqual(templateTree, solutionTree))
+            .expect(solutionSprite)
+            .toNotBe(undefined);
+
+          const templateSprite = cloneDeep(template.sprite(hat))!;
+
+          // We test as follows: remove all blocks attached to the hat block.
+          // The remaining blocks should be identical to the template sprite.
+          // Start by finding the hat block (in the template, guaranteed to exist).
+          let solutionBlocks = solutionSprite.blocks.filter(finder) ?? [];
+          let templateBlocks = templateSprite.blocks.filter(finder);
+
+          e.test()
+            .fatal()
+            .feedback({
+              wrong: 'Oei, je verwijderde een voorgeprogrammeerde blokje.',
+              correct: 'Goed zo, je hebt geen voorgeprogrammeerde blokjes verwijderd.',
+            })
+            .expect(
+              // If there are no blocks in the template, it's fine as well.
+              templateBlocks.length === 0 ||
+                (solutionBlocks.length > 0 &&
+                  solutionBlocks.length >= templateBlocks.length),
+            )
             .toBe(true);
 
-          if (config.debug && !areEqual) {
-            const templateArray = Array.from(templateTree).sort((a, b) =>
-              stringify(a).localeCompare(stringify(b)),
+          // We remove all attached code from the hat block in the solution.
+          solutionBlocks = solutionBlocks.sort(config.blockComparator);
+          templateBlocks = templateBlocks.sort(config.blockComparator);
+
+          const removedSolutionBlocks: ScratchBlock[] = [];
+          const removedTemplateBlocks: ScratchBlock[] = [];
+          const until = Math.min(solutionBlocks.length, templateBlocks.length);
+
+          for (let i = 0; i < until; i++) {
+            removedSolutionBlocks.push(
+              ...removeAttached(solutionBlocks[i], solutionSprite),
             );
-            const solutionArray = Array.from(solutionTree).sort((a, b) =>
-              stringify(a).localeCompare(stringify(b)),
+            removedTemplateBlocks.push(
+              ...removeAttached(templateBlocks[i], templateSprite),
             );
-            for (let i = 0; i < templateArray.length; i++) {
-              if (!isEqual(templateArray[i], solutionArray[i])) {
-                const dd = difference(
-                  templateArray[i] as unknown as Dict,
-                  solutionArray[i] as unknown as Dict,
-                );
-                console.log(dd);
-                // eslint-disable-next-line no-debugger
-                debugger;
-              }
+          }
+
+          const removedSolutionIds = new Set(removedSolutionBlocks.map((b) => b.id));
+          const removedTemplateIds = new Set(removedTemplateBlocks.map((b) => b.id));
+
+          const filteredSolutionBlocks = solutionSprite.blocks.filter(
+            (b) => !removedSolutionIds.has(b.id),
+          );
+          // Fix next block. Needed because the solution might contain a next block.
+          if (filteredSolutionBlocks) {
+            for (const solutionBlock of solutionBlocks) {
+              fixHatBlock(filteredSolutionBlocks, solutionBlock);
             }
           }
 
-          if (removedSolutionBlocks.length > 0) {
-            assertType<Record<string, BlockFilter>>(config.allowedBlocks);
-            const allowedBlockCheck = config.allowedBlocks[hat] as BlockFilter;
-            // Verify that only allowed blocks are used.
-            const usesAllowed = removedSolutionBlocks.every(allowedBlockCheck);
-            e.test('Toegelaten blokjes')
-              .feedback({
-                wrong:
-                  'Oei, je gebruikt de verkeerde blokjes. Je mag enkel de blokjes uit mijn blokken en eindige lussen gebruiken.',
-                correct: 'Goed zo! Je gebruikt geen verkeerde blokjes.',
-              })
-              .expect(usesAllowed)
-              .toBe(true);
+          const filteredTemplateBlocks = templateSprite.blocks.filter(
+            (b) => !removedTemplateIds.has(b.id),
+          );
+          for (const templateBlock of templateBlocks) {
+            fixHatBlock(filteredTemplateBlocks, templateBlock);
           }
-        }
-      });
-    }
-  });
+
+          const solutionTree = solutionSprite.blockTree(filteredSolutionBlocks || []);
+          const templateTree = templateSprite.blockTree(filteredTemplateBlocks);
+
+          const result = e
+            .test('Test op rondslingerende blokjes')
+            .feedback({
+              wrong: 'Probeer je rondslingerende blokjes te verwijderen of te gebruiken.',
+              correct: 'Goed zo! Je hebt geen losse blokjes laten rondslingeren.',
+            })
+            .expect(solutionTree.size <= templateTree.size)
+            .toBe(true);
+
+          if (result) {
+            const areEqual = isEqual(templateTree, solutionTree);
+
+            if (config.debug && !areEqual) {
+              const templateArray = Array.from(templateTree).sort((a, b) =>
+                stringify(a).localeCompare(stringify(b)),
+              );
+              const solutionArray = Array.from(solutionTree).sort((a, b) =>
+                stringify(a).localeCompare(stringify(b)),
+              );
+              for (let i = 0; i < templateArray.length; i++) {
+                if (!isEqual(templateArray[i], solutionArray[i])) {
+                  const ddd = deepDiff(templateArray[i], solutionArray[i]);
+                  console.log(ddd);
+                  // eslint-disable-next-line no-debugger
+                  debugger;
+                }
+              }
+            }
+
+            e.test()
+              .fatal()
+              .feedback({
+                wrong: `Je hebt aan de voorgeprogrammeerde blokjes van de sprite ${hat} wijzigingen aangebracht.`,
+                correct: `Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite ${hat}.`,
+              })
+              .expect(areEqual)
+              .toBe(true);
+
+            if (removedSolutionBlocks.length > 0) {
+              assertType<Record<string, BlockFilter>>(config.allowedBlocks);
+              const allowedBlockCheck = config.allowedBlocks[hat] as BlockFilter;
+              // Verify that only allowed blocks are used.
+              const usesAllowed = removedSolutionBlocks.every(allowedBlockCheck);
+              e.test('Toegelaten blokjes')
+                .feedback({
+                  wrong:
+                    'Oei, je gebruikt de verkeerde blokjes. Je mag enkel de blokjes uit mijn blokken en eindige lussen gebruiken.',
+                  correct: 'Goed zo! Je gebruikt geen verkeerde blokjes.',
+                })
+                .expect(usesAllowed)
+                .toBe(true);
+            }
+          }
+        });
+      }
+    },
+  );
 }

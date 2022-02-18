@@ -25,9 +25,49 @@ function convertMutation(mutation?: ScratchMutation): string | null {
 export interface Node {
   opcode: string;
   next: Node | null;
-  input: Record<string, unknown>;
+  input: Record<string, string | Node | undefined>;
   fields: Record<string, unknown>;
   mutation: string | null;
+}
+
+/**
+ * Convert the input field. If it is a block, get the block.
+ *
+ * @param inputArray
+ * @param blockmap
+ */
+function convertInput(
+  inputArray: unknown[],
+  blockmap: Map<string, ScratchBlock>,
+): string | Node | undefined {
+  // We ignore shadows, as they are not that relevant for us.
+  // As such, we always convert the second element in the input array.
+  if (Array.isArray(inputArray[1])) {
+    const input = inputArray[1];
+    return input[1]?.toString();
+  } else {
+    // ID of a block.
+    const id = inputArray[1];
+    const block = blockmap.get(<string>id);
+    if (!block) {
+      return undefined;
+    } else {
+      return blockToNode(block, blockmap);
+    }
+  }
+}
+
+function convertFields(
+  fields: Record<string, unknown[]> | null,
+): Record<string, unknown> {
+  const object: Record<string, unknown> = {};
+  if (!fields) {
+    return object;
+  }
+  for (const [name, description] of Object.entries(fields)) {
+    object[name] = description[0];
+  }
+  return object;
 }
 
 /**
@@ -35,11 +75,17 @@ export interface Node {
  */
 function blockToNode(block: ScratchBlock, blockmap: Map<string, ScratchBlock>): Node {
   const next = getOrNull(block.next, blockmap);
+
+  const inputs: Record<string, string | Node | undefined> = {};
+  for (const [key, value] of Object.entries(block.inputs)) {
+    inputs[key] = convertInput(value, blockmap);
+  }
+
   return {
     opcode: block.opcode,
     next: next,
-    input: block.inputs,
-    fields: block.fields,
+    input: inputs,
+    fields: convertFields(block.fields),
     mutation: convertMutation(block.mutation),
   };
 }
