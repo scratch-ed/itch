@@ -40,10 +40,10 @@ class Processor {
     }
 
     if (command === 'close-group') {
-      if (message.description) {
+      if (message.summary) {
         const summary = this.element.querySelector('summary');
         summary.innerHTML += '<br>';
-        summary.innerHTML += message.description;
+        summary.innerHTML += message.summary;
       }
       this.element = this.groupStack.pop();
     }
