@@ -8,7 +8,7 @@ function getOrNull(
   if (blockId) {
     const parentBlock = ensure(blockmap.get(blockId));
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    return blockToNode(parentBlock, blockmap);
+    return asNode(parentBlock, blockmap);
   } else {
     return null;
   }
@@ -26,7 +26,7 @@ export interface Node {
   opcode: string;
   next: Node | null;
   input: Record<string, string | Node | undefined>;
-  fields: Record<string, unknown>;
+  fields: Record<string, string>;
   mutation: string | null;
 }
 
@@ -52,20 +52,18 @@ function convertInput(
     if (!block) {
       return undefined;
     } else {
-      return blockToNode(block, blockmap);
+      return asNode(block, blockmap);
     }
   }
 }
 
-function convertFields(
-  fields: Record<string, unknown[]> | null,
-): Record<string, unknown> {
-  const object: Record<string, unknown> = {};
+function convertFields(fields: Record<string, unknown[]> | null): Record<string, string> {
+  const object: Record<string, string> = {};
   if (!fields) {
     return object;
   }
   for (const [name, description] of Object.entries(fields)) {
-    object[name] = description[0];
+    object[name] = description[0] as string;
   }
   return object;
 }
@@ -73,7 +71,7 @@ function convertFields(
 /**
  * Convert one block to a tree node.
  */
-function blockToNode(block: ScratchBlock, blockmap: Map<string, ScratchBlock>): Node {
+export function asNode(block: ScratchBlock, blockmap: Map<string, ScratchBlock>): Node {
   const next = getOrNull(block.next, blockmap);
 
   const inputs: Record<string, string | Node | undefined> = {};
@@ -104,7 +102,7 @@ export function asTree(
   const blockMap = new Map(sprite.blocks.map((i) => [i.id, i]));
 
   // Find all top-level blocks.
-  const filtered = blocks.filter((b) => b.topLevel).map((b) => blockToNode(b, blockMap));
+  const filtered = blocks.filter((b) => b.topLevel).map((b) => asNode(b, blockMap));
 
   return new Set(filtered);
 }

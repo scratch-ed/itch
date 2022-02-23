@@ -12,10 +12,119 @@ import { checkPredefinedBlocks } from './testplan/predefined-blocks';
 import { Project } from './project';
 import { Evaluation, run } from './evaluation';
 import { t as translate } from './i18n';
+import {
+  anything,
+  backdrop,
+  changeEffectBy,
+  changeSizeBy,
+  changeXByZ,
+  changeYByZ,
+  clearGraphicsEffects,
+  costume,
+  customBlock,
+  direction,
+  glideZSecsToX,
+  glideZSecsToXY,
+  goLayers,
+  goTo,
+  goToLayer,
+  goToXY,
+  greenFlag,
+  hide,
+  ifOnEdgeBounce,
+  moveXSteps,
+  nextBackdrop,
+  nextCostume,
+  pointInDirectionX,
+  pointTowardsX,
+  say,
+  sayForXSeconds,
+  setEffectTo,
+  setRotationStyle,
+  setSizeTo,
+  setXToZ,
+  setYToZ,
+  show,
+  size,
+  switchBackdropTo,
+  switchBackdropToAndWait,
+  switchCostumeTo,
+  think,
+  thinkForXSeconds,
+  turnLeftXDegrees,
+  turnRightXDegrees,
+  whenBackdropSwitchedTo,
+  whenIReceive,
+  whenKeyPressed,
+  whenSpriteClicked,
+  whenStageClicked,
+  whenXGreaterThanY,
+  xPosition,
+  yPosition,
+  broadcast as bBroadcast,
+  broadcastAndWait,
+  whenIStartAsClone,
+  wait as bWait,
+} from './matcher/patterns';
 
 declare interface Itch {
   checkPredefinedBlocks: typeof checkPredefinedBlocks;
   distSq: typeof distSq;
+}
+
+declare interface BlockMatch {
+  anything: typeof anything;
+  moveXSteps: typeof moveXSteps;
+  turnRightXDegrees: typeof turnRightXDegrees;
+  turnLeftXDegrees: typeof turnLeftXDegrees;
+  pointInDirectionX: typeof pointInDirectionX;
+  pointTowardsX: typeof pointTowardsX;
+  goToXY: typeof goToXY;
+  goTo: typeof goTo;
+  glideZSecsToXY: typeof glideZSecsToXY;
+  glideZSecsToX: typeof glideZSecsToX;
+  changeXByZ: typeof changeXByZ;
+  changeYByZ: typeof changeYByZ;
+  setXToZ: typeof setXToZ;
+  setYToZ: typeof setYToZ;
+  ifOnEdgeBounce: typeof ifOnEdgeBounce;
+  setRotationStyle: typeof setRotationStyle;
+  xPosition: typeof xPosition;
+  yPosition: typeof yPosition;
+  direction: typeof direction;
+  sayForXSeconds: typeof sayForXSeconds;
+  say: typeof say;
+  thinkForXSeconds: typeof thinkForXSeconds;
+  think: typeof think;
+  show: typeof show;
+  hide: typeof hide;
+  switchCostumeTo: typeof switchCostumeTo;
+  switchBackdropTo: typeof switchBackdropTo;
+  switchBackdropToAndWait: typeof switchBackdropToAndWait;
+  nextCostume: typeof nextCostume;
+  nextBackdrop: typeof nextBackdrop;
+  changeEffectBy: typeof changeEffectBy;
+  setEffectTo: typeof setEffectTo;
+  clearGraphicsEffects: typeof clearGraphicsEffects;
+  changeSizeBy: typeof changeSizeBy;
+  setSizeTo: typeof setSizeTo;
+  goToLayer: typeof goToLayer;
+  goLayers: typeof goLayers;
+  costume: typeof costume;
+  backdrop: typeof backdrop;
+  size: typeof size;
+  customBlock: typeof customBlock;
+  greenFlag: typeof greenFlag;
+  whenKeyPressed: typeof whenKeyPressed;
+  whenSpriteClicked: typeof whenSpriteClicked;
+  whenStageClicked: typeof whenStageClicked;
+  whenBackdropSwitchedTo: typeof whenBackdropSwitchedTo;
+  whenXGreaterThanY: typeof whenXGreaterThanY;
+  whenIReceive: typeof whenIReceive;
+  broadcast: typeof bBroadcast;
+  broadcastAndWait: typeof broadcastAndWait;
+  whenIStartAsClone: typeof whenIStartAsClone;
+  wait: typeof bWait;
 }
 
 /**
@@ -81,7 +190,7 @@ declare global {
     /** @deprecated */
     distSq: typeof distSq;
 
-    beforeExecution?: (typeof beforeExecution) | CallbackFunction;
+    beforeExecution?: typeof beforeExecution | CallbackFunction;
     duringExecution?: CallbackFunction;
     afterExecution?: CallbackFunction;
 
@@ -90,9 +199,13 @@ declare global {
     Itch: Itch;
 
     t: typeof translate;
+
+    B: BlockMatch;
   }
 
   const Itch: Itch;
+
+  const B: BlockMatch;
 
   /** @deprecated */
   const OneHatAllowedTest: typeof AllowedTest;

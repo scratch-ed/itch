@@ -8,6 +8,9 @@ import { assertType, stringify, Writeable } from '../utils';
 import { cloneDeep, isEmpty, isEqual } from 'lodash-es';
 import { Evaluation } from '../evaluation';
 import { ScratchBlock, ScratchTarget } from '../model';
+import { PatternBlock } from '../matcher/patterns';
+import { asNode, Node } from '../new-blocks';
+import { matchesStackPattern } from '../matcher/node-matcher';
 
 type BlockFilter = (value: ScratchBlock, index: number, array: ScratchBlock[]) => boolean;
 
@@ -33,7 +36,7 @@ export interface PredefinedBlockConfig {
    * want to allow all blocks: in that case the filter function can
    * just always return true.
    */
-  hats: Record<string, BlockFilter>;
+  hats: Record<string, BlockFilter | PatternBlock[][]>;
 
   /**
    * You can optionally add (for each sprite or one for all) filter function
@@ -258,8 +261,33 @@ export function checkPredefinedBlocks(
           // We test as follows: remove all blocks attached to the hat block.
           // The remaining blocks should be identical to the template sprite.
           // Start by finding the hat block (in the template, guaranteed to exist).
-          let solutionBlocks = solutionSprite.blocks.filter(finder) ?? [];
-          let templateBlocks = templateSprite.blocks.filter(finder);
+          let solutionBlocks: ScratchBlock[];
+          if (Array.isArray(finder)) {
+            const blockMap = new Map(solutionSprite.blocks.map((i) => [i.id, i]));
+            const nodes: Array<[string, Node]> = solutionSprite.blocks
+              .filter((b) => b.topLevel)
+              .map((b) => [b.id, asNode(b, blockMap)]);
+            const matching = nodes.filter(([_id, node]) =>
+              matchesStackPattern(node, ...finder),
+            );
+            solutionBlocks = matching.map(([id, _]) => blockMap.get(id)!);
+          } else {
+            solutionBlocks = solutionSprite.blocks.filter(finder);
+          }
+
+          let templateBlocks: ScratchBlock[];
+          if (Array.isArray(finder)) {
+            const blockMap = new Map(templateSprite.blocks.map((i) => [i.id, i]));
+            const nodes: Array<[string, Node]> = templateSprite.blocks
+              .filter((b) => b.topLevel)
+              .map((b) => [b.id, asNode(b, blockMap)]);
+            const matching = nodes.filter(([_id, node]) =>
+              matchesStackPattern(node, ...finder),
+            );
+            templateBlocks = matching.map(([id, _]) => blockMap.get(id)!);
+          } else {
+            templateBlocks = templateSprite.blocks.filter(finder);
+          }
 
           e.test()
             .fatal()
