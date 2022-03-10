@@ -25,6 +25,8 @@ function convertMutation(mutation?: ScratchMutation): string | null {
 export interface Node {
   opcode: string;
   next: Node | null;
+  inputs: Record<string, string | Node | undefined>;
+  /** @deprecated */
   input: Record<string, string | Node | undefined>;
   fields: Record<string, string>;
   mutation: string | null;
@@ -86,6 +88,7 @@ export function asNode(block: ScratchBlock, blockmap: Map<string, ScratchBlock>)
   return {
     opcode: block.opcode,
     next: next,
+    inputs: inputs,
     input: inputs,
     fields: convertFields(block.fields),
     mutation: convertMutation(block.mutation),
