@@ -131,7 +131,7 @@ function matchesOnePattern(
   }
 
   // Check if all required inputs match.
-  if (pattern.inputs && !matchesFieldsOrInputs(node.input, pattern.inputs)) {
+  if (pattern.inputs && !matchesFieldsOrInputs(node.inputs, pattern.inputs)) {
     return false;
   }
 

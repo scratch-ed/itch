@@ -53,7 +53,7 @@ export type OnePattern<T> = T | Anything | Nothing;
 export type Pattern<T> = OnePattern<T>[] | OnePattern<T>;
 
 /**
- * A value pattern is used when a scratch block expects input.
+ * A value pattern is used when a scratch block expects inputs.
  */
 export type OneValuePattern<T> = OnePattern<ExactValue<T>>;
 export type ValuePattern<T> = OneValuePattern<T>[] | OneValuePattern<T>;
@@ -114,10 +114,14 @@ export function nothing(): Nothing {
 /**
  * Match a stack of blocks.
  *
+ * @param first The first block.
  * @param blocks The blocks in the stack.
  */
-export function stack(...blocks: (PatternBlock | Anything | Nothing)[]): BlockStack {
-  return new BlockStack(blocks);
+export function stack(
+  first: PatternBlock | Anything | Nothing,
+  ...blocks: (PatternBlock | Anything | Nothing)[]
+): BlockStack {
+  return new BlockStack([first, ...blocks]);
 }
 
 // https://en.scratch-wiki.info/wiki/Move_()_Steps_(block)
@@ -165,7 +169,12 @@ export function pointTowards(towards: ValuePattern<string>): PatternBlock {
   return {
     opcode: 'motion_pointtowards',
     inputs: {
-      TOWARDS: towards,
+      TOWARDS: stack({
+        opcode: 'motion_pointtowards_menu',
+        fields: {
+          TOWARDS: towards,
+        },
+      }),
     },
   };
 }
@@ -282,11 +291,19 @@ export function ifOnEdgeBounce(): PatternBlock {
   };
 }
 
+export type RotationStyle = 'all around' | 'left-right' | "don't rotate";
+
+export const Rotation: Record<string, RotationStyle> = {
+  AllAround: 'all around',
+  LeftRight: 'left-right',
+  None: "don't rotate",
+};
+
 // https://en.scratch-wiki.info/wiki/Set_Rotation_Style_()_(block)
-export function setRotationStyle(style: ValuePattern<string>): PatternBlock {
+export function setRotationStyle(style: ValuePattern<RotationStyle>): PatternBlock {
   return {
     opcode: 'motion_setrotationstyle',
-    inputs: {
+    fields: {
       STYLE: style,
     },
   };
@@ -383,7 +400,12 @@ export function switchCostumeTo(costume: ValuePattern<string>): PatternBlock {
   return {
     opcode: 'looks_switchcostumeto',
     inputs: {
-      COSTUME: costume,
+      COSTUME: stack({
+        opcode: 'looks_costume',
+        fields: {
+          COSTUME: costume,
+        },
+      }),
     },
   };
 }
@@ -408,7 +430,12 @@ export function switchBackdropToAndWait(backdrop: ValuePattern<string>): Pattern
   return {
     opcode: 'looks_switchbackdroptoandwait',
     inputs: {
-      BACKDROP: backdrop,
+      BACKDROP: stack({
+        opcode: 'looks_backdrops',
+        fields: {
+          BACKDROP: backdrop,
+        },
+      }),
     },
   };
 }
@@ -490,7 +517,7 @@ export function setSizeTo(size: ValuePattern<number>): PatternBlock {
 export function goToLayer(layer: ValuePattern<'front' | 'back'>): PatternBlock {
   return {
     opcode: 'looks_gotofrontback',
-    inputs: {
+    fields: {
       FRONT_BACK: layer,
     },
   };
@@ -504,8 +531,10 @@ export function goLayers(
   return {
     opcode: 'looks_goforwardbackwardlayers',
     inputs: {
-      FORWARD_BACKWARD: direction,
       NUM: layers,
+    },
+    fields: {
+      FORWARD_BACKWARD: direction,
     },
   };
 }
@@ -515,7 +544,7 @@ export function costume(numberOrName: ValuePattern<'number' | 'name'>): Reporter
   return {
     type: 'reporter',
     opcode: 'looks_costumenumbername',
-    inputs: {
+    fields: {
       NUMBER_NAME: numberOrName,
     },
   };
@@ -526,7 +555,7 @@ export function backdrop(numberOrName: ValuePattern<'number' | 'name'>): Reporte
   return {
     type: 'reporter',
     opcode: 'looks_backdropnumbername',
-    inputs: {
+    fields: {
       NUMBER_NAME: numberOrName,
     },
   };
@@ -541,12 +570,11 @@ export function size(): ReporterBlock {
 export function customBlock(
   opcode: string,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  args?: Record<string, ValuePattern<any>>,
+  inputs?: Record<string, ValuePattern<any>>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  fields?: Record<string, ValuePattern<any>>,
 ): PatternBlock {
-  return {
-    opcode: opcode,
-    inputs: args,
-  };
+  return { opcode, inputs, fields };
 }
 
 // https://en.scratch-wiki.info/wiki/When_Green_Flag_Clicked_(block)
@@ -664,11 +692,16 @@ export function waitUntil(condition: ValuePattern<BooleanBlock>): PatternBlock {
 }
 
 // https://en.scratch-wiki.info/wiki/Create_Clone_of_()_(block)
-export function createCloneOf(block: ValuePattern<string>): PatternBlock {
+export function createCloneOf(sprite: ValuePattern<string>): PatternBlock {
   return {
     opcode: 'control_create_clone_of',
     inputs: {
-      CLONE_OPTION: block,
+      CLONE_OPTION: stack({
+        opcode: 'control_create_clone_of_menu',
+        fields: {
+          CLONE_OPTION: sprite,
+        },
+      }),
     },
   };
 }
@@ -825,7 +858,7 @@ export function colorIsTouching(
     type: 'boolean',
     opcode: 'sensing_coloristouchingcolor',
     inputs: {
-      COLOR1: color1,
+      COLOR: color1,
       COLOR2: color2,
     },
   };
@@ -837,7 +870,12 @@ export function isKeyPressed(key: ValuePattern<string>): BooleanBlock {
     type: 'boolean',
     opcode: 'sensing_keypressed',
     inputs: {
-      KEY_OPTION: key,
+      KEY_OPTION: stack({
+        opcode: 'sensing_keyoptions',
+        fields: {
+          KEY_OPTION: key,
+        },
+      }),
     },
   };
 }
@@ -856,7 +894,12 @@ export function distanceTo(what: ValuePattern<string>): ReporterBlock {
     type: 'reporter',
     opcode: 'sensing_distanceto',
     inputs: {
-      DISTANCETOMENU: what,
+      DISTANCETOMENU: stack({
+        opcode: 'sensing_distancetomenu',
+        fields: {
+          DISTANCETOMENU: what,
+        },
+      }),
     },
   };
 }
@@ -923,7 +966,12 @@ export function senseXOfY(
       PROPERTY: what,
     },
     inputs: {
-      OBJECT: sprite,
+      OBJECT: stack({
+        opcode: 'sensing_of_object_menu',
+        fields: {
+          OBJECT: sprite,
+        },
+      }),
     },
   };
 }
