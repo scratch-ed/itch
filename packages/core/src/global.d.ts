@@ -17,8 +17,8 @@ import {
   backdrop,
   changeEffectBy,
   changeSizeBy,
-  changeXByZ,
-  changeYByZ,
+  changeXBy,
+  changeYBy,
   clearGraphicsEffects,
   costume,
   customBlock,
@@ -35,15 +35,15 @@ import {
   moveXSteps,
   nextBackdrop,
   nextCostume,
-  pointInDirectionX,
-  pointTowardsX,
+  pointInDirection,
+  pointTowards,
   say,
   sayForXSeconds,
   setEffectTo,
   setRotationStyle,
   setSizeTo,
-  setXToZ,
-  setYToZ,
+  setXTo,
+  setYTo,
   show,
   size,
   switchBackdropTo,
@@ -65,6 +65,8 @@ import {
   broadcastAndWait,
   whenIStartAsClone,
   wait as bWait,
+  nothing,
+  stack,
 } from './matcher/patterns';
 
 declare interface Itch {
@@ -73,20 +75,22 @@ declare interface Itch {
 }
 
 declare interface BlockMatch {
+  nothing: typeof nothing;
+  stack: typeof stack;
   anything: typeof anything;
   moveXSteps: typeof moveXSteps;
   turnRightXDegrees: typeof turnRightXDegrees;
   turnLeftXDegrees: typeof turnLeftXDegrees;
-  pointInDirectionX: typeof pointInDirectionX;
-  pointTowardsX: typeof pointTowardsX;
+  pointInDirection: typeof pointInDirection;
+  pointTowards: typeof pointTowards;
   goToXY: typeof goToXY;
   goTo: typeof goTo;
   glideZSecsToXY: typeof glideZSecsToXY;
   glideZSecsToX: typeof glideZSecsToX;
-  changeXByZ: typeof changeXByZ;
-  changeYByZ: typeof changeYByZ;
-  setXToZ: typeof setXToZ;
-  setYToZ: typeof setYToZ;
+  changeXBy: typeof changeXBy;
+  changeYBy: typeof changeYBy;
+  setXTo: typeof setXTo;
+  setYTo: typeof setYTo;
   ifOnEdgeBounce: typeof ifOnEdgeBounce;
   setRotationStyle: typeof setRotationStyle;
   xPosition: typeof xPosition;

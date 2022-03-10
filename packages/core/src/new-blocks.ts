@@ -30,6 +30,10 @@ export interface Node {
   mutation: string | null;
 }
 
+export function isNode(object: unknown): object is Node {
+  return object !== null && typeof object === 'object' && 'opcode' in object;
+}
+
 /**
  * Convert the input field. If it is a block, get the block.
  *

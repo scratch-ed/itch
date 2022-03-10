@@ -1,51 +1,49 @@
-import { Node } from '../new-blocks';
-import { ANYTHING, Pattern, PatternBlock, ValuePattern } from './patterns';
-
-function matchesOneStack(node: Node, patternStack: Pattern<PatternBlock>[]) {
-  let currentNode: Node | null = node;
-  for (const pattern of patternStack) {
-    // If the current node is null, there is no block, so fail.
-    if (currentNode === null) {
-      return false;
-    }
-    // Check if the node matches the pattern.
-    if (!matchesBlockPattern(currentNode, pattern)) {
-      return false;
-    }
-
-    currentNode = currentNode.next;
-  }
-
-  // The stack matches the pattern.
-  return true;
-}
-
-/**
- * Check if the block stack matches with one of the provided patterns.
- *
- * The matching will start
- *
- * @param node
- * @param blockPattern
- */
-export function matchesStackPattern(
-  node: Node,
-  ...blockPattern: Pattern<PatternBlock>[][]
-) {
-  return blockPattern.some((p) => matchesOneStack(node, p));
-}
+import { isNode, Node } from '../new-blocks';
+import { assertType } from '../utils';
+import {
+  ANYTHING,
+  BlockStack,
+  isReporterBlock,
+  NOTHING,
+  OnePattern,
+  OneValuePattern,
+  Pattern,
+  PatternBlock,
+  stack,
+  ValuePattern,
+} from './patterns';
 
 // We don't care about the actual value here.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function matchesValue(value: string, valuePattern: ValuePattern<any>): boolean {
-  // If anything, we are good.
-  if (valuePattern === ANYTHING) {
-    return true;
+/**
+ * Match a value to one value pattern.
+ *
+ * This means there is only one pattern to match against.
+ * See `valueMatchesValuePatterns` if you want to match a value against a list
+ * of possible patterns.
+ *
+ *
+ *
+ *
+ *
+ * @param value
+ * @param valuePattern
+ */
+function valueMatchesOneValuePattern(
+  value: string | Node | undefined | null,
+  valuePattern: OneValuePattern<unknown>,
+): boolean {
+  // 1. If the value is undefined or null, the pattern needs to be nothing.
+  //    Conversely, if the pattern is nothing, the value needs to be undefined
+  //    or null. This will handle both cases. If only one condition is satisfied,
+  //    we cannot match.
+  if (value === undefined || value === null || valuePattern === NOTHING) {
+    return (value === undefined || value === null) && valuePattern === NOTHING;
   }
 
-  // If a choice, it must be inside.
-  if (Array.isArray(valuePattern)) {
-    return valuePattern.map((v) => v.toString().toLowerCase()).includes(value);
+  // 2. If the pattern is a wildcard, accept everything.
+  //    This does imply that null or undefined is not accepted.
+  if (valuePattern === ANYTHING) {
+    return true;
   }
 
   // If a function, call it.
@@ -53,12 +51,76 @@ function matchesValue(value: string, valuePattern: ValuePattern<any>): boolean {
     return valuePattern(value);
   }
 
-  // It must be a primitive.
-  return value.toLowerCase() === valuePattern.toString().toLowerCase();
+  // The pattern could be a reporter block.
+  if (isReporterBlock(valuePattern)) {
+    valuePattern = stack(valuePattern);
+  }
+
+  if (valuePattern instanceof BlockStack) {
+    // If the pattern is a stack, the value must be a node.
+    if (!isNode(value)) {
+      return false;
+    }
+    return subtreeMatchesOneStack(value, valuePattern);
+  }
+
+  if (isNode(value)) {
+    // This should not happen.
+    console.warn('Unexpected node as value in pattern match.');
+    return false;
+  }
+
+  assertType<string>(valuePattern);
+  return value?.toLowerCase() === valuePattern.toString().toLowerCase();
 }
 
-function matchesOnePattern(node: Node, pattern: Pattern<PatternBlock>): boolean {
-  // We have a wildcard.
+// We don't care about the actual value here.
+function valueMatchesValuePatterns<T>(
+  value: string | Node | undefined | null,
+  valuePattern: ValuePattern<T>,
+): boolean {
+  if (!Array.isArray(valuePattern)) {
+    valuePattern = [valuePattern];
+  }
+
+  return valuePattern.some((p) => valueMatchesOneValuePattern(value, p));
+}
+
+function matchesFieldsOrInputs(
+  fieldOrInputs: Record<string, string | Node | undefined>,
+  patterns: Record<string, ValuePattern<unknown>>,
+): boolean {
+  for (const [name, valuePattern] of Object.entries(patterns)) {
+    // If the value does not exist, we don't match.
+    if (!(name in fieldOrInputs)) {
+      return false;
+    }
+    const actualValue = fieldOrInputs[name];
+    if (!valueMatchesValuePatterns(actualValue, valuePattern)) {
+      return false;
+    }
+  }
+
+  // It matches.
+  return true;
+}
+
+/**
+ * Matches a node against a single pattern, meaning the choices (or) have
+ * been removed.
+ *
+ * @param node The node to match.
+ * @param pattern
+ */
+function matchesOnePattern(
+  node: Node | null | undefined,
+  pattern: OnePattern<PatternBlock>,
+): boolean {
+  if (node === null || node === undefined || pattern === NOTHING) {
+    return (node === null || node === undefined) && pattern === NOTHING;
+  }
+
+  // If the pattern is a wildcard, we match.
   if (pattern === ANYTHING) {
     return true;
   }
@@ -69,54 +131,19 @@ function matchesOnePattern(node: Node, pattern: Pattern<PatternBlock>): boolean 
   }
 
   // Check if all required inputs match.
-  if (pattern.inputs) {
-    for (const [field, valuePattern] of Object.entries(pattern.inputs)) {
-      const value = node.input[field];
-
-      if (value === undefined) {
-        return false;
-      }
-
-      // The value is another Node, so we must match blocks.
-      if (typeof value === 'object') {
-        if (!matchesStackPattern(value, ...valuePattern)) {
-          // The blocks don't match, so abort.
-          return false;
-        } else {
-          // The blocks match.
-          continue;
-        }
-      }
-
-      if (!matchesValue(value, valuePattern)) {
-        return false;
-      }
-    }
+  if (pattern.inputs && !matchesFieldsOrInputs(node.input, pattern.inputs)) {
+    return false;
   }
 
   // Check if all required fields match.
-  if (pattern.fields) {
-    for (const [field, valuePattern] of Object.entries(pattern.fields)) {
-      const value = node.fields[field];
+  if (pattern.fields && !matchesFieldsOrInputs(node.fields, pattern.fields)) {
+    return false;
+  }
 
-      if (value === undefined) {
-        return false;
-      }
-
-      // The value is another Node, so we must match blocks.
-      if (typeof value === 'object') {
-        if (!matchesStackPattern(value, ...valuePattern)) {
-          // The blocks don't match, so abort.
-          return false;
-        } else {
-          // The blocks match.
-          continue;
-        }
-      }
-
-      if (!matchesValue(value, valuePattern)) {
-        return false;
-      }
+  // Check if the mutation is correct.
+  if (pattern.mutation) {
+    if (!valueMatchesValuePatterns(node.mutation, pattern.mutation)) {
+      return false;
     }
   }
 
@@ -127,19 +154,68 @@ function matchesOnePattern(node: Node, pattern: Pattern<PatternBlock>): boolean 
 /**
  * Check if a node matches with a pattern.
  *
- * Note that only the node itself and its children are checked. For example,
- * all blocks inside a loop will be checked. The next block however, will not
- * be checked. The caller should get the next pattern and node, and check if
- * those match.
+ * This only checks the current node (and its children), but not the
+ * next node (since you can also only pass one pattern).
  *
- * We support
- *
- * @param node
- * @param pattern
+ * @param node The node to match.
+ * @param pattern The pattern to match the node to.
  */
-export function matchesBlockPattern(
-  node: Node,
-  ...pattern: Pattern<PatternBlock>[]
+function nodeMatchesPattern(
+  node: Node | null | undefined,
+  pattern: Pattern<PatternBlock>,
 ): boolean {
+  if (!Array.isArray(pattern)) {
+    pattern = [pattern];
+  }
   return pattern.some((p) => matchesOnePattern(node, p));
+}
+
+/**
+ * Check if the subtree of blocks starting with `Node` match with the given
+ * pattern of black stacks.
+ *
+ * Note that while the node can be null or undefined, these are only accepted
+ * if the pattern is Never.
+ *
+ * TODO: lookup and potentially implement a better tree matching algorithm
+ *
+ * @param node The root of the subtree to check.
+ * @param pattern The pattern to check against.
+ */
+export function subtreeMatchesOneStack(
+  node: Node | null | undefined,
+  pattern: OnePattern<BlockStack>,
+) {
+  if (node === null || node === undefined || pattern === NOTHING) {
+    return (node === null || node === undefined) && pattern === NOTHING;
+  }
+
+  // If the pattern is a wildcard, we match.
+  if (pattern === ANYTHING) {
+    return true;
+  }
+
+  let currentNode: Node | null | undefined = node;
+  for (const blockPatterns of pattern.blockPatterns) {
+    // Check if the node matches the pattern.
+    if (!nodeMatchesPattern(currentNode, blockPatterns)) {
+      return false;
+    }
+
+    currentNode = currentNode?.next;
+  }
+
+  // The stack matches the pattern.
+  return true;
+}
+
+export function subTreeMatchesStack(
+  node: Node | null | undefined,
+  pattern: Pattern<BlockStack>,
+) {
+  if (!Array.isArray(pattern)) {
+    pattern = [pattern];
+  }
+
+  return pattern.some((p) => subtreeMatchesOneStack(node, p));
 }

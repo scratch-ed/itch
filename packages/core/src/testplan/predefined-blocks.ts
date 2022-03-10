@@ -8,9 +8,9 @@ import { assertType, stringify, Writeable } from '../utils';
 import { cloneDeep, isEmpty, isEqual } from 'lodash-es';
 import { Evaluation } from '../evaluation';
 import { ScratchBlock, ScratchTarget } from '../model';
-import { PatternBlock } from '../matcher/patterns';
+import { BlockStack } from '../matcher/patterns';
 import { asNode, Node } from '../new-blocks';
-import { matchesStackPattern } from '../matcher/node-matcher';
+import { subTreeMatchesStack } from '../matcher/node-matcher';
 
 type BlockFilter = (value: ScratchBlock, index: number, array: ScratchBlock[]) => boolean;
 
@@ -36,7 +36,7 @@ export interface PredefinedBlockConfig {
    * want to allow all blocks: in that case the filter function can
    * just always return true.
    */
-  hats: Record<string, BlockFilter | PatternBlock[][]>;
+  hats: Record<string, BlockFilter | BlockStack[]>;
 
   /**
    * You can optionally add (for each sprite or one for all) filter function
@@ -126,9 +126,11 @@ function deepDiff(obj1: unknown, obj2: unknown) {
   function isArray(x: unknown) {
     return Array.isArray(x);
   }
+
   function isObject(x: unknown) {
     return typeof x === 'object';
   }
+
   function isValue(x: unknown) {
     return !isObject(x) && !isArray(x);
   }
@@ -268,7 +270,7 @@ export function checkPredefinedBlocks(
               .filter((b) => b.topLevel)
               .map((b) => [b.id, asNode(b, blockMap)]);
             const matching = nodes.filter(([_id, node]) =>
-              matchesStackPattern(node, ...finder),
+              subTreeMatchesStack(node, finder),
             );
             solutionBlocks = matching.map(([id, _]) => blockMap.get(id)!);
           } else {
@@ -282,7 +284,7 @@ export function checkPredefinedBlocks(
               .filter((b) => b.topLevel)
               .map((b) => [b.id, asNode(b, blockMap)]);
             const matching = nodes.filter(([_id, node]) =>
-              matchesStackPattern(node, ...finder),
+              subTreeMatchesStack(node, finder),
             );
             templateBlocks = matching.map(([id, _]) => blockMap.get(id)!);
           } else {

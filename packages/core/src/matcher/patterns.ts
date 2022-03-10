@@ -1,11 +1,69 @@
-export type Anything = '__any_block_or_value_sentinel__';
-export type Pattern<Type> = Type | Anything;
-export type ValuePrimitives = string | number | boolean;
-export type ValuePattern<T extends ValuePrimitives> =
-  | Pattern<T>
-  | T[]
-  | ((value: T) => boolean);
-export const ANYTHING = '__any_block_or_value_sentinel__';
+// noinspection JSUnusedGlobalSymbols
+
+/**
+ * @fileOverview A DSL-like construct to match Scratch blocks against a pattern.
+ *
+ * The shortest description would be that this is "regex" for Scratch blocks.
+ * It provides functions to create block and value patterns, which can then be
+ * used to match against the blocks or functions in the log of the judge.
+ *
+ * Three special functions exist, see their docs for information:
+ *  {@link anything}, {@link nothing} and {@link stack}.
+ *
+ * Other functions map to the various blocks.
+ *
+ * For example, to create a pattern that matches a head block:
+ *
+ * // TODO add example
+ * @example
+ * const pattern = stack(
+ *
+ * )
+ */
+
+type Anything = '__any_block_or_value_sentinel__';
+type Nothing = '__never_block_or_value_sentinel__';
+
+/**
+ * A value can be either a static value or a reporter block, which is basically
+ * a variable. However, sometimes, you cannot use any type of variable
+ * (e.g. when you need to use a condition).
+ *
+ * @example
+ * ExactValue<string>         // Allows strings and ReporterBlocks
+ * ExactValue<ReporterBlock>  // Allows only ReporterBlocks
+ * ExactValue<BooleanBlock>   // Allows only BooleanBlocks
+ */
+export type ExactValue<T> = T extends ReporterBlock ? T : T | ReporterBlock;
+
+/**
+ * A pattern is either:
+ *
+ * 1. An exact value. The possibilities for this are:
+ *   a. number, string
+ *   b. BlockStack class
+ *   c. ReporterBlock (or extending classes).
+ * => If possible, we would write: T extends string | number | BlockStack | ReporterBlock
+ * 2. A wildcard (anything goes).
+ * 4. A custom function to evaluate the value.
+ */
+export type OnePattern<T> = T | Anything | Nothing;
+
+// 3. A choice, meaning a list of possibilities.
+export type Pattern<T> = OnePattern<T>[] | OnePattern<T>;
+
+/**
+ * A value pattern is used when a scratch block expects input.
+ */
+export type OneValuePattern<T> = OnePattern<ExactValue<T>>;
+export type ValuePattern<T> = OneValuePattern<T>[] | OneValuePattern<T>;
+
+export class BlockStack {
+  constructor(public blockPatterns: Pattern<PatternBlock>[]) {}
+}
+
+export const ANYTHING: Anything = '__any_block_or_value_sentinel__';
+export const NOTHING: Nothing = '__never_block_or_value_sentinel__';
 
 export interface PatternBlock {
   opcode: string;
@@ -15,10 +73,51 @@ export interface PatternBlock {
   // We don't care about the actual value here.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   fields?: Record<string, ValuePattern<any>>;
+
+  // For functions.
+  mutation?: ValuePattern<string>;
 }
 
+interface ReporterBlock extends PatternBlock {
+  type: 'reporter' | 'boolean';
+}
+
+interface BooleanBlock extends ReporterBlock {
+  type: 'boolean';
+}
+
+export function isReporterBlock(block: unknown): block is ReporterBlock {
+  return block !== null && typeof block === 'object' && 'type' in block;
+}
+
+export function isBooleanBlock(block: unknown): block is BooleanBlock {
+  return isReporterBlock(block) && block.type === 'boolean';
+}
+
+/**
+ * Match any value or block.
+ *
+ * No block or no value is not included in this, i.e. null or undefined
+ * blocks or values are not accepted with anything.
+ */
 export function anything(): Anything {
   return ANYTHING;
+}
+
+/**
+ * Accept only the absence of a value or block.
+ */
+export function nothing(): Nothing {
+  return NOTHING;
+}
+
+/**
+ * Match a stack of blocks.
+ *
+ * @param blocks The blocks in the stack.
+ */
+export function stack(...blocks: (PatternBlock | Anything | Nothing)[]): BlockStack {
+  return new BlockStack(blocks);
 }
 
 // https://en.scratch-wiki.info/wiki/Move_()_Steps_(block)
@@ -52,17 +151,17 @@ export function turnLeftXDegrees(degrees: ValuePattern<number>): PatternBlock {
 }
 
 // https://en.scratch-wiki.info/wiki/Point_in_Direction_()_(block)
-export function pointInDirectionX(degrees: ValuePattern<number>): PatternBlock {
+export function pointInDirection(degrees: ValuePattern<number>): PatternBlock {
   return {
     opcode: 'motion_pointindirection',
     inputs: {
-      DIRECTION: degrees.toString(),
+      DIRECTION: degrees,
     },
   };
 }
 
 // https://en.scratch-wiki.info/wiki/Point_Towards_()_(block)
-export function pointTowardsX(towards: ValuePattern<string>): PatternBlock {
+export function pointTowards(towards: ValuePattern<string>): PatternBlock {
   return {
     opcode: 'motion_pointtowards',
     inputs: {
@@ -87,7 +186,14 @@ export function goTo(towards: ValuePattern<string>): PatternBlock {
   return {
     opcode: 'motion_goto',
     inputs: {
-      TO: towards,
+      TO: new BlockStack([
+        {
+          opcode: 'motion_goto_menu',
+          fields: {
+            TO: towards,
+          },
+        },
+      ]),
     },
   };
 }
@@ -117,13 +223,20 @@ export function glideZSecsToX(
     opcode: 'motion_glideto',
     inputs: {
       SECS: secs,
-      TO: towards,
+      TO: new BlockStack([
+        {
+          opcode: 'motion_glideto_menu',
+          fields: {
+            TO: towards,
+          },
+        },
+      ]),
     },
   };
 }
 
 // https://en.scratch-wiki.info/wiki/Change_X_by_()_(block)
-export function changeXByZ(amount: ValuePattern<number>): PatternBlock {
+export function changeXBy(amount: ValuePattern<number>): PatternBlock {
   return {
     opcode: 'motion_changexby',
     inputs: {
@@ -133,7 +246,7 @@ export function changeXByZ(amount: ValuePattern<number>): PatternBlock {
 }
 
 // https://en.scratch-wiki.info/wiki/Change_Y_by_()_(block)
-export function changeYByZ(amount: ValuePattern<number>): PatternBlock {
+export function changeYBy(amount: ValuePattern<number>): PatternBlock {
   return {
     opcode: 'motion_changeyby',
     inputs: {
@@ -143,7 +256,7 @@ export function changeYByZ(amount: ValuePattern<number>): PatternBlock {
 }
 
 // https://en.scratch-wiki.info/wiki/Set_X_to_()_(block)
-export function setXToZ(value: ValuePattern<number>): PatternBlock {
+export function setXTo(value: ValuePattern<number>): PatternBlock {
   return {
     opcode: 'motion_setx',
     inputs: {
@@ -153,7 +266,7 @@ export function setXToZ(value: ValuePattern<number>): PatternBlock {
 }
 
 // https://en.scratch-wiki.info/wiki/Set_Y_to_()_(block)
-export function setYToZ(value: ValuePattern<number>): PatternBlock {
+export function setYTo(value: ValuePattern<number>): PatternBlock {
   return {
     opcode: 'motion_sety',
     inputs: {
@@ -180,23 +293,26 @@ export function setRotationStyle(style: ValuePattern<string>): PatternBlock {
 }
 
 // https://en.scratch-wiki.info/wiki/X_Position_(block)
-export function xPosition(): PatternBlock {
+export function xPosition(): ReporterBlock {
   return {
+    type: 'reporter',
     opcode: 'motion_xposition',
   };
 }
 
 // https://en.scratch-wiki.info/wiki/Y_Position_(block)
-export function yPosition(): PatternBlock {
+export function yPosition(): ReporterBlock {
   return {
+    type: 'reporter',
     opcode: 'motion_yposition',
   };
 }
 
 // https://en.scratch-wiki.info/wiki/Direction_(block)
-export function direction(): PatternBlock {
+export function direction(): ReporterBlock {
   return {
-    opcode: 'motion_xposition',
+    type: 'reporter',
+    opcode: 'motion_direction',
   };
 }
 
@@ -277,7 +393,12 @@ export function switchBackdropTo(backdrop: ValuePattern<string>): PatternBlock {
   return {
     opcode: 'looks_switchbackdropto',
     inputs: {
-      BACKDROP: backdrop,
+      BACKDROP: stack({
+        opcode: 'looks_backdrops',
+        fields: {
+          BACKDROP: backdrop,
+        },
+      }),
     },
   };
 }
@@ -310,10 +431,16 @@ export function changeEffectBy(
   return {
     opcode: 'looks_changeeffectby',
     inputs: {
-      EFFECT: effect,
       CHANGE: amount,
     },
+    fields: {
+      EFFECT: effect,
+    },
   };
+}
+
+export function transparent(): string {
+  return 'GHOST';
 }
 
 // https://en.scratch-wiki.info/wiki/Set_()_Effect_to_()_(Looks_block)
@@ -324,8 +451,10 @@ export function setEffectTo(
   return {
     opcode: 'looks_seteffectto',
     inputs: {
-      EFFECT: effect,
       VALUE: amount,
+    },
+    fields: {
+      EFFECT: effect,
     },
   };
 }
@@ -382,8 +511,9 @@ export function goLayers(
 }
 
 // https://en.scratch-wiki.info/wiki/Costume_()_(block)
-export function costume(numberOrName: ValuePattern<'number' | 'name'>): PatternBlock {
+export function costume(numberOrName: ValuePattern<'number' | 'name'>): ReporterBlock {
   return {
+    type: 'reporter',
     opcode: 'looks_costumenumbername',
     inputs: {
       NUMBER_NAME: numberOrName,
@@ -392,8 +522,9 @@ export function costume(numberOrName: ValuePattern<'number' | 'name'>): PatternB
 }
 
 // https://en.scratch-wiki.info/wiki/Backdrop_()_(block)
-export function backdrop(numberOrName: ValuePattern<'number' | 'name'>): PatternBlock {
+export function backdrop(numberOrName: ValuePattern<'number' | 'name'>): ReporterBlock {
   return {
+    type: 'reporter',
     opcode: 'looks_backdropnumbername',
     inputs: {
       NUMBER_NAME: numberOrName,
@@ -402,14 +533,14 @@ export function backdrop(numberOrName: ValuePattern<'number' | 'name'>): Pattern
 }
 
 // https://en.scratch-wiki.info/wiki/Size_(block)
-export function size(): PatternBlock {
-  return { opcode: 'looks_size' };
+export function size(): ReporterBlock {
+  return { opcode: 'looks_size', type: 'reporter' };
 }
 
 // FIXME: support sound blocks.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function customBlock(
   opcode: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   args?: Record<string, ValuePattern<any>>,
 ): PatternBlock {
   return {
@@ -523,21 +654,833 @@ export function wait(duration: ValuePattern<number>): PatternBlock {
 }
 
 // https://en.scratch-wiki.info/wiki/Wait_Until_()_(block)
+export function waitUntil(condition: ValuePattern<BooleanBlock>): PatternBlock {
+  return {
+    opcode: 'control_wait_until',
+    inputs: {
+      CONDITION: condition,
+    },
+  };
+}
 
 // https://en.scratch-wiki.info/wiki/Create_Clone_of_()_(block)
+export function createCloneOf(block: ValuePattern<string>): PatternBlock {
+  return {
+    opcode: 'control_create_clone_of',
+    inputs: {
+      CLONE_OPTION: block,
+    },
+  };
+}
 
 // https://en.scratch-wiki.info/wiki/Repeat_()_(block)
+export function repeat(
+  times: ValuePattern<number>,
+  stack: Pattern<BlockStack>,
+): PatternBlock {
+  return {
+    opcode: 'control_repeat',
+    inputs: {
+      TIMES: times,
+      SUBSTACK: stack,
+    },
+  };
+}
 
 // https://en.scratch-wiki.info/wiki/Forever_(block)
+export function forever(stack: Pattern<BlockStack>): PatternBlock {
+  return {
+    opcode: 'control_forever',
+    inputs: {
+      SUBSTACK: stack,
+    },
+  };
+}
 
 // https://en.scratch-wiki.info/wiki/If_()_Then_(block)
+export function ifThen(
+  condition: ValuePattern<BooleanBlock>,
+  stack: Pattern<BlockStack>,
+): PatternBlock {
+  return {
+    opcode: 'control_if',
+    inputs: {
+      CONDITION: condition,
+      SUBSTACK: stack,
+    },
+  };
+}
 
 // https://en.scratch-wiki.info/wiki/If_()_Then,_Else_(block)
+export function ifThenElse(
+  condition: ValuePattern<BooleanBlock>,
+  ifTrue: Pattern<BlockStack>,
+  ifFalse: Pattern<BlockStack>,
+): PatternBlock {
+  return {
+    opcode: 'control_if_else',
+    inputs: {
+      CONDITION: condition,
+      SUBSTACK: ifTrue,
+      SUBSTACK2: ifFalse,
+    },
+  };
+}
 
 // https://en.scratch-wiki.info/wiki/Repeat_Until_()_(block)
+export function repeatUntil(
+  condition: ValuePattern<BooleanBlock>,
+  stack: Pattern<BlockStack>,
+): PatternBlock {
+  return {
+    opcode: 'control_repeat_until',
+    inputs: {
+      CONDITION: condition,
+      SUBSTACK: stack,
+    },
+  };
+}
 
 // https://en.scratch-wiki.info/wiki/Stop_()_(block)
+export function stop(what: ValuePattern<string>): PatternBlock {
+  return {
+    opcode: 'control_stop',
+    fields: {
+      STOP_OPTION: what,
+    },
+  };
+}
 
 // https://en.scratch-wiki.info/wiki/Delete_This_Clone_(block)
+export function deleteThisClone(): PatternBlock {
+  return {
+    opcode: 'control_delete_this_clone',
+  };
+}
 
-// https://en.scratch-wiki.info/wiki/When_I_Receive_()_(block)
+// https://en.scratch-wiki.info/wiki/Reset_Timer_(block)
+export function resetTimer(): PatternBlock {
+  return {
+    opcode: 'sensing_resettimer',
+  };
+}
+
+// https://en.scratch-wiki.info/wiki/Set_Drag_Mode_()_(block)
+export function setDragMode(
+  mode: ValuePattern<'draggable' | 'not draggable'>,
+): PatternBlock {
+  return {
+    opcode: 'sensing_setdragmode',
+    fields: {
+      DRAG_MODE: mode,
+    },
+  };
+}
+
+// https://en.scratch-wiki.info/wiki/Ask_()_and_Wait_(block)
+export function askAndWait(question: ValuePattern<string>): PatternBlock {
+  return {
+    opcode: 'sensing_askandwait',
+    inputs: {
+      QUESTION: question,
+    },
+  };
+}
+
+// https://en.scratch-wiki.info/wiki/Touching_()%3F_(block)
+export function isTouching(object: ValuePattern<string>): BooleanBlock {
+  return {
+    type: 'boolean',
+    opcode: 'sensing_touchingobject',
+    inputs: {
+      TOUCHINGOBJECTMENU: new BlockStack([
+        {
+          opcode: 'sensing_touchingobjectmenu',
+          fields: {
+            TOUCHINGOBJECTMENU: object,
+          },
+        },
+      ]),
+    },
+  };
+}
+
+// https://en.scratch-wiki.info/wiki/Touching_Color_()%3F_(block)
+export function isTouchingColor(color: ValuePattern<string>): BooleanBlock {
+  return {
+    type: 'boolean',
+    opcode: 'sensing_touchingcolor',
+    inputs: {
+      COLOR: color,
+    },
+  };
+}
+
+// https://en.scratch-wiki.info/wiki/Color_()_is_Touching_()%3F_(block)
+export function colorIsTouching(
+  color1: ValuePattern<string>,
+  color2: ValuePattern<string>,
+): BooleanBlock {
+  return {
+    type: 'boolean',
+    opcode: 'sensing_coloristouchingcolor',
+    inputs: {
+      COLOR1: color1,
+      COLOR2: color2,
+    },
+  };
+}
+
+// https://en.scratch-wiki.info/wiki/Key_()_Pressed%3F_(block)
+export function isKeyPressed(key: ValuePattern<string>): BooleanBlock {
+  return {
+    type: 'boolean',
+    opcode: 'sensing_keypressed',
+    inputs: {
+      KEY_OPTION: key,
+    },
+  };
+}
+
+// https://en.scratch-wiki.info/wiki/Mouse_Down%3F_(block)
+export function isMouseDown(): BooleanBlock {
+  return {
+    type: 'boolean',
+    opcode: 'sensing_mousedown',
+  };
+}
+
+// https://en.scratch-wiki.info/wiki/Distance_to_()_(block)
+export function distanceTo(what: ValuePattern<string>): ReporterBlock {
+  return {
+    type: 'reporter',
+    opcode: 'sensing_distanceto',
+    inputs: {
+      DISTANCETOMENU: what,
+    },
+  };
+}
+
+// https://en.scratch-wiki.info/wiki/Answer_(block)
+export function answer(): ReporterBlock {
+  return {
+    type: 'reporter',
+    opcode: 'sensing_answer',
+  };
+}
+
+// https://en.scratch-wiki.info/wiki/Mouse_X_(block)
+export function mouseX(): ReporterBlock {
+  return {
+    type: 'reporter',
+    opcode: 'sensing_mousex',
+  };
+}
+
+// https://en.scratch-wiki.info/wiki/Mouse_Y_(block)
+export function mouseY(): ReporterBlock {
+  return {
+    type: 'reporter',
+    opcode: 'sensing_mousey',
+  };
+}
+
+// https://en.scratch-wiki.info/wiki/Loudness_(block)
+export function loudness(): ReporterBlock {
+  return {
+    type: 'reporter',
+    opcode: 'sensing_loudness',
+  };
+}
+
+// https://en.scratch-wiki.info/wiki/Timer_(block)
+export function timer(): ReporterBlock {
+  return {
+    type: 'reporter',
+    opcode: 'sensing_timer',
+  };
+}
+
+type SensingProperty =
+  | 'x position'
+  | 'y position'
+  | 'costume #'
+  | 'costume name'
+  | 'size'
+  | 'volume'
+  | 'backdrop #'
+  | 'backdrop name';
+
+// https://en.scratch-wiki.info/wiki/()_of_()_(Sensing_block)
+export function senseXOfY(
+  what: ValuePattern<SensingProperty>,
+  sprite: ValuePattern<string>,
+): ReporterBlock {
+  return {
+    type: 'reporter',
+    opcode: 'sensing_of',
+    fields: {
+      PROPERTY: what,
+    },
+    inputs: {
+      OBJECT: sprite,
+    },
+  };
+}
+
+export type CurrentMenu =
+  | 'year'
+  | 'month'
+  | 'date'
+  | 'dayofweek'
+  | 'hour'
+  | 'minute'
+  | 'second';
+
+// https://en.scratch-wiki.info/wiki/Current_()_(block)
+export function currentX(what: ValuePattern<CurrentMenu>): ReporterBlock {
+  return {
+    type: 'reporter',
+    opcode: 'sensing_current',
+    fields: {
+      CURRENTMENU: what,
+    },
+  };
+}
+
+// https://en.scratch-wiki.info/wiki/Days_Since_2000_(block)
+export function daysSince2000(): ReporterBlock {
+  return {
+    type: 'reporter',
+    opcode: 'sensing_dayssince2000',
+  };
+}
+
+// https://en.scratch-wiki.info/wiki/Username_(block)
+export function username(): ReporterBlock {
+  return {
+    type: 'reporter',
+    opcode: 'sensing_username',
+  };
+}
+
+// https://en.scratch-wiki.info/wiki/()_is_less_than_()_(block)
+export function isLessThan(
+  a: ValuePattern<number | string>,
+  b: ValuePattern<number | string>,
+): BooleanBlock {
+  return {
+    type: 'boolean',
+    opcode: 'operator_lt',
+    inputs: {
+      OPERAND1: a,
+      OPERAND2: b,
+    },
+  };
+}
+
+// https://en.scratch-wiki.info/wiki/()_=_()_(block)
+export function equals(
+  a: ValuePattern<number | string>,
+  b: ValuePattern<number | string>,
+): BooleanBlock {
+  return {
+    type: 'boolean',
+    opcode: 'operator_equals',
+    inputs: {
+      OPERAND1: a,
+      OPERAND2: b,
+    },
+  };
+}
+
+// https://en.scratch-wiki.info/wiki/()_is_greater_than_()_(block)
+export function isGreaterThan(
+  a: ValuePattern<number | string>,
+  b: ValuePattern<number | string>,
+): BooleanBlock {
+  return {
+    type: 'boolean',
+    opcode: 'operator_gt',
+    inputs: {
+      OPERAND1: a,
+      OPERAND2: b,
+    },
+  };
+}
+
+// https://en.scratch-wiki.info/wiki/()_and_()_(block)
+export function and(
+  a: ValuePattern<BooleanBlock>,
+  b: ValuePattern<BooleanBlock>,
+): BooleanBlock {
+  return {
+    type: 'boolean',
+    opcode: 'operator_and',
+    inputs: {
+      OPERAND1: a,
+      OPERAND2: b,
+    },
+  };
+}
+
+// https://en.scratch-wiki.info/wiki/()_or_()_(block)
+export function or(
+  a: ValuePattern<BooleanBlock>,
+  b: ValuePattern<BooleanBlock>,
+): BooleanBlock {
+  return {
+    type: 'boolean',
+    opcode: 'operator_or',
+    inputs: {
+      OPERAND1: a,
+      OPERAND2: b,
+    },
+  };
+}
+
+// https://en.scratch-wiki.info/wiki/Not_()_(block)
+export function not(a: ValuePattern<BooleanBlock>): BooleanBlock {
+  return {
+    type: 'boolean',
+    opcode: 'operator_not',
+    inputs: {
+      OPERAND: a,
+    },
+  };
+}
+
+// https://en.scratch-wiki.info/wiki/()_Contains_()%3F_(Operators_block)
+export function contains(
+  haystack: ValuePattern<string | number>,
+  needle: ValuePattern<string | number>,
+): BooleanBlock {
+  return {
+    type: 'boolean',
+    opcode: 'operator_contains',
+    inputs: {
+      STRING1: haystack,
+      STRING2: needle,
+    },
+  };
+}
+
+// https://en.scratch-wiki.info/wiki/()_%2B_()_(block)
+export function add(a: ValuePattern<number>, b: ValuePattern<number>): ReporterBlock {
+  return {
+    type: 'reporter',
+    opcode: 'operator_add',
+    inputs: {
+      NUM1: a,
+      NUM2: b,
+    },
+  };
+}
+
+// https://en.scratch-wiki.info/wiki/()_-_()_(block)
+export function subtract(
+  a: ValuePattern<number>,
+  b: ValuePattern<number>,
+): ReporterBlock {
+  return {
+    type: 'reporter',
+    opcode: 'operator_subtract',
+    inputs: {
+      NUM1: a,
+      NUM2: b,
+    },
+  };
+}
+
+// https://en.scratch-wiki.info/wiki/()_*_()_(block)
+export function multiply(
+  a: ValuePattern<number>,
+  b: ValuePattern<number>,
+): ReporterBlock {
+  return {
+    type: 'reporter',
+    opcode: 'operator_multiply',
+    inputs: {
+      NUM1: a,
+      NUM2: b,
+    },
+  };
+}
+
+// https://en.scratch-wiki.info/wiki/()_/_()_(block)
+export function divide(a: ValuePattern<number>, b: ValuePattern<number>): ReporterBlock {
+  return {
+    type: 'reporter',
+    opcode: 'operator_divide',
+    inputs: {
+      NUM1: a,
+      NUM2: b,
+    },
+  };
+}
+
+// https://en.scratch-wiki.info/wiki/Pick_Random_()_to_()_(block)
+export function pickRandom(
+  from: ValuePattern<number>,
+  to: ValuePattern<number>,
+): ReporterBlock {
+  return {
+    type: 'reporter',
+    opcode: 'operator_random',
+    inputs: {
+      FROM: from,
+      TO: to,
+    },
+  };
+}
+
+// https://en.scratch-wiki.info/wiki/Join_()()_(block)
+export function join(
+  left: ValuePattern<string | number>,
+  right: ValuePattern<string | number>,
+): ReporterBlock {
+  return {
+    type: 'reporter',
+    opcode: 'operator_join',
+    inputs: {
+      STRING1: left,
+      STRING2: right,
+    },
+  };
+}
+
+// https://en.scratch-wiki.info/wiki/Letter_()_of_()_(block)
+export function letterOf(
+  position: ValuePattern<number>,
+  string: ValuePattern<string>,
+): ReporterBlock {
+  return {
+    type: 'reporter',
+    opcode: 'operator_letter_of',
+    inputs: {
+      LETTER: position,
+      STRING: string,
+    },
+  };
+}
+
+// https://en.scratch-wiki.info/wiki/Length_of_()_(Operators_block)
+export function lengthOf(string: ValuePattern<string>): ReporterBlock {
+  return {
+    type: 'reporter',
+    opcode: 'operator_length',
+    inputs: {
+      STRING: string,
+    },
+  };
+}
+
+// https://en.scratch-wiki.info/wiki/()_Mod_()_(block)
+export function mod(a: ValuePattern<number>, b: ValuePattern<number>): ReporterBlock {
+  return {
+    type: 'reporter',
+    opcode: 'operator_mod',
+    inputs: {
+      NUM1: a,
+      NUM2: b,
+    },
+  };
+}
+
+// https://en.scratch-wiki.info/wiki/Round_()_(block)
+export function round(number: ValuePattern<number>): ReporterBlock {
+  return {
+    type: 'reporter',
+    opcode: 'operator_round',
+    inputs: {
+      NUM: number,
+    },
+  };
+}
+
+type MathOperator =
+  | 'abs'
+  | 'floor'
+  | 'ceiling'
+  | 'sqrt'
+  | 'sin'
+  | 'cos'
+  | 'tan'
+  | 'asin'
+  | 'acos'
+  | 'atan'
+  | 'ln'
+  | 'e ^'
+  | '10 ^';
+
+// https://en.scratch-wiki.info/wiki/()_of_()_(Operators_block)
+export function operatorOf(
+  operation: ValuePattern<MathOperator>,
+  value: ValuePattern<number>,
+): ReporterBlock {
+  return {
+    type: 'reporter',
+    opcode: 'operator_mathop',
+    fields: {
+      OPERATOR: operation,
+    },
+    inputs: {
+      NUM: value,
+    },
+  };
+}
+
+// https://en.scratch-wiki.info/wiki/Set_()_to_()_(block)
+export function setXtoY(
+  variable: ValuePattern<string>,
+  value: ValuePattern<string | number>,
+): PatternBlock {
+  return {
+    opcode: 'data_setvariableto',
+    fields: {
+      VARIABLE: variable,
+    },
+    inputs: {
+      VALUE: value,
+    },
+  };
+}
+
+// https://en.scratch-wiki.info/wiki/Change_()_by_()_(block)
+export function changeXbyY(
+  variable: ValuePattern<string>,
+  delta: ValuePattern<number>,
+): PatternBlock {
+  return {
+    opcode: 'data_changevariableby',
+    fields: {
+      VARIABLE: variable,
+    },
+    inputs: {
+      VALUE: delta,
+    },
+  };
+}
+
+// https://en.scratch-wiki.info/wiki/Show_Variable_()_(block)
+export function showVariable(variable: ValuePattern<string>): PatternBlock {
+  return {
+    opcode: 'data_showvariable',
+    fields: {
+      VARIABLE: variable,
+    },
+  };
+}
+
+// https://en.scratch-wiki.info/wiki/Hide_Variable_()_(block)
+export function hideVariable(variable: ValuePattern<string>): PatternBlock {
+  return {
+    opcode: 'data_hidevariable',
+    fields: {
+      VARIABLE: variable,
+    },
+  };
+}
+
+// https://en.scratch-wiki.info/wiki/()_(Variables_block)
+export function variable(variable: ValuePattern<string>): ReporterBlock {
+  return {
+    type: 'reporter',
+    opcode: 'data_variable',
+    fields: {
+      VARIABLE: variable,
+    },
+  };
+}
+
+// https://en.scratch-wiki.info/wiki/Add_()_to_()_(block)
+export function addXtoList(
+  value: ValuePattern<number | string>,
+  list: ValuePattern<string>,
+): PatternBlock {
+  return {
+    opcode: 'data_addtolist',
+    fields: {
+      LIST: list,
+    },
+    inputs: {
+      ITEM: value,
+    },
+  };
+}
+
+// https://en.scratch-wiki.info/wiki/Delete_()_of_()_(block)
+export function deleteXfromList(
+  index: ValuePattern<number>,
+  list: ValuePattern<string>,
+): PatternBlock {
+  return {
+    opcode: 'data_deleteoflist',
+    fields: {
+      LIST: list,
+    },
+    inputs: {
+      INDEX: index,
+    },
+  };
+}
+
+// https://en.scratch-wiki.info/wiki/Delete_All_of_()_(block)
+export function deleteAllFromList(list: ValuePattern<string>): PatternBlock {
+  return {
+    opcode: 'data_deletealloflist',
+    fields: {
+      LIST: list,
+    },
+  };
+}
+
+// https://en.scratch-wiki.info/wiki/Insert_()_at_()_of_()_(block)
+export function insertAt(
+  value: ValuePattern<string | number>,
+  at: ValuePattern<number>,
+  list: ValuePattern<string>,
+): PatternBlock {
+  return {
+    opcode: 'data_insertatlist',
+    fields: {
+      LIST: list,
+    },
+    inputs: {
+      ITEM: value,
+      INDEX: at,
+    },
+  };
+}
+
+// https://en.scratch-wiki.info/wiki/Replace_Item_()_of_()_with_()_(block)
+export function replaceInList(
+  index: ValuePattern<string>,
+  list: ValuePattern<string>,
+  newValue: ValuePattern<string | number>,
+): PatternBlock {
+  return {
+    opcode: 'data_replaceitemoflist',
+    fields: {
+      LIST: list,
+    },
+    inputs: {
+      INDEX: index,
+      ITEM: newValue,
+    },
+  };
+}
+
+// https://en.scratch-wiki.info/wiki/Show_List_()_(block)
+export function showList(list: ValuePattern<string>): PatternBlock {
+  return {
+    opcode: 'data_showlist',
+    fields: {
+      LIST: list,
+    },
+  };
+}
+
+// https://en.scratch-wiki.info/wiki/Hide_List_()_(block)
+export function hideList(list: ValuePattern<string>): PatternBlock {
+  return {
+    opcode: 'data_hidelist',
+    fields: {
+      LIST: list,
+    },
+  };
+}
+
+// https://en.scratch-wiki.info/wiki/()_(List_block)
+export function list(name: ValuePattern<string>): ReporterBlock {
+  return {
+    type: 'reporter',
+    opcode: 'data_listcontents',
+    fields: {
+      LIST: name,
+    },
+  };
+}
+
+// https://en.scratch-wiki.info/wiki/Item_()_of_()_(block)
+export function itemOfList(
+  index: ValuePattern<number>,
+  list: ValuePattern<string>,
+): ReporterBlock {
+  return {
+    type: 'reporter',
+    opcode: 'data_itemoflist',
+    fields: {
+      LIST: list,
+    },
+    inputs: {
+      INDEX: index,
+    },
+  };
+}
+
+// https://en.scratch-wiki.info/wiki/Length_of_()_(List_block)
+export function lengthOfList(list: ValuePattern<string>): ReporterBlock {
+  return {
+    type: 'reporter',
+    opcode: 'data_lengthoflist',
+    fields: {
+      LIST: list,
+    },
+  };
+}
+
+// https://en.scratch-wiki.info/wiki/Item_Number_of_()_in_()_(block)
+export function indexOf(
+  value: ValuePattern<string | number>,
+  list: ValuePattern<string>,
+): ReporterBlock {
+  return {
+    type: 'reporter',
+    opcode: 'data_itemnumoflist',
+    inputs: {
+      ITEM: value,
+    },
+    fields: {
+      LIST: list,
+    },
+  };
+}
+
+// https://en.scratch-wiki.info/wiki/()_Contains_()%3F_(List_block)
+export function listContains(
+  list: ValuePattern<string>,
+  value: ValuePattern<string | number>,
+): BooleanBlock {
+  return {
+    type: 'boolean',
+    opcode: 'data_listcontainsitem',
+    fields: {
+      LIST: list,
+    },
+    inputs: {
+      ITEM: value,
+    },
+  };
+}
+
+export function procedureDefinition(name: ValuePattern<string>): PatternBlock {
+  return {
+    opcode: 'procedures_definition',
+    inputs: {
+      custom_block: new BlockStack([
+        {
+          opcode: 'procedures_prototype',
+          mutation: name,
+        },
+      ]),
+    },
+  };
+}
+
+export function procedureCall(name: ValuePattern<string>): PatternBlock {
+  return {
+    opcode: 'procedures_call',
+    mutation: name,
+  };
+}
