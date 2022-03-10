@@ -1,3 +1,4 @@
+import { RotationStyle } from './matcher/patterns';
 import { asTree, Node } from './new-blocks';
 import { Position } from './lines';
 import { ensure } from './utils';
@@ -250,7 +251,6 @@ export class ScratchStage extends ScratchTarget {
   }
 }
 
-export type RotationStyle = 'all around' | 'left-right' | "don't rotate";
 export type Bounds = { left: number; right: number; top: number; bottom: number };
 
 export class ScratchSprite extends ScratchTarget {
