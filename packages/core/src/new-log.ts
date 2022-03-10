@@ -2,11 +2,11 @@ import type Variable from '@ftrprf/judge-scratch-vm-types/types/engine/variable'
 import type Comment from '@ftrprf/judge-scratch-vm-types/types/engine/comment';
 import type VirtualMachine from '@ftrprf/judge-scratch-vm-types/types/virtual-machine';
 import type RenderedTarget from '@ftrprf/judge-scratch-vm-types/types/sprites/rendered-target';
+import { RotationStyle } from './matcher/patterns';
 
 import {
   blockFromSb3,
   Bounds,
-  RotationStyle,
   ScratchBlock,
   ScratchComment,
   ScratchCostume,
