@@ -82,12 +82,23 @@ interface ReporterBlock extends PatternBlock {
   type: 'reporter' | 'boolean';
 }
 
+interface VariableBlock extends ReporterBlock {
+  opcode: 'data_variable';
+  fields: {
+    VARIABLE: Pattern<string>;
+  };
+}
+
 interface BooleanBlock extends ReporterBlock {
   type: 'boolean';
 }
 
 export function isReporterBlock(block: unknown): block is ReporterBlock {
   return block !== null && typeof block === 'object' && 'type' in block;
+}
+
+export function isVariableBlock(block: unknown): block is VariableBlock {
+  return isReporterBlock(block) && block.opcode === 'data_variable';
 }
 
 export function isBooleanBlock(block: unknown): block is BooleanBlock {
@@ -397,17 +408,26 @@ export function hide(): PatternBlock {
 
 // https://en.scratch-wiki.info/wiki/Switch_Costume_to_()_(block)
 export function switchCostumeTo(costume: ValuePattern<string>): PatternBlock {
-  return {
-    opcode: 'looks_switchcostumeto',
-    inputs: {
-      COSTUME: stack({
-        opcode: 'looks_costume',
-        fields: {
-          COSTUME: costume,
-        },
-      }),
-    },
-  };
+  if (isVariableBlock(costume)) {
+    return {
+      opcode: 'looks_switchcostumeto',
+      inputs: {
+        COSTUME: costume.fields.VARIABLE,
+      },
+    };
+  } else {
+    return {
+      opcode: 'looks_switchcostumeto',
+      inputs: {
+        COSTUME: stack({
+          opcode: 'looks_costume',
+          fields: {
+            COSTUME: costume,
+          },
+        }),
+      },
+    };
+  }
 }
 
 // https://en.scratch-wiki.info/wiki/Switch_Backdrop_to_()_(block)
@@ -1331,7 +1351,7 @@ export function hideVariable(variable: ValuePattern<string>): PatternBlock {
 }
 
 // https://en.scratch-wiki.info/wiki/()_(Variables_block)
-export function variable(variable: ValuePattern<string>): ReporterBlock {
+export function variable(variable: Pattern<string>): VariableBlock {
   return {
     type: 'reporter',
     opcode: 'data_variable',

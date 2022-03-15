@@ -120,15 +120,44 @@ import {
   itemOfList,
   lengthOfList,
   listContains,
+  BlockStack,
 } from '../src/matcher/patterns';
 import { subtreeMatchesOneStack } from '../src/matcher/node-matcher';
 
-function treeMatches(roots, pattern) {
-  // Check if a node from the tree matches.
-  return roots.some((r) => subtreeMatchesOneStack(r, pattern));
-}
+expect.extend({
+  /**
+   * @param {Node[]} trees
+   * @param {PatternBlock | BlockStack} pattern
+   * @returns {{pass: boolean, message: (function(): string)}}
+   */
+  toMatchPattern(trees, pattern) {
+    if (!(pattern instanceof BlockStack)) {
+      pattern = stack(pattern);
+    }
+    const filtered = trees.filter((node) => subtreeMatchesOneStack(node, pattern));
+    const pass = filtered.length === 1;
+    if (pass) {
+      return {
+        message: () => `expected to find one block`,
+        pass: true,
+      };
+    } else {
+      let maybe = trees.filter((t) => t.opcode === pattern.opcode);
+      if (maybe.length === 1) {
+        maybe = maybe[0];
+      }
+      return {
+        message: () =>
+          `expected to find one block, but found ${filtered.length}\n\n` +
+          `Expected: ${this.utils.printExpected(pattern)}\n` +
+          `Received: ${this.utils.printReceived(maybe)}`,
+        pass: false,
+      };
+    }
+  },
+});
 
-describe('Integrations tests for patterns', () => {
+describe('Integration tests for patterns', () => {
   // Load the blocks from the project.
   const snapshot = snapshotFromSb3(projectData);
 
@@ -147,7 +176,7 @@ describe('Integrations tests for patterns', () => {
     ];
 
     for (const pattern of patterns) {
-      expect(treeMatches(tree, pattern)).toBe(true);
+      expect(tree).toMatchPattern(pattern);
     }
   });
 
@@ -196,7 +225,7 @@ describe('Integrations tests for patterns', () => {
       ];
 
       for (const pattern of patterns) {
-        expect(treeMatches(tree, pattern)).toBe(true);
+        expect(tree).toMatchPattern(pattern);
       }
     },
   );
@@ -225,7 +254,7 @@ describe('Integrations tests for patterns', () => {
     ];
 
     for (const pattern of patterns) {
-      expect(treeMatches(tree, pattern)).toBe(true);
+      expect(tree).toMatchPattern(pattern);
     }
 
     const wrongValue = stack(
@@ -242,7 +271,7 @@ describe('Integrations tests for patterns', () => {
       hide(),
       nothing(),
     );
-    expect(treeMatches(tree, wrongValue)).toBe(false);
+    expect(tree).not.toMatchPattern(wrongValue);
 
     const wrongNothing = stack(
       whenIReceive('Start'),
@@ -252,7 +281,7 @@ describe('Integrations tests for patterns', () => {
       hide(),
     );
 
-    expect(treeMatches(tree, wrongNothing)).toBe(false);
+    expect(tree).not.toMatchPattern(wrongNothing);
   });
 
   test('Test for boodschap 1', () => {
@@ -265,47 +294,16 @@ describe('Integrations tests for patterns', () => {
       stack(
         greenFlag(),
         setXtoY('Boodschap 1', 'Boodschap 1'),
-        switchCostumeTo('Boodschap 1'),
+        switchCostumeTo(variable('Boodschap 1')),
         show(),
         nothing(),
       ),
     ];
 
     for (const pattern of patterns) {
-      expect(treeMatches(tree, pattern)).toBe(true);
+      expect(tree).toMatchPattern(pattern);
     }
   });
-});
-
-expect.extend({
-  /**
-   *
-   * @param {Node[]} trees
-   * @param {PatternBlock} pattern
-   * @returns {{pass: boolean, message: (function(): string)}}
-   */
-  toMatchPattern(trees, pattern) {
-    const filtered = trees.filter((node) => subtreeMatchesOneStack(node, stack(pattern)));
-    const pass = filtered.length === 1;
-    if (pass) {
-      return {
-        message: () => `expected to find one block`,
-        pass: true,
-      };
-    } else {
-      let maybe = trees.filter((t) => t.opcode === pattern.opcode);
-      if (maybe.length === 1) {
-        maybe = maybe[0];
-      }
-      return {
-        message: () =>
-          `expected to find one block, but found ${filtered.length}\n\n` +
-          `Expected: ${this.utils.printExpected(pattern)}\n` +
-          `Received: ${this.utils.printReceived(maybe)}`,
-        pass: false,
-      };
-    }
-  },
 });
 
 describe('Individual blocks', () => {
