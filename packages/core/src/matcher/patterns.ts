@@ -176,7 +176,7 @@ export function pointInDirection(degrees: ValuePattern<number>): PatternBlock {
 }
 
 // https://en.scratch-wiki.info/wiki/Point_Towards_()_(block)
-export function pointTowards(towards: ValuePattern<string>): PatternBlock {
+export function pointTowards(towards: ValuePattern<string | '_mouse_'>): PatternBlock {
   return {
     opcode: 'motion_pointtowards',
     inputs: {
@@ -237,7 +237,7 @@ export function glideZSecsToXY(
 // https://en.scratch-wiki.info/wiki/Glide_()_Secs_to_()_(block)
 export function glideZSecsToX(
   secs: ValuePattern<number>,
-  towards: ValuePattern<string>,
+  towards: ValuePattern<string | '_random_'>,
 ): PatternBlock {
   return {
     opcode: 'motion_glideto',

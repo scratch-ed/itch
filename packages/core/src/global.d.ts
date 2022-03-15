@@ -67,6 +67,71 @@ import {
   wait as bWait,
   nothing,
   stack,
+  equals,
+  forever,
+  ifThenElse,
+  isTouching,
+  pickRandom,
+  repeat,
+  procedureCall,
+  procedureDefinition,
+  repeatUntil,
+  setXtoY,
+  add,
+  subtract,
+  transparent,
+  waitUntil,
+  loudness,
+  createCloneOf,
+  ifThen,
+  isMouseDown,
+  deleteThisClone,
+  resetTimer,
+  setDragMode,
+  askAndWait,
+  isTouchingColor,
+  colorIsTouching,
+  isKeyPressed,
+  distanceTo,
+  answer,
+  mouseX,
+  mouseY,
+  timer,
+  senseXOfY,
+  currentX,
+  divide,
+  multiply,
+  daysSince2000,
+  round,
+  username,
+  isLessThan,
+  isGreaterThan,
+  and,
+  or,
+  contains,
+  not,
+  letterOf,
+  mod,
+  operatorOf,
+  showVariable,
+  hideVariable,
+  variable,
+  addXtoList,
+  deleteAllFromList,
+  replaceInList,
+  showList,
+  list,
+  join,
+  lengthOf,
+  changeXbyY,
+  deleteXfromList,
+  insertAt,
+  indexOf,
+  hideList,
+  itemOfList,
+  lengthOfList,
+  listContains,
+  stop,
 } from './matcher/patterns';
 
 declare interface Itch {
@@ -129,6 +194,71 @@ declare interface BlockMatch {
   broadcastAndWait: typeof broadcastAndWait;
   whenIStartAsClone: typeof whenIStartAsClone;
   wait: typeof bWait;
+  equals: typeof equals;
+  forever: typeof forever;
+  ifThenElse: typeof ifThenElse;
+  isTouching: typeof isTouching;
+  pickRandom: typeof pickRandom;
+  repeat: typeof repeat;
+  procedureCall: typeof procedureCall;
+  procedureDefinition: typeof procedureDefinition;
+  repeatUntil: typeof repeatUntil;
+  setXtoY: typeof setXtoY;
+  add: typeof add;
+  subtract: typeof subtract;
+  transparent: typeof transparent;
+  waitUntil: typeof waitUntil;
+  loudness: typeof loudness;
+  join: typeof join;
+  createCloneOf: typeof createCloneOf;
+  ifThen: typeof ifThen;
+  isMouseDown: typeof isMouseDown;
+  stop: typeof stop;
+  deleteThisClone: typeof deleteThisClone;
+  resetTimer: typeof resetTimer;
+  setDragMode: typeof setDragMode;
+  askAndWait: typeof askAndWait;
+  isTouchingColor: typeof isTouchingColor;
+  colorIsTouching: typeof colorIsTouching;
+  isKeyPressed: typeof isKeyPressed;
+  distanceTo: typeof distanceTo;
+  answer: typeof answer;
+  mouseX: typeof mouseX;
+  mouseY: typeof mouseY;
+  timer: typeof timer;
+  senseXOfY: typeof senseXOfY;
+  currentX: typeof currentX;
+  divide: typeof divide;
+  multiply: typeof multiply;
+  round: typeof round;
+  daysSince2000: typeof daysSince2000;
+  username: typeof username;
+  isLessThan: typeof isLessThan;
+  isGreaterThan: typeof isGreaterThan;
+  and: typeof and;
+  or: typeof or;
+  not: typeof not;
+  contains: typeof contains;
+  letterOf: typeof letterOf;
+  lengthOf: typeof lengthOf;
+  mod: typeof mod;
+  operatorOf: typeof operatorOf;
+  changeXbyY: typeof changeXbyY;
+  showVariable: typeof showVariable;
+  hideVariable: typeof hideVariable;
+  variable: typeof variable;
+  addXtoList: typeof addXtoList;
+  deleteXfromList: typeof deleteXfromList;
+  deleteAllFromList: typeof deleteAllFromList;
+  insertAt: typeof insertAt;
+  indexOf: typeof indexOf;
+  replaceInList: typeof replaceInList;
+  showList: typeof showList;
+  hideList: typeof hideList;
+  list: typeof list;
+  itemOfList: typeof itemOfList;
+  lengthOfList: typeof lengthOfList;
+  listContains: typeof listContains;
 }
 
 /**

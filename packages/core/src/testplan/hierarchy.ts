@@ -13,9 +13,12 @@
  * to see if they are equal or not.
  */
 import isEqual from 'lodash-es/isEqual';
+import { nodeMatchesPattern } from '../matcher/node-matcher';
+import { Pattern, PatternBlock } from '../matcher/patterns';
 import { castCallback, numericEquals, stringify } from '../utils';
 import { GroupedResultManager } from '../output';
 import { Visibility } from '../output/partial-schema';
+import { isNode, Node } from '../new-blocks';
 
 export class FatalErrorException extends Error {}
 
@@ -60,6 +63,24 @@ class Matcher {
    */
   toBe(expected: unknown): boolean {
     return this.callback(this.accepted(expected), expected, this.actual);
+  }
+
+  /**
+   * Match the value against a pattern.
+   *
+   * In this case, the value must be a Node, or it will throw, as this is
+   * considered a programming error.
+   *
+   * @param blockPattern
+   */
+  toMatch(blockPattern: Pattern<PatternBlock>): boolean {
+    // It can possibly be a node.
+    if (!(isNode(this.actual) || this.actual === null || this.actual === undefined)) {
+      throw new Error(`Found non-Node: ${this.actual}, expected Node.`);
+    }
+
+    const accepted = nodeMatchesPattern(this.actual, blockPattern);
+    return this.callback(accepted);
   }
 
   /**

@@ -160,7 +160,7 @@ function matchesOnePattern(
  * @param node The node to match.
  * @param pattern The pattern to match the node to.
  */
-function nodeMatchesPattern(
+export function nodeMatchesPattern(
   node: Node | null | undefined,
   pattern: Pattern<PatternBlock>,
 ): boolean {
