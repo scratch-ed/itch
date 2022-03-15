@@ -18,7 +18,7 @@ import { Pattern, PatternBlock } from '../matcher/patterns';
 import { castCallback, numericEquals, stringify } from '../utils';
 import { GroupedResultManager } from '../output';
 import { Visibility } from '../output/partial-schema';
-import { isNode, Node } from '../new-blocks';
+import { isNode } from '../new-blocks';
 
 export class FatalErrorException extends Error {}
 

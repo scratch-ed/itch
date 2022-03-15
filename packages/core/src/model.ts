@@ -1,11 +1,5 @@
 import { subtreeMatchesOneStack } from './matcher/node-matcher';
-import {
-  BlockStack,
-  Pattern,
-  PatternBlock,
-  RotationStyle,
-  stack,
-} from './matcher/patterns';
+import { PatternBlock, RotationStyle, stack } from './matcher/patterns';
 import { asTree, Node } from './new-blocks';
 import { Position } from './lines';
 import { ensure } from './utils';
