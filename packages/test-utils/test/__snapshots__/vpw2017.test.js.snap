@@ -108,10 +108,20 @@ Array [
     "status": "correct",
   },
   Object {
+    "command": "start-test",
+    "name": "Toegelaten blokjes",
+  },
+  Object {
+    "command": "close-test",
+    "feedback": "Goed zo! Je gebruikt geen verkeerde blokjes.",
+    "status": "correct",
+  },
+  Object {
     "command": "close-group",
   },
   Object {
     "command": "close-group",
+    "summary": "De bestaande code is nog steeds juist.",
   },
   Object {
     "command": "start-group",

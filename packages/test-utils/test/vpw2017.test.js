@@ -9,8 +9,8 @@ jest.setTimeout(50000);
 
 test('01_mad_hatter', () => {
   return runTest().then((result) => {
-    expect(result).toMatchSnapshot();
     expect(result).everyStatusToBe('correct');
+    expect(result).toMatchSnapshot();
   });
 });
 
@@ -23,24 +23,24 @@ test.skip('02_papegaai', () => {
 
 test.skip('03_teken_een_vierkant', () => {
   return runTest().then((result) => {
-    expect(result).toMatchSnapshot();
     expect(result).everyStatusToBe('correct');
+    expect(result).toMatchSnapshot();
   });
 });
 
 test.skip('04_teken_een_driehoek', () => {
   return runTest().then((result) => {
-    expect(result).toMatchSnapshot();
     expect(result).everyStatusToBe('correct');
     expect(result).atLeastCommands('close-testcase', 2);
+    expect(result).toMatchSnapshot();
   });
 });
 
 test.skip('05_teken_een_huis', () => {
   return runTest().then((result) => {
-    expect(result).toMatchSnapshot();
     expect(result).everyStatusToBe('correct');
     expect(result).atLeastCommands('close-testcase', 1);
+    expect(result).toMatchSnapshot();
   });
 });
 

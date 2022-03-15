@@ -236,6 +236,7 @@ export class Context {
    */
   prepareAndRunVm(): void {
     this.attachEventHandles();
+    this.createProfiler();
 
     this.providedAnswers = this.answers.slice();
 
