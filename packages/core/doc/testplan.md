@@ -58,10 +58,10 @@ function beforeExecution(e) {
   Itch.checkPredefinedBlocks(
     {
       hats: {
-        Planet: [stack(whenIReceive('Start'), setSizeTo(anything()))]
+        Planet: [stack(whenIReceive('Start'), setSizeTo(anything()))],
       },
     },
-    e
+    e,
   );
 }
 ```
@@ -73,7 +73,6 @@ In the example above, we allow blocks to be added to the "Planet" sprite,
 in a block stack starting with the hat _When I receive broadcast "Start"_,
 followed by a block "Set size to", with any argument.
 
-
 ## During execution
 
 Here, the main purpose is to simulate user interaction.
@@ -83,10 +82,7 @@ A simple example is:
 
 ```javascript
 function duringExecution(e) {
-  e.scheduler
-    .greenFlag(false)
-    .sendBroadcast('Start', false)
-    .wait(1000);
+  e.scheduler.greenFlag(false).sendBroadcast('Start', false).wait(1000);
 }
 ```
 
@@ -95,7 +91,6 @@ then send a broadcast "Start" (again not waiting for the execution to end),
 and finally we wait 1000 ms (so 1 second).
 
 The reference documentation for the scheduler is available at [].
-
 
 ## After execution
 
@@ -133,18 +128,11 @@ Can be represented as such by the API:
 stack(
   whenIReceive('Start'),
   setEffectTo(transparent(), 0),
-  repeat(15, stack(
-    changeSizeBy(3),
-    changeYBy(-2), 
-  )),
-  repeat(20, stack(
-    changeEffectBy(transparent(), 5),
-    changeSizeBy(3)
-  )),
-  hide()
-)
+  repeat(15, stack(changeSizeBy(3), changeYBy(-2))),
+  repeat(20, stack(changeEffectBy(transparent(), 5), changeSizeBy(3))),
+  hide(),
+);
 ```
-
 
 For most blocks, an equivalent function exists (see the source file).
 Three special functions are:
