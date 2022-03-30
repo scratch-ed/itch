@@ -16,34 +16,18 @@
       "type": "object"
     },
     "Group": {
-      "anyOf": [
-        {
-          "$ref": "#/definitions/NestedGroup"
-        },
-        {
-          "$ref": "#/definitions/TestGroup"
-        }
-      ]
-    },
-    "Meta": {
       "properties": {
-        "correctTests": {
-          "default": 0,
-          "type": "number"
-        },
-        "totalTests": {
-          "default": 0,
-          "type": "number"
-        }
-      },
-      "type": "object"
-    },
-    "NestedGroup": {
-      "description": "A group containing other groups as children.",
-      "properties": {
-        "groups": {
+        "children": {
+          "description": "- Tests and subgroups.",
           "items": {
-            "$ref": "#/definitions/Group"
+            "anyOf": [
+              {
+                "$ref": "#/definitions/Test"
+              },
+              {
+                "$ref": "#/definitions/Group"
+              }
+            ]
           },
           "type": "array"
         },
@@ -80,6 +64,19 @@
         "visibility": {
           "$ref": "#/definitions/Visibility",
           "description": "- Visibility of the group. See the docs."
+        }
+      },
+      "type": "object"
+    },
+    "Meta": {
+      "properties": {
+        "correctTests": {
+          "default": 0,
+          "type": "number"
+        },
+        "totalTests": {
+          "default": 0,
+          "type": "number"
         }
       },
       "type": "object"
@@ -123,58 +120,6 @@
       },
       "type": "object"
     },
-    "TestGroup": {
-      "description": "A group containing tests as children.",
-      "properties": {
-        "groups": {
-          "items": {
-            "$ref": "#/definitions/Test"
-          },
-          "type": "array"
-        },
-        "messages": {
-          "description": "- Optional additional messages.",
-          "items": {
-            "type": "string"
-          },
-          "type": "array"
-        },
-        "name": {
-          "description": "- Name of the group. This is visible to students.",
-          "type": "string"
-        },
-        "sprite": {
-          "description": "- If this group is linked to a sprite, its name is included\nhere. This might be useful to include an image of the sprite or something.",
-          "type": "string"
-        },
-        "status": {
-          "description": "- Optional status override.",
-          "enum": [
-            "correct",
-            "internal error",
-            "testplan error",
-            "time limit exceeded",
-            "wrong"
-          ],
-          "type": "string"
-        },
-        "summary": {
-          "description": "- Optional summary to display. Especially usefull when\nthe group is collapsed.",
-          "type": "string"
-        },
-        "tests": {
-          "items": {
-            "$ref": "#/definitions/Test"
-          },
-          "type": "array"
-        },
-        "visibility": {
-          "$ref": "#/definitions/Visibility",
-          "description": "- Visibility of the group. See the docs."
-        }
-      },
-      "type": "object"
-    },
     "Visibility": {
       "description": "The visibility of a group.\n\n- Show means display this group and all it's children (non-nested).\n- Collapse means display this group, but hide children,  unless an\n  error occurs.\n- Hide means do not display this group, unless an error occurs.",
       "enum": ["hide", "show", "summary"],
@@ -183,10 +128,17 @@
   },
   "description": "Top level object, containing a number of groups.",
   "properties": {
-    "groups": {
-      "description": "- The groups in this judgement.",
+    "children": {
+      "description": "- The groups or tests in this judgement.",
       "items": {
-        "$ref": "#/definitions/Group"
+        "anyOf": [
+          {
+            "$ref": "#/definitions/Test"
+          },
+          {
+            "$ref": "#/definitions/Group"
+          }
+        ]
       },
       "type": "array"
     },

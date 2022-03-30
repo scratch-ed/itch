@@ -2,14 +2,9 @@
 
 exports[`Collector works correctly 1`] = `
 Judgement {
-  "groups": Array [
-    TestGroup {
-      "messages": Array [],
-      "name": "Controle op bestaande code",
-      "sprite": undefined,
-      "status": "runtime error",
-      "summary": undefined,
-      "tests": Array [
+  "children": Array [
+    Group {
+      "children": Array [
         Test {
           "diff": Diff {
             "actual": "false",
@@ -211,15 +206,15 @@ Judgement {
           "status": "correct",
         },
       ],
+      "messages": Array [],
+      "name": "Controle op bestaande code",
+      "sprite": undefined,
+      "status": "runtime error",
+      "summary": undefined,
       "visibility": "show",
     },
-    TestGroup {
-      "messages": Array [],
-      "name": "Test voor Planeet.",
-      "sprite": undefined,
-      "status": undefined,
-      "summary": undefined,
-      "tests": Array [
+    Group {
+      "children": Array [
         Test {
           "diff": Diff {
             "actual": "control_forever",
@@ -271,15 +266,15 @@ Judgement {
           "status": "correct",
         },
       ],
-      "visibility": "show",
-    },
-    TestGroup {
       "messages": Array [],
-      "name": "Test voor Vijand 1.",
+      "name": "Test voor Planeet.",
       "sprite": undefined,
       "status": undefined,
       "summary": undefined,
-      "tests": Array [
+      "visibility": "show",
+    },
+    Group {
+      "children": Array [
         Test {
           "diff": Diff {
             "actual": "control_forever",
@@ -301,15 +296,15 @@ Judgement {
           "status": "correct",
         },
       ],
-      "visibility": "show",
-    },
-    TestGroup {
       "messages": Array [],
-      "name": "Test voor Vijand 2.",
+      "name": "Test voor Vijand 1.",
       "sprite": undefined,
       "status": undefined,
       "summary": undefined,
-      "tests": Array [
+      "visibility": "show",
+    },
+    Group {
+      "children": Array [
         Test {
           "diff": Diff {
             "actual": "control_forever",
@@ -331,15 +326,15 @@ Judgement {
           "status": "correct",
         },
       ],
-      "visibility": "show",
-    },
-    TestGroup {
       "messages": Array [],
-      "name": "Test voor Voedsel 1",
+      "name": "Test voor Vijand 2.",
       "sprite": undefined,
       "status": undefined,
       "summary": undefined,
-      "tests": Array [
+      "visibility": "show",
+    },
+    Group {
+      "children": Array [
         Test {
           "diff": Diff {
             "actual": "control_forever",
@@ -401,15 +396,15 @@ Judgement {
           "status": "correct",
         },
       ],
-      "visibility": "show",
-    },
-    TestGroup {
       "messages": Array [],
-      "name": "Test voor Voedsel 2",
+      "name": "Test voor Voedsel 1",
       "sprite": undefined,
       "status": undefined,
       "summary": undefined,
-      "tests": Array [
+      "visibility": "show",
+    },
+    Group {
+      "children": Array [
         Test {
           "diff": Diff {
             "actual": "control_forever",
@@ -471,15 +466,15 @@ Judgement {
           "status": "correct",
         },
       ],
-      "visibility": "show",
-    },
-    TestGroup {
       "messages": Array [],
-      "name": "Test voor Voedsel 3",
+      "name": "Test voor Voedsel 2",
       "sprite": undefined,
       "status": undefined,
       "summary": undefined,
-      "tests": Array [
+      "visibility": "show",
+    },
+    Group {
+      "children": Array [
         Test {
           "diff": Diff {
             "actual": "control_forever",
@@ -541,15 +536,15 @@ Judgement {
           "status": "correct",
         },
       ],
-      "visibility": "show",
-    },
-    TestGroup {
       "messages": Array [],
-      "name": "Test voor Voedsel 4",
+      "name": "Test voor Voedsel 3",
       "sprite": undefined,
       "status": undefined,
       "summary": undefined,
-      "tests": Array [
+      "visibility": "show",
+    },
+    Group {
+      "children": Array [
         Test {
           "diff": Diff {
             "actual": "control_forever",
@@ -611,6 +606,11 @@ Judgement {
           "status": "correct",
         },
       ],
+      "messages": Array [],
+      "name": "Test voor Voedsel 4",
+      "sprite": undefined,
+      "status": undefined,
+      "summary": undefined,
       "visibility": "show",
     },
   ],

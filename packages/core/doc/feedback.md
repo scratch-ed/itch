@@ -1,15 +1,15 @@
 # Feedback
 
-This document describes the output format of the judge. It is a high level
-document; see below where to find more detailed documentation.
+This document describes the output format of the judge.
+It is a high-level document;
+see below where to find more detailed documentation.
 
 ## Structure
 
 There are three structural objects in the feedback:
 
 - `Judgement` - the top level object.
-- `Group` - groups one or more tests or subgroups. Note that the children of a
-  group must either be all `Group`s or all `Test`s. A mix is not allowed.
+- `Group` - groups one or more tests or subgroups.
 - `Test` - one condition or test that is evaluated.
 
 For example, the structure might look like this for a very simple test plan.
@@ -17,9 +17,9 @@ All 5 tests are in one group.
 
 ```yaml
 # The judgement object
-groups:
+children:
   - name: All tests
-    tests:
+    children:
       - Test 1
       - Test 2
       - Test 3
@@ -27,26 +27,26 @@ groups:
       - Test 5
 ```
 
-A more complex test plan might have subgroups of different levels. The first
-2 tests are again in one group. The second group does not contain groups, but
-contains other groups instead, which each have 3 tests.
+A more complex test plan might have subgroups of different levels.
+The first 2 tests are again in one group.
+The second group does not contain other groups, each with 3 tests.
 
 ```yaml
 # The judgement object
-groups:
+children:
   - name: Normal tests (group 1)
-    tests:
+    children:
       - Test 1
       - Test 2
   - name: Advanced tests (group 2)
-    groups:
+    children:
       - name: Group 2.1
-        tests:
+        children:
           - Test 3
           - Test 4
           - Test 5
       - name: Group 2.2
-        tests:
+        children:
           - Test 6
           - Test 7
           - Test 8
@@ -55,11 +55,11 @@ groups:
 The format does not limit the amount of nesting, but of course very deeply
 nested groups may not be practical.
 
-## Visibility & collapsibility of groups
+## Collapsing groups
 
 There are currently 3 visibility modes. From the docs:
 
-- `show` means display this group.
+- `show` means display this group and expand it.
 - `summary` means display this group, collapse or hide the children by default, unless
   one of the tests in this group (or its subgroups) fails.
 - `hide` means do not show the group by default, unless one of the tests in
@@ -71,28 +71,22 @@ groups with `hide` are only counted if displayed. This works the same for nested
 groups. For example, assume we have the following structure of groups:
 
 ```yaml
-groups:
+children:
   - name: Group 1
     visibility: 'show'
-    groups:
+    children:
       - name: Group 1.1
         visibility: 'summary'
       - name: Group 1.2
         visibility: 'hide'
 ```
 
-Counting of tests should be done recursively, and on each level applying the
-rules. Group 1 is thus visible, so the children are counted. In this case, the
-children are groups, so the rules apply again. Group 1.1 is collapsed, but still
-visible, so the tests are counted. Group 1.2 is hidden, so tests are only
-counted if there was an error.
-
 ## Status propagation
 
 TODO: this could be applied in the judge itself if easier.
 
-Each test has a status. However, `Group` (and `Judgement`) objects can also have
-an optional status override.
+Each test has a status.
+However, `Group` (and `Judgement`) objects can also have an optional status override.
 
 The status for a group is thus the status property if it exists. If none is
 provided, the status of the group is the worst status of its children, again
@@ -146,8 +140,8 @@ The intention is that if a backwards incompatible change needs to be made, the
 `version` attribute will be increased. This attribute can then be used to change
 the behaviour of the code using the results if needed.
 
-Note that code using these results should be built with forward compatibility in
-mind. For example, unknown attributes or values should be ignored, rather than
-erroring. For example, we might add a new visibility mode in the future.
-Existing code should still do a best effort to accept the results, for example
-by using a default visibility.
+Note that code using these results should be built with forward compatibility in mind.
+For example, unknown attributes or values should be ignored, rather than erroring.
+For example, we might add a new visibility mode in the future.
+All existing code should still accept the results, on a best-efforts basis,
+i.e. by using a default visibility.

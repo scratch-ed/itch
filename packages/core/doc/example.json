@@ -1,11 +1,11 @@
 {
   "version": 2,
-  "groups": [
+  "children": [
     {
       "name": "Controle op bestaande code",
       "visibility": "show",
       "messages": [],
-      "tests": [
+      "children": [
         {
           "name": "Scherm",
           "status": "correct",
@@ -212,7 +212,7 @@
       "name": "Test voor Planeet.",
       "visibility": "show",
       "messages": [],
-      "tests": [
+      "children": [
         {
           "name": "Juiste lus",
           "status": "correct",
@@ -269,7 +269,7 @@
       "name": "Test voor Vijand 1.",
       "visibility": "show",
       "messages": [],
-      "tests": [
+      "children": [
         {
           "name": "Juiste lus",
           "status": "correct",
@@ -296,7 +296,7 @@
       "name": "Test voor Vijand 2.",
       "visibility": "show",
       "messages": [],
-      "tests": [
+      "children": [
         {
           "name": "Juiste lus",
           "status": "correct",
@@ -323,7 +323,7 @@
       "name": "Test voor Voedsel 1",
       "visibility": "show",
       "messages": [],
-      "tests": [
+      "children": [
         {
           "name": "Juiste lus",
           "status": "correct",
@@ -390,7 +390,7 @@
       "name": "Test voor Voedsel 2",
       "visibility": "show",
       "messages": [],
-      "tests": [
+      "children": [
         {
           "name": "Juiste lus",
           "status": "correct",
@@ -457,7 +457,7 @@
       "name": "Test voor Voedsel 3",
       "visibility": "show",
       "messages": [],
-      "tests": [
+      "children": [
         {
           "name": "Juiste lus",
           "status": "correct",
@@ -524,7 +524,7 @@
       "name": "Test voor Voedsel 4",
       "visibility": "show",
       "messages": [],
-      "tests": [
+      "children": [
         {
           "name": "Juiste lus",
           "status": "correct",

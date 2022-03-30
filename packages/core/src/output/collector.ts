@@ -1,12 +1,4 @@
-import {
-  Diff,
-  Group,
-  Judgement,
-  Meta,
-  NestedGroup,
-  Test,
-  TestGroup,
-} from './full-schema';
+import { Diff, Group, Judgement, Meta, Test } from './full-schema';
 import {
   AppendDiff,
   AppendMessage,
@@ -125,18 +117,15 @@ export class OutputCollector {
     }
 
     const messages: string[] = [];
-    const groups: Group[] = [];
-    const tests: Test[] = [];
+    const children: Array<Group | Test> = [];
     let escalatedStatus;
 
     const levelObjects = this.levelStack.pop() as Array<
       AppendMessage | Test | Group | EscalateStatus
     >;
     for (const levelObject of levelObjects!) {
-      if (levelObject instanceof Test) {
-        tests.push(levelObject);
-      } else if (levelObject instanceof NestedGroup || levelObject instanceof TestGroup) {
-        groups.push(levelObject);
+      if (levelObject instanceof Test || levelObject instanceof Group) {
+        children.push(levelObject);
       } else if (levelObject.command === 'append-message') {
         messages.push(levelObject.message);
       } else if (levelObject.command === 'escalate-status') {
@@ -150,30 +139,15 @@ export class OutputCollector {
       this.currentLevel().push(escalatedStatus);
     }
 
-    if (tests.length > 0 && groups.length > 0) {
-      throw new Error(`Cannot mix groups and tests as children of a group.`);
-    }
-    if (tests.length > 0) {
-      return new TestGroup(
-        tests,
-        startUpdate.name,
-        startUpdate.visibility,
-        messages,
-        startUpdate.sprite,
-        escalatedStatus?.status,
-        finalUpdate.summary,
-      );
-    } else {
-      return new NestedGroup(
-        groups,
-        startUpdate.name,
-        startUpdate.visibility,
-        messages,
-        startUpdate.sprite,
-        escalatedStatus?.status,
-        finalUpdate.summary,
-      );
-    }
+    return new Group(
+      startUpdate.name,
+      startUpdate.visibility,
+      children,
+      messages,
+      startUpdate.sprite,
+      escalatedStatus?.status,
+      finalUpdate.summary,
+    );
   }
 
   private handleJudgementLevel(_update: CloseJudgement): Judgement {
@@ -190,7 +164,7 @@ export class OutputCollector {
       AppendMessage | Group | EscalateStatus
     >;
     for (const levelObject of levelObjects!) {
-      if (levelObject instanceof NestedGroup || levelObject instanceof TestGroup) {
+      if (levelObject instanceof Group) {
         groups.push(levelObject);
       } else if (levelObject.command === 'append-message') {
         messages.push(levelObject.message);
