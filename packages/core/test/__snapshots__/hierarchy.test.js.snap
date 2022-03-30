@@ -10,17 +10,20 @@ Array [
     "command": "start-group",
     "name": "Groep 1",
     "sprite": "Test",
+    "tags": Array [],
     "visibility": "show",
   },
   Object {
     "command": "start-group",
     "name": "Groep 2",
     "sprite": undefined,
+    "tags": Array [],
     "visibility": "show",
   },
   Object {
     "command": "start-test",
     "name": "Test 1",
+    "tags": Array [],
   },
   Object {
     "command": "close-test",
@@ -48,17 +51,20 @@ Array [
     "command": "start-group",
     "name": "Groep 1",
     "sprite": undefined,
+    "tags": Array [],
     "visibility": "show",
   },
   Object {
     "command": "start-group",
     "name": "Groep 2",
     "sprite": undefined,
+    "tags": Array [],
     "visibility": "show",
   },
   Object {
     "command": "start-test",
     "name": "Test 1",
+    "tags": Array [],
   },
   Object {
     "actual": "No",

@@ -9,12 +9,14 @@ Array [
   Object {
     "command": "start-group",
     "name": "Groep 1",
-    "sprite": "test-sprite",
+    "sprite": undefined,
+    "tags": "test-sprite",
     "visibility": "show",
   },
   Object {
     "command": "start-test",
     "name": "Hallo one test...",
+    "tags": Array [],
   },
   Object {
     "command": "append-message",

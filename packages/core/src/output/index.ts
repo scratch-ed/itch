@@ -85,9 +85,15 @@ export class GroupedResultManager {
    * @param name Name of the test group.
    * @param [visibility] Default visibility of the group. If an error occurs, the
    *        group must always be shown.
+   * @param [tags] Optional tags for this group.
    * @param [sprite] Name of optionally linked sprite.
    */
-  startGroup(name: string, visibility: Visibility = 'show', sprite?: string): void {
+  startGroup(
+    name: string,
+    visibility: Visibility = 'show',
+    tags: string[] = [],
+    sprite?: string,
+  ): void {
     if (this.isFinished) {
       console.warn(
         'Attempting to open group after judgement has been completed. Ignoring.',
@@ -103,6 +109,7 @@ export class GroupedResultManager {
       name: name,
       sprite: sprite,
       visibility: visibility,
+      tags: tags,
     });
   }
 
@@ -127,7 +134,7 @@ export class GroupedResultManager {
     this.out({ command: 'close-group', summary: summary });
   }
 
-  startTest(name = `Test ${Math.random()}`): void {
+  startTest(name = `Test ${Math.random()}`, tags: string[] = []): void {
     if (this.isFinished) {
       console.warn('Attempting to start test after judgement has been completed.');
       return;
@@ -145,6 +152,7 @@ export class GroupedResultManager {
     this.out({
       command: 'start-test',
       name: name,
+      tags: tags,
     });
     this.hasOpenTest = true;
   }

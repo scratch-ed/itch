@@ -28,14 +28,24 @@ export interface StartGroup {
   name: string;
   /** Visibility of the group. */
   visibility: Visibility;
+  /**
+   * A bunch of tags for this group.
+   */
+  tags: string[];
   /** Optionally link this group to a certain sprite. */
   sprite?: string;
 }
 
 export interface StartTest {
   readonly command: 'start-test';
-  /** Name of the test, shown if no messages were received. */
+  /**
+   * Name of the test, shown if no messages were received.
+   */
   name: string;
+  /**
+   * A bunch of tags for this test.
+   */
+  tags: string[];
 }
 
 export type Message = string;

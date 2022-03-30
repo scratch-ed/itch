@@ -9,17 +9,20 @@ Array [
   Object {
     "command": "start-group",
     "name": "Controle op bestaande code",
+    "tags": Array [],
     "visibility": "summary",
   },
   Object {
     "command": "start-group",
     "name": "Nori",
     "sprite": "Nori",
+    "tags": Array [],
     "visibility": "summary",
   },
   Object {
     "command": "start-test",
     "name": "Test 0.055085085131258336",
+    "tags": Array [],
   },
   Object {
     "command": "close-test",
@@ -29,6 +32,7 @@ Array [
   Object {
     "command": "start-test",
     "name": "Test 0.6675940473163964",
+    "tags": Array [],
   },
   Object {
     "command": "close-test",
@@ -42,11 +46,13 @@ Array [
     "command": "start-group",
     "name": "Speelveld",
     "sprite": "Speelveld",
+    "tags": Array [],
     "visibility": "summary",
   },
   Object {
     "command": "start-test",
     "name": "Gewijzigde sprite",
+    "tags": Array [],
   },
   Object {
     "command": "close-test",
@@ -56,6 +62,7 @@ Array [
   Object {
     "command": "start-test",
     "name": "Test 0.3017406753576552",
+    "tags": Array [],
   },
   Object {
     "command": "close-test",
@@ -69,11 +76,13 @@ Array [
     "command": "start-group",
     "name": "Hat",
     "sprite": "Hat",
+    "tags": Array [],
     "visibility": "summary",
   },
   Object {
     "command": "start-test",
     "name": "Test 0.26858494859270277",
+    "tags": Array [],
   },
   Object {
     "command": "close-test",
@@ -83,6 +92,7 @@ Array [
   Object {
     "command": "start-test",
     "name": "Test 0.19415545140297377",
+    "tags": Array [],
   },
   Object {
     "command": "close-test",
@@ -92,6 +102,7 @@ Array [
   Object {
     "command": "start-test",
     "name": "Test op rondslingerende blokjes",
+    "tags": Array [],
   },
   Object {
     "command": "close-test",
@@ -101,6 +112,7 @@ Array [
   Object {
     "command": "start-test",
     "name": "Test 0.9255796447261436",
+    "tags": Array [],
   },
   Object {
     "command": "close-test",
@@ -110,6 +122,7 @@ Array [
   Object {
     "command": "start-test",
     "name": "Toegelaten blokjes",
+    "tags": Array [],
   },
   Object {
     "command": "close-test",
@@ -126,11 +139,13 @@ Array [
   Object {
     "command": "start-group",
     "name": "Testen voor de Hoed",
+    "tags": Array [],
     "visibility": "show",
   },
   Object {
     "command": "start-test",
     "name": "Hoed verandert bij klikken",
+    "tags": Array [],
   },
   Object {
     "command": "close-test",
@@ -139,6 +154,7 @@ Array [
   Object {
     "command": "start-test",
     "name": "Kostuums van de hoed",
+    "tags": Array [],
   },
   Object {
     "command": "close-test",
@@ -147,6 +163,7 @@ Array [
   Object {
     "command": "start-test",
     "name": "Klikken op de hoed",
+    "tags": Array [],
   },
   Object {
     "command": "close-test",
@@ -155,6 +172,7 @@ Array [
   Object {
     "command": "start-test",
     "name": "Klikken op de hoed",
+    "tags": Array [],
   },
   Object {
     "command": "close-test",
@@ -163,6 +181,7 @@ Array [
   Object {
     "command": "start-test",
     "name": "Klikken op de hoed",
+    "tags": Array [],
   },
   Object {
     "command": "close-test",
@@ -171,6 +190,7 @@ Array [
   Object {
     "command": "start-test",
     "name": "Klikken op de hoed",
+    "tags": Array [],
   },
   Object {
     "command": "close-test",
@@ -179,6 +199,7 @@ Array [
   Object {
     "command": "start-test",
     "name": "Klikken op de hoed",
+    "tags": Array [],
   },
   Object {
     "command": "close-test",
@@ -187,6 +208,7 @@ Array [
   Object {
     "command": "start-test",
     "name": "Klikken op de hoed",
+    "tags": Array [],
   },
   Object {
     "command": "close-test",
@@ -195,6 +217,7 @@ Array [
   Object {
     "command": "start-test",
     "name": "Klikken op de hoed",
+    "tags": Array [],
   },
   Object {
     "command": "close-test",
@@ -203,6 +226,7 @@ Array [
   Object {
     "command": "start-test",
     "name": "Klikken op de hoed",
+    "tags": Array [],
   },
   Object {
     "command": "close-test",
@@ -211,6 +235,7 @@ Array [
   Object {
     "command": "start-test",
     "name": "Klikken op de hoed",
+    "tags": Array [],
   },
   Object {
     "command": "close-test",
@@ -219,6 +244,7 @@ Array [
   Object {
     "command": "start-test",
     "name": "Klikken op de hoed",
+    "tags": Array [],
   },
   Object {
     "command": "close-test",
@@ -227,6 +253,7 @@ Array [
   Object {
     "command": "start-test",
     "name": "Klikken op de hoed",
+    "tags": Array [],
   },
   Object {
     "command": "close-test",
@@ -235,6 +262,7 @@ Array [
   Object {
     "command": "start-test",
     "name": "Klikken op de hoed",
+    "tags": Array [],
   },
   Object {
     "command": "close-test",
@@ -243,6 +271,7 @@ Array [
   Object {
     "command": "start-test",
     "name": "Klikken op de hoed",
+    "tags": Array [],
   },
   Object {
     "command": "close-test",
@@ -251,6 +280,7 @@ Array [
   Object {
     "command": "start-test",
     "name": "Klikken op de hoed",
+    "tags": Array [],
   },
   Object {
     "command": "close-test",
@@ -259,6 +289,7 @@ Array [
   Object {
     "command": "start-test",
     "name": "Correcte blokken",
+    "tags": Array [],
   },
   Object {
     "command": "close-test",

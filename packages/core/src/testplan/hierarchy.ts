@@ -123,8 +123,12 @@ class TestOptions {
   private correctMessage?: MessageCallback;
   private terminate = false;
   private enableDiff = false;
+  private testTags: string[] = [];
 
-  constructor(private readonly resultManager: GroupedResultManager) {}
+  constructor(
+    private readonly name: string,
+    private readonly resultManager: GroupedResultManager,
+  ) {}
 
   /**
    * Make this test fatal: if it fails, execution is stopped.
@@ -183,15 +187,25 @@ class TestOptions {
     return this;
   }
 
+  tags(...tags: string[]): TestOptions {
+    this.testTags = tags;
+    return this;
+  }
+
   private out(accepted: boolean, expected?: unknown, actual?: unknown): boolean {
+    // Start the test.
+    this.resultManager.startTest(this.name, this.testTags);
+
     const status = accepted ? 'correct' : 'wrong';
     const messageCallback = accepted ? this.correctMessage : this.errorMessage;
     const summary = messageCallback?.(expected, actual);
 
+    // Add diff if needed.
     if (this.enableDiff) {
       this.resultManager.appendDiff(stringify(expected), stringify(actual));
     }
 
+    // Stop the test.
     this.resultManager.closeTest(status, summary);
 
     if (!accepted && this.terminate) {
@@ -206,6 +220,7 @@ export interface GroupOptions {
   sprite?: string;
   summary?: string;
   visibility?: Visibility;
+  tags?: string[];
 }
 
 export interface SpriteGroupOptions extends GroupOptions {
@@ -219,14 +234,8 @@ export class GroupLevel {
    * Start a test.
    * @param name - Optional name of the test.
    */
-  test(name?: string): TestOptions {
-    if (name) {
-      this.resultManager.startTest(name);
-    } else {
-      this.resultManager.startTest();
-    }
-
-    return new TestOptions(this.resultManager);
+  test(name = `Test ${Math.random()}`): TestOptions {
+    return new TestOptions(name, this.resultManager);
   }
 
   /**
@@ -294,7 +303,13 @@ export class GroupLevel {
       throw new Error('Wrong arguments to group function.');
     }
 
-    this.resultManager.startGroup(name, options?.visibility ?? 'show', options?.sprite);
+    const tags = options?.tags ?? [];
+    this.resultManager.startGroup(
+      name,
+      options?.visibility ?? 'show',
+      tags,
+      options?.sprite,
+    );
     block!();
     this.resultManager.closeGroup(options?.summary);
   }

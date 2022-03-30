@@ -28,7 +28,7 @@
     "build": "npm run build --workspaces --if-present",
     "type-check": "npm run type-check --workspaces --if-present",
     "test:exercises": "jest --selectProjects stableExercises --silent",
-    "test:exercises:all": "jest --runInBand --selectProjects exercise",
+    "test:exercises:all": "jest --runInBand --selectProjects exercises",
     "clean": "npm run clean --workspaces --if-present && rimraf ./**/node_modules",
     "lint": "eslint .",
     "format": "prettier --write .",
