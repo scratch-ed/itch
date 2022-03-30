@@ -140,3 +140,41 @@ Three special functions are:
 - `stack()`: Indicate a block stack.
 - `anything()`: Matches anything.
 - `nothing()`: Matches nothing.
+
+## Test groups
+
+The tests in a test plan can be organized in groups:
+
+```javascript
+// Start a group.
+e.group.group('Groep 1', () => {
+  e.group
+    .test('Test 1')
+    .feedback({
+      correct: 'Yes',
+      wrong: 'No',
+    })
+    .expect(25)
+    .toBe('52'); // No.
+});
+```
+
+You can nest groups inside of groups.
+See the JS Docs for what parameters are accepted when creating groups.
+There is also documentation for the test matcher (similar to Jest), but a short overview is:
+
+```javascript
+e.group
+  .test('Test 1') // Optional name
+  .feedback({
+    correct: 'Yes',
+    wrong: 'No',
+  }) // Feedback for when it is wrong or correct
+  .expect(25) // Actual value produced
+  .toBe('52'); // The expected value.
+```
+
+Besides `expect`/`toBe`, other matchers are:
+
+- `acceptIf(value)` - Correct if `value` is true, otherwise wrong.
+- `expect`/`toMatch(block)` - Allows to match blocks (see above)
