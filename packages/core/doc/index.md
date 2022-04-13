@@ -16,7 +16,6 @@ The VM also manages the canvas using the Scratch Renderer, which is a WebGL-base
 
 There are few more helper packages used by the VM, but these are less important for the Scratch Judge, as the judge only interacts with the VM and the Renderer.
 
-
 ## Components
 
 The repository is a mono-repo with a few components.
@@ -42,4 +41,3 @@ Finally, there are exercises in `/exercises`.
 Each exercise is its own "JavaScript package", containing one or more test plans.
 Additionally, there are some jest tests, to ensure we don't break the test plan by changing the judge.
 See the [documentation on test plans](./testplan.md) for more information about the test plans.
-
