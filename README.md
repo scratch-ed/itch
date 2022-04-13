@@ -13,6 +13,8 @@ If you use `nvm`, you can simply execute `nvm use` to get the desired `node` and
 
 ## Running the judge
 
+For more high-level docs, see [here](./packages/core/doc/index.md).
+
 To start, run `npm run build`.
 
 To run the judge in debug mode:
