@@ -197,7 +197,7 @@ export function checkPredefinedBlocks(
 
   e.group(
     'Controle op bestaande code',
-    { visibility: 'summary', summary: 'De bestaande code is nog steeds juist.' },
+    { visibility: 'summary', summary: 'De bestaande code is niet gewijzigd.' },
     () => {
       // We check each sprite.
       for (const target of template.targets) {
@@ -206,20 +206,41 @@ export function checkPredefinedBlocks(
           continue;
         }
         e.group(name, { sprite: name, visibility: 'summary' }, () => {
-          e.test()
+          const targetComparison = e
+            .test()
             .feedback({
               correct: `Top! Je hebt niets veranderd aan de sprite ${name}.`,
               wrong: `Oops, je hebt iets veranderd aan de sprite ${name}. Je gaat opnieuw moeten beginnen.`,
             })
             .expect(template.hasChangedTarget(submission, name))
             .toBe(false);
-          e.test()
+          if (config.debug && !targetComparison) {
+            const templateTarget = template.target(name);
+            const submissionTarget = submission.target(name);
+            const ddd = deepDiff(
+              templateTarget.comparableObject(),
+              submissionTarget.comparableObject(),
+            );
+            console.log(ddd);
+            // eslint-disable-next-line no-debugger
+            debugger;
+          }
+          const blockComparison = e
+            .test()
             .feedback({
               correct: `Top! Je hebt niets veranderd aan de blokjes van sprite ${name}.`,
               wrong: `Oops, je hebt iets veranderd aan de blokjes sprite ${name}. Je gaat opnieuw moeten beginnen.`,
             })
             .expect(template.hasChangedBlocks(submission, name))
             .toBe(false);
+          if (config.debug && !blockComparison) {
+            const templateBlocks = template.target(name).blockTree();
+            const submissionBlocks = submission.target(name).blockTree();
+            const ddd = deepDiff(templateBlocks, submissionBlocks);
+            console.log(ddd);
+            // eslint-disable-next-line no-debugger
+            debugger;
+          }
         });
       }
 
