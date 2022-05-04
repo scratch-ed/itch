@@ -1,4 +1,5 @@
 import { searchFrames } from './log';
+import { nodeMatchesPattern } from './matcher/node-matcher';
 import { format, numericEquals } from './utils';
 import { broadcast, delay, sprite } from './scheduler/wait';
 import {
@@ -259,6 +260,8 @@ declare interface BlockMatch {
   itemOfList: typeof itemOfList;
   lengthOfList: typeof lengthOfList;
   listContains: typeof listContains;
+  // Some utility functions
+  nodeMatchesPattern: typeof nodeMatchesPattern;
 }
 
 /**

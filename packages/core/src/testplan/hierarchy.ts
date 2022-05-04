@@ -124,6 +124,7 @@ class TestOptions {
   private terminate = false;
   private enableDiff = false;
   private testTags: string[] = [];
+  private ignoreWrongResult = false;
 
   constructor(
     private readonly name: string,
@@ -143,6 +144,11 @@ class TestOptions {
    */
   diff(): TestOptions {
     this.enableDiff = true;
+    return this;
+  }
+
+  ignoreWrong(ignoreIt: boolean) {
+    this.ignoreWrongResult = ignoreIt;
     return this;
   }
 
@@ -193,6 +199,11 @@ class TestOptions {
   }
 
   private out(accepted: boolean, expected?: unknown, actual?: unknown): boolean {
+    // If the test is not accepted, and we ignore wrong results, stop now.
+    if (this.ignoreWrongResult && !accepted) {
+      return accepted;
+    }
+
     // Start the test.
     this.resultManager.startTest(this.name, this.testTags);
 

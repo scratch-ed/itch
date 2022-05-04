@@ -125,6 +125,11 @@ function matchesOnePattern(
     return true;
   }
 
+  // If the pattern is a function, call it.
+  if (typeof pattern === 'function') {
+    return pattern(node);
+  }
+
   // If the opcode doesn't match, end it now.
   if (node.opcode !== pattern.opcode) {
     return false;
@@ -193,6 +198,10 @@ export function subtreeMatchesOneStack(
   // If the pattern is a wildcard, we match.
   if (pattern === ANYTHING) {
     return true;
+  }
+
+  if (typeof pattern === 'function') {
+    throw new Error('You cannot pass a function to a subtree match function.');
   }
 
   let currentNode: Node | null | undefined = node;

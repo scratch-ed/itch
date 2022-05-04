@@ -1,5 +1,5 @@
 import { subtreeMatchesOneStack } from './matcher/node-matcher';
-import { PatternBlock, RotationStyle, stack } from './matcher/patterns';
+import { BlockStack, PatternBlock, RotationStyle, stack } from './matcher/patterns';
 import { asTree, Node } from './new-blocks';
 import { Position } from './lines';
 import { ensure } from './utils';
@@ -209,6 +209,11 @@ export class ScratchTarget {
     return asTree(this, blocks);
   }
 
+  find(stack: BlockStack): Node | undefined {
+    const blocks = Array.from(this.blockTree());
+    return blocks.find((b) => subtreeMatchesOneStack(b, stack));
+  }
+
   /**
    * Find the block stack that matches with the pattern.
    *
@@ -219,9 +224,8 @@ export class ScratchTarget {
    *         match, an arbitrary stack will be returned.
    */
   findStack(firstBlock: PatternBlock, ...other: PatternBlock[]): Node | undefined {
-    const blocks = Array.from(this.blockTree());
     const stacked = stack(firstBlock, ...other);
-    return blocks.find((b) => subtreeMatchesOneStack(b, stacked));
+    return this.find(stacked);
   }
 
   variable(name: string): ScratchVariable | undefined {

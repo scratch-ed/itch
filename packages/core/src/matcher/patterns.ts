@@ -1,4 +1,5 @@
 // noinspection JSUnusedGlobalSymbols
+import { Node } from '../new-blocks';
 
 /**
  * @fileOverview A DSL-like construct to match Scratch blocks against a pattern.
@@ -47,7 +48,7 @@ export type ExactValue<T> = T extends ReporterBlock ? T : T | ReporterBlock;
  * 2. A wildcard (anything goes).
  * 4. A custom function to evaluate the value.
  */
-export type OnePattern<T> = T | Anything | Nothing;
+export type OnePattern<T> = T | Anything | Nothing | ((a: Node) => boolean);
 
 // 3. A choice, meaning a list of possibilities.
 export type Pattern<T> = OnePattern<T>[] | OnePattern<T>;
@@ -604,8 +605,17 @@ export function greenFlag(): PatternBlock {
   };
 }
 
+type KeyPress =
+  | 'space'
+  | 'left arrow'
+  | 'up arrow'
+  | 'right arrow'
+  | 'down arrow'
+  | 'enter'
+  | string;
+
 // https://en.scratch-wiki.info/wiki/When_()_Key_Pressed_(Events_block)
-export function whenKeyPressed(key: ValuePattern<string>): PatternBlock {
+export function whenKeyPressed(key: ValuePattern<KeyPress>): PatternBlock {
   return {
     opcode: 'event_whenkeypressed',
     fields: {
@@ -885,7 +895,7 @@ export function colorIsTouching(
 }
 
 // https://en.scratch-wiki.info/wiki/Key_()_Pressed%3F_(block)
-export function isKeyPressed(key: ValuePattern<string>): BooleanBlock {
+export function isKeyPressed(key: ValuePattern<KeyPress>): BooleanBlock {
   return {
     type: 'boolean',
     opcode: 'sensing_keypressed',
