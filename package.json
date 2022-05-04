@@ -59,7 +59,8 @@
           "<rootDir>/exercises/maanbal/*.test.js",
           "<rootDir>/exercises/navigeer-rommel/*.test.js",
           "<rootDir>/exercises/rommelruimend/*.test.js",
-          "<rootDir>/exercises/vernietig-asteroiden/*.test.js"
+          "<rootDir>/exercises/vernietig-asteroiden/*.test.js",
+          "<rootDir>/exercises/r0nn-op-avontuur/*.test.js"
         ]
       }
     ]
