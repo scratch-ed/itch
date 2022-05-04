@@ -6,6 +6,7 @@ class Processor {
     this.stack = [];
     this.element = element;
     this.groupStack = [];
+    this.correctStack = [true];
   }
 
   process(message) {
@@ -28,6 +29,7 @@ class Processor {
     }
 
     if (command === 'start-group') {
+      this.correctStack.push(true);
       // Start a new group.
       const details = document.createElement('details');
       details.open = message.visibility === 'show';
@@ -40,12 +42,15 @@ class Processor {
     }
 
     if (command === 'close-group') {
-      if (message.summary) {
-        const summary = this.element.querySelector('summary');
+      const summary = this.element.querySelector('summary');
+      const currentCorrect = this.correctStack.pop();
+      summary.innerHTML = (currentCorrect ? '✅' : '❌') + summary.innerHTML;
+      if (message.summary && currentCorrect) {
         summary.innerHTML += '<br>';
         summary.innerHTML += message.summary;
       }
       this.element = this.groupStack.pop();
+      this.correctStack[this.correctStack.length - 1] &&= currentCorrect;
     }
 
     if (command === 'start-test') {
@@ -56,6 +61,7 @@ class Processor {
       this.element.innerHTML += `<span title='${this.currentTest.name}'>${
         message.status === 'correct' ? '✅' : '❌'
       } ${message.feedback || this.currentTest.name}</span><br>`;
+      this.correctStack[this.correctStack.length - 1] &&= message.status === 'correct';
     }
 
     if (command.startsWith('close')) {
