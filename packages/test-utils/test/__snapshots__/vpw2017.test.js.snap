@@ -134,7 +134,7 @@ Array [
   },
   Object {
     "command": "close-group",
-    "summary": "De bestaande code is nog steeds juist.",
+    "summary": "De bestaande code is niet gewijzigd.",
   },
   Object {
     "command": "start-group",
