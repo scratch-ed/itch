@@ -115,7 +115,7 @@ function checkSpriteBlocks(
     const templateFiltered = templateStacks.filter(filter);
 
     // The amount of matches in both should be equal.
-    if (submissionFiltered.length === templateFiltered.length) {
+    if (submissionFiltered.length >= templateFiltered.length) {
       submissionFiltered.forEach((e) => encountered.add(e));
     } else {
       correct = false;

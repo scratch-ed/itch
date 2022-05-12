@@ -13,8 +13,8 @@
  * to see if they are equal or not.
  */
 import isEqual from 'lodash-es/isEqual';
-import { nodeMatchesPattern } from '../matcher/node-matcher';
-import { Pattern, PatternBlock } from '../matcher/patterns';
+import { nodeMatchesPattern, subTreeMatchesStack } from '../matcher/node-matcher';
+import { BlockStack, Pattern, PatternBlock } from '../matcher/patterns';
 import { castCallback, numericEquals, stringify } from '../utils';
 import { GroupedResultManager } from '../output';
 import { Visibility } from '../output/partial-schema';
@@ -86,6 +86,22 @@ class Matcher {
     }
 
     const accepted = nodeMatchesPattern(this.actual, blockPattern);
+    return this.callback(accepted);
+  }
+
+  /**
+   * Match the value against a subtree.
+   *
+   * In this case, the value must be a Node, or it will throw, as this is
+   * considered a programming error.
+   */
+  toMatchSubtree(stackPattern: Pattern<BlockStack>): boolean {
+    // It can possibly be a node.
+    if (!(isNode(this.actual) || this.actual === null || this.actual === undefined)) {
+      throw new Error(`Found non-Node: ${this.actual}, expected Node.`);
+    }
+
+    const accepted = subTreeMatchesStack(this.actual, stackPattern);
     return this.callback(accepted);
   }
 

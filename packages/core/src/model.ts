@@ -202,11 +202,21 @@ export class ScratchTarget {
 
   /**
    * Get all blocks as a set of trees.
+   *
    * You can optionally pass a list of tree roots to consider; other blocks
    * will be ignored.
    */
   blockTree(blocks?: ScratchBlock[]): Set<Node> {
     return asTree(this, blocks);
+  }
+
+  /**
+   * Same as `blockTree`, but converted to a list.
+   *
+   * @param blocks See `blockTree`.
+   */
+  blockTreeList(blocks?: ScratchBlock[]): Array<Node> {
+    return Array.from(this.blockTree(blocks));
   }
 
   find(stack: BlockStack): Node | undefined {

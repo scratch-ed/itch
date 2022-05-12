@@ -2,7 +2,7 @@
 import 'regenerator-runtime/runtime';
 
 import seed from 'seed-random';
-import { nodeMatchesPattern } from './matcher/node-matcher';
+import { nodeMatchesPattern, subTreeMatchesStack } from './matcher/node-matcher';
 import { numericEquals, format } from './utils';
 import { Context } from './context';
 import { Project } from './project';
@@ -322,6 +322,7 @@ function expose() {
     listContains,
     stop,
     nodeMatchesPattern,
+    subTreeMatchesStack,
   };
 }
 
