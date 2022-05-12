@@ -183,8 +183,8 @@ export class Snapshot {
     predicate = (s1: ScratchTarget, s2: ScratchTarget) =>
       !isEqual(s1.comparableObject(), s2.comparableObject()),
   ): boolean {
-    const baseSprite = this.target(target);
-    const comparisonSprite = other.target(target);
+    const baseSprite = this.findTarget(target);
+    const comparisonSprite = other.findTarget(target);
 
     if (baseSprite === undefined && comparisonSprite === undefined) {
       return false;

@@ -20,7 +20,13 @@ import { GroupedResultManager } from '../output';
 import { Visibility } from '../output/partial-schema';
 import { isNode } from '../new-blocks';
 
-export class FatalErrorException extends Error {}
+export class FatalErrorException extends Error {
+  public readonly type: string;
+  constructor() {
+    super();
+    this.type = 'FatalErrorException';
+  }
+}
 
 export class RuntimeException extends Error {}
 

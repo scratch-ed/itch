@@ -10,7 +10,6 @@ import { ScheduledEvent } from './scheduler/scheduled-event';
 import { broadcast, delay, sprite } from './scheduler/wait';
 import {
   asRange,
-  FatalErrorException,
   generatePositionMessage,
   ignoreWaitInProcedureFor,
   OneHatAllowedTest,
@@ -587,7 +586,8 @@ export async function run(config: EvalConfig): Promise<void | Judgement> {
     // Do post-mortem tests.
     afterExecution(judge);
   } catch (e) {
-    if (!(e instanceof FatalErrorException)) {
+    // @ts-ignore
+    if (e.type !== 'FatalErrorException') {
       throw e;
     } else {
       console.warn('Stopping tests due to fatal test not passing.');

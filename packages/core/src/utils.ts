@@ -83,3 +83,74 @@ export function assertType<T>(value: unknown): asserts value is T {
 }
 
 export type Writeable<T> = { -readonly [P in keyof T]: T[P] };
+
+const Delta = {
+  VALUE_CREATED: 'created',
+  VALUE_UPDATED: 'updated',
+  VALUE_DELETED: 'deleted',
+  VALUE_UNCHANGED: 'unchanged',
+};
+
+export function deepDiff(obj1: unknown, obj2: unknown) {
+  function compareValues(value1: unknown, value2: unknown) {
+    if (value1 === value2) {
+      return Delta.VALUE_UNCHANGED;
+    }
+    if (value1 === undefined) {
+      return Delta.VALUE_CREATED;
+    }
+    if (value2 === undefined) {
+      return Delta.VALUE_DELETED;
+    }
+    return Delta.VALUE_UPDATED;
+  }
+
+  function isFunction(x: unknown) {
+    return typeof x === 'function';
+  }
+
+  function isArray(x: unknown) {
+    return Array.isArray(x);
+  }
+
+  function isObject(x: unknown) {
+    return typeof x === 'object';
+  }
+
+  function isValue(x: unknown) {
+    return !isObject(x) && !isArray(x);
+  }
+
+  if (isValue(obj1) || isValue(obj2)) {
+    return {
+      type: compareValues(obj1, obj2),
+      data: obj1 === undefined ? obj2 : obj1,
+    };
+  }
+
+  assertType<Record<string, unknown>>(obj1);
+  assertType<Record<string, unknown>>(obj2);
+
+  const diff: Record<string, unknown> = {};
+  for (const key in obj1) {
+    if (isFunction(obj1[key])) {
+      continue;
+    }
+
+    let value2 = undefined;
+    if (obj2[key] !== undefined) {
+      value2 = obj2[key];
+    }
+
+    diff[key] = deepDiff(obj1[key], value2);
+  }
+  for (const key in obj2) {
+    if (isFunction(obj2[key]) || diff[key] !== undefined) {
+      continue;
+    }
+
+    diff[key] = deepDiff(undefined, obj2[key]);
+  }
+
+  return diff;
+}

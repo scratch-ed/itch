@@ -32,6 +32,11 @@ function valueMatchesOneValuePattern(
   value: string | Node | undefined | null,
   valuePattern: OneValuePattern<unknown>,
 ): boolean {
+  // If a function, call it.
+  if (typeof valuePattern === 'function') {
+    return valuePattern(value);
+  }
+
   // 1. If the value is undefined or null, the pattern needs to be nothing.
   //    Conversely, if the pattern is nothing, the value needs to be undefined
   //    or null. This will handle both cases. If only one condition is satisfied,
@@ -44,11 +49,6 @@ function valueMatchesOneValuePattern(
   //    This does imply that null or undefined is not accepted.
   if (valuePattern === ANYTHING) {
     return true;
-  }
-
-  // If a function, call it.
-  if (typeof valuePattern === 'function') {
-    return valuePattern(value);
   }
 
   // The pattern could be a reporter block.
@@ -116,6 +116,11 @@ function matchesOnePattern(
   node: Node | null | undefined,
   pattern: OnePattern<PatternBlock>,
 ): boolean {
+  // If the pattern is a function, call it.
+  if (typeof pattern === 'function') {
+    return pattern(node);
+  }
+
   if (node === null || node === undefined || pattern === NOTHING) {
     return (node === null || node === undefined) && pattern === NOTHING;
   }
@@ -123,11 +128,6 @@ function matchesOnePattern(
   // If the pattern is a wildcard, we match.
   if (pattern === ANYTHING) {
     return true;
-  }
-
-  // If the pattern is a function, call it.
-  if (typeof pattern === 'function') {
-    return pattern(node);
   }
 
   // If the opcode doesn't match, end it now.

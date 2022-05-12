@@ -48,7 +48,11 @@ export type ExactValue<T> = T extends ReporterBlock ? T : T | ReporterBlock;
  * 2. A wildcard (anything goes).
  * 4. A custom function to evaluate the value.
  */
-export type OnePattern<T> = T | Anything | Nothing | ((a: Node) => boolean);
+export type OnePattern<T> =
+  | T
+  | Anything
+  | Nothing
+  | ((a: Node | null | undefined) => boolean);
 
 // 3. A choice, meaning a list of possibilities.
 export type Pattern<T> = OnePattern<T>[] | OnePattern<T>;
@@ -60,7 +64,7 @@ export type OneValuePattern<T> = OnePattern<ExactValue<T>>;
 export type ValuePattern<T> = OneValuePattern<T>[] | OneValuePattern<T>;
 
 export class BlockStack {
-  constructor(public blockPatterns: Pattern<PatternBlock>[]) {}
+  constructor(public blockPatterns: OnePattern<PatternBlock>[]) {}
 }
 
 export const ANYTHING: Anything = '__any_block_or_value_sentinel__';
@@ -130,8 +134,8 @@ export function nothing(): Nothing {
  * @param blocks The blocks in the stack.
  */
 export function stack(
-  first: PatternBlock | Anything | Nothing,
-  ...blocks: (PatternBlock | Anything | Nothing)[]
+  first: OnePattern<PatternBlock>,
+  ...blocks: OnePattern<PatternBlock>[]
 ): BlockStack {
   return new BlockStack([first, ...blocks]);
 }
