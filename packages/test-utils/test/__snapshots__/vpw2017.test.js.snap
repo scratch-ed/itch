@@ -14,8 +14,8 @@ Array [
   },
   Object {
     "command": "start-group",
-    "name": "Nori",
-    "sprite": "Nori",
+    "name": "Stage",
+    "sprite": "Stage",
     "tags": Array [],
     "visibility": "summary",
   },
@@ -26,7 +26,7 @@ Array [
   },
   Object {
     "command": "close-test",
-    "feedback": "Top! Je hebt niets veranderd aan de sprite Nori.",
+    "feedback": "Top, de sprite Stage is niet verwijderd.",
     "status": "correct",
   },
   Object {
@@ -36,27 +36,7 @@ Array [
   },
   Object {
     "command": "close-test",
-    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Nori.",
-    "status": "correct",
-  },
-  Object {
-    "command": "close-group",
-  },
-  Object {
-    "command": "start-group",
-    "name": "Speelveld",
-    "sprite": "Speelveld",
-    "tags": Array [],
-    "visibility": "summary",
-  },
-  Object {
-    "command": "start-test",
-    "name": "Gewijzigde sprite",
-    "tags": Array [],
-  },
-  Object {
-    "command": "close-test",
-    "feedback": "Top! Je hebt niets veranderd aan het speelveld.",
+    "feedback": "Top! Je hebt niets veranderd aan de sprite Stage.",
     "status": "correct",
   },
   Object {
@@ -66,7 +46,67 @@ Array [
   },
   Object {
     "command": "close-test",
-    "feedback": "Top! Je hebt niets veranderd aan de blokjes van het speelveld.",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Stage.",
+    "status": "correct",
+  },
+  Object {
+    "command": "start-test",
+    "name": "Test op rondslingerende blokjes",
+    "tags": Array [],
+  },
+  Object {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  Object {
+    "command": "close-group",
+  },
+  Object {
+    "command": "start-group",
+    "name": "Nori",
+    "sprite": "Nori",
+    "tags": Array [],
+    "visibility": "summary",
+  },
+  Object {
+    "command": "start-test",
+    "name": "Test 0.26858494859270277",
+    "tags": Array [],
+  },
+  Object {
+    "command": "close-test",
+    "feedback": "Top, de sprite Nori is niet verwijderd.",
+    "status": "correct",
+  },
+  Object {
+    "command": "start-test",
+    "name": "Test 0.19415545140297377",
+    "tags": Array [],
+  },
+  Object {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de sprite Nori.",
+    "status": "correct",
+  },
+  Object {
+    "command": "start-test",
+    "name": "Test 0.9255796447261436",
+    "tags": Array [],
+  },
+  Object {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Nori.",
+    "status": "correct",
+  },
+  Object {
+    "command": "start-test",
+    "name": "Test op rondslingerende blokjes",
+    "tags": Array [],
+  },
+  Object {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
     "status": "correct",
   },
   Object {
@@ -81,22 +121,32 @@ Array [
   },
   Object {
     "command": "start-test",
-    "name": "Test 0.26858494859270277",
+    "name": "Test 0.7593161694189935",
     "tags": Array [],
   },
   Object {
     "command": "close-test",
-    "feedback": "De sprite bestaat.",
+    "feedback": "Top, de sprite Hat is niet verwijderd.",
     "status": "correct",
   },
   Object {
     "command": "start-test",
-    "name": "Test 0.19415545140297377",
+    "name": "Test 0.01911516830016577",
     "tags": Array [],
   },
   Object {
     "command": "close-test",
-    "feedback": "Goed zo, je hebt geen voorgeprogrammeerde blokjes verwijderd.",
+    "feedback": "Top! Je hebt niets veranderd aan de sprite Hat.",
+    "status": "correct",
+  },
+  Object {
+    "command": "start-test",
+    "name": "Test 0.3613914273702136",
+    "tags": Array [],
+  },
+  Object {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Hat.",
     "status": "correct",
   },
   Object {
@@ -107,26 +157,6 @@ Array [
   Object {
     "command": "close-test",
     "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
-    "status": "correct",
-  },
-  Object {
-    "command": "start-test",
-    "name": "Test 0.9255796447261436",
-    "tags": Array [],
-  },
-  Object {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Hat.",
-    "status": "correct",
-  },
-  Object {
-    "command": "start-test",
-    "name": "Toegelaten blokjes",
-    "tags": Array [],
-  },
-  Object {
-    "command": "close-test",
-    "feedback": "Goed zo! Je gebruikt geen verkeerde blokjes.",
     "status": "correct",
   },
   Object {
