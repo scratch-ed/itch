@@ -4,7 +4,7 @@ import path from 'path';
 
 import zl from 'zip-lib';
 
-const REGEXP = /:[\w\-_?]+:/g;
+const REGEXP = /:[A-zÀ-ú\-?]+:/g;
 const PREFIX = 'itch';
 
 /**
