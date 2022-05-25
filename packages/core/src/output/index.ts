@@ -31,6 +31,7 @@ export class GroupedResultManager {
   private hasOpenTest = false;
   private isFinished = false;
   private escalation?: Status;
+  private testNumber = 0;
 
   constructor(out: OutputHandler = toOutput) {
     this.out = out;
@@ -134,7 +135,10 @@ export class GroupedResultManager {
     this.out({ command: 'close-group', summary: summary });
   }
 
-  startTest(name = `Test ${Math.random()}`, tags: string[] = []): void {
+  startTest(name?: string, tags: string[] = []): void {
+    if (name === undefined) {
+      name = `Test ${this.testNumber++}`;
+    }
     if (this.isFinished) {
       console.warn('Attempting to start test after judgement has been completed.');
       return;

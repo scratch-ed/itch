@@ -149,8 +149,8 @@ class TestOptions {
   private ignoreWrongResult = false;
 
   constructor(
-    private readonly name: string,
     private readonly resultManager: GroupedResultManager,
+    private readonly name?: string,
   ) {}
 
   /**
@@ -267,8 +267,8 @@ export class GroupLevel {
    * Start a test.
    * @param name - Optional name of the test.
    */
-  test(name = `Test ${Math.random()}`): TestOptions {
-    return new TestOptions(name, this.resultManager);
+  test(name?: string): TestOptions {
+    return new TestOptions(this.resultManager, name);
   }
 
   /**
