@@ -56,7 +56,9 @@
           "<rootDir>/exercises/chaos-in-de-raket/*.test.js",
           "<rootDir>/exercises/eerste-testvlucht/*.test.js",
           "<rootDir>/exercises/koppel-motoren-los/*.test.js",
-          "<rootDir>/exercises/maanbal/*.test.js"
+          "<rootDir>/exercises/maanbal/*.test.js",
+          "<rootDir>/exercises/crewdans/*.test.js",
+          "<rootDir>/exercises/verzamel-de-grondstoffen/*.test.js"
         ]
       },
       {
