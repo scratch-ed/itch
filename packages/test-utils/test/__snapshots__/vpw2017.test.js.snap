@@ -21,7 +21,7 @@ Array [
   },
   Object {
     "command": "start-test",
-    "name": "Test 0.055085085131258336",
+    "name": "Test 0",
     "tags": Array [],
   },
   Object {
@@ -31,7 +31,7 @@ Array [
   },
   Object {
     "command": "start-test",
-    "name": "Test 0.6675940473163964",
+    "name": "Test 1",
     "tags": Array [],
   },
   Object {
@@ -41,7 +41,7 @@ Array [
   },
   Object {
     "command": "start-test",
-    "name": "Test 0.3017406753576552",
+    "name": "Test 2",
     "tags": Array [],
   },
   Object {
@@ -71,7 +71,7 @@ Array [
   },
   Object {
     "command": "start-test",
-    "name": "Test 0.26858494859270277",
+    "name": "Test 3",
     "tags": Array [],
   },
   Object {
@@ -81,7 +81,7 @@ Array [
   },
   Object {
     "command": "start-test",
-    "name": "Test 0.19415545140297377",
+    "name": "Test 4",
     "tags": Array [],
   },
   Object {
@@ -91,7 +91,7 @@ Array [
   },
   Object {
     "command": "start-test",
-    "name": "Test 0.9255796447261436",
+    "name": "Test 5",
     "tags": Array [],
   },
   Object {
@@ -121,7 +121,7 @@ Array [
   },
   Object {
     "command": "start-test",
-    "name": "Test 0.7593161694189935",
+    "name": "Test 6",
     "tags": Array [],
   },
   Object {
@@ -131,7 +131,7 @@ Array [
   },
   Object {
     "command": "start-test",
-    "name": "Test 0.01911516830016577",
+    "name": "Test 7",
     "tags": Array [],
   },
   Object {
@@ -141,7 +141,7 @@ Array [
   },
   Object {
     "command": "start-test",
-    "name": "Test 0.3613914273702136",
+    "name": "Test 8",
     "tags": Array [],
   },
   Object {
@@ -787,13 +787,13 @@ Array [
   },
   Object {
     "command": "start-group",
-    "name": "Groep 0.6675940473163964",
+    "name": "Groep 0.055085085131258336",
     "tags": Array [],
     "visibility": "show",
   },
   Object {
     "command": "start-test",
-    "name": "Test 0.055085085131258336",
+    "name": "Test 0",
     "tags": Array [],
   },
   Object {
