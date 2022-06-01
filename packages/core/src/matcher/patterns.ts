@@ -52,7 +52,7 @@ export type OnePattern<T> =
   | T
   | Anything
   | Nothing
-  | ((a: Node | null | undefined) => boolean);
+  | ((a: Node | null | undefined | T) => boolean);
 
 // 3. A choice, meaning a list of possibilities.
 export type Pattern<T> = OnePattern<T>[] | OnePattern<T>;

@@ -261,7 +261,7 @@ export interface SpriteGroupOptions extends GroupOptions {
 }
 
 export class GroupLevel {
-  constructor(protected readonly resultManager: GroupedResultManager) {}
+  constructor(public readonly resultManager: GroupedResultManager) {}
 
   /**
    * Start a test.
