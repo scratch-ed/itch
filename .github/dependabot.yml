@@ -10,6 +10,7 @@ updates:
     labels: []
     schedule:
       interval: 'monthly'
+    open-pull-requests-limit: 100
   - package-ecosystem: 'github-actions'
     # Workflow files stored in the
     # default location of `.github/workflows`
@@ -17,3 +18,4 @@ updates:
     labels: []
     schedule:
       interval: 'monthly'
+    open-pull-requests-limit: 100
