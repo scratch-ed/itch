@@ -121,7 +121,7 @@ async function downloadLevel(
   includeTranslations,
   quiet,
 ) {
-  const regex = new RegExp(`level ${level}[^0-9]*$`);
+  const regex = new RegExp(`level ${level}([^0-9].*)?$`);
   // Attempt to find the starter project.
   const starterData = result.findExercise.versions
     .filter(
