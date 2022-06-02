@@ -8,7 +8,7 @@
   "dependencies": {
     "commander": "^9.3.0",
     "dotenv": "^16.0.1",
-    "node-fetch": "^3.2.4",
+    "node-fetch": "^3.2.5",
     "zip-lib": "^0.7.3"
   },
   "scripts": {
