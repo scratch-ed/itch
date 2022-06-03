@@ -89,7 +89,7 @@ async function getVersions(id, token) {
  *
  * @param {{relativePath: string, log: string, url: string, absolutePath: string}} exercise
  * @param {Object} lock - lock file
- * @return {boolean} True if the file was actually updated, false otherwise.
+ * @return {Promise<boolean>} True if the file was actually updated, false otherwise.
  */
 async function getBytes(exercise, lock) {
   const headers = {};
@@ -110,6 +110,64 @@ async function getBytes(exercise, lock) {
   }
 
   return updated;
+}
+
+async function downloadExerciseInstance(
+  relativePath,
+  data,
+  absolutePath,
+  name,
+  includeTranslations,
+  quiet,
+  level = undefined,
+) {
+  const uri = data.blobUri;
+  if (!level) {
+    level = data.name;
+  }
+
+  // Check cache.
+  const lockPath = `${absolutePath}/../exercise-lock.json`;
+  let lock;
+  try {
+    lock = JSON.parse(fs.readFileSync(lockPath, 'utf8'));
+  } catch (error) {
+    lock = {};
+  }
+
+  const suffix = `projects/${name || ''}${level ? level + '-' : ''}template`;
+
+  const updated = await getBytes(
+    {
+      absolutePath: `${absolutePath}/${suffix}.sb3`,
+      relativePath: `${relativePath}/${suffix}.sb3`,
+      log: level ? `${relativePath}/${level}` : relativePath,
+      url: uri,
+    },
+    lock,
+  );
+
+  if (updated) {
+    fs.writeFileSync(lockPath, JSON.stringify(lock, null, 2) + '\n', 'utf8');
+  }
+
+  if (includeTranslations) {
+    const translationPath = `${absolutePath}/../translations.json`;
+    await translateSb3(
+      `${absolutePath}/${suffix}.sb3`,
+      `${absolutePath}/${suffix}-NL.sb3`,
+      translationPath,
+      'nl',
+      quiet,
+    );
+    await translateSb3(
+      `${absolutePath}/${suffix}.sb3`,
+      `${absolutePath}/${suffix}-EN.sb3`,
+      translationPath,
+      'en',
+      quiet,
+    );
+  }
 }
 
 async function downloadLevel(
@@ -134,11 +192,19 @@ async function downloadLevel(
     .sort((a, b) => b.id - a.id)
     .find((_) => true);
 
-  const starterUri = starterData?.blobUri;
-
-  if (starterUri === undefined) {
+  if (starterData === undefined) {
     throw new Error(`Could not find starter project for level ${level}`);
   }
+
+  await downloadExerciseInstance(
+    relativePath,
+    starterData,
+    absolutePath,
+    name,
+    includeTranslations,
+    quiet,
+    level,
+  );
 
   const solutionData = result.findExercise.versions
     .filter(
@@ -150,88 +216,19 @@ async function downloadLevel(
     .sort((a, b) => b.id - a.id)
     .find((_) => true);
 
-  const solutionUri = solutionData?.blobUri;
-
-  if (solutionUri === undefined) {
+  if (solutionData === undefined) {
     throw new Error(`Could not find solution project for level ${level}`);
   }
 
-  // Check cache.
-  const lockPath = `${absolutePath}/../exercise-lock.json`;
-  let lock;
-  try {
-    lock = JSON.parse(fs.readFileSync(lockPath, 'utf8'));
-  } catch (error) {
-    lock = {};
-  }
-
-  const startSuffix = `projects/${name || ''}${level ? level + '-' : ''}template`;
-
-  const startDisplayPath = `${relativePath}/${startSuffix}`;
-
-  const starterPromise = getBytes(
-    {
-      absolutePath: `${absolutePath}/${startSuffix}.sb3`,
-      relativePath: `${startDisplayPath}.sb3`,
-      log: level ? `${relativePath}/${level}` : relativePath,
-      url: starterUri,
-    },
-    lock,
+  await downloadExerciseInstance(
+    relativePath,
+    solutionData,
+    absolutePath,
+    name,
+    includeTranslations,
+    quiet,
+    level,
   );
-
-  const solutionSuffix = `projects/${name || ''}${level ? level + '-' : ''}solution`;
-  const solutionDisplayPath = `${relativePath}/${solutionSuffix}`;
-
-  const solutionPromise = getBytes(
-    {
-      absolutePath: `${absolutePath}/${solutionSuffix}.sb3`,
-      relativePath: `${solutionDisplayPath}.sb3`,
-      log: level ? `${relativePath}/${level}` : relativePath,
-      url: solutionUri,
-    },
-    lock,
-  );
-
-  const [updatedStarter, updatedSolution] = await Promise.allSettled([
-    starterPromise,
-    solutionPromise,
-  ]);
-
-  if (updatedStarter || updatedSolution) {
-    fs.writeFileSync(lockPath, JSON.stringify(lock, null, 2) + '\n', 'utf8');
-  }
-
-  if (includeTranslations) {
-    const translationPath = `${absolutePath}/../translations.json`;
-    await translateSb3(
-      `${absolutePath}/${startSuffix}.sb3`,
-      `${absolutePath}/${startSuffix}-NL.sb3`,
-      translationPath,
-      'nl',
-      quiet,
-    );
-    await translateSb3(
-      `${absolutePath}/${solutionSuffix}.sb3`,
-      `${absolutePath}/${solutionSuffix}-NL.sb3`,
-      translationPath,
-      'nl',
-      quiet,
-    );
-    await translateSb3(
-      `${absolutePath}/${startSuffix}.sb3`,
-      `${absolutePath}/${startSuffix}-EN.sb3`,
-      translationPath,
-      'en',
-      quiet,
-    );
-    await translateSb3(
-      `${absolutePath}/${solutionSuffix}.sb3`,
-      `${absolutePath}/${solutionSuffix}-EN.sb3`,
-      translationPath,
-      'en',
-      quiet,
-    );
-  }
 }
 
 export async function downloadExercise(
@@ -272,12 +269,23 @@ export async function downloadExercise(
         exercise.name,
         translations,
       );
-    } else {
+    } else if (typeof exercise.levels === 'number') {
       for (let i = 1; i <= exercise.levels; i++) {
         await downloadLevel(
           relativePath,
           result,
           i,
+          absolutePath,
+          exercise.name,
+          translations,
+          quiet,
+        );
+      }
+    } else {
+      for (const instance of result.findExercise.versions) {
+        await downloadExerciseInstance(
+          relativePath,
+          instance,
           absolutePath,
           exercise.name,
           translations,
