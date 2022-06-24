@@ -1,4 +1,5 @@
 /// <reference types="jest" />
+// @ts-ignore
 
 declare global {
   namespace jest {
@@ -52,10 +53,10 @@ declare global {
     planLevel?: string | number,
   ): Promise<Object[]>;
 
-  function runManual(
+  function execute(
     dir: string,
     templateName: string,
     submissionName: string,
     planName?: string,
-  );
+  ): Promise<Object[]>;
 }

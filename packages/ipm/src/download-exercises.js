@@ -135,7 +135,7 @@ async function downloadExerciseInstance(
     lock = {};
   }
 
-  const suffix = `projects/${name || ''}${level ? level + '-' : ''}template`;
+  const suffix = `projects/${name || ''}${level ?? ''}`;
 
   const updated = await getBytes(
     {
