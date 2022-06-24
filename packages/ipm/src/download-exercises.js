@@ -122,8 +122,8 @@ async function downloadExerciseInstance(
   level = undefined,
 ) {
   const uri = data.blobUri;
-  if (!level) {
-    level = data.name;
+  if (!name) {
+    name = data.name;
   }
 
   // Check cache.
@@ -135,7 +135,7 @@ async function downloadExerciseInstance(
     lock = {};
   }
 
-  const suffix = `projects/${name || ''}${level ?? ''}`;
+  const suffix = `projects/${name}`;
 
   const updated = await getBytes(
     {
