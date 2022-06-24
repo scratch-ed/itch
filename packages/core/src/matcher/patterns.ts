@@ -106,6 +106,10 @@ export function isVariableBlock(block: unknown): block is VariableBlock {
   return isReporterBlock(block) && block.opcode === 'data_variable';
 }
 
+export function isOperatorBlock(block: unknown): block is ReporterBlock {
+  return isReporterBlock(block) && block.opcode.startsWith('operator_');
+}
+
 export function isBooleanBlock(block: unknown): block is BooleanBlock {
   return isReporterBlock(block) && block.type === 'boolean';
 }
@@ -420,6 +424,13 @@ export function switchCostumeTo(costume: ValuePattern<string>): PatternBlock {
         COSTUME: costume.fields.VARIABLE,
       },
     };
+  } else if (isOperatorBlock(costume)) {
+    return {
+      opcode: 'looks_switchcostumeto',
+      inputs: {
+        COSTUME: costume,
+      },
+    };
   } else {
     return {
       opcode: 'looks_switchcostumeto',
@@ -589,6 +600,20 @@ export function backdrop(numberOrName: ValuePattern<'number' | 'name'>): Reporte
 // https://en.scratch-wiki.info/wiki/Size_(block)
 export function size(): ReporterBlock {
   return { opcode: 'looks_size', type: 'reporter' };
+}
+
+export function playSound(sound: string): PatternBlock {
+  return {
+    opcode: 'sound_play',
+    inputs: {
+      SOUND_MENU: stack({
+        opcode: 'sound_sounds_menu',
+        fields: {
+          SOUND_MENU: sound,
+        },
+      }),
+    },
+  };
 }
 
 // FIXME: support sound blocks.

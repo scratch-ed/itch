@@ -51,4 +51,11 @@ declare global {
     level?: string | number,
     planLevel?: string | number,
   ): Promise<Object[]>;
+
+  function runManual(
+    dir: string,
+    templateName: string,
+    submissionName: string,
+    planName?: string,
+  );
 }

@@ -112,7 +112,18 @@ function run(dir, solutionName, level, planLevel = level) {
   });
 }
 
+function runManual(dir, templateName, submissionName, planName = 'plan') {
+  const template = path.resolve(dir, `projects/${templateName}-NL.sb3`);
+  const plan = path.resolve(dir, `${planName}.js`);
+  const solution = path.resolve(dir, `projects/${submissionName}-NL.sb3`);
+
+  return executePlan(template, solution, plan, {
+    debug: false,
+  });
+}
+
 module.exports = {
   executePlan,
   run,
+  runManual,
 };
