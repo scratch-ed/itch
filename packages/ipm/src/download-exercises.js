@@ -116,15 +116,12 @@ async function downloadExerciseInstance(
   relativePath,
   data,
   absolutePath,
-  name,
+  prefix,
   includeTranslations,
   quiet,
   level = undefined,
 ) {
   const uri = data.blobUri;
-  if (!name) {
-    name = data.name;
-  }
 
   // Check cache.
   const lockPath = `${absolutePath}/../exercise-lock.json`;
@@ -135,7 +132,7 @@ async function downloadExerciseInstance(
     lock = {};
   }
 
-  const suffix = `projects/${name}`;
+  const suffix = `projects/${prefix ? prefix + '-' : ''}${data.name}`;
 
   const updated = await getBytes(
     {
