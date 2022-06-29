@@ -48,7 +48,6 @@ Getting the local files can be done with:
 $ npm run ipm --workspace packages/ipm -- down ../../exercises/agario
 ```
 
-
 ## Troubleshooting
 
 ### Puppeteer complains about my browser
