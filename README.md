@@ -19,7 +19,7 @@ To start, run `npm run build`.
 
 To run the judge in debug mode:
 
-- Open `packages/runner/src/environment.html` in your browser. This will load and execute a project based on the `config.json` file.
+- Open `packages/runner/src/environment/page.html` in your browser. This will load and execute a project based on the `config.json` file.
 
 ### Config
 
@@ -30,7 +30,7 @@ An example can be found in `config.example.json`:
 {
   "template": "tests/projects/status/01.space_mission.sb3",
   "submission": "tests/projects/status/01.space_mission.sb3",
-  "plan": "plans/status/01.space_mission_test.js",
+  "testplan": "plans/status/01.space_mission_test.js",
   "debug": false
 }
 ```
@@ -41,6 +41,13 @@ The properties are:
 - **submission**: path to the solution sb3 file, relative to the root of the repo.
 - **plan**: plan to the testplan, relative to the root of the repo.
 - **debug**: if true and run with puppeteer, the browser will open, otherwise it will be headless.
+
+Getting the local files can be done with:
+
+```bash
+$ npm run ipm --workspace packages/ipm -- down ../../exercises/agario
+```
+
 
 ## Troubleshooting
 
