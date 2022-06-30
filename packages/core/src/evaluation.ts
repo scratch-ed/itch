@@ -2,6 +2,7 @@
 import 'regenerator-runtime/runtime';
 
 import seed from 'seed-random';
+import { checkBlocks } from './matcher/differ';
 import { nodeMatchesPattern, subTreeMatchesStack } from './matcher/node-matcher';
 import { numericEquals, format } from './utils';
 import { Context } from './context';
@@ -323,6 +324,7 @@ function expose() {
     stop,
     nodeMatchesPattern,
     subTreeMatchesStack,
+    checkBlocks,
   };
 }
 

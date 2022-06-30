@@ -1,4 +1,5 @@
 import { searchFrames } from './log';
+import { checkBlocks } from './matcher/differ';
 import { nodeMatchesPattern, subTreeMatchesStack } from './matcher/node-matcher';
 import { format, numericEquals } from './utils';
 import { broadcast, delay, sprite } from './scheduler/wait';
@@ -263,6 +264,7 @@ declare interface BlockMatch {
   // Some utility functions
   nodeMatchesPattern: typeof nodeMatchesPattern;
   subTreeMatchesStack: typeof subTreeMatchesStack;
+  checkBlocks: typeof checkBlocks;
 }
 
 /**
