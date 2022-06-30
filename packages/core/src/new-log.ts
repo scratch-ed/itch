@@ -17,6 +17,7 @@ import {
   VariableType,
   VideoState,
 } from './model';
+import { SavedRangeEventData } from './scheduler/callback';
 import { assertType, ensure } from './utils';
 import { last, isEqual } from 'lodash-es';
 import { LogRenderer } from './log';
@@ -228,7 +229,11 @@ export class Snapshot {
   }
 }
 
-type EventData = ProfileEventData | ClickEventData | Record<string, unknown>;
+type EventData =
+  | SavedRangeEventData
+  | ProfileEventData
+  | ClickEventData
+  | Record<string, unknown>;
 
 /**
  * An event is a high-level event in the VM.
@@ -534,7 +539,30 @@ export class NewLog {
     this.eventList.push(event);
   }
 
+  /** @deprecated */
   get frames(): ReadonlyArray<Snapshot> {
     return this.snapshots;
+  }
+
+  /**
+   * Find a range of snapshots that were saved by the scheduler.
+   *
+   * @param name Name of the saved range.
+   */
+  savedRange(name: string): ReadonlyArray<Snapshot> {
+    const event = this.events.find(
+      (e) => e.type == 'savedRange' && (e.data as SavedRangeEventData).name === name,
+    );
+    if (!event) {
+      throw new Error(`Could not find saved range event with name ${name}.`);
+    }
+    const startIndex = this.snapshots.indexOf(event.previous);
+    const endIndex = this.snapshots.indexOf(event.next, startIndex);
+    if (startIndex == -1 || endIndex == -1) {
+      throw new Error(
+        'Something went wrong while finding the event snapshots. This should be impossible.',
+      );
+    }
+    return this.snapshots.slice(startIndex, endIndex);
   }
 }

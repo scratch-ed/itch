@@ -1,5 +1,5 @@
 import { GreenFlagAction } from './green-flag';
-import { CallbackAction } from './callback';
+import { CallbackAction, EndRange, StartRange } from './callback';
 import { ClickSpriteAction } from './click';
 import { KeyUseAction, MouseData, MouseUseAction, WhenPressKeyAction } from './io';
 import { SendBroadcastAction } from './broadcast';
@@ -349,6 +349,26 @@ export class ScheduledEvent {
    */
   log(callback: () => void = () => {}): ScheduledEvent {
     return this.constructNext(new CallbackAction(callback));
+  }
+
+  /**
+   * Save the current frame with a name in the log. Together with `endSave`,
+   * it allows you to easily get a set of frames.
+   *
+   * @param name Unique name.
+   */
+  startRange(name: string): ScheduledEvent {
+    return this.constructNext(new StartRange(name));
+  }
+
+  /**
+   * Stop saving the current frame with a name in the log.
+   * Together with `startSave`, it allows you to easily get a set of frames.
+   *
+   * @param name Unique name.
+   */
+  endRange(name: string): ScheduledEvent {
+    return this.constructNext(new EndRange(name));
   }
 
   track(sprite: string): ScheduledEvent {
