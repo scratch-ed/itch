@@ -58,7 +58,7 @@ function beforeExecution(e) {
   Itch.checkPredefinedBlocks(
     {
       hats: {
-        Planet: [stack(whenIReceive('Start'), setSizeTo(anything()))],
+        Planet: [script(whenIReceive('Start'), setSizeTo(anything()))],
       },
     },
     e,
@@ -66,12 +66,7 @@ function beforeExecution(e) {
 }
 ```
 
-The built-in checks work by comparing the blocks of the submission to the blocks of the template.
-However, since students must add blocks somewhere, we must define where students are allowed to add blocks.
-
-In the example above, we allow blocks to be added to the "Planet" sprite,
-in a block stack starting with the hat _When I receive broadcast "Start"_,
-followed by a block "Set size to", with any argument.
+See the section below for a more detailed example of the predefined blocks check.
 
 ## During execution
 
@@ -118,18 +113,18 @@ A pattern supports the usual techniques:
 - Choices (with a list).
 - Exact matches.
 
-For example, consider the following block stack:
+For example, consider the following script:
 
 ![image](./stack.png)
 
 Can be represented as such by the API:
 
 ```javascript
-stack(
+script(
   whenIReceive('Start'),
   setEffectTo(transparent(), 0),
-  repeat(15, stack(changeSizeBy(3), changeYBy(-2))),
-  repeat(20, stack(changeEffectBy(transparent(), 5), changeSizeBy(3))),
+  repeat(15, script(changeSizeBy(3), changeYBy(-2))),
+  repeat(20, script(changeEffectBy(transparent(), 5), changeSizeBy(3))),
   hide(),
 );
 ```
@@ -137,7 +132,7 @@ stack(
 For most blocks, an equivalent function exists (see the source file).
 Three special functions are:
 
-- `stack()`: Indicate a block stack.
+- `script()`: Indicate a block script.
 - `anything()`: Matches anything.
 - `nothing()`: Matches nothing.
 
@@ -178,3 +173,38 @@ Besides `expect`/`toBe`, other matchers are:
 
 - `acceptIf(value)` - Correct if `value` is true, otherwise wrong.
 - `expect`/`toMatch(block)` - Allows to match blocks (see above)
+
+## Pre-defined blocks check
+
+It is common to add a pre-defined blocks check in the `beforeExecution` stage.
+Most sprites in exercises have a set of blocks that are given (we call them predefined).
+Students are sometimes only allowed to modify a specific script of a sprite.
+
+The pre-defined blocks check takes care of this.
+For example:
+
+```javascript
+Itch.checkPredefinedBlocks(
+  {
+    spriteConfig: {
+      Planeet: script(whenIReceive(':Start:'), setEffectTo('transparant', 0)),
+      Enemy: {
+        pattern: script(whenIReceive(':Start:'), setEffectTo('transparant', 0)),
+        allowedBlocks: [forever()],
+        allowAdditionalScripts: true,
+      },
+    },
+    debug: false,
+  },
+  e,
+);
+```
+
+The example above configures the test for two sprites.
+All other sprites must be unchanged.
+
+For the `Planet` sprite, we allow students to change/add/remove blocks in the script starting with the two blocks of the image above (_When I receive broadcast "Start"_ and _Set effect transparant to 0_).
+Students will be allowed to change blocks after the pre-defined blocks in this script.
+
+The second sprite, `Enemy`, allows modifications to scripts starting with the same blocks, but it uses the full version.
+With the full version, you can also specify if additional scripts are allowed and limit the blocks they can use (note that this allowed blocks check is not executed for additional scripts).

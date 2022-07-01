@@ -20,7 +20,6 @@ import {
   setSizeTo,
   setXtoY,
   show,
-  stack,
   wait,
   add,
   subtract,
@@ -120,21 +119,22 @@ import {
   itemOfList,
   lengthOfList,
   listContains,
-  BlockStack,
+  BlockScript,
+  script,
 } from '../src/matcher/patterns';
-import { subtreeMatchesOneStack } from '../src/matcher/node-matcher';
+import { subtreeMatchesOneScript } from '../src/matcher/node-matcher';
 
 expect.extend({
   /**
    * @param {Node[]} trees
-   * @param {PatternBlock | BlockStack} pattern
+   * @param {PatternBlock | BlockScript} pattern
    * @returns {{pass: boolean, message: (function(): string)}}
    */
   toMatchPattern(trees, pattern) {
-    if (!(pattern instanceof BlockStack)) {
-      pattern = stack(pattern);
+    if (!(pattern instanceof BlockScript)) {
+      pattern = script(pattern);
     }
-    const filtered = trees.filter((node) => subtreeMatchesOneStack(node, pattern));
+    const filtered = trees.filter((node) => subtreeMatchesOneScript(node, pattern));
     const pass = filtered.length === 1;
     if (pass) {
       return {
@@ -166,13 +166,13 @@ describe('Integration tests for patterns', () => {
     const tree = Array.from(target.blockTree());
 
     const patterns = [
-      stack(
+      script(
         whenIReceive('Start'),
         setSizeTo(80),
         show(),
-        forever(stack(glideZSecsToX(5, '_random_'))),
+        forever(script(glideZSecsToX(5, '_random_'))),
       ),
-      stack(greenFlag(), hide()),
+      script(greenFlag(), hide()),
     ];
 
     for (const pattern of patterns) {
@@ -187,11 +187,11 @@ describe('Integration tests for patterns', () => {
       const tree = Array.from(target.blockTree());
 
       const patterns = [
-        stack(
+        script(
           whenIReceive('Start'),
           setSizeTo(20),
           forever(
-            stack(
+            script(
               hide(),
               wait(1),
               goTo('_random_'),
@@ -202,22 +202,22 @@ describe('Integration tests for patterns', () => {
             ),
           ),
         ),
-        stack(greenFlag(), hide()),
-        stack(whenIReceive('Start'), setXtoY('Richting', 0)),
-        stack(
+        script(greenFlag(), hide()),
+        script(whenIReceive('Start'), setXtoY('Richting', 0)),
+        script(
           procedureDefinition(
             'Beweeg in een willekeurige richting tot je de planeet raakt',
           ),
           repeatUntil(
             isTouching('Planeet'),
-            stack(
+            script(
               moveXSteps(2),
               ifOnEdgeBounce(),
               setXtoY('Richting', pickRandom(0, 1)),
               ifThenElse(
                 equals('Richting', 1),
-                stack(pointInDirection(add(direction(), 4))),
-                stack(pointInDirection(subtract(direction(), 4))),
+                script(pointInDirection(add(direction(), 4))),
+                script(pointInDirection(subtract(direction(), 4))),
               ),
             ),
           ),
@@ -235,7 +235,7 @@ describe('Integration tests for patterns', () => {
     const tree = Array.from(target.blockTree());
 
     const patterns = [
-      stack(
+      script(
         greenFlag(),
         show(),
         switchBackdropTo('game'),
@@ -243,11 +243,11 @@ describe('Integration tests for patterns', () => {
         setSizeTo(100),
         nothing(),
       ),
-      stack(
+      script(
         whenIReceive('Start'),
         setEffectTo(transparent(), 0),
-        repeat(15, stack(changeSizeBy(3), changeYBy(-2), nothing())),
-        repeat(20, stack(changeEffectBy(transparent(), 5), changeSizeBy(3), nothing())),
+        repeat(15, script(changeSizeBy(3), changeYBy(-2), nothing())),
+        repeat(20, script(changeEffectBy(transparent(), 5), changeSizeBy(3), nothing())),
         hide(),
         nothing(),
       ),
@@ -257,13 +257,13 @@ describe('Integration tests for patterns', () => {
       expect(tree).toMatchPattern(pattern);
     }
 
-    const wrongValue = stack(
+    const wrongValue = script(
       whenIReceive('Start'),
       setEffectTo(transparent(), 0),
-      repeat(15, stack(changeSizeBy(3), changeYBy(-2))),
+      repeat(15, script(changeSizeBy(3), changeYBy(-2))),
       repeat(
         20,
-        stack(
+        script(
           changeEffectBy(transparent(), 5),
           changeSizeBy(4), // This is wrong
         ),
@@ -273,11 +273,11 @@ describe('Integration tests for patterns', () => {
     );
     expect(tree).not.toMatchPattern(wrongValue);
 
-    const wrongNothing = stack(
+    const wrongNothing = script(
       whenIReceive('Start'),
       setEffectTo(transparent(), 0),
-      repeat(15, stack(changeSizeBy(3), nothing(), changeYBy(-2))),
-      repeat(20, stack(changeEffectBy(transparent(), 5), changeSizeBy(3), nothing())),
+      repeat(15, script(changeSizeBy(3), nothing(), changeYBy(-2))),
+      repeat(20, script(changeEffectBy(transparent(), 5), changeSizeBy(3), nothing())),
       hide(),
     );
 
@@ -289,9 +289,9 @@ describe('Integration tests for patterns', () => {
     const tree = Array.from(target.blockTree());
 
     const patterns = [
-      stack(whenKeyPressed('space'), broadcast('Start')),
-      stack(whenIReceive('Start'), hide()),
-      stack(
+      script(whenKeyPressed('space'), broadcast('Start')),
+      script(whenIReceive('Start'), hide()),
+      script(
         greenFlag(),
         setXtoY('Boodschap 1', 'Boodschap 1'),
         switchCostumeTo(variable('Boodschap 1')),
@@ -545,30 +545,30 @@ describe('Individual blocks', () => {
   });
 
   test('control_repeat', () => {
-    expect(trees).toMatchPattern(repeat(10, stack(say('Hallo!'))));
+    expect(trees).toMatchPattern(repeat(10, script(say('Hallo!'))));
   });
 
   test('control_forever', () => {
-    expect(trees).toMatchPattern(forever(stack(say('Hallo!'))));
+    expect(trees).toMatchPattern(forever(script(say('Hallo!'))));
   });
 
   test('control_if', () => {
-    expect(trees).toMatchPattern(ifThen(isMouseDown(), stack(say('Hallo!'), nothing())));
+    expect(trees).toMatchPattern(ifThen(isMouseDown(), script(say('Hallo!'), nothing())));
   });
 
   test('ifThenElse', () => {
     expect(trees).toMatchPattern(
       ifThenElse(
         equals(50, 50),
-        stack(say('Hallo!'), nothing()),
-        stack(say('Hallo!'), nothing()),
+        script(say('Hallo!'), nothing()),
+        script(say('Hallo!'), nothing()),
       ),
     );
   });
 
   test('control_repeat_until', () => {
     expect(trees).toMatchPattern(
-      repeatUntil(equals(50, 50), stack(say('Hallo!'), nothing())),
+      repeatUntil(equals(50, 50), script(say('Hallo!'), nothing())),
     );
   });
 

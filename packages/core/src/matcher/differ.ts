@@ -2,13 +2,13 @@ import { Evaluation } from '../evaluation';
 import { Node } from '../new-blocks';
 import { Messages } from '../testplan/hierarchy';
 import { assertType } from '../utils';
-import { BlockStack, OnePattern, PatternBlock, stack } from './patterns';
+import { BlockScript, OnePattern, PatternBlock, stack } from './patterns';
 
 interface AnnotatedSubtree {
   /**
    * The pattern for this feedback.
    */
-  pattern: BlockStack | OnePattern<PatternBlock>;
+  pattern: BlockScript | OnePattern<PatternBlock>;
 
   /**
    * The feedback.
@@ -38,12 +38,12 @@ export function checkBlocks(
   let current: Node | null | undefined = startNode;
   for (const subtree of subtrees) {
     let pattern = subtree.pattern;
-    if (!(pattern instanceof BlockStack)) {
+    if (!(pattern instanceof BlockScript)) {
       pattern = stack(pattern);
     }
 
     const runnable = () => {
-      assertType<BlockStack>(pattern);
+      assertType<BlockScript>(pattern);
 
       e.group
         .test(subtree.name)

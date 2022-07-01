@@ -3,7 +3,7 @@ import 'regenerator-runtime/runtime';
 
 import seed from 'seed-random';
 import { checkBlocks } from './matcher/differ';
-import { nodeMatchesPattern, subTreeMatchesStack } from './matcher/node-matcher';
+import { nodeMatchesPattern, subTreeMatchesScript } from './matcher/node-matcher';
 import { numericEquals, format } from './utils';
 import { Context } from './context';
 import { Project } from './project';
@@ -79,7 +79,6 @@ import {
   whenIStartAsClone,
   wait as bWait,
   nothing,
-  stack,
   pointTowards,
   pointInDirection,
   equals,
@@ -147,6 +146,7 @@ import {
   lengthOfList,
   listContains,
   stop,
+  script,
 } from './matcher/patterns';
 
 const object: Window = window;
@@ -256,7 +256,8 @@ function expose() {
     whenIStartAsClone,
     wait: bWait,
     nothing,
-    stack,
+    stack: script,
+    script,
     equals,
     forever,
     ifThenElse,
@@ -323,7 +324,8 @@ function expose() {
     listContains,
     stop,
     nodeMatchesPattern,
-    subTreeMatchesStack,
+    subTreeMatchesStack: subTreeMatchesScript,
+    subTreeMatchesScript,
     checkBlocks,
   };
 }

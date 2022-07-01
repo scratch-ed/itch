@@ -42,9 +42,9 @@ export type ExactValue<T> = T extends ReporterBlock ? T : T | ReporterBlock;
  *
  * 1. An exact value. The possibilities for this are:
  *   a. number, string
- *   b. BlockStack class
+ *   b. BlockScript class
  *   c. ReporterBlock (or extending classes).
- * => If possible, we would write: T extends string | number | BlockStack | ReporterBlock
+ * => If possible, we would write: T extends string | number | BlockScript | ReporterBlock
  * 2. A wildcard (anything goes).
  * 4. A custom function to evaluate the value.
  */
@@ -63,7 +63,7 @@ export type Pattern<T> = OnePattern<T>[] | OnePattern<T>;
 export type OneValuePattern<T> = OnePattern<ExactValue<T>>;
 export type ValuePattern<T> = OneValuePattern<T>[] | OneValuePattern<T>;
 
-export class BlockStack {
+export class BlockScript {
   constructor(public blockPatterns: OnePattern<PatternBlock>[]) {}
 }
 
@@ -132,16 +132,26 @@ export function nothing(): Nothing {
 }
 
 /**
+ * @deprecated Use `script` instead.
+ */
+export function stack(
+  first: OnePattern<PatternBlock>,
+  ...blocks: OnePattern<PatternBlock>[]
+): BlockScript {
+  return new BlockScript([first, ...blocks]);
+}
+
+/**
  * Match a stack of blocks.
  *
  * @param first The first block.
  * @param blocks The blocks in the stack.
  */
-export function stack(
+export function script(
   first: OnePattern<PatternBlock>,
   ...blocks: OnePattern<PatternBlock>[]
-): BlockStack {
-  return new BlockStack([first, ...blocks]);
+): BlockScript {
+  return new BlockScript([first, ...blocks]);
 }
 
 // https://en.scratch-wiki.info/wiki/Move_()_Steps_(block)
@@ -189,7 +199,7 @@ export function pointTowards(towards: ValuePattern<string | '_mouse_'>): Pattern
   return {
     opcode: 'motion_pointtowards',
     inputs: {
-      TOWARDS: stack({
+      TOWARDS: script({
         opcode: 'motion_pointtowards_menu',
         fields: {
           TOWARDS: towards,
@@ -215,7 +225,7 @@ export function goTo(towards: ValuePattern<string>): PatternBlock {
   return {
     opcode: 'motion_goto',
     inputs: {
-      TO: new BlockStack([
+      TO: new BlockScript([
         {
           opcode: 'motion_goto_menu',
           fields: {
@@ -252,7 +262,7 @@ export function glideZSecsToX(
     opcode: 'motion_glideto',
     inputs: {
       SECS: secs,
-      TO: new BlockStack([
+      TO: new BlockScript([
         {
           opcode: 'motion_glideto_menu',
           fields: {
@@ -435,7 +445,7 @@ export function switchCostumeTo(costume: ValuePattern<string>): PatternBlock {
     return {
       opcode: 'looks_switchcostumeto',
       inputs: {
-        COSTUME: stack({
+        COSTUME: script({
           opcode: 'looks_costume',
           fields: {
             COSTUME: costume,
@@ -451,7 +461,7 @@ export function switchBackdropTo(backdrop: ValuePattern<string>): PatternBlock {
   return {
     opcode: 'looks_switchbackdropto',
     inputs: {
-      BACKDROP: stack({
+      BACKDROP: script({
         opcode: 'looks_backdrops',
         fields: {
           BACKDROP: backdrop,
@@ -466,7 +476,7 @@ export function switchBackdropToAndWait(backdrop: ValuePattern<string>): Pattern
   return {
     opcode: 'looks_switchbackdroptoandwait',
     inputs: {
-      BACKDROP: stack({
+      BACKDROP: script({
         opcode: 'looks_backdrops',
         fields: {
           BACKDROP: backdrop,
@@ -606,7 +616,7 @@ export function playSound(sound: string): PatternBlock {
   return {
     opcode: 'sound_play',
     inputs: {
-      SOUND_MENU: stack({
+      SOUND_MENU: script({
         opcode: 'sound_sounds_menu',
         fields: {
           SOUND_MENU: sound,
@@ -755,7 +765,7 @@ export function createCloneOf(sprite: ValuePattern<string>): PatternBlock {
   return {
     opcode: 'control_create_clone_of',
     inputs: {
-      CLONE_OPTION: stack({
+      CLONE_OPTION: script({
         opcode: 'control_create_clone_of_menu',
         fields: {
           CLONE_OPTION: sprite,
@@ -768,7 +778,7 @@ export function createCloneOf(sprite: ValuePattern<string>): PatternBlock {
 // https://en.scratch-wiki.info/wiki/Repeat_()_(block)
 export function repeat(
   times: ValuePattern<number>,
-  stack: Pattern<BlockStack>,
+  stack: Pattern<BlockScript>,
 ): PatternBlock {
   return {
     opcode: 'control_repeat',
@@ -780,7 +790,7 @@ export function repeat(
 }
 
 // https://en.scratch-wiki.info/wiki/Forever_(block)
-export function forever(stack: Pattern<BlockStack>): PatternBlock {
+export function forever(stack: Pattern<BlockScript>): PatternBlock {
   return {
     opcode: 'control_forever',
     inputs: {
@@ -792,7 +802,7 @@ export function forever(stack: Pattern<BlockStack>): PatternBlock {
 // https://en.scratch-wiki.info/wiki/If_()_Then_(block)
 export function ifThen(
   condition: ValuePattern<BooleanBlock>,
-  stack: Pattern<BlockStack>,
+  stack: Pattern<BlockScript>,
 ): PatternBlock {
   return {
     opcode: 'control_if',
@@ -806,8 +816,8 @@ export function ifThen(
 // https://en.scratch-wiki.info/wiki/If_()_Then,_Else_(block)
 export function ifThenElse(
   condition: ValuePattern<BooleanBlock>,
-  ifTrue: Pattern<BlockStack>,
-  ifFalse: Pattern<BlockStack>,
+  ifTrue: Pattern<BlockScript>,
+  ifFalse: Pattern<BlockScript>,
 ): PatternBlock {
   return {
     opcode: 'control_if_else',
@@ -822,7 +832,7 @@ export function ifThenElse(
 // https://en.scratch-wiki.info/wiki/Repeat_Until_()_(block)
 export function repeatUntil(
   condition: ValuePattern<BooleanBlock>,
-  stack: Pattern<BlockStack>,
+  stack: Pattern<BlockScript>,
 ): PatternBlock {
   return {
     opcode: 'control_repeat_until',
@@ -885,7 +895,7 @@ export function isTouching(object: ValuePattern<string>): BooleanBlock {
     type: 'boolean',
     opcode: 'sensing_touchingobject',
     inputs: {
-      TOUCHINGOBJECTMENU: new BlockStack([
+      TOUCHINGOBJECTMENU: new BlockScript([
         {
           opcode: 'sensing_touchingobjectmenu',
           fields: {
@@ -929,7 +939,7 @@ export function isKeyPressed(key: ValuePattern<KeyPress>): BooleanBlock {
     type: 'boolean',
     opcode: 'sensing_keypressed',
     inputs: {
-      KEY_OPTION: stack({
+      KEY_OPTION: script({
         opcode: 'sensing_keyoptions',
         fields: {
           KEY_OPTION: key,
@@ -953,7 +963,7 @@ export function distanceTo(what: ValuePattern<string>): ReporterBlock {
     type: 'reporter',
     opcode: 'sensing_distanceto',
     inputs: {
-      DISTANCETOMENU: stack({
+      DISTANCETOMENU: script({
         opcode: 'sensing_distancetomenu',
         fields: {
           DISTANCETOMENU: what,
@@ -1025,7 +1035,7 @@ export function senseXOfY(
       PROPERTY: what,
     },
     inputs: {
-      OBJECT: stack({
+      OBJECT: script({
         opcode: 'sensing_of_object_menu',
         fields: {
           OBJECT: sprite,
@@ -1575,7 +1585,7 @@ export function procedureDefinition(name: ValuePattern<string>): PatternBlock {
   return {
     opcode: 'procedures_definition',
     inputs: {
-      custom_block: new BlockStack([
+      custom_block: new BlockScript([
         {
           opcode: 'procedures_prototype',
           mutation: name,

@@ -2,14 +2,14 @@ import { isNode, Node } from '../new-blocks';
 import { assertType } from '../utils';
 import {
   ANYTHING,
-  BlockStack,
+  BlockScript,
   isReporterBlock,
   NOTHING,
   OnePattern,
   OneValuePattern,
   Pattern,
   PatternBlock,
-  stack,
+  script,
   ValuePattern,
 } from './patterns';
 
@@ -53,15 +53,15 @@ function valueMatchesOneValuePattern(
 
   // The pattern could be a reporter block.
   if (isReporterBlock(valuePattern)) {
-    valuePattern = stack(valuePattern);
+    valuePattern = script(valuePattern);
   }
 
-  if (valuePattern instanceof BlockStack) {
+  if (valuePattern instanceof BlockScript) {
     // If the pattern is a stack, the value must be a node.
     if (!isNode(value)) {
       return false;
     }
-    return subtreeMatchesOneStack(value, valuePattern);
+    return subtreeMatchesOneScript(value, valuePattern);
   }
 
   if (isNode(value)) {
@@ -187,9 +187,9 @@ export function nodeMatchesPattern(
  * @param node The root of the subtree to check.
  * @param pattern The pattern to check against.
  */
-export function subtreeMatchesOneStack(
+export function subtreeMatchesOneScript(
   node: Node | null | undefined,
-  pattern: OnePattern<BlockStack>,
+  pattern: OnePattern<BlockScript>,
 ) {
   if (node === null || node === undefined || pattern === NOTHING) {
     return (node === null || node === undefined) && pattern === NOTHING;
@@ -218,13 +218,13 @@ export function subtreeMatchesOneStack(
   return true;
 }
 
-export function subTreeMatchesStack(
+export function subTreeMatchesScript(
   node: Node | null | undefined,
-  pattern: Pattern<BlockStack>,
+  pattern: Pattern<BlockScript>,
 ) {
   if (!Array.isArray(pattern)) {
     pattern = [pattern];
   }
 
-  return pattern.some((p) => subtreeMatchesOneStack(node, p));
+  return pattern.some((p) => subtreeMatchesOneScript(node, p));
 }

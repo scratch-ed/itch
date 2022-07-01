@@ -1,5 +1,5 @@
-import { subtreeMatchesOneStack } from './matcher/node-matcher';
-import { BlockStack, PatternBlock, RotationStyle, stack } from './matcher/patterns';
+import { subtreeMatchesOneScript } from './matcher/node-matcher';
+import { BlockScript, PatternBlock, RotationStyle, stack } from './matcher/patterns';
 import { asTree, Node } from './new-blocks';
 import { Position } from './lines';
 import { ensure } from './utils';
@@ -219,9 +219,9 @@ export class ScratchTarget {
     return Array.from(this.blockTree(blocks));
   }
 
-  find(stack: BlockStack): Node | undefined {
+  find(stack: BlockScript): Node | undefined {
     const blocks = Array.from(this.blockTree());
-    return blocks.find((b) => subtreeMatchesOneStack(b, stack));
+    return blocks.find((b) => subtreeMatchesOneScript(b, stack));
   }
 
   /**

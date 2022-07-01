@@ -4,12 +4,13 @@
  * Utilities to check if the students changed the predefined blocks and/or
  * sprites in their solution.
  */
-import { isEqual, merge } from 'lodash-es';
+import { isEqual } from 'lodash-es';
 import { Evaluation } from '../evaluation';
-import { subTreeMatchesStack } from '../matcher/node-matcher';
-import { BlockStack, Pattern } from '../matcher/patterns';
+import { t } from '../i18n';
+import { subTreeMatchesScript } from '../matcher/node-matcher';
+import { BlockScript, Pattern, PatternBlock } from '../matcher/patterns';
 import { ScratchBlock } from '../model';
-import { Node } from '../new-blocks';
+import { Node, walkNodes } from '../new-blocks';
 import { Snapshot } from '../new-log';
 import { assertType, deepDiff, stringify } from '../utils';
 import { GroupLevel } from './hierarchy';
@@ -17,11 +18,11 @@ import { GroupLevel } from './hierarchy';
 type BlockFunction = (block: Node) => boolean;
 
 /**
- * The configuration for the pre-defined block config.
+ * The options for the sprite config.
  */
-export interface PredefinedBlockConfig {
+interface Config {
   /**
-   * Configuration for the different sprites.
+   * The pattern to use to search for scripts that can be modified.
    *
    * The predefined-block function checks by iterating each stack of blocks in
    * the template, and asserting that an identical block stack exists in the
@@ -34,13 +35,40 @@ export interface PredefinedBlockConfig {
    * In this context, identical means functionally identical. For example,
    * block stacks that were moved are still considered identical.
    */
-  spriteConfig: Record<string, BlockFunction | Pattern<BlockStack>>;
+  pattern: BlockFunction | Pattern<BlockScript>;
+  /**
+   * A set of blocks that can be used. Unset to allow all blocks.
+   */
+  allowedBlocks?: Array<PatternBlock>;
+  /**
+   * Allow additional scripts in this sprite, that are not available in the
+   * template project.
+   */
+  allowAdditionalScripts?: boolean;
+}
+
+/**
+ * Configures the pre-defined block check.
+ */
+export interface PredefinedBlockConfig {
+  /**
+   * Configuration for the different sprites.
+   *
+   * See the config interface for an explanation of the various possibilities.
+   * You can also pass the pattern directly, which is shorter in most cases.
+   *
+   * Note that if you want to allow unconditional editing of blocks for a sprite,
+   * you should either add the sprite to the `ignoredSprites`, do the following:
+   *
+   * - Use `() => true` as the pattern, meaning you can modify any script.
+   * - Set `allowAdditionalScripts` to `true`, for either this sprite or globally.
+   */
+  spriteConfig: Record<string, BlockFunction | Pattern<BlockScript> | Config>;
 
   /**
-   * By default, blocks for which there is no equivalent in the template are
-   * considered wrong. However, you can disable this per sprite (or globally).
+   * Allow additional scripts for all sprites.
    */
-  allowAdditionalStacks?: boolean | Record<string, boolean>;
+  allowAdditionalScripts?: boolean;
 
   /**
    * Allows you to override the sort function for the hat blocks. This is used
@@ -60,20 +88,81 @@ export interface PredefinedBlockConfig {
   debug?: boolean;
 }
 
-type InternalConfig = Required<
-  Omit<PredefinedBlockConfig, 'spriteConfig' | 'allowAdditionalStacks'> & {
-    spriteConfig: Record<string, BlockFunction>;
-    allowAdditionalStacks: Record<string, boolean>;
-  }
->;
+interface InternalSpriteConfig {
+  pattern: BlockFunction;
+  allowedBlocks: Array<PatternBlock> | undefined;
+  allowAdditionalScripts: boolean;
+}
 
-const DEFAULT_CONFIG: Partial<PredefinedBlockConfig> = {
-  spriteConfig: {},
-  allowAdditionalStacks: false,
-  ignoredSprites: [],
-  blockComparator: (a, b) => stringify(a).localeCompare(stringify(b)),
-  debug: false,
-};
+interface InternalConfig {
+  spriteConfig: Record<string, InternalSpriteConfig>;
+  debug: boolean;
+  ignoredSprites: string[];
+  blockComparator: Parameters<Array<ScratchBlock>['sort']>[0];
+}
+
+/**
+ * Convert an external config to the internal config.
+ * This makes using it easier.
+ */
+function normalizeConfig(
+  config: PredefinedBlockConfig,
+  template: Snapshot,
+): InternalConfig {
+  for (const [spriteName, patternOrConfig] of Object.entries(config.spriteConfig)) {
+    // If we get a pattern, in which case we convert to a config.
+    let finalConfig: Config;
+    if (
+      typeof patternOrConfig === 'object' &&
+      Object.hasOwn(patternOrConfig, 'pattern')
+    ) {
+      assertType<Config>(patternOrConfig);
+      finalConfig = patternOrConfig;
+    } else {
+      assertType<BlockFunction | Pattern<BlockScript>>(patternOrConfig);
+      finalConfig = {
+        pattern: patternOrConfig,
+      };
+    }
+
+    finalConfig.allowedBlocks = finalConfig.allowedBlocks ?? undefined;
+    finalConfig.allowAdditionalScripts =
+      finalConfig.allowAdditionalScripts ?? config.allowAdditionalScripts ?? false;
+
+    config.spriteConfig[spriteName] = finalConfig;
+  }
+
+  const spriteConfig: Record<string, InternalSpriteConfig> = {};
+
+  // Convert all patterns in the configs to BlockFunctions.
+  // Fix config for hats.
+  for (const target of template.targets) {
+    const fromConfig = config.spriteConfig[target.name] as Config;
+    if (fromConfig === undefined) {
+      spriteConfig[target.name] = {
+        pattern: () => false,
+        allowedBlocks: undefined,
+        allowAdditionalScripts: false,
+      };
+    } else if (typeof fromConfig.pattern !== 'function') {
+      const existing = fromConfig.pattern;
+      fromConfig.pattern = (block: Node) => {
+        return subTreeMatchesScript(block, existing);
+      };
+      spriteConfig[target.name] = fromConfig as InternalSpriteConfig;
+    } else {
+      spriteConfig[target.name] = fromConfig as InternalSpriteConfig;
+    }
+  }
+
+  return {
+    spriteConfig: spriteConfig,
+    debug: config.debug ?? false,
+    ignoredSprites: config.ignoredSprites ?? [],
+    blockComparator:
+      config.blockComparator ?? ((a, b) => stringify(a).localeCompare(stringify(b))),
+  };
+}
 
 // Check a sprite, but without grouping.
 function checkSpriteBlocks(
@@ -85,6 +174,7 @@ function checkSpriteBlocks(
 ): { correct: boolean; remainder: Node[] } {
   const templateSprite = template.findTarget(name)!;
   const submissionSprite = submission.findTarget(name);
+  const spriteConfig = config.spriteConfig[name];
 
   if (submissionSprite === undefined) {
     return { correct: false, remainder: [] };
@@ -100,11 +190,11 @@ function checkSpriteBlocks(
   for (const stack of templateStacks) {
     // If this stack matches a pattern or function, we allow modifications to it.
     let filter: (n: Node) => boolean;
-    if (config.spriteConfig[name](stack)) {
+    if (spriteConfig.pattern(stack)) {
       // When we ignore a stack, it must still exist in the submission. The main
       // difference is that we only match on the function/pattern, not the complete
       // stack.
-      filter = (b) => config.spriteConfig[name](b);
+      filter = (b) => spriteConfig.pattern(b);
     } else {
       // In this case, we want an identical stack in the submission.
       filter = (b) => isEqual(b, stack);
@@ -114,7 +204,7 @@ function checkSpriteBlocks(
     const submissionFiltered = submissionStacks.filter(filter);
     const templateFiltered = templateStacks.filter(filter);
 
-    // The amount of matches in both should be equal.
+    // The number of matches in both should be equal.
     if (submissionFiltered.length >= templateFiltered.length) {
       submissionFiltered.forEach((e) => encountered.add(e));
     } else {
@@ -137,8 +227,52 @@ function checkSpriteBlocks(
     })
     .acceptIf(correct);
 
-  const remainingStacks = submissionStacks.filter((n) => !encountered.has(n));
+  // Do the check for remaining blocks, if needed.
+  for (const [name, spriteConfig] of Object.entries(config.spriteConfig)) {
+    if (spriteConfig.allowedBlocks === undefined) {
+      continue;
+    }
+    // Allowed opcodes.
+    const allowedOpcodes = new Set(spriteConfig.allowedBlocks.map((b) => b.opcode));
+    // We add the opcodes of blocks in the template.
+    const templateScripts = template
+      .sprite(name)
+      .blockTreeList()
+      .filter((b) => spriteConfig.pattern(b));
+    for (const templateScript of templateScripts) {
+      walkNodes(templateScript, (n) => allowedOpcodes.add(n.opcode));
+    }
+    // Every block in the submission must be available in the allowed blocks.
+    const submissionScripts = submission
+      .sprite(name)
+      .blockTreeList()
+      .filter((b) => spriteConfig.pattern(b));
+    const submissionOpcodes: Set<string> = new Set();
+    for (const submissionScript of submissionScripts) {
+      walkNodes(submissionScript, (n) => submissionOpcodes.add(n.opcode));
+    }
 
+    // Find blocks used that were not allowed.
+    const illegallyUsed = new Set();
+    for (const ss of submissionOpcodes) {
+      if (!allowedOpcodes.has(ss)) {
+        illegallyUsed.add(ss);
+      }
+    }
+
+    e.test('Toegestane blokjes')
+      .feedback({
+        wrong: t('predefined.allowed.wrong'),
+        correct: t('predefined.allowed.correct'),
+      })
+      .acceptIf(illegallyUsed.size === 0);
+
+    if (config.debug && illegallyUsed.size !== 0) {
+      console.warn('Found disallowed blocks:', illegallyUsed);
+    }
+  }
+
+  const remainingStacks = submissionStacks.filter((n) => !encountered.has(n));
   return { remainder: remainingStacks, correct };
 }
 
@@ -193,33 +327,10 @@ export function checkPredefinedBlocks(
   userConfig: PredefinedBlockConfig,
   evaluation: Evaluation,
 ): void {
-  const config = {} as Required<PredefinedBlockConfig>;
-  merge(config, DEFAULT_CONFIG, userConfig);
-
   const template = evaluation.log.template;
   const submission = evaluation.log.submission;
   const e = evaluation.group;
-
-  let defaultAllowAdditionalStacks;
-  if (typeof config.allowAdditionalStacks === 'boolean') {
-    defaultAllowAdditionalStacks = config.allowAdditionalStacks;
-    config.allowAdditionalStacks = {};
-  }
-
-  // Fix config for hats.
-  for (const target of template.targets) {
-    const fromConfig = config.spriteConfig[target.name];
-    if (fromConfig === undefined) {
-      config.spriteConfig[target.name] = () => false;
-    } else if (typeof fromConfig !== 'function') {
-      config.spriteConfig[target.name] = (block: Node) => {
-        return subTreeMatchesStack(block, fromConfig);
-      };
-    }
-    config.allowAdditionalStacks[target.name] ??= defaultAllowAdditionalStacks ?? false;
-  }
-
-  assertType<InternalConfig>(config);
+  const config = normalizeConfig(userConfig, template);
 
   e.group(
     'Controle op bestaande code',
@@ -232,6 +343,7 @@ export function checkPredefinedBlocks(
         if (config.ignoredSprites.includes(name)) {
           continue;
         }
+        const spriteConfig = config.spriteConfig[name];
         e.group(name, { sprite: name, visibility: 'summary' }, () => {
           // Check the sprite itself.
           checkSpriteSensuStricto(name, template, submission, e, config);
@@ -246,7 +358,7 @@ export function checkPredefinedBlocks(
           );
 
           // Check for floating blocks if needed and allowed.
-          if (!config.allowAdditionalStacks[name] && correct) {
+          if (!spriteConfig.allowAdditionalScripts && correct) {
             const result = e
               .test('Test op rondslingerende blokjes')
               .feedback({

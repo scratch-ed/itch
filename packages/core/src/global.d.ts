@@ -1,6 +1,6 @@
 import { searchFrames } from './log';
 import { checkBlocks } from './matcher/differ';
-import { nodeMatchesPattern, subTreeMatchesStack } from './matcher/node-matcher';
+import { nodeMatchesPattern, subTreeMatchesScript } from './matcher/node-matcher';
 import { format, numericEquals } from './utils';
 import { broadcast, delay, sprite } from './scheduler/wait';
 import {
@@ -68,7 +68,6 @@ import {
   whenIStartAsClone,
   wait as bWait,
   nothing,
-  stack,
   equals,
   forever,
   ifThenElse,
@@ -134,6 +133,7 @@ import {
   lengthOfList,
   listContains,
   stop,
+  script,
 } from './matcher/patterns';
 
 declare interface Itch {
@@ -143,7 +143,9 @@ declare interface Itch {
 
 declare interface BlockMatch {
   nothing: typeof nothing;
-  stack: typeof stack;
+  /** @deprecated */
+  stack: typeof script;
+  script: typeof script;
   anything: typeof anything;
   moveXSteps: typeof moveXSteps;
   turnRightXDegrees: typeof turnRightXDegrees;
@@ -263,7 +265,9 @@ declare interface BlockMatch {
   listContains: typeof listContains;
   // Some utility functions
   nodeMatchesPattern: typeof nodeMatchesPattern;
-  subTreeMatchesStack: typeof subTreeMatchesStack;
+  /** @deprecated */
+  subTreeMatchesStack: typeof subTreeMatchesScript;
+  subTreeMatchesScript: typeof subTreeMatchesScript;
   checkBlocks: typeof checkBlocks;
 }
 

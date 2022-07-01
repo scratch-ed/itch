@@ -113,3 +113,23 @@ export function asTree(
 
   return new Set(filtered);
 }
+
+/**
+ * Walk all nodes in the given tree and call the callback for each node.
+ *
+ * @param node The root of the tree to walk.
+ * @param walker The callback, which will be called for each node.
+ */
+export function walkNodes(node: Node, walker: (n: Node) => void): void {
+  walker(node);
+  while (node.next) {
+    if (node.inputs.SUBSTACK) {
+      walkNodes(node.inputs.SUBSTACK as Node, walker);
+    }
+    if (node.inputs.SUBSTACK2) {
+      walkNodes(node.inputs.SUBSTACK2 as Node, walker);
+    }
+    node = node.next;
+    walker(node);
+  }
+}
