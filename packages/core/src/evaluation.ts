@@ -198,6 +198,7 @@ function expose() {
   object.Itch = {
     checkPredefinedBlocks: checkPredefinedBlocks,
     distSq: distSq,
+    numericEquals: numericEquals,
   };
   object.format = format;
   object.t = t;

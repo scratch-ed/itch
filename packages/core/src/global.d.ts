@@ -139,6 +139,7 @@ import {
 declare interface Itch {
   checkPredefinedBlocks: typeof checkPredefinedBlocks;
   distSq: typeof distSq;
+  numericEquals: typeof numericEquals;
 }
 
 declare interface BlockMatch {
