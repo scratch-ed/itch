@@ -1,6 +1,7 @@
 import { Evaluation } from '../evaluation';
 import { Node } from '../new-blocks';
 import { Messages } from '../testplan/hierarchy';
+import { assertType } from '../utils';
 import { BlockStack, OnePattern, PatternBlock, stack } from './patterns';
 
 interface AnnotatedSubtree {
@@ -19,7 +20,7 @@ interface AnnotatedSubtree {
   substack?: AnnotatedSubtree[];
   substack2?: AnnotatedSubtree[];
 
-  subgroup?: boolean;
+  subgroup?: boolean | string;
 }
 
 /**
@@ -41,40 +42,36 @@ export function checkBlocks(
       pattern = stack(pattern);
     }
 
-    e.group
-      .test(subtree.name)
-      .feedback(subtree.feedback)
-      .expect(current)
-      .toMatchSubtree(pattern);
+    const runnable = () => {
+      assertType<BlockStack>(pattern);
 
-    // If there is a substack, use it.
-    let sub1;
-    if (subtree.substack) {
-      const substackBlocks = current?.inputs?.SUBSTACK || current;
-      sub1 = () => {
+      e.group
+        .test(subtree.name)
+        .feedback(subtree.feedback)
+        .expect(current)
+        .toMatchSubtree(pattern);
+
+      if (subtree.substack) {
+        const substackBlocks = current?.inputs?.SUBSTACK || current;
         checkBlocks(e, substackBlocks as Node, subtree.substack!);
-      };
-    }
-    if (sub1) {
-      if (subtree.subgroup ?? true) {
-        e.group.group('Lus', sub1);
-      } else {
-        sub1();
       }
-    }
-    // The IfThenElse block has a second substack.
-    let sub2;
-    if (subtree.substack2) {
-      sub2 = () => {
-        checkBlocks(e, current?.inputs?.SUBSTACK2 as Node, subtree.substack2!);
-      };
-    }
-    if (sub2) {
-      if (subtree.subgroup ?? true) {
-        e.group.group('Lus', sub2);
-      } else {
-        sub2();
+
+      if (subtree.substack2) {
+        const substack2Blocks = current?.inputs?.SUBSTACK2 || current;
+        checkBlocks(e, substack2Blocks as Node, subtree.substack2!);
       }
+    };
+
+    if (subtree.subgroup ?? subtree.substack) {
+      let name: string;
+      if (typeof subtree.subgroup === 'string') {
+        name = subtree.subgroup;
+      } else {
+        name = 'Lus';
+      }
+      e.group.group(name, runnable);
+    } else {
+      runnable();
     }
 
     for (let i = 0; i < pattern.blockPatterns.length; i++) {
