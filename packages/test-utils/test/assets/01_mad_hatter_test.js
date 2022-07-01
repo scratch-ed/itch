@@ -8,8 +8,8 @@
 function beforeExecution(e) {
   Itch.checkPredefinedBlocks(
     {
-      hats: {
-        Hat: (_b) => true,
+      spriteConfig: {
+        Hat: () => true,
       },
     },
     e,
