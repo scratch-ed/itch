@@ -199,6 +199,9 @@ function expose() {
     checkPredefinedBlocks: checkPredefinedBlocks,
     distSq: distSq,
     numericEquals: numericEquals,
+    broadcast: broadcast,
+    sprite: sprite,
+    delay: delay,
   };
   object.format = format;
   object.t = t;

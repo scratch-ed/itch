@@ -1,6 +1,8 @@
 import type VirtualMachine from '@ftrprf/judge-scratch-vm-types/types/virtual-machine';
+import { Node } from './new-blocks';
 import { Event, NewLog } from './new-log';
 import { ScratchBlock } from './model';
+import { memoize } from './utils';
 
 export interface ProfileEventData {
   /**
@@ -13,9 +15,19 @@ export interface ProfileEventData {
   readonly target: string;
 
   /**
-   * Shortcut to get the actual block.
+   * Get the executed block as an instance of a `ScratchBlock`.
+   * This method is expensive, so only use it if necessary.
+   * The method is memoized, so calling it multiple times is no problem.
    */
   block(): ScratchBlock;
+
+  /**
+   * Get the executed block as an instance of a `Node`.
+   * This allows for easy matching against blocks.
+   * This method is expensive, so only use it if necessary.
+   * The method is memoized, so calling it multiple times is no problem.
+   */
+  node(): Node;
 }
 
 /**
@@ -35,14 +47,19 @@ export function installAdvancedBlockProfiler(vm: VirtualMachine, log: NewLog): v
         const currentBlockId = argumentsList[1].thread.peekStack();
         // Only register block executions that exist; other blocks we don't care about.
         if (vmTarget.blocks.getBlock(currentBlockId)) {
-          const event = new Event('block_execution', {
+          const data: ProfileEventData = {
             blockId: currentBlockId,
             target: targetName,
-            block: () => {
+            block: memoize(() => {
               const target = log.last.target(targetName);
               return target.block(currentBlockId);
-            },
-          } as ProfileEventData);
+            }),
+            node: memoize(() => {
+              const target = log.last.target(targetName);
+              return target.node(currentBlockId);
+            }),
+          };
+          const event = new Event('block_execution', data);
           event.previous = log.last;
           event.next = event.previous;
           log.registerEvent(event);

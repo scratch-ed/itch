@@ -140,6 +140,9 @@ declare interface Itch {
   checkPredefinedBlocks: typeof checkPredefinedBlocks;
   distSq: typeof distSq;
   numericEquals: typeof numericEquals;
+  sprite: typeof sprite;
+  broadcast: typeof broadcast;
+  delay: typeof delay;
 }
 
 declare interface BlockMatch {

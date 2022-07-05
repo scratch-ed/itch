@@ -1,6 +1,6 @@
 import { subtreeMatchesOneScript } from './matcher/node-matcher';
-import { BlockScript, PatternBlock, RotationStyle, stack } from './matcher/patterns';
-import { asTree, Node } from './new-blocks';
+import { BlockScript, PatternBlock, RotationStyle, script } from './matcher/patterns';
+import { asNode, asTree, Node } from './new-blocks';
 import { Position } from './lines';
 import { ensure } from './utils';
 
@@ -219,23 +219,31 @@ export class ScratchTarget {
     return Array.from(this.blockTree(blocks));
   }
 
-  find(stack: BlockScript): Node | undefined {
+  /**
+   * Find the script that matches with the pattern.
+   *
+   * @param script The start of the script to match.
+   *
+   * @return The matched script if found, otherwise undefined. If multiple stacks
+   *         match, an arbitrary script will be returned.
+   */
+  find(script: BlockScript): Node | undefined {
     const blocks = Array.from(this.blockTree());
-    return blocks.find((b) => subtreeMatchesOneScript(b, stack));
+    return blocks.find((b) => subtreeMatchesOneScript(b, script));
   }
 
   /**
-   * Find the block stack that matches with the pattern.
+   * Find the script that matches with the pattern.
    *
-   * @param firstBlock The first block in the stack to match.
-   * @param other Optional, additional blocks in the stack.
+   * @param firstBlock The first block in the script to match.
+   * @param other Optional, additional blocks in the script.
    *
-   * @return The matched stack if found, otherwise undefined. If multiple stacks
+   * @return The matched script if found, otherwise undefined. If multiple scripts
    *         match, an arbitrary stack will be returned.
    */
   findStack(firstBlock: PatternBlock, ...other: PatternBlock[]): Node | undefined {
-    const stacked = stack(firstBlock, ...other);
-    return this.find(stacked);
+    const blockScript = script(firstBlock, ...other);
+    return this.find(blockScript);
   }
 
   variable(name: string): ScratchVariable | undefined {
@@ -244,6 +252,22 @@ export class ScratchTarget {
 
   block(id: string): ScratchBlock {
     return ensure(this.blocks.find((b) => b.id === id));
+  }
+
+  /**
+   * Return the given scratch block as a node.
+   * It returns a single node; next blocks are not attached.
+   * Use `blockTree` if you need that.
+   *
+   * This will fail if the block is not from this target.
+   *
+   * @param block The block or ID you want as a node.
+   */
+  node(block: ScratchBlock | string): Node {
+    const blockId = typeof block === 'string' ? block : block.id;
+    const ourBlock = this.block(blockId);
+    const blockMap = new Map(this.blocks.map((i) => [i.id, i]));
+    return asNode(ourBlock, blockMap);
   }
 
   /** @deprecated */

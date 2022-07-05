@@ -82,8 +82,6 @@ export function assertType<T>(value: unknown): asserts value is T {
   // Do nothing, this is a type check only.
 }
 
-export type Writeable<T> = { -readonly [P in keyof T]: T[P] };
-
 const Delta = {
   VALUE_CREATED: 'created',
   VALUE_UPDATED: 'updated',
@@ -128,6 +126,13 @@ export function deepDiff(obj1: unknown, obj2: unknown) {
     };
   }
 
+  if ((!obj1 && obj2) || (obj1 && !obj2)) {
+    return {
+      type: compareValues(obj1, obj2),
+      data: obj1 === undefined ? obj2 : obj1,
+    };
+  }
+
   assertType<Record<string, unknown>>(obj1);
   assertType<Record<string, unknown>>(obj2);
 
@@ -153,4 +158,25 @@ export function deepDiff(obj1: unknown, obj2: unknown) {
   }
 
   return diff;
+}
+
+/**
+ * Memoize a function without parameters.
+ *
+ * The result is a function with the same arguments as the original, but the
+ * result will only be computed once.
+ * Afterwards, the saved value is used.
+ *
+ * @param fn The function to memoize.
+ */
+export function memoize<R>(fn: () => R): () => R {
+  let result: R | undefined = undefined;
+
+  return (...args) => {
+    if (result === undefined) {
+      result = fn(...args);
+    }
+
+    return result;
+  };
 }
