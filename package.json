@@ -60,7 +60,8 @@
           "<rootDir>/exercises/verzamel-de-grondstoffen/*.test.js",
           "<rootDir>/exercises/sloopbal/*.test.js",
           "<rootDir>/exercises/vang-de-items/*.test.js",
-          "<rootDir>/exercises/zet-de-lasers-uit/*.test.js"
+          "<rootDir>/exercises/zet-de-lasers-uit/*.test.js",
+          "<rootDir>/exercises/bouw-de-raket/*.test.js"
         ]
       },
       {
@@ -70,8 +71,7 @@
           "<rootDir>/exercises/rommelruimend/*.test.js",
           "<rootDir>/exercises/vernietig-asteroiden/*.test.js",
           "<rootDir>/exercises/r0nn-op-avontuur/*.test.js",
-          "<rootDir>/exercises/chaos-in-de-raket/*.test.js",
-          "<rootDir>/exercises/bouw-de-raket/*.test.js"
+          "<rootDir>/exercises/chaos-in-de-raket/*.test.js"
         ]
       }
     ]

@@ -143,6 +143,7 @@ declare interface Itch {
   sprite: typeof sprite;
   broadcast: typeof broadcast;
   delay: typeof delay;
+  asRange: typeof asRange;
 }
 
 declare interface BlockMatch {

@@ -202,6 +202,7 @@ function expose() {
     broadcast: broadcast,
     sprite: sprite,
     delay: delay,
+    asRange: asRange,
   };
   object.format = format;
   object.t = t;

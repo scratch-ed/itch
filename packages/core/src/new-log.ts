@@ -235,6 +235,8 @@ type EventData =
   | ClickEventData
   | Record<string, unknown>;
 
+type EventTypes = 'block_execution' | 'key';
+
 /**
  * An event is a high-level event in the VM.
  *
@@ -248,7 +250,7 @@ export class Event {
   private previousSnapshot?: Snapshot;
   private nextSnapshot?: Snapshot;
 
-  constructor(readonly type: string, readonly data: EventData = {}) {}
+  constructor(readonly type: string | EventTypes, readonly data: EventData = {}) {}
 
   get previous(): Snapshot {
     return ensure(this.previousSnapshot, 'The previous snapshot is not available yet.');
