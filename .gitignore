@@ -28,3 +28,5 @@ exercises/translations.json
 
 # Ignore lock file
 exercises/exercise-lock.json
+.DS_Store
+.vscode/settings.json
