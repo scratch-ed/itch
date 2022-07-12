@@ -325,6 +325,7 @@ export class GroupLevel {
       // Third case; sprite & block.
       name = `Testen voor ${nameOrOptions.sprite}`;
       block = optionsOrBlock;
+      options = nameOrOptions;
     } else if (
       typeof nameOrOptions === 'string' &&
       typeof optionsOrBlock === 'function'
