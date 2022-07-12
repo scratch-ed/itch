@@ -1,5 +1,11 @@
 import { subtreeMatchesOneScript } from './matcher/node-matcher';
-import { BlockScript, PatternBlock, RotationStyle, script } from './matcher/patterns';
+import {
+  BlockScript,
+  OnePattern,
+  PatternBlock,
+  RotationStyle,
+  script,
+} from './matcher/patterns';
 import { asNode, asTree, Node } from './new-blocks';
 import { Position } from './lines';
 import { ensure } from './utils';
@@ -241,7 +247,10 @@ export class ScratchTarget {
    * @return The matched script if found, otherwise undefined. If multiple scripts
    *         match, an arbitrary stack will be returned.
    */
-  findStack(firstBlock: PatternBlock, ...other: PatternBlock[]): Node | undefined {
+  findStack(
+    firstBlock: OnePattern<PatternBlock>,
+    ...other: OnePattern<PatternBlock>[]
+  ): Node | undefined {
     const blockScript = script(firstBlock, ...other);
     return this.find(blockScript);
   }

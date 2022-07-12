@@ -62,7 +62,8 @@
           "<rootDir>/exercises/vang-de-items/*.test.js",
           "<rootDir>/exercises/zet-de-lasers-uit/*.test.js",
           "<rootDir>/exercises/bouw-de-raket/*.test.js",
-          "<rootDir>/exercises/navigeer-rommel/*.test.js"
+          "<rootDir>/exercises/navigeer-rommel/*.test.js",
+          "<rootDir>/exercises/plant-de-vlag/*.test.js"
         ]
       },
       {
