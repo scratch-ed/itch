@@ -144,6 +144,7 @@ declare interface Itch {
   broadcast: typeof broadcast;
   delay: typeof delay;
   asRange: typeof asRange;
+  mergeLines: typeof mergeLines;
 }
 
 declare interface BlockMatch {

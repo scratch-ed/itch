@@ -203,6 +203,7 @@ function expose() {
     sprite: sprite,
     delay: delay,
     asRange: asRange,
+    mergeLines: mergeLines,
   };
   object.format = format;
   object.t = t;
