@@ -65,13 +65,13 @@
           "<rootDir>/exercises/navigeer-rommel/*.test.js",
           "<rootDir>/exercises/plant-de-vlag/*.test.js",
           "<rootDir>/exercises/chaos-in-de-raket/*.test.js",
-          "<rootDir>/exercises/rommelruimend/*.test.js"
+          "<rootDir>/exercises/rommelruimend/*.test.js",
+          "<rootDir>/exercises/vernietig-asteroiden/*.test.js"
         ]
       },
       {
         "displayName": "brokenExercises",
         "testMatch": [
-          "<rootDir>/exercises/vernietig-asteroiden/*.test.js",
           "<rootDir>/exercises/r0nn-op-avontuur/*.test.js"
         ]
       }
