@@ -169,6 +169,14 @@ class TestOptions {
     return this;
   }
 
+  /**
+   * Ignore wrong results.
+   *
+   * If you pass true to this method, a failing test will not result in any
+   * output being produced; instead it will be silently ignored.
+   *
+   * @param ignoreIt Ignore failing tests or not.
+   */
   ignoreWrong(ignoreIt: boolean) {
     this.ignoreWrongResult = ignoreIt;
     return this;
