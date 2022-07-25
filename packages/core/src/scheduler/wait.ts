@@ -7,7 +7,7 @@ import { castCallback, numericEquals } from '../utils';
 import { Context } from '../context';
 import { WaitCondition } from './scheduled-event';
 import { Position } from '../lines';
-import { Event } from '../new-log';
+import { Event } from '../log';
 
 class WaitEvent extends ScheduledAction {
   delay: number;

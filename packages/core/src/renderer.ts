@@ -1,16 +1,16 @@
 /* Copyright (C) 2019 Ghent University - All Rights Reserved */
 import ScratchRender from 'scratch-render';
-import { Event, NewLog } from './new-log';
+import { Event, Log } from './log';
 
 /**
  * Intercept events from pen extension.
  *
- * @param {NewLog} log - The vm to intercept info from.
+ * @param {Log} log - The vm to intercept info from.
  * @param {ScratchRender} renderer - Renderer
  *
  * @see https://en.scratch-wiki.info/wiki/Pen_Extension
  */
-function interceptPen(log: NewLog, renderer: ScratchRender) {
+function interceptPen(log: Log, renderer: ScratchRender) {
   console.log('Intercepting pen events...');
 
   // Intercept lines
@@ -75,15 +75,12 @@ function interceptPen(log: NewLog, renderer: ScratchRender) {
 /**
  * Create a proxied renderer, allowing us to intercept various stuff.
  *
- * @param {NewLog} log - The context.
+ * @param {Log} log - The context.
  * @param {HTMLCanvasElement} canvas - The canvas where the renderer should work.
  *
  * @return {ScratchRender}
  */
-export function makeProxiedRenderer(
-  log: NewLog,
-  canvas: HTMLCanvasElement,
-): ScratchRender {
+export function makeProxiedRenderer(log: Log, canvas: HTMLCanvasElement): ScratchRender {
   const render = new ScratchRender(canvas);
   console.log('renderer created');
 

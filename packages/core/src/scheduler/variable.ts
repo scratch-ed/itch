@@ -2,7 +2,7 @@ import type Target from '@ftrprf/judge-scratch-vm-types/types/engine/target';
 
 import { ScheduledAction } from './action';
 import { Context } from '../context';
-import { Event } from '../new-log';
+import { Event } from '../log';
 
 const STAGE = 'Stage';
 

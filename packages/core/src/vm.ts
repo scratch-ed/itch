@@ -1,8 +1,8 @@
-import { NewLog, snapshotFromSb3 } from './new-log';
 import VirtualMachine from 'scratch-vm';
 import ScratchStorage from 'scratch-storage';
 import AudioEngine from 'scratch-audio';
 import ScratchSVGRenderer from 'scratch-svg-renderer';
+import { Log, snapshotFromSb3 } from './log';
 import { makeProxiedRenderer } from './renderer';
 import { Context } from './context';
 import { EvalConfig } from './evaluation';
@@ -70,7 +70,7 @@ function wrapStartHats(vm: VirtualMachine) {
  */
 export async function createContext(config: EvalConfig): Promise<Context> {
   const vm = new VirtualMachine();
-  const log = new NewLog(vm);
+  const log = new Log(vm);
 
   // Disable turbo mode by default.
   vm.setTurboMode(false);

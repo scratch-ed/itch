@@ -3,7 +3,7 @@ import type Target from '@ftrprf/judge-scratch-vm-types/types/engine/target';
 import { ScheduledAction } from './action';
 import { Context } from '../context';
 import { BroadcastReceiver, BroadcastUpdate } from '../listener';
-import { Event } from '../new-log';
+import { Event } from '../log';
 
 export class TrackSpriteAction extends ScheduledAction {
   name: string;

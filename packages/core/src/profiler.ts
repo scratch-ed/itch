@@ -1,6 +1,6 @@
 import type VirtualMachine from '@ftrprf/judge-scratch-vm-types/types/virtual-machine';
 import { Node } from './new-blocks';
-import { Event, NewLog } from './new-log';
+import { Event, Log } from './log';
 import { ScratchBlock } from './model';
 import { memoize } from './utils';
 
@@ -36,7 +36,7 @@ export interface ProfileEventData {
  * This will save each executed block. Since this is executed a lot,
  * no new snapshots are taken; instead the previous one is linked.
  */
-export function installAdvancedBlockProfiler(vm: VirtualMachine, log: NewLog): void {
+export function installAdvancedBlockProfiler(vm: VirtualMachine, log: Log): void {
   console.log('Installing advanced block profiler...');
   // Attach the advanced profiler.
   for (const [opcode, blockFunction] of Object.entries(vm.runtime._primitives)) {

@@ -22,7 +22,6 @@
  * 3. The `describe` directive groups a bunch of related tests, e.g. for one sprite.
  * 4. The `tab` groups a bunch of `describe` statements. These are mainly for UI purposes.
  */
-import isEqual from 'lodash-es/isEqual';
 import { castCallback, MessageData, numericEquals, stringify } from '../utils';
 import { Project } from '../project';
 import { Evaluation } from '../evaluation';
@@ -30,8 +29,7 @@ import { Sb3Block, Sb3Target } from '../structures';
 
 import type VirtualMachine from '@ftrprf/judge-scratch-vm-types';
 import type BlockUtility from '@ftrprf/judge-scratch-vm-types/types/engine/block-utility';
-import { LoggedSprite } from '../log';
-import { cloneDeep } from 'lodash-es';
+import { cloneDeep, isEqual } from 'lodash-es';
 import { GroupedResultManager } from '../output';
 import { t } from '../i18n';
 import { Status } from '../output/partial-schema';
@@ -163,6 +161,7 @@ class ExpectLevel {
   }
 }
 
+/** @deprecated */
 class TestLevel {
   constructor(protected readonly resultManager: GroupedResultManager) {}
 
@@ -172,6 +171,7 @@ class TestLevel {
   }
 }
 
+/** @deprecated */
 class DescribeLevel extends TestLevel {
   /** @deprecated */
   describe(name: string, block: (out: TestLevel) => void) {
@@ -181,6 +181,7 @@ class DescribeLevel extends TestLevel {
   }
 }
 
+/** @deprecated */
 export class TabLevel extends DescribeLevel {
   /** @deprecated */
   tab(name: string, block: (out: DescribeLevel) => void): void {
@@ -190,6 +191,7 @@ export class TabLevel extends DescribeLevel {
   }
 }
 
+/** @deprecated */
 function removeAttached(block: Sb3Block, from?: Sb3Target): Sb3Block[] {
   // We remove all attached code from the hat block in the solution.
   const toCheck = new Set();
@@ -213,6 +215,7 @@ function removeAttached(block: Sb3Block, from?: Sb3Target): Sb3Block[] {
   return removedBlocks;
 }
 
+/** @deprecated */
 function fixHatBlock(filteredBlocks: Sb3Block[], hatBlock: Sb3Block) {
   const solutionIndex = filteredBlocks.findIndex((b) => b.id === hatBlock.id);
   hatBlock.next = null;
@@ -512,40 +515,4 @@ export function asRange(range: number | Range): Range {
   } else {
     return range;
   }
-}
-
-/** @deprecated * @deprecated
- */
-export function generatePositionMessage(
-  sprite: LoggedSprite,
-  xRange: Range | number,
-  yRange: Range | number,
-): string {
-  xRange = asRange(xRange);
-  yRange = asRange(yRange);
-  let message = `De sprite '${sprite.name}' moet `;
-
-  let messageX = '';
-  // First check x part.
-  if (sprite.x < xRange.min) {
-    messageX = 'meer naar links';
-  } else if (sprite.x > xRange.max) {
-    messageX = 'meer naar rechts';
-  }
-
-  let messageY = '';
-  // First check x part.
-  if (sprite.y < yRange.min) {
-    messageY = 'meer omhoog';
-  } else if (sprite.y > yRange.max) {
-    messageY = 'meer omlaag';
-  }
-
-  message += messageX;
-  if (messageX && messageY) {
-    message += ' en ';
-  }
-  message += messageY;
-  message += '.';
-  return message;
 }

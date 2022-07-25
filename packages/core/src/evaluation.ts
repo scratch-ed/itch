@@ -11,7 +11,6 @@ import { ScheduledEvent } from './scheduler/scheduled-event';
 import { broadcast, delay, sprite } from './scheduler/wait';
 import {
   asRange,
-  generatePositionMessage,
   ignoreWaitInProcedureFor,
   OneHatAllowedTest,
   TabLevel,
@@ -21,7 +20,7 @@ import type VirtualMachine from '@ftrprf/judge-scratch-vm-types';
 import { angle, distSq, mergeLines } from './lines';
 import { checkPredefinedBlocks } from './testplan/predefined-blocks';
 import { GroupLevel } from './testplan/hierarchy';
-import { NewLog } from './new-log';
+import { Log } from './log';
 import { initialiseTranslations, LanguageData, t } from './i18n';
 import { OutputCollector } from './output/collector';
 import { Judgement } from './output/full-schema';
@@ -190,7 +189,6 @@ function expose() {
   object.delay = delay;
   object.OneHatAllowedTest = OneHatAllowedTest;
   object.ignoreWaitInProcedureFor = ignoreWaitInProcedureFor;
-  object.generatePositionMessage = generatePositionMessage;
   object.asRange = asRange;
   object.angle = angle;
   object.mergeLines = mergeLines;
@@ -410,7 +408,7 @@ export class Evaluation extends TabLevel {
   /**
    * Get access to the log.
    */
-  get log(): NewLog {
+  get log(): Log {
     return this.context.log;
   }
 

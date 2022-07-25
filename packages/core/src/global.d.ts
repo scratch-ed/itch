@@ -1,11 +1,9 @@
-import { searchFrames } from './log';
 import { checkBlocks } from './matcher/differ';
 import { nodeMatchesPattern, subTreeMatchesScript } from './matcher/node-matcher';
 import { format, numericEquals } from './utils';
 import { broadcast, delay, sprite } from './scheduler/wait';
 import {
   asRange,
-  generatePositionMessage,
   ignoreWaitInProcedureFor,
   OneHatAllowedTest as AllowedTest,
 } from './testplan';
@@ -318,8 +316,6 @@ declare global {
     /** @deprecated */
     numericEquals: typeof numericEquals;
     /** @deprecated */
-    searchFrames: typeof searchFrames;
-    /** @deprecated */
     sprite: typeof sprite;
     /** @deprecated */
     broadcast: typeof broadcast;
@@ -329,8 +325,6 @@ declare global {
     OneHatAllowedTest: typeof AllowedTest;
     /** @deprecated */
     ignoreWaitInProcedureFor: typeof ignoreWaitInProcedureFor;
-    /** @deprecated */
-    generatePositionMessage: typeof generatePositionMessage;
     /** @deprecated */
     asRange: typeof asRange;
     /** @deprecated */

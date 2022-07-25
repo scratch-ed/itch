@@ -1,4 +1,4 @@
-import { snapshotFromSb3 } from '../src/new-log';
+import { snapshotFromSb3 } from '../src/log.js';
 import projectData from './agario-NL.json';
 import allBlocks from './all-blocks-NL.json';
 import {

@@ -2,7 +2,7 @@ import { Evaluation } from '../evaluation';
 import { Node } from '../new-blocks';
 import { Messages } from '../testplan/hierarchy';
 import { assertType } from '../utils';
-import { BlockScript, OnePattern, PatternBlock, stack } from './patterns';
+import { BlockScript, OnePattern, PatternBlock, script } from './patterns';
 
 interface AnnotatedSubtree {
   /**
@@ -39,7 +39,7 @@ export function checkBlocks(
   for (const subtree of subtrees) {
     let pattern = subtree.pattern;
     if (!(pattern instanceof BlockScript)) {
-      pattern = stack(pattern);
+      pattern = script(pattern);
     }
 
     const runnable = () => {

@@ -1,4 +1,4 @@
-import { Event } from '../new-log';
+import { Event } from '../log';
 import { ScheduledAction } from './action';
 import { Context } from '../context';
 

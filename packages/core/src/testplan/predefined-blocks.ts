@@ -11,7 +11,7 @@ import { subTreeMatchesScript } from '../matcher/node-matcher';
 import { BlockScript, Pattern, PatternBlock } from '../matcher/patterns';
 import { ScratchBlock } from '../model';
 import { Node, walkNodes } from '../new-blocks';
-import { Snapshot } from '../new-log';
+import { Snapshot } from '../log';
 import { assertType, deepDiff, stringify } from '../utils';
 import { GroupLevel } from './hierarchy';
 

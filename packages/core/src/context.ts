@@ -7,7 +7,7 @@ import { EndAction } from './scheduler/end';
 import { BroadcastReceiver, ThreadListener } from './listener';
 import { installAdvancedBlockProfiler, ProfileEventData } from './profiler';
 import { GroupedResultManager, OutputHandler } from './output';
-import { Event, NewLog } from './new-log';
+import { Event, Log } from './log';
 import { assertType } from './utils';
 import { Events } from './vm';
 
@@ -30,7 +30,7 @@ interface Acceleration {
 export class Context {
   readonly vm: VirtualMachine;
   numberOfRun: number;
-  readonly newLog: NewLog;
+  readonly newLog: Log;
   answers: string[];
   providedAnswers: string[];
   /**
@@ -65,7 +65,7 @@ export class Context {
 
   constructor(
     vm: VirtualMachine,
-    log: NewLog,
+    log: Log,
     templateJson: Record<string, unknown>,
     submissionJson: Record<string, unknown>,
     callback?: OutputHandler,
@@ -331,7 +331,7 @@ export class Context {
     action.execute(this, () => {});
   }
 
-  get log(): NewLog {
+  get log(): Log {
     return this.newLog!;
   }
 }

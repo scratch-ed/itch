@@ -1,7 +1,7 @@
 import { ScheduledAction } from './action';
 import { ThreadListener } from '../listener';
 import { Context } from '../context';
-import { Event } from '../new-log';
+import { Event } from '../log';
 
 export class GreenFlagAction extends ScheduledAction {
   execute(context: Context, resolve: (v: string) => void): void {
