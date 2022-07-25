@@ -247,7 +247,7 @@ export class ScratchTarget {
    * @return The matched script if found, otherwise undefined. If multiple scripts
    *         match, an arbitrary stack will be returned.
    */
-  findStack(
+  findScript(
     firstBlock: OnePattern<PatternBlock>,
     ...other: OnePattern<PatternBlock>[]
   ): Node | undefined {
