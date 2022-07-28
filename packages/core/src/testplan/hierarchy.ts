@@ -262,6 +262,7 @@ export interface GroupOptions {
   summary?: string;
   visibility?: Visibility;
   tags?: string[];
+  ignoreWrong?: boolean;
 }
 
 export interface SpriteGroupOptions extends GroupOptions {
@@ -346,6 +347,10 @@ export class GroupLevel {
     }
 
     const tags = options?.tags ?? [];
+    // Stop and hold the output temporarily.
+    if (options?.ignoreWrong) {
+      this.resultManager.pauzeOutput();
+    }
     this.resultManager.startGroup(
       name,
       options?.visibility ?? 'show',
@@ -354,5 +359,12 @@ export class GroupLevel {
     );
     block!();
     this.resultManager.closeGroup(options?.summary);
+
+    if (options?.ignoreWrong) {
+      // If we want to ignore wrong output, check the saved output buffer for
+      // wrong tests. If there are any, discard the output, otherwise, print it.
+      const shouldDiscard = this.resultManager.hasWrongTestInBuffer();
+      this.resultManager.unpauzeOutput(shouldDiscard);
+    }
   }
 }

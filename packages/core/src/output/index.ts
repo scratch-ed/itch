@@ -21,7 +21,7 @@ function toOutput(output: Update): void {
 }
 
 export interface OutputHandler {
-  (obj: Update): void;
+  (obj: Update, force?: boolean): void;
 }
 
 export class GroupedResultManager {
@@ -33,8 +33,38 @@ export class GroupedResultManager {
   private escalation?: Status;
   private testNumber = 0;
 
+  // If the output is stopped for some reason.
+  private isPaused = false;
+
+  // Buffer for when output is paused.
+  private outputBuffer: Update[] = [];
+
   constructor(out: OutputHandler = toOutput) {
-    this.out = out;
+    this.out = (update: Update, force) => {
+      if (this.isPaused && !force) {
+        this.outputBuffer.push(update);
+      } else {
+        out(update);
+      }
+    };
+  }
+
+  pauzeOutput() {
+    this.isPaused = true;
+  }
+
+  unpauzeOutput(discard = false) {
+    this.isPaused = false;
+    if (!discard) {
+      this.outputBuffer.forEach((n) => this.out(n));
+    }
+    this.outputBuffer = [];
+  }
+
+  hasWrongTestInBuffer(): boolean {
+    return this.outputBuffer.some(
+      (u) => u.command === 'close-test' && u.status !== 'correct',
+    );
   }
 
   /**
@@ -47,7 +77,7 @@ export class GroupedResultManager {
       );
       return;
     }
-    this.out({ command: 'start-judgement', version: 2 });
+    this.out({ command: 'start-judgement', version: 2 }, true);
     this.hasOpenJudgement = true;
   }
 
@@ -70,7 +100,7 @@ export class GroupedResultManager {
       console.warn('Unclosed groups, force closing them...');
       this.closeGroup();
     }
-    this.out({ command: 'close-judgement' });
+    this.out({ command: 'close-judgement' }, true);
     this.hasOpenJudgement = false;
     this.isFinished = true;
   }
