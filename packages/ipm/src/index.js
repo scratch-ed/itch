@@ -3,6 +3,7 @@ import fs from 'fs';
 import { downloadTranslations } from './download-translations.js';
 import { downloadExercise } from './download-exercises.js';
 import { getBearerToken } from './authenticate-user.js';
+import { checkOrUploadTestplans } from './testplans.js';
 
 program
   .command('down')
@@ -34,6 +35,20 @@ program
   .argument('<local>', 'location of the translations')
   .action(async (local) => {
     await downloadTranslations(local);
+  });
+
+program
+  .command('check-plan')
+  .argument('<local>', 'path to the local exercise')
+  .action(async (local) => {
+    await checkOrUploadTestplans(local, 'check');
+  });
+
+program
+  .command('upload-plan')
+  .argument('<local>', 'path to the local exercise')
+  .action(async (local) => {
+    await checkOrUploadTestplans(local, 'upload');
   });
 
 program.parseAsync(process.argv).then(() => process.exit());

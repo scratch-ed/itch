@@ -26,7 +26,7 @@ async function download(from, to, headers = {}) {
   return res.headers;
 }
 
-async function getVersions(id, token) {
+export async function getVersions(id, token) {
   const myHeaders = new Headers();
   myHeaders.append('authorization', token);
   myHeaders.append('content-type', 'application/json');
@@ -167,15 +167,8 @@ async function downloadExerciseInstance(
   }
 }
 
-async function downloadLevel(
-  relativePath,
-  result,
-  level,
-  absolutePath,
-  name,
-  includeTranslations,
-  quiet,
-) {
+export function retrieveStarterAndSubmissionForLevel(result, level) {
+  // Get the actual version to use as starter for the level.
   const regex = new RegExp(`level ${level}([^0-9].*)?$`);
   // Attempt to find the starter project.
   const starterData = result.findExercise.versions
@@ -193,16 +186,6 @@ async function downloadLevel(
     throw new Error(`Could not find starter project for level ${level}`);
   }
 
-  await downloadExerciseInstance(
-    relativePath,
-    starterData,
-    absolutePath,
-    name,
-    includeTranslations,
-    quiet,
-    level,
-  );
-
   const solutionData = result.findExercise.versions
     .filter(
       (v) =>
@@ -216,6 +199,30 @@ async function downloadLevel(
   if (solutionData === undefined) {
     throw new Error(`Could not find solution project for level ${level}`);
   }
+
+  return [starterData, solutionData];
+}
+
+async function downloadLevel(
+  relativePath,
+  result,
+  level,
+  absolutePath,
+  name,
+  includeTranslations,
+  quiet,
+) {
+  const [starterData, solutionData] = retrieveStarterAndSubmissionForLevel(result, level);
+
+  await downloadExerciseInstance(
+    relativePath,
+    starterData,
+    absolutePath,
+    name,
+    includeTranslations,
+    quiet,
+    level,
+  );
 
   await downloadExerciseInstance(
     relativePath,
