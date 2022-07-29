@@ -16,7 +16,7 @@ program
 program
   .command('sync')
   .argument('<local>', 'location of the exercises folder')
-  .action(async (local, _options) => {
+  .action(async (local) => {
     const token = await getBearerToken();
     // Download translations
     await downloadTranslations(local, token);
@@ -49,6 +49,19 @@ program
   .argument('<local>', 'path to the local exercise')
   .action(async (local) => {
     await checkOrUploadTestplans(local, 'upload');
+  });
+
+program
+  .command('sync-plan')
+  .argument('<local>', 'location of the exercises folder')
+  .action(async (local) => {
+    const token = await getBearerToken();
+    const exercises = fs
+      .readdirSync(local, { withFileTypes: true })
+      .filter((p) => p.isDirectory());
+    for (const exercise of exercises) {
+      await checkOrUploadTestplans(exercise.name, 'upload', token);
+    }
   });
 
 program.parseAsync(process.argv).then(() => process.exit());
