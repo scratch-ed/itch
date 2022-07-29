@@ -1,5 +1,6 @@
 {
   "predefined": {
+    "existing_code": "Verification of existing code",
     "stage": "Stage",
     "stage_correct": "Good job! You didn't change anything in the Stage.",
     "stage_wrong": "Oops, you changed something in the Stage. You'll need to start again.",
@@ -12,7 +13,10 @@
       "correct_block": "Good job! You didn't change the blocks of sprite {0}.",
       "wrong_block": "Oops, you changed the blocks of sprite {0}. You'll need to start again."
     },
-    "deleted": "Oh no, you removed sprite {0}. You'll need to start again.",
+    "deleted": {
+      "correct": "Good job! You didn't remove sprite {0}.",
+      "wrong": "Oh no, you removed sprite {0}. You'll need to start again."
+    },
     "necessary": "Oh no, you deleted a necessary block of sprite {0}.",
     "around": {
       "correct": "Good job! There were no unnecessary blocks lying around.",

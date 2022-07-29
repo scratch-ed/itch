@@ -222,8 +222,8 @@ function checkSpriteBlocks(
 
   e.test()
     .feedback({
-      wrong: `Oops, je hebt iets veranderd aan de blokjes sprite ${name}. Je gaat opnieuw moeten beginnen.`,
-      correct: `Top! Je hebt niets veranderd aan de blokjes van sprite ${name}.`,
+      wrong: t('predefined.existing.wrong_block', name),
+      correct: t('predefined.existing.correct_block', name),
     })
     .acceptIf(correct);
 
@@ -288,8 +288,8 @@ function checkSpriteSensuStricto(
   e.test()
     .fatal()
     .feedback({
-      wrong: `Oei, je verwijderde de sprite ${name}. Je zult opnieuw moeten beginnen.`,
-      correct: `Top, de sprite ${name} is niet verwijderd.`,
+      wrong: t('predefined.deleted.wrong', name),
+      correct: t('predefined.deleted.correct', name),
     })
     .expect(submissionSprite)
     .toNotBe(undefined);
@@ -297,8 +297,8 @@ function checkSpriteSensuStricto(
   const targetComparison = e
     .test()
     .feedback({
-      correct: `Top! Je hebt niets veranderd aan de sprite ${name}.`,
-      wrong: `Oops, je hebt iets veranderd aan de sprite ${name}. Je gaat opnieuw moeten beginnen.`,
+      wrong: t('predefined.preprogrammed.wrong', name),
+      correct: t('predefined.preprogrammed.correct', name),
     })
     .expect(template.hasChangedTarget(submission, name))
     .toBe(false);
@@ -333,7 +333,7 @@ export function checkPredefinedBlocks(
   const config = normalizeConfig(userConfig, template);
 
   e.group(
-    'Controle op bestaande code',
+    t('predefined.existing_code'),
     { visibility: 'summary', summary: 'De bestaande code is niet gewijzigd.' },
     () => {
       // We check each sprite.
@@ -362,9 +362,8 @@ export function checkPredefinedBlocks(
             const result = e
               .test('Test op rondslingerende blokjes')
               .feedback({
-                wrong:
-                  'Probeer je rondslingerende blokjes te verwijderen of te gebruiken.',
-                correct: 'Goed zo! Je hebt geen losse blokjes laten rondslingeren.',
+                wrong: t('predefined.around.wrong'),
+                correct: t('predefined.around.correct'),
               })
               .expect(remainder.length)
               .toBe(0);
