@@ -151,6 +151,27 @@ export class Snapshot {
     return ensure(this.findTarget(name));
   }
 
+  /**
+   * Check if two sprites were touching when the frame was captured.
+   *
+   * An exception will be thrown if the first sprite does not exist.
+   *
+   * @param first - The first sprite.
+   * @param second - The second sprite.
+   *
+   * @return If they were touching or not.
+   * @deprecated
+   */
+  areTouching(first: string, second: string): boolean {
+    const firstSprite = this.findSprite(first);
+    const secondSprite = this.findSprite(second);
+
+    if (firstSprite === undefined || secondSprite === undefined) {
+      throw new TypeError(`Cannot check non existing sprite ${first}`);
+    }
+    return firstSprite.touchesPosition({ x: secondSprite.x, y: secondSprite.y });
+  }
+
   /** @deprecated */
   getSprite(name: string): ScratchSprite | null {
     return this.findSprite(name) || null;
