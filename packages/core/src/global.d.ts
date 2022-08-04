@@ -134,7 +134,6 @@ import {
   listContains,
   stop,
   script,
-  procedureCallWithParameters,
   stringNumberArgument,
 } from './matcher/patterns';
 
