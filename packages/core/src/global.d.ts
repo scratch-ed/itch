@@ -134,6 +134,7 @@ import {
   listContains,
   stop,
   script,
+  procedureCallWithParameters,
 } from './matcher/patterns';
 
 declare interface Itch {
@@ -213,6 +214,7 @@ declare interface BlockMatch {
   pickRandom: typeof pickRandom;
   repeat: typeof repeat;
   procedureCall: typeof procedureCall;
+  procedureCallWithParameters: typeof procedureCallWithParameters;
   procedureDefinition: typeof procedureDefinition;
   repeatUntil: typeof repeatUntil;
   setXtoY: typeof setXtoY;
