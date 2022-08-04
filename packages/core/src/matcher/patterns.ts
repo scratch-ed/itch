@@ -623,6 +623,7 @@ export function size(): ReporterBlock {
   return { opcode: 'looks_size', type: 'reporter' };
 }
 
+// https://en.scratch-wiki.info/wiki/Start_Sound_()_(block)
 export function playSound(sound: string): PatternBlock {
   return {
     opcode: 'sound_play',
@@ -1649,7 +1650,6 @@ export function procedureCall(
  * @param {string} name The name of the argument.
  * @return {ArgumentBlock} An ArgumentBlock with specific name
  */
-
 export function stringNumberArgument(name: Pattern<string>): ArgumentBlock {
   return {
     type: 'argument',
