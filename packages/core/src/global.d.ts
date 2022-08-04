@@ -135,6 +135,7 @@ import {
   stop,
   script,
   procedureCallWithParameters,
+  stringNumberArgument,
 } from './matcher/patterns';
 
 declare interface Itch {
@@ -215,6 +216,7 @@ declare interface BlockMatch {
   repeat: typeof repeat;
   procedureCall: typeof procedureCall;
   procedureCallWithParameters: typeof procedureCallWithParameters;
+  stringNumberArgument: typeof stringNumberArgument;
   procedureDefinition: typeof procedureDefinition;
   repeatUntil: typeof repeatUntil;
   setXtoY: typeof setXtoY;

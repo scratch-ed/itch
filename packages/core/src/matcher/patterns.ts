@@ -85,7 +85,7 @@ export interface PatternBlock {
 }
 
 interface ReporterBlock extends PatternBlock {
-  type: 'reporter' | 'boolean';
+  type: 'reporter' | 'boolean' | 'argument';
 }
 
 interface VariableBlock extends ReporterBlock {
@@ -97,6 +97,14 @@ interface VariableBlock extends ReporterBlock {
 
 interface BooleanBlock extends ReporterBlock {
   type: 'boolean';
+}
+
+interface ArgumentBlock extends ReporterBlock {
+  opcode: 'argument_reporter_string_number';
+  type: 'argument';
+  fields: {
+    VALUE: Pattern<string>;
+  };
 }
 
 export function isReporterBlock(block: unknown): block is ReporterBlock {
@@ -785,7 +793,7 @@ export function createCloneOf(sprite: ValuePattern<string>): PatternBlock {
 
 // https://en.scratch-wiki.info/wiki/Repeat_()_(block)
 export function repeat(
-  times: ValuePattern<number>,
+  times: ValuePattern<number | string | ArgumentBlock>,
   stack: Pattern<BlockScript>,
 ): PatternBlock {
   return {
@@ -1632,5 +1640,24 @@ export function procedureCall(
   return {
     opcode: 'procedures_call',
     argumentList: additionalArguments,
+  };
+}
+
+/**
+ * Creates an ArgumentBlock with given name.
+ *
+ * @param {string} name The name of the argument.
+ * @return {ArgumentBlock} An ArgumentBlock with specific name
+ */
+
+export function stringNumberArgument(
+    name: Pattern<string>,
+): ArgumentBlock {
+  return {
+    type: 'argument',
+    opcode: 'argument_reporter_string_number',
+    fields: {
+      VALUE: name,
+    },
   };
 }
