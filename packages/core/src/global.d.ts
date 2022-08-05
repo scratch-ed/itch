@@ -22,6 +22,8 @@ import {
   clearGraphicsEffects,
   costume,
   customBlock,
+  playSound,
+  stopAllSounds,
   direction,
   glideZSecsToX,
   glideZSecsToXY,
@@ -191,6 +193,8 @@ declare interface BlockMatch {
   backdrop: typeof backdrop;
   size: typeof size;
   customBlock: typeof customBlock;
+  playSound: typeof playSound;
+  stopAllSounds: typeof stopAllSounds;
   greenFlag: typeof greenFlag;
   whenKeyPressed: typeof whenKeyPressed;
   whenSpriteClicked: typeof whenSpriteClicked;

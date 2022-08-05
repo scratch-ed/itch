@@ -155,7 +155,7 @@ export function script(
 }
 
 // https://en.scratch-wiki.info/wiki/Move_()_Steps_(block)
-export function moveXSteps(steps: ValuePattern<number>): PatternBlock {
+export function moveXSteps(steps: ValuePattern<number | string>): PatternBlock {
   return {
     opcode: 'motion_movesteps',
     inputs: {
@@ -624,6 +624,10 @@ export function playSound(sound: string): PatternBlock {
       }),
     },
   };
+}
+
+export function stopAllSounds(): PatternBlock {
+  return { opcode: 'sound_stopallsounds' };
 }
 
 // FIXME: support sound blocks.
