@@ -123,6 +123,10 @@ export function isBooleanBlock(block: unknown): block is BooleanBlock {
   return isReporterBlock(block) && block.type === 'boolean';
 }
 
+export function isArgumentBlock(block: unknown): block is ArgumentBlock {
+  return isReporterBlock(block) && block.type === 'argument';
+}
+
 /**
  * Match any value or block.
  *
@@ -435,7 +439,9 @@ export function hide(): PatternBlock {
 }
 
 // https://en.scratch-wiki.info/wiki/Switch_Costume_to_()_(block)
-export function switchCostumeTo(costume: ValuePattern<string>): PatternBlock {
+export function switchCostumeTo(
+  costume: ValuePattern<string | ArgumentBlock>,
+): PatternBlock {
   if (isVariableBlock(costume)) {
     return {
       opcode: 'looks_switchcostumeto',
@@ -443,7 +449,7 @@ export function switchCostumeTo(costume: ValuePattern<string>): PatternBlock {
         COSTUME: costume.fields.VARIABLE,
       },
     };
-  } else if (isOperatorBlock(costume)) {
+  } else if (isOperatorBlock(costume) || isArgumentBlock(costume)) {
     return {
       opcode: 'looks_switchcostumeto',
       inputs: {
