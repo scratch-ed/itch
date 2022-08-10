@@ -612,6 +612,7 @@ export function size(): ReporterBlock {
   return { opcode: 'looks_size', type: 'reporter' };
 }
 
+// https://en.scratch-wiki.info/wiki/Start_Sound_()_(block)
 export function playSound(sound: string): PatternBlock {
   return {
     opcode: 'sound_play',
@@ -626,6 +627,7 @@ export function playSound(sound: string): PatternBlock {
   };
 }
 
+// https://en.scratch-wiki.info/wiki/Stop_All_Sounds_(block)
 export function stopAllSounds(): PatternBlock {
   return { opcode: 'sound_stopallsounds' };
 }

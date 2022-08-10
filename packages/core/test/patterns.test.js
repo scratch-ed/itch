@@ -1,6 +1,6 @@
 import { snapshotFromSb3 } from '../src/log';
 import projectData from './agario-NL.json';
-import allBlocks from './all-blocks-NL.json';
+import allBlocks from './all-blocks.json';
 import {
   equals,
   forever,
@@ -121,6 +121,7 @@ import {
   listContains,
   BlockScript,
   script,
+  stopAllSounds,
 } from '../src/matcher/patterns';
 import { subtreeMatchesOneScript } from '../src/matcher/node-matcher';
 
@@ -805,5 +806,9 @@ describe('Individual blocks', () => {
 
   test('procedures_call', () => {
     expect(trees).toMatchPattern(procedureCall('%n %s %b'));
+  });
+
+  test('stop_all_sounds', () => {
+    expect(trees).toMatchPattern(stopAllSounds());
   });
 });
