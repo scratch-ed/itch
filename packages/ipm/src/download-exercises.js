@@ -175,9 +175,9 @@ export function retrieveStarterAndSubmissionForLevel(result, level) {
     .filter(
       (v) =>
         v.versionType === 'STARTER' &&
-        (regex.test(v.name.toLowerCase()) || !level) &&
-        !v.name.toLowerCase().includes('oplossing') &&
-        !v.name.toLowerCase().includes('v0'),
+        (regex.test(v.name?.toLowerCase()) || !level) &&
+        !v.name?.toLowerCase()?.includes('oplossing') &&
+        !v.name?.toLowerCase()?.includes('v0'),
     )
     .sort((a, b) => b.id - a.id)
     .find((_) => true);
@@ -190,8 +190,8 @@ export function retrieveStarterAndSubmissionForLevel(result, level) {
     .filter(
       (v) =>
         v.versionType === 'SOLUTION' &&
-        (regex.test(v.name.toLowerCase()) || !level) &&
-        v.name.toLowerCase().includes('oplossing'),
+        (regex.test(v.name?.toLowerCase()) || !level) &&
+        v.name?.toLowerCase()?.includes('oplossing'),
     )
     .sort((a, b) => b.id - a.id)
     .find((_) => true);
