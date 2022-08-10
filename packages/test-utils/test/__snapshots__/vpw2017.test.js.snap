@@ -36,7 +36,7 @@ Array [
   },
   Object {
     "command": "close-test",
-    "feedback": "Top! Je hebt niets veranderd aan de sprite Stage.",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Stage.",
     "status": "correct",
   },
   Object {
@@ -86,7 +86,7 @@ Array [
   },
   Object {
     "command": "close-test",
-    "feedback": "Top! Je hebt niets veranderd aan de sprite Nori.",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Nori.",
     "status": "correct",
   },
   Object {
@@ -136,7 +136,7 @@ Array [
   },
   Object {
     "command": "close-test",
-    "feedback": "Top! Je hebt niets veranderd aan de sprite Hat.",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Hat.",
     "status": "correct",
   },
   Object {
