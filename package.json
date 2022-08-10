@@ -64,7 +64,8 @@
           "<rootDir>/exercises/plant-de-vlag/*.test.js",
           "<rootDir>/exercises/chaos-in-de-raket/*.test.js",
           "<rootDir>/exercises/rommelruimend/*.test.js",
-          "<rootDir>/exercises/vernietig-asteroiden/*.test.js"
+          "<rootDir>/exercises/vernietig-asteroiden/*.test.js",
+          "<rootDir>/exercises/introductie/*.test.js"
         ]
       },
       {
