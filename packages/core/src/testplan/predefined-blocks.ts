@@ -338,7 +338,7 @@ export function checkPredefinedBlocks(
     () => {
       // We check each sprite.
       for (const target of template.targets) {
-        const name = t(`${target.name}`);
+        const name = target.name;
         // If the sprite is ignored, stop now.
         if (config.ignoredSprites.includes(name)) {
           continue;
