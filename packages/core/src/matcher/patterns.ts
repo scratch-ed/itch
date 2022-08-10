@@ -867,7 +867,9 @@ export function repeatUntil(
 }
 
 // https://en.scratch-wiki.info/wiki/Stop_()_(block)
-export function stop(what: ValuePattern<string>): PatternBlock {
+export function stop(
+  what: ValuePattern<'all' | 'this script' | 'other scripts in sprite'>,
+): PatternBlock {
   return {
     opcode: 'control_stop',
     fields: {
