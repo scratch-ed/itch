@@ -132,6 +132,10 @@ export interface AnnotatedSubscript {
    */
   substack2?: AnnotatedSubscript[];
   /**
+   * Allow matching the condition separately.
+   */
+  condition?: AnnotatedSubscript[];
+  /**
    * Determine if the C mouth checks should result in a new subgroup
    * in the test results.
    * A string indicates the name of the group, while a boolean just
@@ -171,6 +175,11 @@ export function checkBlocks(
         .expect(current)
         .toMatchSubtree(pattern);
       wasCorrect = wasCorrect && newCorrect;
+
+      if (subtree.condition) {
+        const conditionBlocks = current?.input?.CONDITION || current;
+        checkBlocks(e, conditionBlocks as Node, subtree.condition!);
+      }
 
       if (subtree.substack) {
         const substackBlocks = current?.inputs?.SUBSTACK || current;
