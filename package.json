@@ -59,7 +59,6 @@
           "<rootDir>/exercises/crewdans/*.test.js",
           "<rootDir>/exercises/verzamel-de-grondstoffen/*.test.js",
           "<rootDir>/exercises/sloopbal/*.test.js",
-          "<rootDir>/exercises/vang-de-items/*.test.js",
           "<rootDir>/exercises/bouw-de-raket/*.test.js",
           "<rootDir>/exercises/navigeer-rommel/*.test.js",
           "<rootDir>/exercises/plant-de-vlag/*.test.js",
