@@ -1250,7 +1250,10 @@ export function multiply(
 }
 
 // https://en.scratch-wiki.info/wiki/()_/_()_(block)
-export function divide(a: ValuePattern<number>, b: ValuePattern<number>): ReporterBlock {
+export function divide(
+  a: ValuePattern<number | string>,
+  b: ValuePattern<number | string>,
+): ReporterBlock {
   return {
     type: 'reporter',
     opcode: 'operator_divide',
