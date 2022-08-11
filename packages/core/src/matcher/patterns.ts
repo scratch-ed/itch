@@ -499,7 +499,9 @@ export function nextBackdrop(): PatternBlock {
 
 // https://en.scratch-wiki.info/wiki/Change_()_Effect_by_()_(Looks_block)
 export function changeEffectBy(
-  effect: ValuePattern<string>,
+  effect: ValuePattern<
+    'color' | 'fisheye' | 'whirl' | 'pixelate' | 'mosaic' | 'brightness' | 'ghost'
+  >,
   amount: ValuePattern<number>,
 ): PatternBlock {
   return {
