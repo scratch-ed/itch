@@ -71,7 +71,9 @@ async function runOnPage(page, options) {
     await submissionHandle.uploadFile(options.submission);
   }
 
-  await page.exposeFunction('handleOut', options.outputHandler);
+  if (options.outputHandler) {
+    await page.exposeFunction('handleOut', options.outputHandler);
+  }
 
   // Capture logs.
   page.on('console', (msg) => console.debug('PAGE LOG:', msg.text()));

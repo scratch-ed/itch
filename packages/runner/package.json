@@ -22,8 +22,8 @@
     "@ftrprf/judge-core": "*"
   },
   "devDependencies": {
-    "puppeteer": "^10.1.0",
-    "puppeteer-core": "^10.1.0"
+    "puppeteer": "^16.1.0",
+    "puppeteer-core": "^16.1.0"
   },
   "files": [
     "src/**"
