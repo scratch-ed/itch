@@ -114,7 +114,7 @@ function normalizeConfig(
     let finalConfig: Config;
     if (
       typeof patternOrConfig === 'object' &&
-      Object.hasOwn(patternOrConfig, 'pattern')
+      patternOrConfig.hasOwnProperty('pattern')
     ) {
       assertType<Config>(patternOrConfig);
       finalConfig = patternOrConfig;
