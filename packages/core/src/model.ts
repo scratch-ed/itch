@@ -33,7 +33,7 @@ export interface ScratchMutation {
   tagName: string;
   children: Array<unknown>;
   proccode: string;
-  argumentids: string;
+  argumentids?: string[];
 }
 
 /**
@@ -64,7 +64,7 @@ class Sb3ScratchBlock implements ScratchBlock {
    * @param parent If the block is a stack block and is preceded, this is the ID
    * of the preceding block. If the block is the first stack block in a C mouth,
    * this is the ID of the C block. If the block is an input to another block,
-   * this is the ID of that other block. Otherwise it is undefined.
+   * this is the ID of that other block. Otherwise, it is undefined.
    * @param inputs An object associating names with arrays representing inputs
    * into which reporters may be dropped and C mouths. The first element of each
    * array is 1 if the input is a shadow, 2 if there is no shadow, and 3 if
@@ -76,9 +76,9 @@ class Sb3ScratchBlock implements ScratchBlock {
    * by an ID.
    * @param shadow True if this is a shadow and false otherwise.
    * A shadow is a constant expression in a block input which can be replaced
-   * by a reporter; Scratch internally considers these to be blocks although they
+   * by a reporter; Scratch internally considers these to be blocks, although they
    * are not usually thought of as such.
-   * This means that a shadow is basically the place holder of some variable in blocks
+   * This means that a shadow is basically the placeholder of some variable in blocks
    * while they are in the toolbox. https://groups.google.com/g/blockly/c/bXe4iEaVSao
    * @param topLevel False if the block has a parent and true otherwise.
    * @param x X coordinate in the code area if top-level.
@@ -117,7 +117,7 @@ class Sb3ScratchBlock implements ScratchBlock {
 }
 
 export function blockFromSb3(id: string, data: Record<string, unknown>): ScratchBlock {
-  return new Sb3ScratchBlock(
+  const block = new Sb3ScratchBlock(
     id,
     data.opcode as string,
     data.next as string,
@@ -130,6 +130,12 @@ export function blockFromSb3(id: string, data: Record<string, unknown>): Scratch
     data.y as number,
     data.mutation as ScratchMutation,
   );
+  if (block.mutation?.argumentids) {
+    block.mutation.argumentids = JSON.parse(
+      (data.mutation as Record<string, string>).argumentids,
+    );
+  }
+  return block;
 }
 
 /**

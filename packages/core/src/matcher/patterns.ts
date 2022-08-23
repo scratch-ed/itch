@@ -81,6 +81,7 @@ export interface PatternBlock {
 
   // For functions.
   mutation?: ValuePattern<string>;
+  argumentList?: Array<ValuePattern<string | number | BooleanBlock>>;
 }
 
 interface ReporterBlock extends PatternBlock {
@@ -1587,23 +1588,48 @@ export function listContains(
   };
 }
 
-export function procedureDefinition(name: ValuePattern<string>): PatternBlock {
+/**
+ * Match against a procedure definition.
+ *
+ * The mutation should be a space-separated string, consisting of:
+ *
+ * - The literal names for labels and procedure names.
+ * - %n for numbers
+ * - %s for strings
+ * - %b for booleans
+ *
+ * @param mutation The mutation string, see above.
+ * @see https://en.scratch-wiki.info/wiki/My_Blocks
+ */
+export function procedureDefinition(mutation: ValuePattern<string>): PatternBlock {
   return {
     opcode: 'procedures_definition',
     inputs: {
       custom_block: new BlockScript([
         {
           opcode: 'procedures_prototype',
-          mutation: name,
+          mutation: mutation,
         },
       ]),
     },
   };
 }
 
-export function procedureCall(name: ValuePattern<string>): PatternBlock {
+/**
+ * Match against a procedure call.
+ *
+ * The arguments of the procedure call should be given in-order,
+ * including any labels or names of the procedure.
+ * Every argument supports all pattern-related features.
+ *
+ * @param additionalArguments
+ * @see https://en.scratch-wiki.info/wiki/My_Blocks
+ */
+export function procedureCall(
+  ...additionalArguments: Array<ValuePattern<string | number | BooleanBlock>>
+): PatternBlock {
   return {
     opcode: 'procedures_call',
-    mutation: name,
+    argumentList: additionalArguments,
   };
 }

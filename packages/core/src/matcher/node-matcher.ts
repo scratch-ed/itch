@@ -152,6 +152,19 @@ function matchesOnePattern(
     }
   }
 
+  if (pattern.argumentList) {
+    // The lists are not the same length, or the actual node has no arguments.
+    if (pattern.argumentList.length !== node.arguments?.length) {
+      return false;
+    }
+    // Check each argument.
+    for (let i = 0; i < pattern.argumentList.length; i++) {
+      if (!valueMatchesValuePatterns(node.arguments[i], pattern.argumentList[i])) {
+        return false;
+      }
+    }
+  }
+
   // The block matches!
   return true;
 }

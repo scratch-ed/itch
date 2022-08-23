@@ -30,6 +30,14 @@ export interface Node {
   input: Record<string, string | Node | undefined>;
   fields: Record<string, string>;
   mutation: string | null;
+  /**
+   * A list of arguments if the block is a mutation call.
+   *
+   * Note that in Scratch itself, these values are also
+   * in the `inputs` field. Here however, we remove those,
+   * to prevent duplicates.
+   */
+  arguments?: Array<string | Node>;
 }
 
 export function isNode(object: unknown): object is Node {
@@ -74,6 +82,49 @@ function convertFields(fields: Record<string, unknown[]> | null): Record<string,
   return object;
 }
 
+function convertProcedureArguments(
+  opcode: string,
+  mutation: string | null,
+  inputs?: Record<string, string | Node | undefined>,
+  argumentList?: string[],
+): Array<string | Node> | undefined {
+  if (opcode !== 'procedures_call' || !mutation || !inputs) {
+    // This is not a procedure call, or it is one without any arguments,
+    // so just do nothing.
+    return undefined;
+  }
+
+  // The mutation looks like this: "label 1 part 2 %s %n label 3 %b"
+  // We split on " %", to extract the different parts.
+  // Multiple subsequent labels should not be possible.
+  const convertedArguments = mutation.split(/ ?(%b|%n|%s) ?/g).filter((s) => s !== '');
+  const mergedArguments: Array<string | Node> = [];
+
+  // Do a preliminary check to see if stuff makes sense or not.
+
+  let argumentIndex = 0;
+  for (
+    let mutationIndex = 0;
+    mutationIndex < convertedArguments.length;
+    mutationIndex++
+  ) {
+    const mutationArg = convertedArguments[mutationIndex];
+    if (mutationArg == '%s' || mutationArg == '%b' || mutationArg == '%n') {
+      // Get the actual param from the input.
+      const inputId = ensure(argumentList)[argumentIndex++];
+      const value = inputs[inputId];
+      if (!value) {
+        throw new Error('Procedure call has a non-existing input value');
+      }
+      mergedArguments[mutationIndex] = value;
+    } else {
+      mergedArguments[mutationIndex] = mutationArg;
+    }
+  }
+
+  return mergedArguments;
+}
+
 /**
  * Convert one block to a tree node.
  */
@@ -84,6 +135,7 @@ export function asNode(block: ScratchBlock, blockmap: Map<string, ScratchBlock>)
   for (const [key, value] of Object.entries(block.inputs)) {
     inputs[key] = convertInput(value, blockmap);
   }
+  const mutation = convertMutation(block.mutation);
 
   return {
     opcode: block.opcode,
@@ -91,7 +143,13 @@ export function asNode(block: ScratchBlock, blockmap: Map<string, ScratchBlock>)
     inputs: inputs,
     input: inputs,
     fields: convertFields(block.fields),
-    mutation: convertMutation(block.mutation),
+    mutation: mutation,
+    arguments: convertProcedureArguments(
+      block.opcode,
+      mutation,
+      inputs,
+      block.mutation?.argumentids,
+    ),
   };
 }
 

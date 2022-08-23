@@ -805,7 +805,7 @@ describe('Individual blocks', () => {
   });
 
   test('procedures_call', () => {
-    expect(trees).toMatchPattern(procedureCall('%n %s %b'));
+    expect(trees).toMatchPattern(procedureCall(1, 5, equals(50, 50)));
   });
 
   test('stop_all_sounds', () => {
