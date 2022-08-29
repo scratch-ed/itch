@@ -65,7 +65,8 @@
           "<rootDir>/exercises/vernietig-asteroiden/*.test.js",
           "<rootDir>/exercises/introductie/*.test.js",
           "<rootDir>/exercises/alientje-klop/*.test.js",
-          "<rootDir>/exercises/alien-claw/*.test.js"
+          "<rootDir>/exercises/alien-claw/*.test.js",
+          "<rootDir>/exercises/cosmos-flight/*.test.js"
         ]
       },
       {
