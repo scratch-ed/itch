@@ -160,15 +160,11 @@ export class Snapshot {
    * @param second - The second sprite.
    *
    * @return If they were touching or not.
-   * @deprecated
    */
   areTouching(first: string, second: string): boolean {
-    const firstSprite = this.findSprite(first);
-    const secondSprite = this.findSprite(second);
+    const firstSprite = this.sprite(first);
+    const secondSprite = this.sprite(second);
 
-    if (firstSprite === undefined || secondSprite === undefined) {
-      throw new TypeError(`Cannot check non existing sprite ${first}`);
-    }
     return firstSprite.touchesPosition({ x: secondSprite.x, y: secondSprite.y });
   }
 
