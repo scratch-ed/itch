@@ -1670,3 +1670,4 @@ export function stringNumberArgument(name: Pattern<string>): ArgumentBlock {
     },
   };
 }
+
