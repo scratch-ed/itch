@@ -214,7 +214,6 @@ declare interface BlockMatch {
   pickRandom: typeof pickRandom;
   repeat: typeof repeat;
   procedureCall: typeof procedureCall;
-  procedureCallWithParameters: typeof procedureCallWithParameters;
   stringNumberArgument: typeof stringNumberArgument;
   procedureDefinition: typeof procedureDefinition;
   repeatUntil: typeof repeatUntil;

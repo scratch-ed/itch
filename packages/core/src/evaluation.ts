@@ -219,6 +219,8 @@ function expose() {
     clearGraphicsEffects,
     costume,
     customBlock,
+    playSound,
+    stopAllSounds,
     direction,
     glideZSecsToX,
     glideZSecsToXY,

@@ -1650,9 +1650,7 @@ export function procedureCall(
  * @return {ArgumentBlock} An ArgumentBlock with specific name
  */
 
-export function stringNumberArgument(
-    name: Pattern<string>,
-): ArgumentBlock {
+export function stringNumberArgument(name: Pattern<string>): ArgumentBlock {
   return {
     type: 'argument',
     opcode: 'argument_reporter_string_number',
