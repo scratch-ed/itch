@@ -164,14 +164,13 @@ export function checkBlocks(
     const runnable = () => {
       assertType<BlockScript>(pattern);
 
-      wasCorrect =
-        wasCorrect &&
-        e.group
-          .test(subtree.name)
-          .feedback(subtree.feedback)
-          .ignoreWrong(ignoreWrong)
-          .expect(current)
-          .toMatchSubtree(pattern);
+      const newCorrect = e.group
+        .test(subtree.name)
+        .feedback(subtree.feedback)
+        .ignoreWrong(ignoreWrong)
+        .expect(current)
+        .toMatchSubtree(pattern);
+      wasCorrect = wasCorrect && newCorrect;
 
       if (subtree.substack) {
         const substackBlocks = current?.inputs?.SUBSTACK || current;
