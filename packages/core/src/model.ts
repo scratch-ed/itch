@@ -131,9 +131,12 @@ export function blockFromSb3(id: string, data: Record<string, unknown>): Scratch
     data.mutation as ScratchMutation,
   );
   if (block.mutation?.argumentids) {
-    block.mutation.argumentids = JSON.parse(
-      (data.mutation as Record<string, string>).argumentids,
-    );
+    const potential = (data.mutation as Record<string, string | string[]>).argumentids;
+    if (typeof potential === 'string') {
+      block.mutation.argumentids = JSON.parse(potential);
+    } else {
+      block.mutation.argumentids = potential;
+    }
   }
   return block;
 }

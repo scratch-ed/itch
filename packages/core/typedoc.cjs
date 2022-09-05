@@ -7,11 +7,11 @@ module.exports = {
         title: 'Guides',
         children: [
           {
-            title: "Getting started",
-            source:'./index.md'
-          }
-        ]
-      }
-    ]
-  }
+            title: 'Getting started',
+            source: './index.md',
+          },
+        ],
+      },
+    ],
+  },
 };

@@ -204,8 +204,8 @@ export function subtreeMatchesOneScript(
   node: Node | null | undefined,
   pattern: OnePattern<BlockScript>,
 ) {
-  if (node === null || node === undefined || pattern === NOTHING) {
-    return (node === null || node === undefined) && pattern === NOTHING;
+  if (pattern === NOTHING) {
+    return node === null || node === undefined;
   }
 
   // If the pattern is a wildcard, we match.
