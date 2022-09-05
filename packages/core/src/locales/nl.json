@@ -1,6 +1,7 @@
 {
   "predefined": {
     "existing_code": "Controle op bestaande code",
+    "no_changes": "De bestaande code is niet gewijzigd.",
     "stage": "Speelveld",
     "stage_correct": "Top! Je hebt niets veranderd aan het speelveld.",
     "stage_wrong": "Oops, je hebt iets veranderd aan het speelveld. Je gaat opnieuw moeten beginnen.",
@@ -14,15 +15,18 @@
       "wrong_block": "Oops, je hebt iets veranderd aan de blokjes van sprite {0}. Je gaat opnieuw moeten beginnen."
     },
     "deleted": {
+      "name": "Bestaande sprite",
       "correct": "Top, de sprite {0} is niet verwijderd.",
       "wrong": "Oei, je verwijderde de sprite {0}. Je zal opnieuw moeten beginnen."
     },
     "necessary": "Oei, je verwijderde een noodzakelijk blokje bij de sprite {0}.",
     "around": {
+      "name": "Rondsligerende blokjes",
       "correct": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
       "wrong": "Probeer je rondslingerende blokjes te verwijderen of te gebruiken."
     },
     "preprogrammed": {
+      "name": "Voorgeprogrammeerde blokjes",
       "wrong": "Je hebt aan de voorgeprogrammeerde blokjes van de sprite {0} wijzigingen aangebracht.",
       "correct": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite {0}."
     },

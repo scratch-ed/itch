@@ -1,6 +1,7 @@
 {
   "predefined": {
     "existing_code": "Verification of existing code",
+    "no_changes": "You didn't make changes to the existing blocks",
     "stage": "Stage",
     "stage_correct": "Good job! You didn't change anything in the Stage.",
     "stage_wrong": "Oops, you changed something in the Stage. You'll need to start again.",
@@ -14,15 +15,18 @@
       "wrong_block": "Oops, you changed the blocks of sprite {0}. You'll need to start again."
     },
     "deleted": {
+      "name": "Existing sprite",
       "correct": "Good job! You didn't remove sprite {0}.",
       "wrong": "Oh no, you removed sprite {0}. You'll need to start again."
     },
     "necessary": "Oh no, you deleted a necessary block of sprite {0}.",
     "around": {
+      "name": "Unnecessary blocks",
       "correct": "Good job! There were no unnecessary blocks lying around.",
       "wrong": "Try to remove the blocks lying around or use them."
     },
     "preprogrammed": {
+      "name": "Existing blocks",
       "wrong": "You made changes to the existing blocks of sprite {0}.",
       "correct": "You didn't make changes to the existing blocks of sprite {0}."
     },

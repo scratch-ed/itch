@@ -220,7 +220,7 @@ function checkSpriteBlocks(
     }
   }
 
-  e.test()
+  e.test(t('predefined.existing.name'))
     .feedback({
       wrong: t('predefined.existing.wrong_block', name),
       correct: t('predefined.existing.correct_block', name),
@@ -260,7 +260,7 @@ function checkSpriteBlocks(
       }
     }
 
-    e.test('Toegestane blokjes')
+    e.test(t(':predefined.allowed.name'))
       .feedback({
         wrong: t('predefined.allowed.wrong'),
         correct: t('predefined.allowed.correct'),
@@ -285,7 +285,7 @@ function checkSpriteSensuStricto(
 ) {
   const submissionSprite = submission.findTarget(name);
 
-  e.test()
+  e.test(t('predefined.deleted.name'))
     .fatal()
     .feedback({
       wrong: t('predefined.deleted.wrong', name),
@@ -295,7 +295,7 @@ function checkSpriteSensuStricto(
     .toNotBe(undefined);
 
   const targetComparison = e
-    .test()
+    .test(t('predefined.preprogrammed.name'))
     .feedback({
       wrong: t('predefined.preprogrammed.wrong', name),
       correct: t('predefined.preprogrammed.correct', name),
@@ -334,7 +334,7 @@ export function checkPredefinedBlocks(
 
   e.group(
     t('predefined.existing_code'),
-    { visibility: 'summary', summary: 'De bestaande code is niet gewijzigd.' },
+    { visibility: 'summary', summary: t('predefined.no_changes') },
     () => {
       // We check each sprite.
       for (const target of template.targets) {
@@ -360,7 +360,7 @@ export function checkPredefinedBlocks(
           // Check for floating blocks if needed and allowed.
           if (!spriteConfig.allowAdditionalScripts && correct) {
             const result = e
-              .test('Test op rondslingerende blokjes')
+              .test(t('predefined.around.name'))
               .feedback({
                 wrong: t('predefined.around.wrong'),
                 correct: t('predefined.around.correct'),
