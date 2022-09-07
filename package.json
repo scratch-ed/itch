@@ -66,7 +66,8 @@
           "<rootDir>/exercises/alien-claw/*.test.js",
           "<rootDir>/exercises/cosmos-flight/*.test.js",
           "<rootDir>/exercises/breng-de-groep-veilig/*.test.js",
-          "<rootDir>/exercises/battle-royale/*.test.js"
+          "<rootDir>/exercises/battle-royale/*.test.js",
+          "<rootDir>/exercises/jetpack/*.test.js"
         ]
       },
       {
