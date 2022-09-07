@@ -64,7 +64,8 @@
           "<rootDir>/exercises/introductie/*.test.js",
           "<rootDir>/exercises/alientje-klop/*.test.js",
           "<rootDir>/exercises/alien-claw/*.test.js",
-          "<rootDir>/exercises/cosmos-flight/*.test.js"
+          "<rootDir>/exercises/cosmos-flight/*.test.js",
+          "<rootDir>/exercises/breng-de-groep-veilig/*.test.js"
         ]
       },
       {
