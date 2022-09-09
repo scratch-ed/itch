@@ -68,7 +68,8 @@
           "<rootDir>/exercises/breng-de-groep-veilig/*.test.js",
           "<rootDir>/exercises/battle-royale/*.test.js",
           "<rootDir>/exercises/jetpack/*.test.js",
-          "<rootDir>/exercises/methodes/*.test.js"
+          "<rootDir>/exercises/methodes/*.test.js",
+          "<rootDir>/exercises/catch-the-aliens/*.test.js"
         ]
       },
       {
