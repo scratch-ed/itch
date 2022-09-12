@@ -71,7 +71,8 @@
           "<rootDir>/exercises/methodes/*.test.js",
           "<rootDir>/exercises/catch-the-aliens/*.test.js",
           "<rootDir>/exercises/methodes-met-parameters/*.test.js",
-          "<rootDir>/exercises/parameters/*.test.js"
+          "<rootDir>/exercises/parameters/*.test.js",
+          "<rootDir>/exercises/feverswitch/*.test.js"
         ]
       },
       {
