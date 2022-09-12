@@ -21,7 +21,7 @@ Array [
   },
   Object {
     "command": "start-test",
-    "name": "Test 0",
+    "name": "Bestaande sprite",
     "tags": Array [],
   },
   Object {
@@ -31,7 +31,7 @@ Array [
   },
   Object {
     "command": "start-test",
-    "name": "Test 1",
+    "name": "Voorgeprogrammeerde blokjes",
     "tags": Array [],
   },
   Object {
@@ -41,7 +41,7 @@ Array [
   },
   Object {
     "command": "start-test",
-    "name": "Test 2",
+    "name": "Controle op bestaande code",
     "tags": Array [],
   },
   Object {
@@ -51,7 +51,7 @@ Array [
   },
   Object {
     "command": "start-test",
-    "name": "Test op rondslingerende blokjes",
+    "name": "Rondsligerende blokjes",
     "tags": Array [],
   },
   Object {
@@ -71,7 +71,7 @@ Array [
   },
   Object {
     "command": "start-test",
-    "name": "Test 3",
+    "name": "Bestaande sprite",
     "tags": Array [],
   },
   Object {
@@ -81,7 +81,7 @@ Array [
   },
   Object {
     "command": "start-test",
-    "name": "Test 4",
+    "name": "Voorgeprogrammeerde blokjes",
     "tags": Array [],
   },
   Object {
@@ -91,7 +91,7 @@ Array [
   },
   Object {
     "command": "start-test",
-    "name": "Test 5",
+    "name": "Controle op bestaande code",
     "tags": Array [],
   },
   Object {
@@ -101,7 +101,7 @@ Array [
   },
   Object {
     "command": "start-test",
-    "name": "Test op rondslingerende blokjes",
+    "name": "Rondsligerende blokjes",
     "tags": Array [],
   },
   Object {
@@ -121,7 +121,7 @@ Array [
   },
   Object {
     "command": "start-test",
-    "name": "Test 6",
+    "name": "Bestaande sprite",
     "tags": Array [],
   },
   Object {
@@ -131,7 +131,7 @@ Array [
   },
   Object {
     "command": "start-test",
-    "name": "Test 7",
+    "name": "Voorgeprogrammeerde blokjes",
     "tags": Array [],
   },
   Object {
@@ -141,7 +141,7 @@ Array [
   },
   Object {
     "command": "start-test",
-    "name": "Test 8",
+    "name": "Controle op bestaande code",
     "tags": Array [],
   },
   Object {
@@ -151,7 +151,7 @@ Array [
   },
   Object {
     "command": "start-test",
-    "name": "Test op rondslingerende blokjes",
+    "name": "Rondsligerende blokjes",
     "tags": Array [],
   },
   Object {
