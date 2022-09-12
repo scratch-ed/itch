@@ -1,334 +1,334 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`01_mad_hatter 1`] = `
-Array [
-  Object {
+[
+  {
     "command": "start-judgement",
     "version": 2,
   },
-  Object {
+  {
     "command": "start-group",
     "name": "Controle op bestaande code",
-    "tags": Array [],
+    "tags": [],
     "visibility": "summary",
   },
-  Object {
+  {
     "command": "start-group",
     "name": "Stage",
     "sprite": "Stage",
-    "tags": Array [],
+    "tags": [],
     "visibility": "summary",
   },
-  Object {
+  {
     "command": "start-test",
     "name": "Bestaande sprite",
-    "tags": Array [],
+    "tags": [],
   },
-  Object {
+  {
     "command": "close-test",
     "feedback": "Top, de sprite Stage is niet verwijderd.",
     "status": "correct",
   },
-  Object {
+  {
     "command": "start-test",
     "name": "Voorgeprogrammeerde blokjes",
-    "tags": Array [],
+    "tags": [],
   },
-  Object {
+  {
     "command": "close-test",
     "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Stage.",
     "status": "correct",
   },
-  Object {
+  {
     "command": "start-test",
     "name": "Controle op bestaande code",
-    "tags": Array [],
+    "tags": [],
   },
-  Object {
+  {
     "command": "close-test",
     "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Stage.",
     "status": "correct",
   },
-  Object {
+  {
     "command": "start-test",
     "name": "Rondsligerende blokjes",
-    "tags": Array [],
+    "tags": [],
   },
-  Object {
+  {
     "command": "close-test",
     "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
     "status": "correct",
   },
-  Object {
+  {
     "command": "close-group",
   },
-  Object {
+  {
     "command": "start-group",
     "name": "Nori",
     "sprite": "Nori",
-    "tags": Array [],
+    "tags": [],
     "visibility": "summary",
   },
-  Object {
+  {
     "command": "start-test",
     "name": "Bestaande sprite",
-    "tags": Array [],
+    "tags": [],
   },
-  Object {
+  {
     "command": "close-test",
     "feedback": "Top, de sprite Nori is niet verwijderd.",
     "status": "correct",
   },
-  Object {
+  {
     "command": "start-test",
     "name": "Voorgeprogrammeerde blokjes",
-    "tags": Array [],
+    "tags": [],
   },
-  Object {
+  {
     "command": "close-test",
     "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Nori.",
     "status": "correct",
   },
-  Object {
+  {
     "command": "start-test",
     "name": "Controle op bestaande code",
-    "tags": Array [],
+    "tags": [],
   },
-  Object {
+  {
     "command": "close-test",
     "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Nori.",
     "status": "correct",
   },
-  Object {
+  {
     "command": "start-test",
     "name": "Rondsligerende blokjes",
-    "tags": Array [],
+    "tags": [],
   },
-  Object {
+  {
     "command": "close-test",
     "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
     "status": "correct",
   },
-  Object {
+  {
     "command": "close-group",
   },
-  Object {
+  {
     "command": "start-group",
     "name": "Hat",
     "sprite": "Hat",
-    "tags": Array [],
+    "tags": [],
     "visibility": "summary",
   },
-  Object {
+  {
     "command": "start-test",
     "name": "Bestaande sprite",
-    "tags": Array [],
+    "tags": [],
   },
-  Object {
+  {
     "command": "close-test",
     "feedback": "Top, de sprite Hat is niet verwijderd.",
     "status": "correct",
   },
-  Object {
+  {
     "command": "start-test",
     "name": "Voorgeprogrammeerde blokjes",
-    "tags": Array [],
+    "tags": [],
   },
-  Object {
+  {
     "command": "close-test",
     "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Hat.",
     "status": "correct",
   },
-  Object {
+  {
     "command": "start-test",
     "name": "Controle op bestaande code",
-    "tags": Array [],
+    "tags": [],
   },
-  Object {
+  {
     "command": "close-test",
     "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Hat.",
     "status": "correct",
   },
-  Object {
+  {
     "command": "start-test",
     "name": "Rondsligerende blokjes",
-    "tags": Array [],
+    "tags": [],
   },
-  Object {
+  {
     "command": "close-test",
     "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
     "status": "correct",
   },
-  Object {
+  {
     "command": "close-group",
   },
-  Object {
+  {
     "command": "close-group",
     "summary": "De bestaande code is niet gewijzigd.",
   },
-  Object {
+  {
     "command": "start-group",
     "name": "Testen voor de Hoed",
-    "tags": Array [],
+    "tags": [],
     "visibility": "show",
   },
-  Object {
+  {
     "command": "start-test",
     "name": "Hoed verandert bij klikken",
-    "tags": Array [],
+    "tags": [],
   },
-  Object {
+  {
     "command": "close-test",
     "status": "correct",
   },
-  Object {
+  {
     "command": "start-test",
     "name": "Kostuums van de hoed",
-    "tags": Array [],
+    "tags": [],
   },
-  Object {
+  {
     "command": "close-test",
     "status": "correct",
   },
-  Object {
+  {
     "command": "start-test",
     "name": "Klikken op de hoed",
-    "tags": Array [],
+    "tags": [],
   },
-  Object {
+  {
     "command": "close-test",
     "status": "correct",
   },
-  Object {
+  {
     "command": "start-test",
     "name": "Klikken op de hoed",
-    "tags": Array [],
+    "tags": [],
   },
-  Object {
+  {
     "command": "close-test",
     "status": "correct",
   },
-  Object {
+  {
     "command": "start-test",
     "name": "Klikken op de hoed",
-    "tags": Array [],
+    "tags": [],
   },
-  Object {
+  {
     "command": "close-test",
     "status": "correct",
   },
-  Object {
+  {
     "command": "start-test",
     "name": "Klikken op de hoed",
-    "tags": Array [],
+    "tags": [],
   },
-  Object {
+  {
     "command": "close-test",
     "status": "correct",
   },
-  Object {
+  {
     "command": "start-test",
     "name": "Klikken op de hoed",
-    "tags": Array [],
+    "tags": [],
   },
-  Object {
+  {
     "command": "close-test",
     "status": "correct",
   },
-  Object {
+  {
     "command": "start-test",
     "name": "Klikken op de hoed",
-    "tags": Array [],
+    "tags": [],
   },
-  Object {
+  {
     "command": "close-test",
     "status": "correct",
   },
-  Object {
+  {
     "command": "start-test",
     "name": "Klikken op de hoed",
-    "tags": Array [],
+    "tags": [],
   },
-  Object {
+  {
     "command": "close-test",
     "status": "correct",
   },
-  Object {
+  {
     "command": "start-test",
     "name": "Klikken op de hoed",
-    "tags": Array [],
+    "tags": [],
   },
-  Object {
+  {
     "command": "close-test",
     "status": "correct",
   },
-  Object {
+  {
     "command": "start-test",
     "name": "Klikken op de hoed",
-    "tags": Array [],
+    "tags": [],
   },
-  Object {
+  {
     "command": "close-test",
     "status": "correct",
   },
-  Object {
+  {
     "command": "start-test",
     "name": "Klikken op de hoed",
-    "tags": Array [],
+    "tags": [],
   },
-  Object {
+  {
     "command": "close-test",
     "status": "correct",
   },
-  Object {
+  {
     "command": "start-test",
     "name": "Klikken op de hoed",
-    "tags": Array [],
+    "tags": [],
   },
-  Object {
+  {
     "command": "close-test",
     "status": "correct",
   },
-  Object {
+  {
     "command": "start-test",
     "name": "Klikken op de hoed",
-    "tags": Array [],
+    "tags": [],
   },
-  Object {
+  {
     "command": "close-test",
     "status": "correct",
   },
-  Object {
+  {
     "command": "start-test",
     "name": "Klikken op de hoed",
-    "tags": Array [],
+    "tags": [],
   },
-  Object {
+  {
     "command": "close-test",
     "status": "correct",
   },
-  Object {
+  {
     "command": "start-test",
     "name": "Klikken op de hoed",
-    "tags": Array [],
+    "tags": [],
   },
-  Object {
+  {
     "command": "close-test",
     "status": "correct",
   },
-  Object {
+  {
     "command": "start-test",
     "name": "Correcte blokken",
-    "tags": Array [],
+    "tags": [],
   },
-  Object {
+  {
     "command": "close-test",
     "status": "correct",
   },
-  Object {
+  {
     "command": "close-group",
   },
-  Object {
+  {
     "command": "close-judgement",
   },
 ]
@@ -780,31 +780,31 @@ Array [
 `;
 
 exports[`06_voetballende_kat 1`] = `
-Array [
-  Object {
+[
+  {
     "command": "start-judgement",
     "version": 2,
   },
-  Object {
+  {
     "command": "start-group",
     "name": "Groep 0.055085085131258336",
-    "tags": Array [],
+    "tags": [],
     "visibility": "show",
   },
-  Object {
+  {
     "command": "start-test",
     "name": "Test 0",
-    "tags": Array [],
+    "tags": [],
   },
-  Object {
+  {
     "command": "close-test",
     "feedback": "Afstand van kat tot voetbal wordt kleiner",
     "status": "correct",
   },
-  Object {
+  {
     "command": "close-group",
   },
-  Object {
+  {
     "command": "close-judgement",
   },
 ]

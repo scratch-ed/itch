@@ -1,40 +1,40 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`new flow works 1`] = `
-Array [
-  Object {
+[
+  {
     "command": "start-judgement",
     "version": 2,
   },
-  Object {
+  {
     "command": "start-group",
     "name": "Groep 1",
     "sprite": "Test",
-    "tags": Array [],
+    "tags": [],
     "visibility": "show",
   },
-  Object {
+  {
     "command": "start-group",
     "name": "Groep 2",
     "sprite": undefined,
-    "tags": Array [],
+    "tags": [],
     "visibility": "show",
   },
-  Object {
+  {
     "command": "start-test",
     "name": "Test 1",
-    "tags": Array [],
+    "tags": [],
   },
-  Object {
+  {
     "command": "close-test",
     "feedback": "No correct at all!",
     "status": "wrong",
   },
-  Object {
+  {
     "command": "close-group",
     "summary": undefined,
   },
-  Object {
+  {
     "command": "close-group",
     "summary": undefined,
   },
@@ -42,45 +42,45 @@ Array [
 `;
 
 exports[`old flow works 1`] = `
-Array [
-  Object {
+[
+  {
     "command": "start-judgement",
     "version": 2,
   },
-  Object {
+  {
     "command": "start-group",
     "name": "Groep 1",
     "sprite": undefined,
-    "tags": Array [],
+    "tags": [],
     "visibility": "show",
   },
-  Object {
+  {
     "command": "start-group",
     "name": "Groep 2",
     "sprite": undefined,
-    "tags": Array [],
+    "tags": [],
     "visibility": "show",
   },
-  Object {
+  {
     "command": "start-test",
     "name": "Test 1",
-    "tags": Array [],
+    "tags": [],
   },
-  Object {
+  {
     "actual": "No",
     "command": "append-diff",
     "expected": "Hallo",
   },
-  Object {
+  {
     "command": "close-test",
     "feedback": "No correct at all!",
     "status": "wrong",
   },
-  Object {
+  {
     "command": "close-group",
     "summary": undefined,
   },
-  Object {
+  {
     "command": "close-group",
     "summary": undefined,
   },
