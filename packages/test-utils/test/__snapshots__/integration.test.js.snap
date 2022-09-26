@@ -1,0 +1,7265 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Agario Correct solution is accepted 1`] = `
+[
+  {
+    "command": "start-judgement",
+    "version": 2,
+  },
+  {
+    "command": "start-group",
+    "name": "Controle op bestaande code",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-group",
+    "name": "Stage",
+    "sprite": "Stage",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Stage is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Stage.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Stage.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Planeet",
+    "sprite": "Planeet",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Planeet is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Planeet.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Planeet.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Vijand 1",
+    "sprite": "Vijand 1",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Vijand 1 is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Vijand 1.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Vijand 1.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Vijand 2",
+    "sprite": "Vijand 2",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Vijand 2 is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Vijand 2.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Vijand 2.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Voedsel 1",
+    "sprite": "Voedsel 1",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Voedsel 1 is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Voedsel 1.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Voedsel 1.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Voedsel 2",
+    "sprite": "Voedsel 2",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Voedsel 2 is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Voedsel 2.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Voedsel 2.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Voedsel 3",
+    "sprite": "Voedsel 3",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Voedsel 3 is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Voedsel 3.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Voedsel 3.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Voedsel 4",
+    "sprite": "Voedsel 4",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Voedsel 4 is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Voedsel 4.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Voedsel 4.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Scherm",
+    "sprite": "Scherm",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Scherm is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Scherm.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Scherm.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Boodschap 1",
+    "sprite": "Boodschap 1",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Boodschap 1 is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Boodschap 1.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Boodschap 1.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "close-group",
+    "summary": "De bestaande code is niet gewijzigd.",
+  },
+  {
+    "command": "start-group",
+    "name": "Testen voor Planeet",
+    "sprite": "Planeet",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-test",
+    "name": "Juiste lus",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De planeet kan oneindig lang bewegen.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Naar muis richten",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De planeet richt zich naar de muis.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Bewegen",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De planeet zet 5 stappen.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Grootte veranderen",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De planeet verandert zijn grootte.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Snelheid veranderen",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De planeet verandert zijn snelheid.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Testen voor Vijand 1",
+    "sprite": "Vijand 1",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-test",
+    "name": "Juiste lus",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De planeet kan oneindig lang bewegen.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Naar muis richten",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Vijand 1 beweegt zich binnen de 5 seconden naar een willekeurige positie.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Testen voor Vijand 2",
+    "sprite": "Vijand 2",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-test",
+    "name": "Juiste lus",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De planeet kan oneindig lang bewegen.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Naar muis richten",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Vijand 2 beweegt zich binnen de 5 seconden naar een willekeurige positie.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Testen voor Voedsel 1",
+    "sprite": "Voedsel 1",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-group",
+    "name": "Lus",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-test",
+    "name": "Juiste lus",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De planeet kan oneindig lang bewegen.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 0",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 1 begint onzichtbaar.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 1",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 1 wacht één seconde.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 2",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 1 gaat naar een willekeurige positie.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 3",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 1 verschijnt.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 4",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 1 beweegt in een willekeurige richting tot het de planeet raakt.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Testen voor Voedsel 2",
+    "sprite": "Voedsel 2",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-group",
+    "name": "Lus",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-test",
+    "name": "Juiste lus",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De planeet kan oneindig lang bewegen.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 5",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 2 begint onzichtbaar.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 6",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 2 wacht één seconde.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 7",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 2 gaat naar een willekeurige positie.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 8",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 2 verschijnt.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 9",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 2 beweegt in een willekeurige richting tot het de planeet raakt.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Testen voor Voedsel 3",
+    "sprite": "Voedsel 3",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-group",
+    "name": "Lus",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-test",
+    "name": "Juiste lus",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De planeet kan oneindig lang bewegen.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 10",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 3 begint onzichtbaar.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 11",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 3 wacht één seconde.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 12",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 3 gaat naar een willekeurige positie.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 13",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 3 verschijnt.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 14",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 3 beweegt in een willekeurige richting tot het de planeet raakt.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Testen voor Voedsel 4",
+    "sprite": "Voedsel 4",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-group",
+    "name": "Lus",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-test",
+    "name": "Juiste lus",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De planeet kan oneindig lang bewegen.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 15",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 4 begint onzichtbaar.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 16",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 4 wacht één seconde.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 17",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 4 gaat naar een willekeurige positie.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 18",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 4 verschijnt.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 19",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 4 beweegt in een willekeurige richting tot het de planeet raakt.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "close-judgement",
+  },
+]
+`;
+
+exports[`Agario Deleted stack is detected 1`] = `
+[
+  {
+    "command": "start-judgement",
+    "version": 2,
+  },
+  {
+    "command": "start-group",
+    "name": "Controle op bestaande code",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-group",
+    "name": "Stage",
+    "sprite": "Stage",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Stage is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Stage.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Stage.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Planeet",
+    "sprite": "Planeet",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Planeet is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Planeet.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Oops, je hebt iets veranderd aan de blokjes van sprite Planeet. Je gaat opnieuw moeten beginnen.",
+    "status": "wrong",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Vijand 1",
+    "sprite": "Vijand 1",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Vijand 1 is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Vijand 1.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Vijand 1.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Vijand 2",
+    "sprite": "Vijand 2",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Vijand 2 is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Vijand 2.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Vijand 2.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Voedsel 1",
+    "sprite": "Voedsel 1",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Voedsel 1 is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Voedsel 1.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Voedsel 1.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Voedsel 2",
+    "sprite": "Voedsel 2",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Voedsel 2 is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Voedsel 2.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Voedsel 2.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Voedsel 3",
+    "sprite": "Voedsel 3",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Voedsel 3 is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Voedsel 3.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Voedsel 3.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Voedsel 4",
+    "sprite": "Voedsel 4",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Voedsel 4 is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Voedsel 4.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Voedsel 4.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Scherm",
+    "sprite": "Scherm",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Scherm is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Scherm.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Scherm.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Boodschap 1",
+    "sprite": "Boodschap 1",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Boodschap 1 is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Boodschap 1.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Boodschap 1.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "close-group",
+    "summary": "De bestaande code is niet gewijzigd.",
+  },
+  {
+    "command": "start-group",
+    "name": "Testen voor Planeet",
+    "sprite": "Planeet",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-test",
+    "name": "Juiste lus",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De planeet kan oneindig lang bewegen.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Naar muis richten",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De planeet richt zich naar de muis.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Bewegen",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De planeet zet 5 stappen.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Grootte veranderen",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De planeet verandert zijn grootte.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Snelheid veranderen",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De planeet verandert zijn snelheid.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Testen voor Vijand 1",
+    "sprite": "Vijand 1",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-test",
+    "name": "Juiste lus",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De planeet kan oneindig lang bewegen.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Naar muis richten",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Vijand 1 beweegt zich binnen de 5 seconden naar een willekeurige positie.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Testen voor Vijand 2",
+    "sprite": "Vijand 2",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-test",
+    "name": "Juiste lus",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De planeet kan oneindig lang bewegen.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Naar muis richten",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Vijand 2 beweegt zich binnen de 5 seconden naar een willekeurige positie.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Testen voor Voedsel 1",
+    "sprite": "Voedsel 1",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-group",
+    "name": "Lus",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-test",
+    "name": "Juiste lus",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De planeet kan oneindig lang bewegen.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 0",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 1 begint onzichtbaar.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 1",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 1 wacht één seconde.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 2",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 1 gaat naar een willekeurige positie.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 3",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 1 verschijnt.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 4",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 1 beweegt in een willekeurige richting tot het de planeet raakt.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Testen voor Voedsel 2",
+    "sprite": "Voedsel 2",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-group",
+    "name": "Lus",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-test",
+    "name": "Juiste lus",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De planeet kan oneindig lang bewegen.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 5",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 2 begint onzichtbaar.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 6",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 2 wacht één seconde.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 7",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 2 gaat naar een willekeurige positie.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 8",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 2 verschijnt.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 9",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 2 beweegt in een willekeurige richting tot het de planeet raakt.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Testen voor Voedsel 3",
+    "sprite": "Voedsel 3",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-group",
+    "name": "Lus",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-test",
+    "name": "Juiste lus",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De planeet kan oneindig lang bewegen.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 10",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 3 begint onzichtbaar.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 11",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 3 wacht één seconde.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 12",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 3 gaat naar een willekeurige positie.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 13",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 3 verschijnt.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 14",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 3 beweegt in een willekeurige richting tot het de planeet raakt.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Testen voor Voedsel 4",
+    "sprite": "Voedsel 4",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-group",
+    "name": "Lus",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-test",
+    "name": "Juiste lus",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De planeet kan oneindig lang bewegen.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 15",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 4 begint onzichtbaar.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 16",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 4 wacht één seconde.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 17",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 4 gaat naar een willekeurige positie.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 18",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 4 verschijnt.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 19",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 4 beweegt in een willekeurige richting tot het de planeet raakt.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "close-judgement",
+  },
+]
+`;
+
+exports[`Agario Modified stack is detected 1`] = `
+[
+  {
+    "command": "start-judgement",
+    "version": 2,
+  },
+  {
+    "command": "start-group",
+    "name": "Controle op bestaande code",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-group",
+    "name": "Stage",
+    "sprite": "Stage",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Stage is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Stage.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Stage.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Planeet",
+    "sprite": "Planeet",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Planeet is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Planeet.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Oops, je hebt iets veranderd aan de blokjes van sprite Planeet. Je gaat opnieuw moeten beginnen.",
+    "status": "wrong",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Vijand 1",
+    "sprite": "Vijand 1",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Vijand 1 is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Vijand 1.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Vijand 1.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Vijand 2",
+    "sprite": "Vijand 2",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Vijand 2 is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Vijand 2.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Vijand 2.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Voedsel 1",
+    "sprite": "Voedsel 1",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Voedsel 1 is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Voedsel 1.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Voedsel 1.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Voedsel 2",
+    "sprite": "Voedsel 2",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Voedsel 2 is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Voedsel 2.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Voedsel 2.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Voedsel 3",
+    "sprite": "Voedsel 3",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Voedsel 3 is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Voedsel 3.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Voedsel 3.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Voedsel 4",
+    "sprite": "Voedsel 4",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Voedsel 4 is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Voedsel 4.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Voedsel 4.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Scherm",
+    "sprite": "Scherm",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Scherm is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Scherm.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Scherm.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Boodschap 1",
+    "sprite": "Boodschap 1",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Boodschap 1 is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Boodschap 1.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Boodschap 1.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "close-group",
+    "summary": "De bestaande code is niet gewijzigd.",
+  },
+  {
+    "command": "start-group",
+    "name": "Testen voor Planeet",
+    "sprite": "Planeet",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-test",
+    "name": "Juiste lus",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De planeet kan oneindig lang bewegen.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Naar muis richten",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De planeet richt zich naar de muis.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Bewegen",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De planeet zet 5 stappen.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Grootte veranderen",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De planeet verandert zijn grootte.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Snelheid veranderen",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De planeet verandert zijn snelheid.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Testen voor Vijand 1",
+    "sprite": "Vijand 1",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-test",
+    "name": "Juiste lus",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De planeet kan oneindig lang bewegen.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Naar muis richten",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Vijand 1 beweegt zich binnen de 5 seconden naar een willekeurige positie.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Testen voor Vijand 2",
+    "sprite": "Vijand 2",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-test",
+    "name": "Juiste lus",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De planeet kan oneindig lang bewegen.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Naar muis richten",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Vijand 2 beweegt zich binnen de 5 seconden naar een willekeurige positie.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Testen voor Voedsel 1",
+    "sprite": "Voedsel 1",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-group",
+    "name": "Lus",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-test",
+    "name": "Juiste lus",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De planeet kan oneindig lang bewegen.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 0",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 1 begint onzichtbaar.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 1",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 1 wacht één seconde.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 2",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 1 gaat naar een willekeurige positie.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 3",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 1 verschijnt.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 4",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 1 beweegt in een willekeurige richting tot het de planeet raakt.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Testen voor Voedsel 2",
+    "sprite": "Voedsel 2",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-group",
+    "name": "Lus",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-test",
+    "name": "Juiste lus",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De planeet kan oneindig lang bewegen.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 5",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 2 begint onzichtbaar.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 6",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 2 wacht één seconde.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 7",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 2 gaat naar een willekeurige positie.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 8",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 2 verschijnt.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 9",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 2 beweegt in een willekeurige richting tot het de planeet raakt.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Testen voor Voedsel 3",
+    "sprite": "Voedsel 3",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-group",
+    "name": "Lus",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-test",
+    "name": "Juiste lus",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De planeet kan oneindig lang bewegen.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 10",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 3 begint onzichtbaar.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 11",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 3 wacht één seconde.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 12",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 3 gaat naar een willekeurige positie.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 13",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 3 verschijnt.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 14",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 3 beweegt in een willekeurige richting tot het de planeet raakt.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Testen voor Voedsel 4",
+    "sprite": "Voedsel 4",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-group",
+    "name": "Lus",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-test",
+    "name": "Juiste lus",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De planeet kan oneindig lang bewegen.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 15",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 4 begint onzichtbaar.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 16",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 4 wacht één seconde.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 17",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 4 gaat naar een willekeurige positie.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 18",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 4 verschijnt.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 19",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 4 beweegt in een willekeurige richting tot het de planeet raakt.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "close-judgement",
+  },
+]
+`;
+
+exports[`Agario No loop has one error 1`] = `
+[
+  {
+    "command": "start-judgement",
+    "version": 2,
+  },
+  {
+    "command": "start-group",
+    "name": "Controle op bestaande code",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-group",
+    "name": "Stage",
+    "sprite": "Stage",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Stage is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Stage.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Stage.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Planeet",
+    "sprite": "Planeet",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Planeet is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Planeet.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Planeet.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Vijand 1",
+    "sprite": "Vijand 1",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Vijand 1 is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Vijand 1.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Vijand 1.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Vijand 2",
+    "sprite": "Vijand 2",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Vijand 2 is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Vijand 2.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Vijand 2.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Voedsel 1",
+    "sprite": "Voedsel 1",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Voedsel 1 is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Voedsel 1.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Voedsel 1.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Voedsel 2",
+    "sprite": "Voedsel 2",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Voedsel 2 is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Voedsel 2.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Voedsel 2.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Voedsel 3",
+    "sprite": "Voedsel 3",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Voedsel 3 is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Voedsel 3.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Voedsel 3.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Voedsel 4",
+    "sprite": "Voedsel 4",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Voedsel 4 is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Voedsel 4.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Voedsel 4.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Scherm",
+    "sprite": "Scherm",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Scherm is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Scherm.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Scherm.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Boodschap 1",
+    "sprite": "Boodschap 1",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Boodschap 1 is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Boodschap 1.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Boodschap 1.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "close-group",
+    "summary": "De bestaande code is niet gewijzigd.",
+  },
+  {
+    "command": "start-group",
+    "name": "Testen voor Planeet",
+    "sprite": "Planeet",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-test",
+    "name": "Juiste lus",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Planeet moet oneindig lang bewegen.",
+    "status": "wrong",
+  },
+  {
+    "command": "start-test",
+    "name": "Naar muis richten",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De planeet richt zich naar de muis.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Bewegen",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De planeet zet 5 stappen.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Grootte veranderen",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De planeet verandert zijn grootte.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Snelheid veranderen",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De planeet verandert zijn snelheid.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Testen voor Vijand 1",
+    "sprite": "Vijand 1",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-test",
+    "name": "Juiste lus",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De planeet kan oneindig lang bewegen.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Naar muis richten",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Vijand 1 beweegt zich binnen de 5 seconden naar een willekeurige positie.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Testen voor Vijand 2",
+    "sprite": "Vijand 2",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-test",
+    "name": "Juiste lus",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De planeet kan oneindig lang bewegen.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Naar muis richten",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Vijand 2 beweegt zich binnen de 5 seconden naar een willekeurige positie.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Testen voor Voedsel 1",
+    "sprite": "Voedsel 1",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-group",
+    "name": "Lus",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-test",
+    "name": "Juiste lus",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De planeet kan oneindig lang bewegen.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 0",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 1 begint onzichtbaar.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 1",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 1 wacht één seconde.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 2",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 1 gaat naar een willekeurige positie.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 3",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 1 verschijnt.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 4",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 1 beweegt in een willekeurige richting tot het de planeet raakt.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Testen voor Voedsel 2",
+    "sprite": "Voedsel 2",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-group",
+    "name": "Lus",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-test",
+    "name": "Juiste lus",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De planeet kan oneindig lang bewegen.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 5",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 2 begint onzichtbaar.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 6",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 2 wacht één seconde.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 7",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 2 gaat naar een willekeurige positie.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 8",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 2 verschijnt.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 9",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 2 beweegt in een willekeurige richting tot het de planeet raakt.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Testen voor Voedsel 3",
+    "sprite": "Voedsel 3",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-group",
+    "name": "Lus",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-test",
+    "name": "Juiste lus",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De planeet kan oneindig lang bewegen.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 10",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 3 begint onzichtbaar.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 11",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 3 wacht één seconde.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 12",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 3 gaat naar een willekeurige positie.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 13",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 3 verschijnt.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 14",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 3 beweegt in een willekeurige richting tot het de planeet raakt.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Testen voor Voedsel 4",
+    "sprite": "Voedsel 4",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-group",
+    "name": "Lus",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-test",
+    "name": "Juiste lus",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De planeet kan oneindig lang bewegen.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 15",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 4 begint onzichtbaar.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 16",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 4 wacht één seconde.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 17",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 4 gaat naar een willekeurige positie.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 18",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 4 verschijnt.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 19",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 4 beweegt in een willekeurige richting tot het de planeet raakt.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "close-judgement",
+  },
+]
+`;
+
+exports[`Agario Switched block order in planet is accepted 1`] = `
+[
+  {
+    "command": "start-judgement",
+    "version": 2,
+  },
+  {
+    "command": "start-group",
+    "name": "Controle op bestaande code",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-group",
+    "name": "Stage",
+    "sprite": "Stage",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Stage is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Stage.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Stage.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Planeet",
+    "sprite": "Planeet",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Planeet is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Planeet.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Planeet.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Vijand 1",
+    "sprite": "Vijand 1",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Vijand 1 is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Vijand 1.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Vijand 1.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Vijand 2",
+    "sprite": "Vijand 2",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Vijand 2 is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Vijand 2.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Vijand 2.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Voedsel 1",
+    "sprite": "Voedsel 1",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Voedsel 1 is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Voedsel 1.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Voedsel 1.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Voedsel 2",
+    "sprite": "Voedsel 2",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Voedsel 2 is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Voedsel 2.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Voedsel 2.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Voedsel 3",
+    "sprite": "Voedsel 3",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Voedsel 3 is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Voedsel 3.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Voedsel 3.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Voedsel 4",
+    "sprite": "Voedsel 4",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Voedsel 4 is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Voedsel 4.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Voedsel 4.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Scherm",
+    "sprite": "Scherm",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Scherm is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Scherm.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Scherm.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Boodschap 1",
+    "sprite": "Boodschap 1",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Boodschap 1 is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Boodschap 1.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Boodschap 1.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "close-group",
+    "summary": "De bestaande code is niet gewijzigd.",
+  },
+  {
+    "command": "start-group",
+    "name": "Testen voor Planeet",
+    "sprite": "Planeet",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-test",
+    "name": "Juiste lus",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De planeet kan oneindig lang bewegen.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Naar muis richten",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De planeet richt zich naar de muis.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Bewegen",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De planeet zet 5 stappen.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Snelheid veranderen",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De planeet verandert zijn snelheid.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Grootte veranderen",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De planeet verandert zijn grootte.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Testen voor Vijand 1",
+    "sprite": "Vijand 1",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-test",
+    "name": "Juiste lus",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De planeet kan oneindig lang bewegen.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Naar muis richten",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Vijand 1 beweegt zich binnen de 5 seconden naar een willekeurige positie.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Testen voor Vijand 2",
+    "sprite": "Vijand 2",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-test",
+    "name": "Juiste lus",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De planeet kan oneindig lang bewegen.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Naar muis richten",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Vijand 2 beweegt zich binnen de 5 seconden naar een willekeurige positie.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Testen voor Voedsel 1",
+    "sprite": "Voedsel 1",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-group",
+    "name": "Lus",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-test",
+    "name": "Juiste lus",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De planeet kan oneindig lang bewegen.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 0",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 1 begint onzichtbaar.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 1",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 1 wacht één seconde.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 2",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 1 gaat naar een willekeurige positie.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 3",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 1 verschijnt.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 4",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 1 beweegt in een willekeurige richting tot het de planeet raakt.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Testen voor Voedsel 2",
+    "sprite": "Voedsel 2",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-group",
+    "name": "Lus",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-test",
+    "name": "Juiste lus",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De planeet kan oneindig lang bewegen.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 5",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 2 begint onzichtbaar.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 6",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 2 wacht één seconde.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 7",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 2 gaat naar een willekeurige positie.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 8",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 2 verschijnt.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 9",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 2 beweegt in een willekeurige richting tot het de planeet raakt.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Testen voor Voedsel 3",
+    "sprite": "Voedsel 3",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-group",
+    "name": "Lus",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-test",
+    "name": "Juiste lus",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De planeet kan oneindig lang bewegen.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 10",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 3 begint onzichtbaar.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 11",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 3 wacht één seconde.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 12",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 3 gaat naar een willekeurige positie.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 13",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 3 verschijnt.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 14",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 3 beweegt in een willekeurige richting tot het de planeet raakt.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Testen voor Voedsel 4",
+    "sprite": "Voedsel 4",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-group",
+    "name": "Lus",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-test",
+    "name": "Juiste lus",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De planeet kan oneindig lang bewegen.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 15",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 4 begint onzichtbaar.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 16",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 4 wacht één seconde.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 17",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 4 gaat naar een willekeurige positie.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 18",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 4 verschijnt.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 19",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 4 beweegt in een willekeurige richting tot het de planeet raakt.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "close-judgement",
+  },
+]
+`;
+
+exports[`Agario Template is rejected 1`] = `
+[
+  {
+    "command": "start-judgement",
+    "version": 2,
+  },
+  {
+    "command": "start-group",
+    "name": "Controle op bestaande code",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-group",
+    "name": "Stage",
+    "sprite": "Stage",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Stage is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Stage.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Stage.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Planeet",
+    "sprite": "Planeet",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Planeet is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Planeet.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Planeet.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Vijand 1",
+    "sprite": "Vijand 1",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Vijand 1 is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Vijand 1.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Vijand 1.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Vijand 2",
+    "sprite": "Vijand 2",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Vijand 2 is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Vijand 2.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Vijand 2.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Voedsel 1",
+    "sprite": "Voedsel 1",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Voedsel 1 is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Voedsel 1.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Voedsel 1.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Voedsel 2",
+    "sprite": "Voedsel 2",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Voedsel 2 is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Voedsel 2.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Voedsel 2.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Voedsel 3",
+    "sprite": "Voedsel 3",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Voedsel 3 is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Voedsel 3.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Voedsel 3.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Voedsel 4",
+    "sprite": "Voedsel 4",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Voedsel 4 is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Voedsel 4.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Voedsel 4.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Scherm",
+    "sprite": "Scherm",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Scherm is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Scherm.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Scherm.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Boodschap 1",
+    "sprite": "Boodschap 1",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Boodschap 1 is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Boodschap 1.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Boodschap 1.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "close-group",
+    "summary": "De bestaande code is niet gewijzigd.",
+  },
+  {
+    "command": "start-group",
+    "name": "Testen voor Planeet",
+    "sprite": "Planeet",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-test",
+    "name": "Juiste lus",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Planeet moet oneindig lang bewegen.",
+    "status": "wrong",
+  },
+  {
+    "command": "start-test",
+    "name": "Naar muis richten",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "First, the planet should point towards mouse-pointer.",
+    "status": "wrong",
+  },
+  {
+    "command": "start-test",
+    "name": "Bewegen",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Nadien moet de planeet 5 stappen nemen.",
+    "status": "wrong",
+  },
+  {
+    "command": "start-test",
+    "name": "Snelheid veranderen",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De planeet moet zijn snelheid veranderen.",
+    "status": "wrong",
+  },
+  {
+    "command": "start-test",
+    "name": "Grootte veranderen",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De planeet moet zijn grootte veranderen.",
+    "status": "wrong",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Testen voor Vijand 1",
+    "sprite": "Vijand 1",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-test",
+    "name": "Juiste lus",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Vijand 1 moet oneindig lang bewegen.",
+    "status": "wrong",
+  },
+  {
+    "command": "start-test",
+    "name": "Naar muis richten",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Vijand 1 moet zich binnen de 5 seconden naar een willekeurige positie verplaatsen.",
+    "status": "wrong",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Testen voor Vijand 2",
+    "sprite": "Vijand 2",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-test",
+    "name": "Juiste lus",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Vijand 2 moet oneindig lang bewegen.",
+    "status": "wrong",
+  },
+  {
+    "command": "start-test",
+    "name": "Naar muis richten",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Vijand 2 moet zich binnen de 5 seconden naar een willekeurige positie verplaatsen.",
+    "status": "wrong",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Testen voor Voedsel 1",
+    "sprite": "Voedsel 1",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-group",
+    "name": "Lus",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-test",
+    "name": "Juiste lus",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 1 moet oneindig lang bewegen.",
+    "status": "wrong",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 0",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 1 moet onzichtbaar beginnen.",
+    "status": "wrong",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 1",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 1 moet één seconde wachten",
+    "status": "wrong",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 2",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 1 moet naar een willekeurige positie gaan.",
+    "status": "wrong",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 3",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 1 moet zichtbaar worden.",
+    "status": "wrong",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 4",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 1 moet in een willekeurige richting bewegen tot het de planeet raakt.",
+    "status": "wrong",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Testen voor Voedsel 2",
+    "sprite": "Voedsel 2",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-group",
+    "name": "Lus",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-test",
+    "name": "Juiste lus",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 2 moet oneindig lang bewegen.",
+    "status": "wrong",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 5",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 2 moet onzichtbaar beginnen.",
+    "status": "wrong",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 6",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 2 moet één seconde wachten",
+    "status": "wrong",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 7",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 2 moet naar een willekeurige positie gaan.",
+    "status": "wrong",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 8",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 2 moet zichtbaar worden.",
+    "status": "wrong",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 9",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 2 moet in een willekeurige richting bewegen tot het de planeet raakt.",
+    "status": "wrong",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Testen voor Voedsel 3",
+    "sprite": "Voedsel 3",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-group",
+    "name": "Lus",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-test",
+    "name": "Juiste lus",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 3 moet oneindig lang bewegen.",
+    "status": "wrong",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 10",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 3 moet onzichtbaar beginnen.",
+    "status": "wrong",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 11",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 3 moet één seconde wachten",
+    "status": "wrong",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 12",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 3 moet naar een willekeurige positie gaan.",
+    "status": "wrong",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 13",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 3 moet zichtbaar worden.",
+    "status": "wrong",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 14",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 3 moet in een willekeurige richting bewegen tot het de planeet raakt.",
+    "status": "wrong",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Testen voor Voedsel 4",
+    "sprite": "Voedsel 4",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-group",
+    "name": "Lus",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-test",
+    "name": "Juiste lus",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 4 moet oneindig lang bewegen.",
+    "status": "wrong",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 15",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 4 moet onzichtbaar beginnen.",
+    "status": "wrong",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 16",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 4 moet één seconde wachten",
+    "status": "wrong",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 17",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 4 moet naar een willekeurige positie gaan.",
+    "status": "wrong",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 18",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 4 moet zichtbaar worden.",
+    "status": "wrong",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 19",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Voedsel 4 moet in een willekeurige richting bewegen tot het de planeet raakt.",
+    "status": "wrong",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "close-judgement",
+  },
+]
+`;
+
+exports[`Laserjets level 5 Correct solution is accepted 1`] = `
+[
+  {
+    "command": "start-judgement",
+    "version": 2,
+  },
+  {
+    "command": "start-group",
+    "name": "Controle op bestaande code",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-group",
+    "name": "Stage",
+    "sprite": "Stage",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Stage is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Stage.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Stage.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Laser",
+    "sprite": "Laser",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Laser is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Laser.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Laser.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Start",
+    "sprite": "Start",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Start is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Start.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Start.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Finish",
+    "sprite": "Finish",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Finish is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Finish.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Finish.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "RodeSpiegel",
+    "sprite": "RodeSpiegel",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite RodeSpiegel is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite RodeSpiegel.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite RodeSpiegel.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Blauwe spiegel",
+    "sprite": "Blauwe spiegel",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Blauwe spiegel is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Blauwe spiegel.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Blauwe spiegel.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Gele spiegel",
+    "sprite": "Gele spiegel",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Gele spiegel is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Gele spiegel.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Gele spiegel.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Groene spiegel",
+    "sprite": "Groene spiegel",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Groene spiegel is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Groene spiegel.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Groene spiegel.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Glas blok",
+    "sprite": "Glas blok",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Glas blok is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Glas blok.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Glas blok.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Tina",
+    "sprite": "Tina",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Tina is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Tina.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Tina.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Startknop",
+    "sprite": "Startknop",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Startknop is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Startknop.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Startknop.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "close-group",
+    "summary": "De bestaande code is niet gewijzigd.",
+  },
+  {
+    "command": "start-group",
+    "name": "Groene spiegel",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-test",
+    "name": "Klaarzetten",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je zet de laser klaar voor je schiet op Groene spiegel.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Bewegen",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Als de laser wordt klaargezet om te schieten op de Groene spiegel, dan blijft de laser bewegen tot hij deze raakt.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Lus",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De laser blijft schieten tot hij zijn doel raakt.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Doel geraakt",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De laser schiet en raakt Groene spiegel.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Blauwe spiegel",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-test",
+    "name": "Klaarzetten",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je zet de laser klaar voor je schiet op Blauwe spiegel.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Bewegen",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Als de laser wordt klaargezet om te schieten op de Blauwe spiegel, dan blijft de laser bewegen tot hij deze raakt.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Lus",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De laser blijft schieten tot hij zijn doel raakt.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Doel geraakt",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De laser schiet en raakt Blauwe spiegel.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "RodeSpiegel",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-test",
+    "name": "Klaarzetten",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je zet de laser klaar voor je schiet op RodeSpiegel.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Bewegen",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Als de laser wordt klaargezet om te schieten op de RodeSpiegel, dan blijft de laser bewegen tot hij deze raakt.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Lus",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De laser blijft schieten tot hij zijn doel raakt.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Doel geraakt",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De laser schiet en raakt RodeSpiegel.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Finish",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-test",
+    "name": "Klaarzetten",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je zet de laser klaar voor je schiet op Finish.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Bewegen",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Als de laser wordt klaargezet om te schieten op de Finish, dan blijft de laser bewegen tot hij deze raakt.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Lus",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De laser blijft schieten tot hij zijn doel raakt.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Doel geraakt",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De laser schiet en raakt Finish.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "close-judgement",
+  },
+]
+`;
+
+exports[`Laserjets level 5 Template is rejected 1`] = `
+[
+  {
+    "command": "start-judgement",
+    "version": 2,
+  },
+  {
+    "command": "start-group",
+    "name": "Controle op bestaande code",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-group",
+    "name": "Stage",
+    "sprite": "Stage",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Stage is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Stage.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Stage.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Laser",
+    "sprite": "Laser",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Laser is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Laser.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Laser.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Start",
+    "sprite": "Start",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Start is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Start.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Start.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Finish",
+    "sprite": "Finish",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Finish is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Finish.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Finish.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "RodeSpiegel",
+    "sprite": "RodeSpiegel",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite RodeSpiegel is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite RodeSpiegel.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite RodeSpiegel.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Blauwe spiegel",
+    "sprite": "Blauwe spiegel",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Blauwe spiegel is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Blauwe spiegel.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Blauwe spiegel.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Gele spiegel",
+    "sprite": "Gele spiegel",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Gele spiegel is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Gele spiegel.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Gele spiegel.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Groene spiegel",
+    "sprite": "Groene spiegel",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Groene spiegel is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Groene spiegel.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Groene spiegel.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Glas blok",
+    "sprite": "Glas blok",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Glas blok is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Glas blok.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Glas blok.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Tina",
+    "sprite": "Tina",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Tina is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Tina.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Tina.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Startknop",
+    "sprite": "Startknop",
+    "tags": [],
+    "visibility": "summary",
+  },
+  {
+    "command": "start-test",
+    "name": "Bestaande sprite",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top, de sprite Startknop is niet verwijderd.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Voorgeprogrammeerde blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Startknop.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Controle op bestaande code",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Top! Je hebt niets veranderd aan de blokjes van sprite Startknop.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Rondsligerende blokjes",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "close-group",
+    "summary": "De bestaande code is niet gewijzigd.",
+  },
+  {
+    "command": "start-group",
+    "name": "Groene spiegel",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-test",
+    "name": "Klaarzetten",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je moet de laser eerst klaarzetten, voor je kan schieten op Groene spiegel.",
+    "status": "wrong",
+  },
+  {
+    "command": "start-test",
+    "name": "Bewegen",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Als de laser wordt klaargezet om te schieten op de Groene spiegel, dan moet hij blijven bewegen tot hij deze raakt.",
+    "status": "wrong",
+  },
+  {
+    "command": "start-test",
+    "name": "Lus",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De laser moet blijven schieten tot hij zijn doel raakt.",
+    "status": "wrong",
+  },
+  {
+    "command": "start-test",
+    "name": "Doel geraakt",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De laser moet schieten naar Groene spiegel.",
+    "status": "wrong",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Blauwe spiegel",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-test",
+    "name": "Klaarzetten",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je moet de laser eerst klaarzetten, voor je kan schieten op Blauwe spiegel.",
+    "status": "wrong",
+  },
+  {
+    "command": "start-test",
+    "name": "Bewegen",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Als de laser wordt klaargezet om te schieten op de Blauwe spiegel, dan moet hij blijven bewegen tot hij deze raakt.",
+    "status": "wrong",
+  },
+  {
+    "command": "start-test",
+    "name": "Lus",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De laser moet blijven schieten tot hij zijn doel raakt.",
+    "status": "wrong",
+  },
+  {
+    "command": "start-test",
+    "name": "Doel geraakt",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De laser moet schieten naar Blauwe spiegel.",
+    "status": "wrong",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "RodeSpiegel",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-test",
+    "name": "Klaarzetten",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je moet de laser eerst klaarzetten, voor je kan schieten op RodeSpiegel.",
+    "status": "wrong",
+  },
+  {
+    "command": "start-test",
+    "name": "Bewegen",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Als de laser wordt klaargezet om te schieten op de RodeSpiegel, dan moet hij blijven bewegen tot hij deze raakt.",
+    "status": "wrong",
+  },
+  {
+    "command": "start-test",
+    "name": "Lus",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De laser moet blijven schieten tot hij zijn doel raakt.",
+    "status": "wrong",
+  },
+  {
+    "command": "start-test",
+    "name": "Doel geraakt",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De laser moet schieten naar RodeSpiegel.",
+    "status": "wrong",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Finish",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-test",
+    "name": "Klaarzetten",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Je moet de laser eerst klaarzetten, voor je kan schieten op Finish.",
+    "status": "wrong",
+  },
+  {
+    "command": "start-test",
+    "name": "Bewegen",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Als de laser wordt klaargezet om te schieten op de Finish, dan moet hij blijven bewegen tot hij deze raakt.",
+    "status": "wrong",
+  },
+  {
+    "command": "start-test",
+    "name": "Lus",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De laser moet blijven schieten tot hij zijn doel raakt.",
+    "status": "wrong",
+  },
+  {
+    "command": "start-test",
+    "name": "Doel geraakt",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De laser moet schieten naar Finish.",
+    "status": "wrong",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "close-judgement",
+  },
+]
+`;

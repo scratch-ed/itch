@@ -14,14 +14,7 @@ test('01_mad_hatter', () => {
   });
 });
 
-test.skip('02_papegaai', () => {
-  return runTest().then((result) => {
-    expect(result).everyStatusToBe('correct');
-    expect(result).toMatchSnapshot();
-  });
-});
-
-test.skip('03_teken_een_vierkant', () => {
+test('03_teken_een_vierkant', () => {
   return runTest().then((result) => {
     expect(result).everyStatusToBe('correct');
     expect(result).toMatchSnapshot();
