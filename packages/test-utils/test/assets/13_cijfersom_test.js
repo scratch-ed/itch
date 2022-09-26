@@ -12,9 +12,10 @@ function duringExecution(e) {
         for (let i = 0; i < getal.length; i++) {
           som += parseInt(getal[i]);
         }
-        e.test(`De berekening van cijfersom ${getal}`, (l) => {
-          l.expect(response).toBe(som.toString());
-        });
+        e.group
+          .test(`De berekening van cijfersom ${getal}`)
+          .expect(response)
+          .toBe(som.toString());
       });
     })
     .end();

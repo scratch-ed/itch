@@ -13,7 +13,7 @@ function duringExecution(e) {
 
 /** @param {Evaluation} e */
 function afterExecution(e) {
-  const sayEvents = e.log.events.filter({ type: 'say' });
+  const sayEvents = e.log.events.filter((e) => e.type === 'say');
   const sprekers = ['Kat', 'Bananen', 'Kat', 'Bananen', 'Kat'];
   const berichten = [
     'Klop, klop!',
@@ -22,17 +22,22 @@ function afterExecution(e) {
     'Ki, wie?',
     'Neen, dank je. Ik heb liever bananen!',
   ];
-  console.log(sayEvents);
   for (let i = 0; i < berichten.length; i++) {
-    e.test(`Bericht nummer ${i} komt van de ${sprekers[i]}`, (l) => {
-      l.expect(sayEvents[i].data.sprite)
-        .withError(`Spreker ${i} moet de ${sprekers[i]} zijn!`)
-        .toBe(sprekers[i]);
-    });
-    e.test(`Correcte text in bericht nummer ${i}`, (l) => {
-      l.expect(sayEvents[i].data.text)
-        .withError('De tekst in de tekstballon is verkeerd')
-        .toBe(berichten[i]);
-    });
+    e.group
+      .test(`Bericht nummer ${i} komt van de ${sprekers[i]}`)
+      .feedback({
+        wrong: `Spreker ${i} moet de ${sprekers[i]} zijn!`,
+        correct: `Spreker ${i} is de ${sprekers[i]} zijn!`,
+      })
+      .expect(sayEvents[i].data.sprite)
+      .toBe(sprekers[i]);
+    e.group
+      .test(`Correcte text in bericht nummer ${i}`)
+      .feedback({
+        wrong: 'De tekst in de tekstballon is verkeerd',
+        correct: 'De tekst in de tekstballon is juist',
+      })
+      .expect(sayEvents[i].data.text)
+      .toBe(berichten[i]);
   }
 }

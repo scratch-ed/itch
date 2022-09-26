@@ -6,30 +6,47 @@ function duringExecution(e) {
 
 /** @param {Evaluation} e */
 function afterExecution(e) {
-  const vierkanten = e.log.getSquares();
+  const vierkanten = Itch.findSquares(e.log.renderer.lines);
   // Er moet exact 1 vierkant getekend worden
-  e.test('Aantal vierkanten', (l) => {
-    l.expect(vierkanten.length)
-      .withError('Er werd niet exact 1 vierkant getekend')
-      .toBe(1);
-  });
+  e.group
+    .test('Aantal vierkanten')
+    .feedback({
+      correct: 'Er is één vierkant getekend',
+      wrong: 'Er werd niet exact 1 vierkant getekend',
+    })
+    .expect(vierkanten.length)
+    .toBe(1);
 
   // Elke zijde van het vierkant heeft lengte 200
-  e.test('Zijdes hebben lengte 200', (l) => {
-    l.expect(numericEquals(200, vierkanten[0].length))
-      .withError('De zijdes van het vierkant hebben niet lengte 200')
-      .toBe(true);
-  });
+  e.group
+    .test('Zijdes hebben lengte 200')
+    .feedback({
+      correct: 'De zijdes hebben lengte 200',
+      wrong: 'De zijdes van het vierkant hebben niet lengte 200',
+    })
+    .expect(vierkanten[0].length)
+    .toBe(200);
 
   // Er werd gebruik gemaakt van de pen
-  e.test('De pen werd gebruikt', (l) => {
-    l.expect(e.log.blocks.containsBlock('pen_penDown'))
-      .withError('Het blok pen_down werd niet gebruikt in de code')
-      .toBe(true);
-  });
+  e.group
+    .test('De pen werd gebruikt')
+    .feedback({
+      wrong: 'Het blok pen_down werd niet gebruikt in de code',
+      correct: 'De pen wordt gebruikt',
+    })
+    .acceptIf(
+      e.log.events.some(
+        (e) => e.type === 'block_execution' && e.data.node().opcode === 'pen_penDown',
+      ),
+    );
 
-  if (!e.log.blocks.containsLoop()) {
-    e.output.appendMessage(
+  const loopBlocks = ['control_repeat', 'control_forever'];
+  const containsLoop = e.log.events.some(
+    (e) => e.type === 'block_execution' && loopBlocks.includes(e.data.node().opcode),
+  );
+
+  if (!containsLoop) {
+    e.groupedOutput.appendMessage(
       'Je kan je oplossing verbeteren door gebruik te maken van het "herhaal-blok"',
     );
   }

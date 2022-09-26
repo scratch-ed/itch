@@ -9,16 +9,24 @@ function duringExecution(e) {
 /** @param {Evaluation} e */
 function afterExecution(e) {
   // Er moet minimum 1 driehoek getekend worden
-  e.test('Aantal driehoeken', (l) => {
-    l.expect(e.log.getTriangles().length >= 1)
-      .withError('Er minder dan 1 driehoek getekend')
-      .toBe(true);
-  });
+  e.group
+    .test('')
+    .feedback({
+      correct: 'Er werd minstens 1 driehoek getekend.',
+      wrong: 'Er minder dan 1 driehoek getekend',
+    })
+    .acceptIf(Itch.findTriangles(e.log.renderer.lines).length >= 1);
 
   // Er werd gebruik gemaakt van de pen
-  e.test('De pen werd gebruikt', (l) => {
-    l.expect(e.log.blocks.containsBlock('pen_penDown'))
-      .withError('Het blok pen_down werd niet gebruikt in de code')
-      .toBe(true);
-  });
+  e.group
+    .test('De pen werd gebruikt')
+    .feedback({
+      wrong: 'Het blok pen_down werd niet gebruikt in de code',
+      correct: 'De pen wordt gebruikt',
+    })
+    .acceptIf(
+      e.log.events.some(
+        (e) => e.type === 'block_execution' && e.data.node().opcode === 'pen_penDown',
+      ),
+    );
 }

@@ -1,86 +1,78 @@
 /* Copyright (C) 2020 Ghent University - All Rights Reserved */
 const { runTest: originalRunner } = require('./integration-runner.js');
 
-function runTest() {
-  return originalRunner(undefined, null, { skipTranslations: true });
+function runTest(projectName = undefined, testName = undefined) {
+  return originalRunner(projectName, testName, { skipTranslations: true, debug: false });
 }
 
 jest.setTimeout(50000);
 
 test('01_mad_hatter', () => {
   return runTest().then((result) => {
-    expect(result).everyStatusToBe('correct');
+    expect(result).exactStatuses('correct', 29);
     expect(result).toMatchSnapshot();
   });
 });
 
 test('03_teken_een_vierkant', () => {
   return runTest().then((result) => {
-    expect(result).everyStatusToBe('correct');
+    expect(result).exactStatuses('correct', 3);
     expect(result).toMatchSnapshot();
   });
 });
 
-test.skip('04_teken_een_driehoek', () => {
+test('04_teken_een_driehoek', () => {
   return runTest().then((result) => {
-    expect(result).everyStatusToBe('correct');
-    expect(result).atLeastCommands('close-testcase', 2);
-    expect(result).toMatchSnapshot();
-  });
-});
-
-test.skip('05_teken_een_huis', () => {
-  return runTest().then((result) => {
-    expect(result).everyStatusToBe('correct');
-    expect(result).atLeastCommands('close-testcase', 1);
+    expect(result).exactStatuses('correct', 2);
     expect(result).toMatchSnapshot();
   });
 });
 
 test('06_voetballende_kat', () => {
   return runTest().then((result) => {
+    expect(result).exactStatuses('correct', 2);
     expect(result).toMatchSnapshot();
-    expect(result).everyStatusToBe('correct');
   });
 });
 
-test.skip('07_heksenjacht', () => {
+test('07_heksenjacht', () => {
   return runTest().then((result) => {
+    expect(result).exactStatuses('correct', 4);
     expect(result).toMatchSnapshot();
-    expect(result).everyStatusToBe('correct');
   });
 });
 
-test.skip('08_op_bezoek_bij_devin', () => {
-  return runTest().then((result) => {
+test('07_heksenjacht_eenvoudig', () => {
+  return runTest('07_heksenjacht', '07_heksenjacht_eenvoudig').then((result) => {
+    expect(result).exactStatuses('correct', 6);
     expect(result).toMatchSnapshot();
-    expect(result).everyStatusToBe('correct');
   });
 });
 
-test.skip('09_flauw_mopje', () => {
+test('08_op_bezoek_bij_devin', () => {
   return runTest().then((result) => {
+    expect(result).exactStatuses('correct', 4);
     expect(result).toMatchSnapshot();
-    expect(result).everyStatusToBe('correct');
   });
 });
 
-test.skip('11_vang_de_appels', () => {
+test('09_flauw_mopje', () => {
   return runTest().then((result) => {
-    expect(result).atLeastCommands('close-test', 8);
-    expect(result).everyStatusToBe('correct');
-  });
-});
-
-test.skip('13_cijfersom', () => {
-  return runTest().then((result) => {
+    expect(result).exactStatuses('correct', 10);
     expect(result).toMatchSnapshot();
-    expect(result).everyStatusToBe('correct');
   });
 });
 
-test.skip('draw_a_square', () => {
+test('11_vang_de_appels', () => {
   return runTest().then((result) => {
+    expect(result).exactStatuses('correct', 7);
+    expect(result).toMatchSnapshot();
+  });
+});
+
+test('13_cijfersom', () => {
+  return runTest().then((result) => {
+    expect(result).exactStatuses('correct', 3);
     expect(result).toMatchSnapshot();
   });
 });

@@ -1,7 +1,11 @@
 /* Copyright (C) 2019 Ghent University - All Rights Reserved */
+
+const acceleration = 5;
+
 /** @param {Evaluation} e */
 function duringExecution(e) {
   e.actionTimeout = 7000;
+  e.acceleration = acceleration;
 
   e.scheduler
     .wait(500)
@@ -20,8 +24,14 @@ function duringExecution(e) {
         .expect(positions.size)
         .toBe(1);
     })
-    .clickSprite('Heks', false) // De eerste klik laat heks starten met bewegen.
-    .forEach(_.range(0, 4000, 50), (event) => event.wait(50).log()) // Manueel elke 50 ms, 4000 ms lang, de sprites loggen.
+    // De eerste klik laat heks starten met bewegen.
+    .clickSprite('Heks', false)
+    // Manueel elke 50 ms, 4000 ms lang, de sprites loggen.
+    .forEach(_.range(0, 4000, 50), (event) =>
+      event.wait(50).log(() => {
+        console.log('Saving sprite... at ' + e.log.timestamp());
+      }),
+    )
     .end();
 }
 
@@ -46,13 +56,19 @@ function afterExecution(e) {
 
   // Na clickTime moet de positie van de heks veranderd zijn en daarna constant blijven voor een seconde
   const frames1 = e.log.snapshots.filter(
-    (s) => clickTime + 200 < s.timestamp && s.timestamp < clickTime + 800,
+    (s) =>
+      clickTime + 200 / acceleration < s.timestamp &&
+      s.timestamp < clickTime + 800 / acceleration,
   );
   const frames2 = e.log.snapshots.filter(
-    (s) => clickTime + 1200 < s.timestamp && s.timestamp < clickTime + 1800,
+    (s) =>
+      clickTime + 1200 / acceleration < s.timestamp &&
+      s.timestamp < clickTime + 1800 / acceleration,
   );
   const frames3 = e.log.snapshots.filter(
-    (s) => clickTime + 2200 < s.timestamp && s.timestamp < clickTime + 2800,
+    (s) =>
+      clickTime + 2200 / acceleration < s.timestamp &&
+      s.timestamp < clickTime + 2800 / acceleration,
   );
   const heks1 = frames1[0].sprite('Heks');
   const heks2 = frames2[0].sprite('Heks');

@@ -334,446 +334,93 @@ exports[`01_mad_hatter 1`] = `
 ]
 `;
 
-exports[`02_papegaai 1`] = `
-Array [
-  Object {
+exports[`03_teken_een_vierkant 1`] = `
+[
+  {
     "command": "start-judgement",
     "version": 2,
   },
-  Object {
+  {
     "command": "start-group",
-    "name": "Testen voor de Papegaai",
+    "name": "Groep 0.2165789609714974",
+    "tags": [],
     "visibility": "show",
   },
-  Object {
+  {
     "command": "start-test",
-    "name": "Papegaai bestaat",
+    "name": "Aantal vierkanten",
+    "tags": [],
   },
-  Object {
+  {
     "command": "close-test",
+    "feedback": "Er is één vierkant getekend",
     "status": "correct",
   },
-  Object {
+  {
     "command": "start-test",
-    "name": "Papegaai beweegt niet",
+    "name": "Zijdes hebben lengte 200",
+    "tags": [],
   },
-  Object {
+  {
     "command": "close-test",
+    "feedback": "De zijdes hebben lengte 200",
     "status": "correct",
   },
-  Object {
+  {
     "command": "start-test",
-    "name": "Papegaai vliegt enkel horizontaal",
+    "name": "De pen werd gebruikt",
+    "tags": [],
   },
-  Object {
+  {
     "command": "close-test",
+    "feedback": "De pen wordt gebruikt",
     "status": "correct",
   },
-  Object {
-    "command": "start-test",
-    "name": "Test 0.2165789609714974",
-  },
-  Object {
-    "command": "close-test",
-    "feedback": "De papegaai raakt de rand bij het veranderen van richting.",
-    "status": "correct",
-  },
-  Object {
-    "command": "start-test",
-    "name": "Test 0.4983973001423014",
-  },
-  Object {
-    "command": "close-test",
-    "feedback": "De papegaai vliegt horizontaal.",
-    "status": "correct",
-  },
-  Object {
-    "command": "start-test",
-    "name": "Test 0.6150841434614063",
-  },
-  Object {
-    "command": "close-test",
-    "feedback": "De papegaai raakt de rand bij het veranderen van richting.",
-    "status": "correct",
-  },
-  Object {
-    "command": "start-test",
-    "name": "Test 0.19843879604101833",
-  },
-  Object {
-    "command": "close-test",
-    "feedback": "De papegaai vliegt horizontaal.",
-    "status": "correct",
-  },
-  Object {
-    "command": "start-test",
-    "name": "Test 0.8526033719101519",
-  },
-  Object {
-    "command": "close-test",
-    "feedback": "De papegaai raakt de rand bij het veranderen van richting.",
-    "status": "correct",
-  },
-  Object {
-    "command": "start-test",
-    "name": "Test 0.04642983889045595",
-  },
-  Object {
-    "command": "close-test",
-    "feedback": "De papegaai vliegt horizontaal.",
-    "status": "correct",
-  },
-  Object {
-    "command": "start-test",
-    "name": "Test 0.2316213679197999",
-  },
-  Object {
-    "command": "close-test",
-    "feedback": "De papegaai raakt de rand bij het veranderen van richting.",
-    "status": "correct",
-  },
-  Object {
-    "command": "start-test",
-    "name": "Test 0.36833606377437567",
-  },
-  Object {
-    "command": "close-test",
-    "feedback": "De papegaai vliegt horizontaal.",
-    "status": "correct",
-  },
-  Object {
-    "command": "start-test",
-    "name": "Test 0.19018709287663796",
-  },
-  Object {
-    "command": "close-test",
-    "feedback": "De papegaai raakt de rand bij het veranderen van richting.",
-    "status": "correct",
-  },
-  Object {
-    "command": "start-test",
-    "name": "Test 0.9481745606476195",
-  },
-  Object {
-    "command": "close-test",
-    "feedback": "De papegaai vliegt horizontaal.",
-    "status": "correct",
-  },
-  Object {
-    "command": "start-test",
-    "name": "Test 0.8620147969967875",
-  },
-  Object {
-    "command": "close-test",
-    "feedback": "De papegaai raakt de rand bij het veranderen van richting.",
-    "status": "correct",
-  },
-  Object {
-    "command": "start-test",
-    "name": "Test 0.9101281237480078",
-  },
-  Object {
-    "command": "close-test",
-    "feedback": "De papegaai vliegt horizontaal.",
-    "status": "correct",
-  },
-  Object {
-    "command": "start-test",
-    "name": "Test 0.25574210927832525",
-  },
-  Object {
-    "command": "close-test",
-    "feedback": "De papegaai raakt de rand bij het veranderen van richting.",
-    "status": "correct",
-  },
-  Object {
-    "command": "start-test",
-    "name": "Test 0.6061971077347643",
-  },
-  Object {
-    "command": "close-test",
-    "feedback": "De papegaai vliegt horizontaal.",
-    "status": "correct",
-  },
-  Object {
-    "command": "start-test",
-    "name": "Test 0.5376622109864118",
-  },
-  Object {
-    "command": "close-test",
-    "feedback": "De papegaai raakt de rand bij het veranderen van richting.",
-    "status": "correct",
-  },
-  Object {
-    "command": "start-test",
-    "name": "Test 0.8020192816528741",
-  },
-  Object {
-    "command": "close-test",
-    "feedback": "De papegaai vliegt horizontaal.",
-    "status": "correct",
-  },
-  Object {
-    "command": "start-test",
-    "name": "Test 0.7979942475379936",
-  },
-  Object {
-    "command": "close-test",
-    "feedback": "De papegaai raakt de rand bij het veranderen van richting.",
-    "status": "correct",
-  },
-  Object {
-    "command": "start-test",
-    "name": "Test 0.15364629595999688",
-  },
-  Object {
-    "command": "close-test",
-    "feedback": "De papegaai vliegt horizontaal.",
-    "status": "correct",
-  },
-  Object {
-    "command": "start-test",
-    "name": "Test 0.4573906342166515",
-  },
-  Object {
-    "command": "close-test",
-    "feedback": "De papegaai veranderde minimum 2 keer van richting.",
-    "status": "correct",
-  },
-  Object {
-    "command": "start-test",
-    "name": "Test 0.5512633986927363",
-  },
-  Object {
-    "command": "close-test",
-    "feedback": "De Papegaai klappert met vleugels.",
-    "status": "correct",
-  },
-  Object {
+  {
     "command": "close-group",
   },
-  Object {
-    "command": "start-group",
-    "name": "Blokjes",
-    "visibility": "show",
-  },
-  Object {
-    "command": "start-test",
-    "name": "Test 0.6020632743932764",
-  },
-  Object {
-    "command": "close-test",
-    "feedback": "Gebruik van een lus",
-    "status": "correct",
-  },
-  Object {
-    "command": "start-test",
-    "name": "Test 0.0036119185150366687",
-  },
-  Object {
-    "command": "close-test",
-    "feedback": "Correcte gebruik van de lus",
-    "status": "correct",
-  },
-  Object {
-    "command": "close-group",
-  },
-  Object {
-    "command": "close-judgement",
-  },
-]
-`;
-
-exports[`03_teken_een_vierkant 1`] = `
-Array [
-  Object {
-    "command": "start-judgement",
-  },
-  Object {
-    "command": "start-tab",
-    "title": "Testen uit het testplan",
-  },
-  Object {
-    "command": "start-context",
-    "description": "Aantal vierkanten",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "Aantal vierkanten",
-  },
-  Object {
-    "command": "start-test",
-    "expected": "1",
-  },
-  Object {
-    "accepted": true,
-    "command": "close-test",
-    "generated": "1",
-    "status": Object {
-      "enum": "correct",
-      "human": "Correct",
-    },
-  },
-  Object {
-    "command": "close-testcase",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "Zijdes hebben lengte 200",
-  },
-  Object {
-    "command": "start-test",
-    "expected": "true",
-  },
-  Object {
-    "accepted": true,
-    "command": "close-test",
-    "generated": "true",
-    "status": Object {
-      "enum": "correct",
-      "human": "Correct",
-    },
-  },
-  Object {
-    "command": "close-testcase",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "De pen werd gebruikt",
-  },
-  Object {
-    "command": "start-test",
-    "expected": "true",
-  },
-  Object {
-    "accepted": true,
-    "command": "close-test",
-    "generated": "true",
-    "status": Object {
-      "enum": "correct",
-      "human": "Correct",
-    },
-  },
-  Object {
-    "command": "close-testcase",
-  },
-  Object {
-    "command": "close-context",
-  },
-  Object {
-    "command": "close-tab",
-  },
-  Object {
+  {
     "command": "close-judgement",
   },
 ]
 `;
 
 exports[`04_teken_een_driehoek 1`] = `
-Array [
-  Object {
+[
+  {
     "command": "start-judgement",
+    "version": 2,
   },
-  Object {
-    "command": "start-tab",
-    "title": "Testen uit het testplan",
+  {
+    "command": "start-group",
+    "name": "Groep 0.2165789609714974",
+    "tags": [],
+    "visibility": "show",
   },
-  Object {
-    "command": "start-context",
-    "description": "Aantal driehoeken",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "Aantal driehoeken",
-  },
-  Object {
+  {
     "command": "start-test",
-    "expected": "true",
+    "name": "",
+    "tags": [],
   },
-  Object {
-    "accepted": true,
+  {
     "command": "close-test",
-    "generated": "true",
-    "status": Object {
-      "enum": "correct",
-      "human": "Correct",
-    },
+    "feedback": "Er werd minstens 1 driehoek getekend.",
+    "status": "correct",
   },
-  Object {
-    "command": "close-testcase",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "De pen werd gebruikt",
-  },
-  Object {
+  {
     "command": "start-test",
-    "expected": "true",
+    "name": "De pen werd gebruikt",
+    "tags": [],
   },
-  Object {
-    "accepted": true,
+  {
     "command": "close-test",
-    "generated": "true",
-    "status": Object {
-      "enum": "correct",
-      "human": "Correct",
-    },
+    "feedback": "De pen wordt gebruikt",
+    "status": "correct",
   },
-  Object {
-    "command": "close-testcase",
+  {
+    "command": "close-group",
   },
-  Object {
-    "command": "close-context",
-  },
-  Object {
-    "command": "close-tab",
-  },
-  Object {
-    "command": "close-judgement",
-  },
-]
-`;
-
-exports[`05_teken_een_huis 1`] = `
-Array [
-  Object {
-    "command": "start-judgement",
-  },
-  Object {
-    "command": "start-tab",
-    "title": "Testen uit het testplan",
-  },
-  Object {
-    "command": "start-context",
-    "description": "De pen werd gebruikt",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "De pen werd gebruikt",
-  },
-  Object {
-    "command": "start-test",
-    "expected": "true",
-  },
-  Object {
-    "accepted": true,
-    "command": "close-test",
-    "generated": "true",
-    "status": Object {
-      "enum": "correct",
-      "human": "Correct",
-    },
-  },
-  Object {
-    "command": "close-testcase",
-  },
-  Object {
-    "command": "close-context",
-  },
-  Object {
-    "command": "close-tab",
-  },
-  Object {
+  {
     "command": "close-judgement",
   },
 ]
@@ -790,6 +437,16 @@ exports[`06_voetballende_kat 1`] = `
     "name": "Groep 0.055085085131258336",
     "tags": [],
     "visibility": "show",
+  },
+  {
+    "command": "start-test",
+    "name": "De kat raakt de voetbal",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Op het einde van de uitvoer raakt de kat de voetbal.",
+    "status": "correct",
   },
   {
     "command": "start-test",
@@ -811,586 +468,520 @@ exports[`06_voetballende_kat 1`] = `
 `;
 
 exports[`07_heksenjacht 1`] = `
-Array [
-  Object {
+[
+  {
     "command": "start-judgement",
     "version": 2,
   },
-  Object {
+  {
     "command": "start-group",
-    "name": "Groep 0.36172273738152844",
+    "name": "Groep 0.41008109820294864",
+    "tags": [],
     "visibility": "show",
   },
-  Object {
+  {
     "command": "start-test",
-    "name": "Test 0.41008109820294864",
+    "name": "Test 0",
+    "tags": [],
   },
-  Object {
+  {
     "command": "close-test",
     "feedback": "De Heks beweegt niet voor de klik",
     "status": "correct",
   },
-  Object {
+  {
     "command": "start-test",
-    "name": "Test 0.5855631229422033",
+    "name": "Test 1",
+    "tags": [],
   },
-  Object {
+  {
     "command": "close-test",
     "feedback": "De heks heeft bewogen",
     "status": "correct",
   },
-  Object {
+  {
     "command": "start-test",
     "name": "na 1 seconde",
+    "tags": [],
   },
-  Object {
+  {
     "command": "close-test",
     "status": "correct",
   },
-  Object {
+  {
     "command": "start-test",
     "name": "na 2 seconden",
+    "tags": [],
   },
-  Object {
+  {
     "command": "close-test",
     "status": "correct",
   },
-  Object {
+  {
     "command": "start-test",
     "name": "tijdens een seconde",
+    "tags": [],
   },
-  Object {
+  {
     "command": "close-test",
-    "status": "correct",
+    "feedback": "De heks mag maar eenmalig veranderen van positie elke seconde",
+    "status": "wrong",
   },
-  Object {
+  {
     "command": "start-test",
     "name": "tijdens een seconde",
+    "tags": [],
   },
-  Object {
+  {
     "command": "close-test",
-    "status": "correct",
+    "feedback": "De heks mag maar eenmalig veranderen van positie elke seconde",
+    "status": "wrong",
   },
-  Object {
+  {
     "command": "start-test",
     "name": "tijdens een seconde",
+    "tags": [],
   },
-  Object {
+  {
     "command": "close-test",
-    "status": "correct",
+    "feedback": "De heks mag maar eenmalig veranderen van positie elke seconde",
+    "status": "wrong",
   },
-  Object {
+  {
     "command": "close-group",
   },
-  Object {
+  {
+    "command": "close-judgement",
+  },
+]
+`;
+
+exports[`07_heksenjacht_eenvoudig 1`] = `
+[
+  {
+    "command": "start-judgement",
+    "version": 2,
+  },
+  {
+    "command": "start-group",
+    "name": "Groep 0.41008109820294864",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-test",
+    "name": "Heks bestaat",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 0",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De Heks beweegt niet voor de klik",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 1",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De heks is veranderd van positie.",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 2",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De heks is veranderd van positie.",
+    "status": "correct",
+  },
+  {
+    "command": "start-group",
+    "name": "Blokjes",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 3",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Gebruik van een lus",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Test 4",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Correcte gebruik van de lus",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "close-group",
+  },
+  {
     "command": "close-judgement",
   },
 ]
 `;
 
 exports[`08_op_bezoek_bij_devin 1`] = `
-Array [
-  Object {
+[
+  {
     "command": "start-judgement",
+    "version": 2,
   },
-  Object {
-    "command": "start-tab",
-    "title": "Testen uit het testplan",
+  {
+    "command": "start-group",
+    "name": "Groep 0.6256459238126899",
+    "tags": [],
+    "visibility": "show",
   },
-  Object {
-    "command": "start-context",
-    "description": "Devin stelt zich voor",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "Devin stelt zich voor",
-  },
-  Object {
+  {
     "command": "start-test",
-    "expected": "\\"Hallo, ik ben Devin.\\"",
+    "name": "Devin stelt zich voor",
+    "tags": [],
   },
-  Object {
-    "accepted": true,
+  {
     "command": "close-test",
-    "generated": "\\"Hallo, ik ben Devin.\\"",
-    "status": Object {
-      "enum": "correct",
-      "human": "Correct",
-    },
+    "status": "correct",
   },
-  Object {
-    "command": "close-testcase",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "Devin vraagt je naam",
-  },
-  Object {
+  {
     "command": "start-test",
-    "expected": "\\"Wat is jouw naam?\\"",
+    "name": "Devin vraagt je naam",
+    "tags": [],
   },
-  Object {
-    "accepted": true,
+  {
     "command": "close-test",
-    "generated": "\\"Wat is jouw naam?\\"",
-    "status": Object {
-      "enum": "correct",
-      "human": "Correct",
-    },
+    "status": "correct",
   },
-  Object {
-    "command": "close-testcase",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "Devin zegt hallo",
-  },
-  Object {
+  {
     "command": "start-test",
-    "expected": "\\"Hallo, Louise\\"",
+    "name": "Devin zegt hallo",
+    "tags": [],
   },
-  Object {
-    "accepted": true,
+  {
     "command": "close-test",
-    "generated": "\\"Hallo, Louise\\"",
-    "status": Object {
-      "enum": "correct",
-      "human": "Correct",
-    },
+    "status": "correct",
   },
-  Object {
-    "command": "close-testcase",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "Devin stelt zich minstens 2 seconden lang voor",
-  },
-  Object {
+  {
     "command": "start-test",
-    "expected": "true",
+    "name": "Devin stelt zich minstens 2 seconden lang voor",
+    "tags": [],
   },
-  Object {
-    "accepted": true,
+  {
     "command": "close-test",
-    "generated": "true",
-    "status": Object {
-      "enum": "correct",
-      "human": "Correct",
-    },
+    "feedback": "OK",
+    "status": "correct",
   },
-  Object {
-    "command": "close-testcase",
+  {
+    "command": "close-group",
   },
-  Object {
-    "command": "close-context",
-  },
-  Object {
-    "command": "close-tab",
-  },
-  Object {
+  {
     "command": "close-judgement",
   },
 ]
 `;
 
 exports[`09_flauw_mopje 1`] = `
-Array [
-  Object {
+[
+  {
     "command": "start-judgement",
+    "version": 2,
   },
-  Object {
-    "command": "start-tab",
-    "title": "Testen uit het testplan",
+  {
+    "command": "start-group",
+    "name": "Groep 0.0870063972180754",
+    "tags": [],
+    "visibility": "show",
   },
-  Object {
-    "command": "start-context",
-    "description": "Bericht nummer 0 komt van de Kat",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "Bericht nummer 0 komt van de Kat",
-  },
-  Object {
+  {
     "command": "start-test",
-    "expected": "\\"Kat\\"",
+    "name": "Bericht nummer 0 komt van de Kat",
+    "tags": [],
   },
-  Object {
-    "accepted": true,
+  {
     "command": "close-test",
-    "generated": "\\"Kat\\"",
-    "status": Object {
-      "enum": "correct",
-      "human": "Correct",
-    },
+    "feedback": "Spreker 0 is de Kat zijn!",
+    "status": "correct",
   },
-  Object {
-    "command": "close-testcase",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "Correcte text in bericht nummer 0",
-  },
-  Object {
+  {
     "command": "start-test",
-    "expected": "\\"Klop, klop!\\"",
+    "name": "Correcte text in bericht nummer 0",
+    "tags": [],
   },
-  Object {
-    "accepted": true,
+  {
     "command": "close-test",
-    "generated": "\\"Klop, klop!\\"",
-    "status": Object {
-      "enum": "correct",
-      "human": "Correct",
-    },
+    "feedback": "De tekst in de tekstballon is juist",
+    "status": "correct",
   },
-  Object {
-    "command": "close-testcase",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "Bericht nummer 1 komt van de Bananen",
-  },
-  Object {
+  {
     "command": "start-test",
-    "expected": "\\"Bananen\\"",
+    "name": "Bericht nummer 1 komt van de Bananen",
+    "tags": [],
   },
-  Object {
-    "accepted": true,
+  {
     "command": "close-test",
-    "generated": "\\"Bananen\\"",
-    "status": Object {
-      "enum": "correct",
-      "human": "Correct",
-    },
+    "feedback": "Spreker 1 is de Bananen zijn!",
+    "status": "correct",
   },
-  Object {
-    "command": "close-testcase",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "Correcte text in bericht nummer 1",
-  },
-  Object {
+  {
     "command": "start-test",
-    "expected": "\\"Wie is daar?\\"",
+    "name": "Correcte text in bericht nummer 1",
+    "tags": [],
   },
-  Object {
-    "accepted": true,
+  {
     "command": "close-test",
-    "generated": "\\"Wie is daar?\\"",
-    "status": Object {
-      "enum": "correct",
-      "human": "Correct",
-    },
+    "feedback": "De tekst in de tekstballon is juist",
+    "status": "correct",
   },
-  Object {
-    "command": "close-testcase",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "Bericht nummer 2 komt van de Kat",
-  },
-  Object {
+  {
     "command": "start-test",
-    "expected": "\\"Kat\\"",
+    "name": "Bericht nummer 2 komt van de Kat",
+    "tags": [],
   },
-  Object {
-    "accepted": true,
+  {
     "command": "close-test",
-    "generated": "\\"Kat\\"",
-    "status": Object {
-      "enum": "correct",
-      "human": "Correct",
-    },
+    "feedback": "Spreker 2 is de Kat zijn!",
+    "status": "correct",
   },
-  Object {
-    "command": "close-testcase",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "Correcte text in bericht nummer 2",
-  },
-  Object {
+  {
     "command": "start-test",
-    "expected": "\\"Ki!\\"",
+    "name": "Correcte text in bericht nummer 2",
+    "tags": [],
   },
-  Object {
-    "accepted": true,
+  {
     "command": "close-test",
-    "generated": "\\"Ki!\\"",
-    "status": Object {
-      "enum": "correct",
-      "human": "Correct",
-    },
+    "feedback": "De tekst in de tekstballon is juist",
+    "status": "correct",
   },
-  Object {
-    "command": "close-testcase",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "Bericht nummer 3 komt van de Bananen",
-  },
-  Object {
+  {
     "command": "start-test",
-    "expected": "\\"Bananen\\"",
+    "name": "Bericht nummer 3 komt van de Bananen",
+    "tags": [],
   },
-  Object {
-    "accepted": true,
+  {
     "command": "close-test",
-    "generated": "\\"Bananen\\"",
-    "status": Object {
-      "enum": "correct",
-      "human": "Correct",
-    },
+    "feedback": "Spreker 3 is de Bananen zijn!",
+    "status": "correct",
   },
-  Object {
-    "command": "close-testcase",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "Correcte text in bericht nummer 3",
-  },
-  Object {
+  {
     "command": "start-test",
-    "expected": "\\"Ki, wie?\\"",
+    "name": "Correcte text in bericht nummer 3",
+    "tags": [],
   },
-  Object {
-    "accepted": true,
+  {
     "command": "close-test",
-    "generated": "\\"Ki, wie?\\"",
-    "status": Object {
-      "enum": "correct",
-      "human": "Correct",
-    },
+    "feedback": "De tekst in de tekstballon is juist",
+    "status": "correct",
   },
-  Object {
-    "command": "close-testcase",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "Bericht nummer 4 komt van de Kat",
-  },
-  Object {
+  {
     "command": "start-test",
-    "expected": "\\"Kat\\"",
+    "name": "Bericht nummer 4 komt van de Kat",
+    "tags": [],
   },
-  Object {
-    "accepted": true,
+  {
     "command": "close-test",
-    "generated": "\\"Kat\\"",
-    "status": Object {
-      "enum": "correct",
-      "human": "Correct",
-    },
+    "feedback": "Spreker 4 is de Kat zijn!",
+    "status": "correct",
   },
-  Object {
-    "command": "close-testcase",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "Correcte text in bericht nummer 4",
-  },
-  Object {
+  {
     "command": "start-test",
-    "expected": "\\"Neen, dank je. Ik heb liever bananen!\\"",
+    "name": "Correcte text in bericht nummer 4",
+    "tags": [],
   },
-  Object {
-    "accepted": true,
+  {
     "command": "close-test",
-    "generated": "\\"Neen, dank je. Ik heb liever bananen!\\"",
-    "status": Object {
-      "enum": "correct",
-      "human": "Correct",
-    },
+    "feedback": "De tekst in de tekstballon is juist",
+    "status": "correct",
   },
-  Object {
-    "command": "close-testcase",
+  {
+    "command": "close-group",
   },
-  Object {
-    "command": "close-context",
+  {
+    "command": "close-judgement",
   },
-  Object {
-    "command": "close-tab",
+]
+`;
+
+exports[`11_vang_de_appels 1`] = `
+[
+  {
+    "command": "start-judgement",
+    "version": 2,
   },
-  Object {
+  {
+    "command": "start-group",
+    "name": "Andere vakjes",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-test",
+    "name": "Niet geprutst met andere sprites",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "De variable Score moet bestaan",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Er moet een variable Score zijn.",
+    "status": "wrong",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "start-group",
+    "name": "Groep 0.9454757552594278",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-test",
+    "name": "Score moet starten op 0",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "status": "wrong",
+  },
+  {
+    "command": "start-test",
+    "name": "Kom moet starten op 0, -150",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Appels komen bovenaan tevoorschijn",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "Appels komen bovenaan tevoorschijn",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Appels komen op willekeurige positie",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Appelsnelheid",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Eindscore",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De score eindigt op 10",
+    "status": "correct",
+  },
+  {
+    "command": "start-test",
+    "name": "Score stijgt",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "feedback": "De score stijgt met één",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
     "command": "close-judgement",
   },
 ]
 `;
 
 exports[`13_cijfersom 1`] = `
-Array [
-  Object {
+[
+  {
     "command": "start-judgement",
+    "version": 2,
   },
-  Object {
-    "command": "start-tab",
-    "title": "Testen uit het testplan",
+  {
+    "command": "start-group",
+    "name": "Groep 0.15106424790626252",
+    "tags": [],
+    "visibility": "show",
   },
-  Object {
-    "command": "start-context",
-    "description": "De berekening van cijfersom 2586",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "De berekening van cijfersom 2586",
-  },
-  Object {
+  {
     "command": "start-test",
-    "expected": "\\"21\\"",
+    "name": "De berekening van cijfersom 2586",
+    "tags": [],
   },
-  Object {
-    "accepted": true,
+  {
     "command": "close-test",
-    "generated": "\\"21\\"",
-    "status": Object {
-      "enum": "correct",
-      "human": "Correct",
-    },
+    "status": "correct",
   },
-  Object {
-    "command": "close-testcase",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "De berekening van cijfersom 000",
-  },
-  Object {
+  {
     "command": "start-test",
-    "expected": "\\"0\\"",
+    "name": "De berekening van cijfersom 000",
+    "tags": [],
   },
-  Object {
-    "accepted": true,
+  {
     "command": "close-test",
-    "generated": "\\"0\\"",
-    "status": Object {
-      "enum": "correct",
-      "human": "Correct",
-    },
+    "status": "correct",
   },
-  Object {
-    "command": "close-testcase",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "De berekening van cijfersom 199999",
-  },
-  Object {
+  {
     "command": "start-test",
-    "expected": "\\"46\\"",
+    "name": "De berekening van cijfersom 199999",
+    "tags": [],
   },
-  Object {
-    "accepted": true,
+  {
     "command": "close-test",
-    "generated": "\\"46\\"",
-    "status": Object {
-      "enum": "correct",
-      "human": "Correct",
-    },
+    "status": "correct",
   },
-  Object {
-    "command": "close-testcase",
+  {
+    "command": "close-group",
   },
-  Object {
-    "command": "close-context",
-  },
-  Object {
-    "command": "close-tab",
-  },
-  Object {
-    "command": "close-judgement",
-  },
-]
-`;
-
-exports[`draw_a_square 1`] = `
-Array [
-  Object {
-    "command": "start-judgement",
-  },
-  Object {
-    "command": "start-tab",
-    "title": "Testen uit het testplan",
-  },
-  Object {
-    "command": "start-context",
-    "description": "Squares were detected",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "Squares were detected",
-  },
-  Object {
-    "command": "start-test",
-    "expected": "true",
-  },
-  Object {
-    "accepted": true,
-    "command": "close-test",
-    "generated": "true",
-    "status": Object {
-      "enum": "correct",
-      "human": "Correct",
-    },
-  },
-  Object {
-    "command": "close-testcase",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "Sides have length 200",
-  },
-  Object {
-    "command": "start-test",
-    "expected": "200",
-  },
-  Object {
-    "command": "append-message",
-    "message": "The detected square does not have sides with length 200.",
-  },
-  Object {
-    "accepted": false,
-    "command": "close-test",
-    "generated": "150",
-    "status": Object {
-      "enum": "wrong",
-      "human": "Wrong",
-    },
-  },
-  Object {
-    "command": "close-testcase",
-  },
-  Object {
-    "command": "start-testcase",
-    "description": "The Pen extension is used",
-  },
-  Object {
-    "command": "start-test",
-    "expected": "true",
-  },
-  Object {
-    "accepted": true,
-    "command": "close-test",
-    "generated": "true",
-    "status": Object {
-      "enum": "correct",
-      "human": "Correct",
-    },
-  },
-  Object {
-    "command": "close-testcase",
-  },
-  Object {
-    "command": "append-message",
-    "message": "You could improve your solution by using a \\"repeat\\"-block.",
-  },
-  Object {
-    "command": "close-context",
-  },
-  Object {
-    "command": "close-tab",
-  },
-  Object {
+  {
     "command": "close-judgement",
   },
 ]

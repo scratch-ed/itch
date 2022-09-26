@@ -7,7 +7,7 @@ import {
   ignoreWaitInProcedureFor,
   OneHatAllowedTest as AllowedTest,
 } from './testplan';
-import { angle, distSq, mergeLines } from './lines';
+import { angle, distSq, findSquares, findTriangles, mergeLines } from './lines';
 import { checkPredefinedBlocks } from './testplan/predefined-blocks';
 import { Project } from './project';
 import { Evaluation, run } from './evaluation';
@@ -146,6 +146,8 @@ declare interface Itch {
   delay: typeof delay;
   asRange: typeof asRange;
   mergeLines: typeof mergeLines;
+  findSquares: typeof findSquares;
+  findTriangles: typeof findTriangles;
 }
 
 declare interface BlockMatch {

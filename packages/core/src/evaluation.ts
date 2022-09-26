@@ -17,7 +17,7 @@ import {
 } from './testplan';
 import { ResultManager, GroupedResultManager, OutputHandler } from './output';
 import type VirtualMachine from '@ftrprf/judge-scratch-vm-types';
-import { angle, distSq, mergeLines } from './lines';
+import { angle, distSq, findSquares, findTriangles, mergeLines } from './lines';
 import { checkPredefinedBlocks } from './testplan/predefined-blocks';
 import { GroupLevel } from './testplan/hierarchy';
 import { Log } from './log';
@@ -205,6 +205,8 @@ function expose() {
     delay: delay,
     asRange: asRange,
     mergeLines: mergeLines,
+    findSquares: findSquares,
+    findTriangles: findTriangles,
   };
   object.format = format;
   object.t = t;

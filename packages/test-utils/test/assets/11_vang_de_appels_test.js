@@ -1,32 +1,22 @@
 /* Copyright (C) 2019 Ghent University - All Rights Reserved */
-
-let scoreVariable = null;
-
-/**
- * Controleer op welke manier de leerling het startproject heeft aangepast
- *
- * @param {Project} template - The template project.
- * @param {Project} submission - The submission project.
- * @param {Evaluation} e - The output manager.
- */
-function beforeExecution(template, submission, e) {
-  e.describe('Andere vakjes', (l) => {
+/** @param {Evaluation} e - The output manager. */
+function beforeExecution(e) {
+  e.group.group('Andere vakjes', () => {
     // Controleer of er aan de sprites geprutst is.
-    l.test('Niet geprutst met andere sprites', (l) => {
-      l.expect(
-        template.hasAddedSprites(submission) || template.hasRemovedSprites(submission),
-      ).toBe(false);
-    });
+    e.group
+      .test('Niet geprutst met andere sprites')
+      .expect(e.log.template.sprites.map((s) => s.name))
+      .toBe(e.log.submission.sprites.map((s) => s.name));
 
     // Controleer of de variable 'score' bestaat.
-    scoreVariable = submission.getVariable('Score');
-    l.test('De variable Score moet bestaan', (l) => {
-      l.expect(scoreVariable)
-        .with({
-          wrong: 'Er moet één variable Score zijn.',
-        })
-        .toNotBe(null);
-    });
+    const scoreVariable = e.log.submission.sprites.map((s) => s.variable('Score'))[0];
+    e.group
+      .test('De variable Score moet bestaan')
+      .feedback({
+        wrong: 'Er moet een variable Score zijn.',
+        correct: 'Er is een variabele met de naam Score.',
+      })
+      .acceptIf(!!scoreVariable);
   });
 }
 
@@ -38,7 +28,7 @@ function duringExecution(e) {
   const mouse = { x: 0, y: 0 };
 
   function mousePosition() {
-    const appel = e.log.sprites.getSprite('Appel').x;
+    const appel = e.log.last.sprite('Appel').x;
     if (appel + 200 >= 240) {
       return appel - 200;
     } else {
@@ -48,28 +38,30 @@ function duringExecution(e) {
 
   e.scheduler
     .greenFlag(false)
-    .wait(sprite('Appel').toMove())
+    .wait(Itch.sprite('Appel').toMove())
     .log(() => {
       // After the apple has moved, the score should have been set to zero.
-      e.test('Score moet starten op 0', (l) => {
-        l.expect(
-          e.log.getVariableValue(scoreVariable.variable.name, scoreVariable.target.name),
-        ).toBe('0');
-      });
-      const sprite = e.log.sprites.getSprite('Kom');
-      e.test('Kom moet starten op 0, -150', (l) => {
-        l.expect([sprite.x, sprite.y]).toBe([0, -150]);
-      });
+      e.group
+        .test('Score moet starten op 0')
+        .expect(
+          e.log.last.sprites.find((s) => s.variable('Score'))?.variable('Score').value,
+        )
+        .toBe('0');
+      const sprite = e.log.last.sprite('Kom');
+      e.group
+        .test('Kom moet starten op 0, -150')
+        .expect([sprite.x, sprite.y])
+        .toBe([0, -150]);
     })
     .log(() => {
-      mouse.x = e.log.sprites.getSprite('Appel').x;
+      mouse.x = e.log.last.sprite('Appel').x;
     })
     .forEach(_.range(0, 10), (ev) => {
       return ev
         .useMouse(mouse)
-        .wait(sprite('Appel').toTouch('Kom'))
+        .wait(Itch.sprite('Appel').toTouch('Kom'))
         .log(() => {
-          mouse.x = e.log.sprites.getSprite('Appel').x;
+          mouse.x = e.log.last.sprite('Appel').x;
         });
     })
     .log(() => {
@@ -79,7 +71,7 @@ function duringExecution(e) {
       // We need to move the bowl out of the way.
       return ev
         .useMouse(mouse)
-        .wait(sprite('Appel').toReach({ x: null, y: 120 }))
+        .wait(Itch.sprite('Appel').toReach({ x: null, y: 120 }))
         .log(() => {
           mouse.x = mousePosition();
         });
@@ -87,27 +79,45 @@ function duringExecution(e) {
     .end();
 }
 
+function getSpritePositions(sprite, snapshots) {
+  return snapshots
+    .map((snapshots) => snapshots.sprite(sprite))
+    .map((sprite) => {
+      return { x: sprite.x, y: sprite.y };
+    })
+    .filter((item, pos, arr) => {
+      return pos === 0 || !_.isEqual(item, arr[pos - 1]);
+    });
+}
+
+function getVariables(variableName, logs) {
+  return logs
+    .map((log) => log.target('Stage'))
+    .map((sprite) => sprite.variable(variableName).value)
+    .filter((item, pos, arr) => {
+      return pos === 0 || !_.isEqual(item, arr[pos - 1]);
+    });
+}
+
 /** @param {Evaluation} e */
 function afterExecution(e) {
   // Check that the apples spawn on top, and in a random position.
   // We need 20 positions with y = 180, and at least 18 different x positions.
   // TODO: is 15 too lax?
-  const locations = e.log.getSpritePositions('Appel');
+  const locations = getSpritePositions('Appel', e.log.snapshots);
   const top = locations.filter((location) => location.y === 180).length;
 
-  e.test('Appels komen bovenaan tevoorschijn', (l) => {
-    l.expect(top >= 10)
-      .with({
-        wrong: 'Appels komen bovenaan tevoorschijn',
-      })
-      .toBe(true);
-  });
+  e.group
+    .test('Appels komen bovenaan tevoorschijn')
+    .feedback({
+      correct: 'Appels komen bovenaan tevoorschijn',
+      wrong: 'Appels moeten bovenaan tevoorschijn komen',
+    })
+    .acceptIf(top >= 10);
 
   const random = new Set(locations.map((location) => location.x)).size;
 
-  e.test('Appels komen op willekeurige positie', (l) => {
-    l.expect(random >= 18).toBe(true);
-  });
+  e.group.test('Appels komen op willekeurige positie').acceptIf(random >= 18);
 
   // Check the speed of the apples.
   // For every position, either the y is 180 or it is 5 less than the previous frame.
@@ -117,21 +127,19 @@ function afterExecution(e) {
     }
     return value.y === arr[index - 1].y - 5;
   });
-  e.test('Appelsnelheid', (l) => {
-    l.expect(speed).toBe(true);
-  });
+  e.group.test('Appelsnelheid').acceptIf(speed);
 
   // Check end score.
-  const end = e.log.current.getSprite('Stage').getVariable('Score');
-  e.test('Eindscore', (l) => {
-    l.expect(end.value >= 10)
-      .with({
-        wrong: 'De score moet eindigen op 10',
-      })
-      .toBe(true);
-  });
+  const end = e.log.last.target('Stage').variable('Score');
+  e.group
+    .test('Eindscore')
+    .feedback({
+      correct: 'De score eindigt op 10',
+      wrong: 'De score moet eindigen op 10',
+    })
+    .acceptIf(end.value >= 10);
 
-  const variables = e.log.getVariables('Score');
+  const variables = getVariables('Score', e.log.snapshots);
   const increases = variables.every((e, i, a) => {
     if (i > 0) {
       return e > a[i - 1];
@@ -140,11 +148,11 @@ function afterExecution(e) {
     }
   });
 
-  e.test('Score stijgt', (l) => {
-    l.expect(increases)
-      .with({
-        wrong: 'De score moet stijgen met één',
-      })
-      .toBe(true);
-  });
+  e.group
+    .test('Score stijgt')
+    .feedback({
+      wrong: 'De score moet stijgen met één',
+      correct: 'De score stijgt met één',
+    })
+    .acceptIf(increases);
 }

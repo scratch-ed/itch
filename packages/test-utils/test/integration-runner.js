@@ -27,12 +27,7 @@ async function runTest(
   return executePlan(sourceFile, sourceFile, planFile, merged);
 }
 
-async function executeTest(
-  template,
-  solution,
-  plan,
-  config = {},
-) {
+async function executeTest(template, solution, plan, config = {}) {
   const templatePath = path.resolve(__dirname, `assets/${template}.sb3`);
   const solutionPath = path.resolve(__dirname, `assets/${solution}.sb3`);
   const planPath = path.resolve(__dirname, `assets/${plan}.js`);
