@@ -13,7 +13,7 @@ import {
   wait,
   whenIReceive,
 } from '../src/matcher/patterns';
-import { anyOrder, checkBlocks, checkOrderlessBlocks } from '../src/matcher/differ';
+import { anyOrder, checkBlocks } from '../src/matcher/differ';
 import { GroupLevel } from '../src/testplan/hierarchy';
 import { GroupedResultManager } from '../src/output/index';
 import { subtreeMatchesOneScript } from '../src/matcher/node-matcher';
@@ -149,7 +149,7 @@ describe('Order 2', () => {
 
   test('Is accepted with orderless check', () => {
     const evaluation = new MockEvaluation();
-    checkOrderlessBlocks(evaluation, startNode, createOrdlessPattern());
+    checkBlocks(evaluation, startNode, createOrdlessPattern());
     evaluation.groupedOutput.closeJudgement();
 
     const status = evaluation.results
@@ -165,7 +165,7 @@ test('Order 1 is accepted', () => {
   const startNode = snapshot.sprite('Hand').findScript(whenIReceive('Start'), wait(2));
 
   const evaluation = new MockEvaluation();
-  checkOrderlessBlocks(evaluation, startNode, createOrdlessPattern());
+  checkBlocks(evaluation, startNode, createOrdlessPattern());
   evaluation.groupedOutput.closeJudgement();
 
   const status = evaluation.results
@@ -180,7 +180,7 @@ test('Duplicate blocks are rejected', () => {
   const startNode = snapshot.sprite('Hand').findScript(whenIReceive('Start'), wait(2));
 
   const evaluation = new MockEvaluation();
-  checkOrderlessBlocks(evaluation, startNode, createOrdlessPattern());
+  checkBlocks(evaluation, startNode, createOrdlessPattern());
   evaluation.groupedOutput.closeJudgement();
 
   const status = evaluation.results
@@ -195,7 +195,7 @@ test('Missing blocks are rejected', () => {
   const startNode = snapshot.sprite('Hand').findScript(whenIReceive('Start'), wait(2));
 
   const evaluation = new MockEvaluation();
-  checkOrderlessBlocks(evaluation, startNode, createOrdlessPattern());
+  checkBlocks(evaluation, startNode, createOrdlessPattern());
   evaluation.groupedOutput.closeJudgement();
 
   const status = evaluation.results
@@ -212,7 +212,7 @@ test('Wrong blocks are rejected', () => {
   const startNode = snapshot.sprite('Hand').findScript(whenIReceive('Start'), wait(2));
 
   const evaluation = new MockEvaluation();
-  checkOrderlessBlocks(evaluation, startNode, createOrdlessPattern());
+  checkBlocks(evaluation, startNode, createOrdlessPattern());
   evaluation.groupedOutput.closeJudgement();
 
   const status = evaluation.results

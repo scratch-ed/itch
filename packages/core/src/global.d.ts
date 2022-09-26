@@ -1,4 +1,4 @@
-import { anyOrder, checkBlocks, checkOrderlessBlocks } from './matcher/differ';
+import { anyOrder, checkBlocks } from './matcher/differ';
 import { nodeMatchesPattern, subTreeMatchesScript } from './matcher/node-matcher';
 import { format, numericEquals } from './utils';
 import { broadcast, delay, sprite } from './scheduler/wait';
@@ -282,7 +282,6 @@ declare interface BlockMatch {
   subTreeMatchesScript: typeof subTreeMatchesScript;
   checkBlocks: typeof checkBlocks;
   anyOrder: typeof anyOrder;
-  checkOrderlessBlocks: typeof checkOrderlessBlocks;
 }
 
 /**

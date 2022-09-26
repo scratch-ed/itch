@@ -2,7 +2,7 @@
 import 'regenerator-runtime/runtime';
 
 import seed from 'seed-random';
-import { anyOrder, checkBlocks, checkOrderlessBlocks } from './matcher/differ';
+import { anyOrder, checkBlocks } from './matcher/differ';
 import { nodeMatchesPattern, subTreeMatchesScript } from './matcher/node-matcher';
 import { numericEquals, format } from './utils';
 import { Context } from './context';
@@ -339,7 +339,6 @@ function expose() {
     subTreeMatchesStack: subTreeMatchesScript,
     subTreeMatchesScript,
     checkBlocks,
-    checkOrderlessBlocks,
     anyOrder,
   };
 }

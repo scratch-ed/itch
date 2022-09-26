@@ -46,7 +46,7 @@ function beforeExecution(e) {
     // This is an experimental function, allowing to describe the expected
     // block structure in a more declarative way, including the expected
     // feedback when a node of the expected block tree is not correct.
-    B.checkOrderlessBlocks(e, current, [
+    B.checkBlocks(e, current, [
       {
         pattern: forever(anything()),
         feedback: {
@@ -72,33 +72,26 @@ function beforeExecution(e) {
               wrong: 'Nadien moet de planeet 5 stappen nemen.',
             },
           },
+          B.anyOrder([
+            {
+              name: 'Snelheid veranderen',
+              pattern: procedureCall('Verander snelheid volgens grootte'),
+              feedback: {
+                correct: 'De planeet verandert zijn snelheid.',
+                wrong: 'De planeet moet zijn snelheid veranderen.',
+              },
+            },
+            {
+              name: 'Grootte veranderen',
+              pattern: procedureCall('Maak me groter of kleiner wanneer ik object raak'),
+              feedback: {
+                correct: 'De planeet verandert zijn grootte.',
+                wrong: 'De planeet moet zijn grootte veranderen.',
+              },
+            },
+          ]),
         ],
       },
-    ]);
-
-    // TODO: a choice, like below, is currently not possible with the block DSL.
-    current = current?.input?.SUBSTACK || current;
-    current = current?.next?.next;
-
-    B.checkOrderlessBlocks(e, current, [
-      B.anyOrder([
-        {
-          name: 'Snelheid veranderen',
-          pattern: procedureCall('Verander snelheid volgens grootte'),
-          feedback: {
-            correct: 'De planeet verandert zijn snelheid.',
-            wrong: 'De planeet moet zijn snelheid veranderen.',
-          },
-        },
-        {
-          name: 'Grootte veranderen',
-          pattern: procedureCall('Maak me groter of kleiner wanneer ik object raak'),
-          feedback: {
-            correct: 'De planeet verandert zijn grootte.',
-            wrong: 'De planeet moet zijn grootte veranderen.',
-          },
-        },
-      ]),
     ]);
   });
 

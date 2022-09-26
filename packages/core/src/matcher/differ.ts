@@ -151,7 +151,7 @@ export interface AnnotatedSubscript {
  * The function does not create a top level group but does create groups
  * for loops. These are collapsed.
  */
-export function checkBlocks(
+export function internalCheckBlocks(
   e: Evaluation,
   startNode: Node | null | undefined,
   subtrees: AnnotatedSubscript[],
@@ -237,7 +237,7 @@ export function anyOrder(subScriptList: AnnotatedSubscript[]): AnyOrderContainer
  * @param startNode
  * @param subScriptList
  */
-export function checkOrderlessBlocks(
+export function checkBlocks(
   e: Evaluation,
   startNode: Node | null | undefined,
   subScriptList: Array<AnnotatedSubscript | AnyOrderContainer>,
@@ -247,7 +247,7 @@ export function checkOrderlessBlocks(
     // If we have a normal subscript, just pass it to the other function.
     // If this is the case, we don't need to do anything special.
     if (!(element instanceof AnyOrderContainer)) {
-      const { current: nextNode } = checkBlocks(e, currentNode, [element]);
+      const { current: nextNode } = internalCheckBlocks(e, currentNode, [element]);
       currentNode = nextNode;
       // We are done with this.
       continue;
@@ -272,7 +272,7 @@ export function checkOrderlessBlocks(
         }
 
         // Test the item.
-        const { current: potentialNextCurrent, wasCorrect } = checkBlocks(
+        const { current: potentialNextCurrent, wasCorrect } = internalCheckBlocks(
           e,
           currentNode,
           [nullableSubscripts[j]!],
@@ -295,7 +295,7 @@ export function checkOrderlessBlocks(
         continue;
       }
 
-      checkBlocks(e, null, [nullableSubscripts[i]!], false);
+      internalCheckBlocks(e, null, [nullableSubscripts[i]!], false);
     }
   }
 }
