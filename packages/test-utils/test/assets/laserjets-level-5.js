@@ -1,17 +1,22 @@
 // START OF LEVEL SPECIFIC SETTINGS
 
-let ORDER;
+const ORDER = [
+  ['Groene spiegel', 'Zet klaar voor schieten op groene spiegel'],
+  ['Blauwe spiegel', 'Zet klaar voor schieten op blauwe spiegel'],
+  ['RodeSpiegel', 'Zet klaar voor schieten op rode spiegel'],
+  ['Finish', 'Zet klaar voor schieten op finish'],
+];
 
 // END OF LEVEL SPECIFIC SETTINGS
 
-function checkExistingLoop(current, e, mutation = t(':BeweegInLijn:')) {
+function checkExistingLoop(current, e, mutation = 'Beweeg in een lijn') {
   const substack = current?.input?.SUBSTACK;
 
   e.group
-    .test(t(':Titel_Lus:'))
+    .test('Lus')
     .feedback({
-      correct: t(':L_TP_LusJuist:'),
-      wrong: t(':L_TP_LusFout:'),
+      correct: 'De laser blijft schieten tot hij zijn doel raakt.',
+      wrong: 'De laser moet blijven schieten tot hij zijn doel raakt.',
     })
     .expect(substack)
     .toMatch(B.procedureCall(mutation));
@@ -21,10 +26,10 @@ function checkExistingLoop(current, e, mutation = t(':BeweegInLijn:')) {
 
 function checkPrepare(current, e, procedure, sprite) {
   e.group
-    .test(t(':Titel_ZetKlaar:'))
+    .test('Klaarzetten')
     .feedback({
-      correct: t(':L_TP_KlaarzettenJuist:', sprite),
-      wrong: t(':L_TP_KlaarzettenFout:', sprite),
+      correct: `Goed zo! Je zet de laser klaar voor je schiet op ${sprite}.`,
+      wrong: `Je moet de laser eerst klaarzetten, voor je kan schieten op ${sprite}.`,
     })
     .expect(current)
     .toMatch(B.procedureCall(procedure));
@@ -40,25 +45,18 @@ let laser;
  * @param {Evaluation} e - The output manager.
  */
 function beforeExecution(e) {
-  ORDER = [
-    [t(':GroeneSpiegel:'), t(':SchietenNaarGroeneSpiegel:')],
-    [t(':BlauweSpiegel:'), t(':SchietenNaarBlauweSpiegel:')],
-    [t(':RodeSpiegel:'), t(':SchietenNaarRodeSpiegel:')],
-    [t(':Finish:'), t(':SchietenNaarFinish:')],
-  ];
-
   const { whenIReceive, stack } = B;
 
   Itch.checkPredefinedBlocks(
     {
       spriteConfig: {
-        [t(':Laser:')]: stack(whenIReceive(t(':Level5:'))),
+        Laser: stack(whenIReceive('Level 5')),
       },
       debug: false,
     },
     e,
   );
-  laser = e.log.submission.sprite(t(':Laser:'));
+  laser = e.log.submission.sprite('Laser');
 }
 
 function checkPrepareAndLoop(e, current, target) {
@@ -68,17 +66,17 @@ function checkPrepareAndLoop(e, current, target) {
 
   current = current?.next;
   let loopMutation;
-  if (target === t(':Finish:')) {
-    loopMutation = t(':SchietOpFinish:');
+  if (target === 'Finish') {
+    loopMutation = 'Schiet op finish';
   }
 
   const condition = current?.input?.CONDITION;
 
   e.group
-    .test(t(':Titel_Beweegt:'))
+    .test('Bewegen')
     .feedback({
-      correct: t(':L_TP_SchietenJuist:', target),
-      wrong: t(':L_TP_SchietenFout:', target),
+      correct: `Als de laser wordt klaargezet om te schieten op de ${target}, dan blijft de laser bewegen tot hij deze raakt.`,
+      wrong: `Als de laser wordt klaargezet om te schieten op de ${target}, dan moet hij blijven bewegen tot hij deze raakt.`,
     })
     .expect(condition)
     .toMatch(B.isTouching(target));
@@ -97,8 +95,8 @@ function duringExecution(e) {
   e.turboMode = true;
   e.scheduler
     .greenFlag()
-    .sendBroadcast(t(':StartLaser:'))
-    .wait(Itch.broadcast(t(':Succes:'), 2000))
+    .sendBroadcast('StartLaser')
+    .wait(Itch.broadcast('Succes', 2000))
     .timedOut(() => true)
     .end();
 }
@@ -106,7 +104,7 @@ function duringExecution(e) {
 /** @param {Evaluation} e */
 function afterExecution(e) {
   const merged = Itch.mergeLines(e.log.renderer.lines);
-  const root = laser.findScript(B.whenIReceive(t(':Level5:')));
+  const root = laser.findScript(B.whenIReceive('Level 5'));
   let current = root?.next;
 
   for (let i = 0; i < ORDER.length; i++) {
@@ -119,13 +117,12 @@ function afterExecution(e) {
       const touches = sprite.touchesPosition(line.end, 15);
 
       e.group
-        .test(t(':Titel_CorrectTarget:'))
+        .test('Doel geraakt')
         .feedback({
-          correct: t(':L_TP_SchietEnRaaktJuist:', element[0]),
-          wrong: t(':L_TP_SchietEnRaaktFout:', element[0]),
+          correct: `De laser schiet en raakt ${element[0]}.`,
+          wrong: `De laser moet schieten naar ${element[0]}.`,
         })
-        .expect(touches)
-        .toBe(true);
+        .acceptIf(touches);
     });
   }
 }

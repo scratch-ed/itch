@@ -5310,7 +5310,7 @@ exports[`Agario Template is rejected 1`] = `
   },
   {
     "command": "close-test",
-    "feedback": "First, the planet should point towards mouse-pointer.",
+    "feedback": "De planeet moet zich eerst naar de muis richten.",
     "status": "wrong",
   },
   {
@@ -5446,7 +5446,7 @@ exports[`Agario Template is rejected 1`] = `
   },
   {
     "command": "close-test",
-    "feedback": "Voedsel 1 moet één seconde wachten",
+    "feedback": "Voedsel 1 moet één seconde wachten.",
     "status": "wrong",
   },
   {
@@ -5525,7 +5525,7 @@ exports[`Agario Template is rejected 1`] = `
   },
   {
     "command": "close-test",
-    "feedback": "Voedsel 2 moet één seconde wachten",
+    "feedback": "Voedsel 2 moet één seconde wachten.",
     "status": "wrong",
   },
   {
@@ -5604,7 +5604,7 @@ exports[`Agario Template is rejected 1`] = `
   },
   {
     "command": "close-test",
-    "feedback": "Voedsel 3 moet één seconde wachten",
+    "feedback": "Voedsel 3 moet één seconde wachten.",
     "status": "wrong",
   },
   {
@@ -5683,7 +5683,7 @@ exports[`Agario Template is rejected 1`] = `
   },
   {
     "command": "close-test",
-    "feedback": "Voedsel 4 moet één seconde wachten",
+    "feedback": "Voedsel 4 moet één seconde wachten.",
     "status": "wrong",
   },
   {
