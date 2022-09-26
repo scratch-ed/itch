@@ -39,6 +39,12 @@ async function runOnPage(page, options) {
   await page.setCacheEnabled(false);
   await page.setViewport({ height: 1080, width: 960 });
 
+  // Handle page errors: crash the judge instead of ignoring them.
+  page.on('pageerror', (err) => {
+    console.error('An error occurred on the puppeteer page', err);
+    throw err;
+  });
+
   // Load the testplan and other options.
   await page.goto(`file://${url}`);
 
