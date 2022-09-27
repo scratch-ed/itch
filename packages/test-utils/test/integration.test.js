@@ -1,5 +1,7 @@
 const { executeTest } = require('./integration-runner.js');
 
+jest.setTimeout(50000);
+
 describe('Laserjets level 5', () => {
   function execute(solution) {
     return executeTest('laserjets-level-5-template', solution, 'laserjets-level-5');
