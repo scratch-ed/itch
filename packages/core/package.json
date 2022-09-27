@@ -1,6 +1,6 @@
 {
   "name": "@ftrprf/judge-core",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "description": "Core judge for Scratch projects",
   "main": "dist/js/judge.browser.js",
   "type": "module",

@@ -1,6 +1,6 @@
 {
   "name": "@ftrprf/judge-runner",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "description": "Judge runner",
   "main": "src/api.js",
   "types": "src/api.d.ts",
