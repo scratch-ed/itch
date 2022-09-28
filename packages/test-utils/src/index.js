@@ -122,8 +122,71 @@ function execute(dir, templateName, submissionName, planName = 'plan') {
   });
 }
 
+function expectCorrect(
+  dir,
+  template = 'Opgave',
+  solution = 'Oplossing',
+  plan = undefined,
+) {
+  return execute(dir, solution, template, plan).then((result) => {
+    expect(result).atLeastStatuses('correct', 1);
+    expect(result).everyStatusToBe('correct');
+  });
+}
+
+/**
+ * Test a default project set-up.
+ *
+ * This function will execute two tests:
+ *
+ * - The solution project must have at least one test, and every test must pass.
+ * - The template project has at least one failing test.
+ *
+ * @param dir The directory of the exercise.
+ * @param template The name of the template project, without the file extension.
+ * @param solution The name of the solution project, without the file extension.
+ * @param plan The name of the test plan to use, without the file extension.
+ */
+function testProject(dir, template = 'Opgave', solution = 'Oplossing', plan = undefined) {
+  test('Correct solution is accepted', () => {
+    return execute(dir, template, solution, plan).then((result) => {
+      expect(result).atLeastStatuses('correct', 1);
+      expect(result).everyStatusToBe('correct');
+    });
+  });
+
+  test('Template is rejected', () => {
+    return execute(dir, template, template, plan).then((result) => {
+      expect(result).atLeastStatuses('wrong', 1);
+    });
+  });
+}
+
+/**
+ * Test that a project is successful.
+ *
+ * This function will execute a test, expecting the given solution to have at least
+ * one test and that all tests pass.
+ *
+ * @param dir The directory of the exercise.
+ * @param template The name of the template project, without the file extension.
+ * @param solution The name of the solution project, without the file extension.
+ * @param plan The name of the test plan to use, without the file extension.
+ */
+function testCorrect(dir, template, solution, plan = undefined) {
+  test(`${solution} is correct`, () => {
+    return execute(dir, template, template, plan).then((result) => {
+      expect(result).atLeastStatuses('correct', 1);
+      expect(result).everyStatusToBe('correct');
+    });
+  });
+}
+
 module.exports = {
   executePlan,
   run,
   execute,
+  testProject,
+  testCorrect,
+  expectCorrect,
 };

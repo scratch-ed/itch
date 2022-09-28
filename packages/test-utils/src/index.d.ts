@@ -59,4 +59,11 @@ declare global {
     submissionName: string,
     planName?: string,
   ): Promise<Object[]>;
+
+  function testProject(
+    dir: string,
+    template: string,
+    solution: string,
+    plan?: string,
+  ): Promise<Object[]>;
 }

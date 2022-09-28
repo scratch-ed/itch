@@ -28,8 +28,7 @@
     "watch": "npm run watch --workspace @ftrprf/judge-core",
     "build": "npm run build --workspaces --if-present",
     "type-check": "npm run type-check --workspaces --if-present",
-    "test:exercises": "jest --selectProjects stableExercises --silent",
-    "test:exercises:all": "jest --runInBand --selectProjects exercises",
+    "test:exercises": "jest exercises.test.js --silent",
     "clean": "npm run clean --workspaces --if-present && rimraf ./**/node_modules",
     "lint": "eslint .",
     "format": "prettier --write .",
@@ -40,47 +39,5 @@
     "release:patch": "npm version patch --workspace packages --include-workspace-root --no-git-tag-version",
     "release:minor": "npm version minor --workspace packages --include-workspace-root --no-git-tag-version",
     "release:major": "npm version major --workspace packages --include-workspace-root --no-git-tag-version"
-  },
-  "jest": {
-    "projects": [
-      {
-        "displayName": "exercises",
-        "testMatch": [
-          "<rootDir>/exercises/**/*.test.js"
-        ]
-      },
-      {
-        "displayName": "stableExercises",
-        "testMatch": [
-          "<rootDir>/exercises/agario/*.test.js",
-          "<rootDir>/exercises/eerste-testvlucht/*.test.js",
-          "<rootDir>/exercises/koppel-motoren-los/*.test.js",
-          "<rootDir>/exercises/maanbal/*.test.js",
-          "<rootDir>/exercises/crewdans/*.test.js",
-          "<rootDir>/exercises/verzamel-de-grondstoffen/*.test.js",
-          "<rootDir>/exercises/bouw-de-raket/*.test.js",
-          "<rootDir>/exercises/rommelruimend/*.test.js",
-          "<rootDir>/exercises/vernietig-asteroiden/*.test.js",
-          "<rootDir>/exercises/introductie/*.test.js",
-          "<rootDir>/exercises/alientje-klop/*.test.js",
-          "<rootDir>/exercises/alien-claw/*.test.js",
-          "<rootDir>/exercises/cosmos-flight/*.test.js",
-          "<rootDir>/exercises/breng-de-groep-veilig/*.test.js",
-          "<rootDir>/exercises/battle-royale/*.test.js",
-          "<rootDir>/exercises/jetpack/*.test.js",
-          "<rootDir>/exercises/methodes/*.test.js",
-          "<rootDir>/exercises/catch-the-aliens/*.test.js",
-          "<rootDir>/exercises/methodes-met-parameters/*.test.js",
-          "<rootDir>/exercises/parameters/*.test.js",
-          "<rootDir>/exercises/feverswitch/*.test.js"
-        ]
-      },
-      {
-        "displayName": "brokenExercises",
-        "testMatch": [
-          "<rootDir>/exercises/r0nn-op-avontuur/*.test.js"
-        ]
-      }
-    ]
   }
 }
