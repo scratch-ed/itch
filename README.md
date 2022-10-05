@@ -13,7 +13,8 @@ If you use `nvm`, you can simply execute `nvm use` to get the desired `node` and
 
 ## Running the judge
 
-For more high-level docs, see [here](./packages/core/doc/index.md).
+For more high-level docs, see [here](./packages/core/pages/index.md).
+You can also build the docs for a better experience.
 
 To start, run `npm run build`.
 

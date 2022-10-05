@@ -1,8 +1,8 @@
-import { GroupedResultManager } from '../src/output/index.ts';
+import { ResultManager } from '../src/output/index.ts';
 
 test('normal usage', () => {
   const results = [];
-  const manager = new GroupedResultManager((r) => results.push(r));
+  const manager = new ResultManager((r) => results.push(r));
 
   manager.startJudgement();
   manager.startGroup('Groep 1', 'show', 'test-sprite');

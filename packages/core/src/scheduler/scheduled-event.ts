@@ -106,6 +106,7 @@ export interface WaitCondition {
  * event.newEvent();
  */
 export class ScheduledEvent {
+  /** @internal */
   action: ScheduledAction;
   private readonly sync: boolean;
   private readonly timeout?: number;
@@ -122,6 +123,8 @@ export class ScheduledEvent {
    * @param action - The action to execute on this event.
    * @param sync - The data for the event.
    * @param timeout - How to long to wait before resolving.
+   *
+   * @internal
    */
   constructor(action: ScheduledAction, sync = true, timeout?: number) {
     this.action = action;

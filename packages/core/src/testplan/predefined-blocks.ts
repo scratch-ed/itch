@@ -10,7 +10,7 @@ import { t } from '../i18n';
 import { subTreeMatchesScript } from '../matcher/node-matcher';
 import { BlockScript, Pattern, PatternBlock } from '../matcher/patterns';
 import { ScratchBlock } from '../model';
-import { Node, walkNodes } from '../new-blocks';
+import { Node, walkNodes } from '../blocks';
 import { Snapshot } from '../log';
 import { assertType, deepDiff, stringify } from '../utils';
 import { GroupLevel } from './hierarchy';
@@ -316,9 +316,48 @@ function checkSpriteSensuStricto(
 }
 
 /**
- * Check the predefined blocks of a solution against a template. It can be used
- * to ensure students only changed code of allowed sprites. See the docs on the
- * config interfaces for more information.
+ * Check the predefined blocks of a solution against a template.
+ *
+ * It is common to add a check for pre-defined blocks in the `beforeExecution`
+ * phase. Most sprites in exercises have a set of blocks that are given
+ * (we call them predefined). Students are sometimes only allowed to modify a
+ * specific script of a sprite.
+ *
+ * The pre-defined blocks check takes care of this.
+ * For example:
+ *
+ * ```javascript
+ * Itch.checkPredefinedBlocks(
+ *   {
+ *     spriteConfig: {
+ *       Planeet: script(whenIReceive(':Start:'), setEffectTo('transparant', 0)),
+ *       Enemy: {
+ *         pattern: script(whenIReceive(':Start:'), setEffectTo('transparant', 0)),
+ *         allowedBlocks: [forever()],
+ *         allowAdditionalScripts: true,
+ *       },
+ *     },
+ *     debug: false,
+ *   },
+ *   e,
+ * );
+ * ```
+ *
+ * The example above configures the test for two sprites.
+ * All other sprites must be unchanged.
+ *
+ * For the `Planet` sprite, we allow students to change/add/remove blocks in
+ * the script starting with the two blocks of the image above
+ * (_When I receive broadcast "Start"_ and _Set effect transparant to 0_).
+ * Students will be allowed to change blocks after the pre-defined blocks in
+ * this script.
+ *
+ * The second sprite, `Enemy`, allows modifications to scripts starting with the
+ * same blocks, but it uses the full version. With the full version, you can
+ * also specify if additional scripts are allowed and limit the blocks they can
+ * use (note that this allowed blocks check is not executed for additional scripts).
+ *
+ * See {@link PredefinedBlockConfig} for more information.
  *
  * @param userConfig The config to use.
  * @param evaluation The evaluation, from which the data is extracted.
@@ -329,7 +368,7 @@ export function checkPredefinedBlocks(
 ): void {
   const template = evaluation.log.template;
   const submission = evaluation.log.submission;
-  const e = evaluation.group;
+  const e = evaluation.out;
   const config = normalizeConfig(userConfig, template);
 
   e.group(

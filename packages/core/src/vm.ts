@@ -107,5 +107,5 @@ export async function createContext(config: EvalConfig): Promise<Context> {
   const submissionSnapshot = snapshotFromSb3(submissionData);
   log.registerStartSnapshots(templateSnapshot, submissionSnapshot);
 
-  return new Context(vm, log, templateData, submissionData, config.callback);
+  return new Context(vm, log, config.callback);
 }

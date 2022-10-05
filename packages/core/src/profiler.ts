@@ -1,5 +1,5 @@
 import type VirtualMachine from '@ftrprf/judge-scratch-vm-types/types/virtual-machine';
-import { Node } from './new-blocks';
+import { Node } from './blocks';
 import { Event, Log } from './log';
 import { ScratchBlock } from './model';
 import { memoize } from './utils';

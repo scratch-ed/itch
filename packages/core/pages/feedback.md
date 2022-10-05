@@ -1,5 +1,3 @@
-# Feedback
-
 This document describes the output format of the judge.
 It is a high-level document;
 see below where to find more detailed documentation.
@@ -82,8 +80,6 @@ children:
 ```
 
 ## Status propagation
-
-TODO: this could be applied in the judge itself if easier.
 
 Each test has a status.
 However, `Group` (and `Judgement`) objects can also have an optional status override.

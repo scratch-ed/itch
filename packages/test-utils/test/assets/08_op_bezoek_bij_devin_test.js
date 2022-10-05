@@ -34,13 +34,13 @@ function afterExecution(e) {
     let id = -1;
     for (const e of createTextSkinEvents) {
       if (e.data.text === text) {
-        time = e.time;
+        time = e.timestamp;
         id = e.data.id;
       }
     }
     for (const e of destroyTextSkinEvents) {
       if (e.data.id === id) {
-        return e.time - time;
+        return e.timestamp - time;
       }
     }
     return null;

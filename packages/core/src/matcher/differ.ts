@@ -89,13 +89,13 @@
  *
  * See {@link AnnotatedSubscript} for more information on how to represent
  * blocks with the metadata for these functions. Afterwards, use {@link checkBlocks}
- * to check blocks normally or use {@link checkOrderlessBlocks} if the order
- * of the blocks does not matter.
+ * to check blocks normally. {@link anyOrder} is also useful if the order of the
+ * blocks is less relevant.
  *
  * @module
  */
 import { Evaluation } from '../evaluation';
-import { Node } from '../new-blocks';
+import { Node } from '../blocks';
 import { Messages } from '../testplan/hierarchy';
 import { assertType } from '../utils';
 import { BlockScript, OnePattern, PatternBlock, script } from './patterns';
@@ -151,7 +151,7 @@ export interface AnnotatedSubscript {
  * The function does not create a top level group but does create groups
  * for loops. These are collapsed.
  */
-export function internalCheckBlocks(
+function internalCheckBlocks(
   e: Evaluation,
   startNode: Node | null | undefined,
   subtrees: AnnotatedSubscript[],
@@ -216,6 +216,61 @@ class AnyOrderContainer {
   constructor(public subScriptList: AnnotatedSubscript[]) {}
 }
 
+/**
+ * Wrap a list of patterns indicating that the order does not matter.
+ *
+ * For example:
+ *
+ * ```javascript
+ * B.checkBlocks(e, current, [
+ *   {
+ *     pattern: forever(anything()),
+ *     feedback: {
+ *       correct: 'De planeet kan oneindig lang bewegen.',
+ *       wrong: 'Planeet moet oneindig lang bewegen.',
+ *     },
+ *     subgroup: false,
+ *     name: 'Juiste lus',
+ *     substack: [
+ *       {
+ *         name: 'Naar muis richten',
+ *         pattern: pointTowards('_mouse_'),
+ *         feedback: {
+ *           correct: 'De planeet richt zich naar de muis.',
+ *           wrong: 'De planeet moet zich eerst naar de muis richten.',
+ *         },
+ *       },
+ *       {
+ *         name: 'Bewegen',
+ *         pattern: moveXSteps(5),
+ *         feedback: {
+ *           correct: 'De planeet zet 5 stappen.',
+ *           wrong: 'Nadien moet de planeet 5 stappen nemen.',
+ *         },
+ *       },
+ *       B.anyOrder([
+ *         {
+ *           name: 'Snelheid veranderen',
+ *           pattern: procedureCall('Verander snelheid volgens grootte'),
+ *           feedback: {
+ *             correct: 'De planeet verandert zijn snelheid.',
+ *             wrong: 'De planeet moet zijn snelheid veranderen.',
+ *           },
+ *         },
+ *         {
+ *           name: 'Grootte veranderen',
+ *           pattern: procedureCall('Maak me groter of kleiner wanneer ik object raak'),
+ *           feedback: {
+ *             correct: 'De planeet verandert zijn grootte.',
+ *             wrong: 'De planeet moet zijn grootte veranderen.',
+ *           },
+ *         },
+ *       ]),
+ *     ],
+ *   },
+ * ]);
+ * ```
+ */
 export function anyOrder(subScriptList: AnnotatedSubscript[]): AnyOrderContainer {
   return new AnyOrderContainer(subScriptList);
 }

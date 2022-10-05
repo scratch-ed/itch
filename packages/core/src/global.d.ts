@@ -2,14 +2,9 @@ import { anyOrder, checkBlocks } from './matcher/differ';
 import { nodeMatchesPattern, subTreeMatchesScript } from './matcher/node-matcher';
 import { format, numericEquals } from './utils';
 import { broadcast, delay, sprite } from './scheduler/wait';
-import {
-  asRange,
-  ignoreWaitInProcedureFor,
-  OneHatAllowedTest as AllowedTest,
-} from './testplan';
+import { asRange, ignoreWaitInProcedureFor } from './testplan';
 import { angle, distSq, findSquares, findTriangles, mergeLines } from './lines';
 import { checkPredefinedBlocks } from './testplan/predefined-blocks';
-import { Project } from './project';
 import { Evaluation, run } from './evaluation';
 import { t as translate } from './i18n';
 import {
@@ -285,17 +280,6 @@ declare interface BlockMatch {
 }
 
 /**
- * @param template - The template project.
- * @param submission - The submission project.
- * @param e - Evaluation object.
- */
-declare function beforeExecution(
-  template: Project,
-  submission: Project,
-  e: Evaluation,
-): void;
-
-/**
  * The callback function in the test plan. There are three kinds
  * of callback functions.
  *
@@ -331,8 +315,6 @@ declare global {
     /** @deprecated */
     delay: typeof delay;
     /** @deprecated */
-    OneHatAllowedTest: typeof AllowedTest;
-    /** @deprecated */
     ignoreWaitInProcedureFor: typeof ignoreWaitInProcedureFor;
     /** @deprecated */
     asRange: typeof asRange;
@@ -343,7 +325,7 @@ declare global {
     /** @deprecated */
     distSq: typeof distSq;
 
-    beforeExecution?: typeof beforeExecution | CallbackFunction;
+    beforeExecution?: CallbackFunction;
     duringExecution?: CallbackFunction;
     afterExecution?: CallbackFunction;
 
@@ -359,9 +341,6 @@ declare global {
   const Itch: Itch;
 
   const B: BlockMatch;
-
-  /** @deprecated */
-  const OneHatAllowedTest: typeof AllowedTest;
 
   const t: typeof translate;
 }

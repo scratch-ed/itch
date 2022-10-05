@@ -1,24 +1,19 @@
 /**
- * @file
+ * This module provides convenience classes to create groups and tests.
  *
- * This file contains the testplan API, i.e. most of the stuff
- * you use when writing a test plan. This API is inspired by Jest.
+ * See the _Introduction to testing_ document for the conceptual overview.
+ * The JavaScript docs are mainly on the {@link GroupLevel} and {@link TestOptions}
+ * classes.
  *
- * There are two primitives:
- *
- * 1. Groups
- * 2. Tests
- *
- * Groups are used to organise the tests, while tests actually compare two values
- * to see if they are equal or not.
+ * @module
  */
 import isEqual from 'lodash-es/isEqual';
 import { nodeMatchesPattern, subTreeMatchesScript } from '../matcher/node-matcher';
 import { BlockScript, Pattern, PatternBlock } from '../matcher/patterns';
 import { castCallback, numericEquals, stringify } from '../utils';
-import { GroupedResultManager } from '../output';
+import { ResultManager } from '../output';
 import { Visibility } from '../output/partial-schema';
-import { isNode } from '../new-blocks';
+import { isNode } from '../blocks';
 
 export class FatalErrorException extends Error {
   public readonly type: string;
@@ -34,7 +29,11 @@ interface OutputCallback {
   (accepted: boolean, expected?: unknown, actual?: unknown): boolean;
 }
 
-class Matcher {
+/**
+ * Provides methods to check if some condition is true.
+ * This API is inspired by Jest.
+ */
+export class Matcher {
   private readonly callback: OutputCallback;
   private readonly actual: unknown;
 
@@ -128,19 +127,31 @@ class Matcher {
 
 export type MessageCallback = (..._args: unknown[]) => string;
 
-interface CorrectMessage {
+export interface CorrectMessage {
   correct: string | MessageCallback;
   wrong?: string | MessageCallback;
 }
 
-interface WrongMessage {
+export interface WrongMessage {
   correct?: string | (() => string);
   wrong: string | (() => string);
 }
 
 export type Messages = CorrectMessage | WrongMessage;
 
-class TestOptions {
+/**
+ * Class to create a test.
+ *
+ * In general, you first want to configure your test with all the data you want
+ * (e.g. providing {@link feedback}, adding a {@link diff}, etc.), before finally
+ * doing the actual test.
+ *
+ * For doing the actual test, there are two categories:
+ *
+ * - Simple checks like {@link acceptIf}.
+ * - Matchers (with {@link expect}), see {@link Matcher}.
+ */
+export class TestOptions {
   private errorMessage?: MessageCallback;
   private correctMessage?: MessageCallback;
   private terminate = false;
@@ -149,7 +160,7 @@ class TestOptions {
   private ignoreWrongResult = false;
 
   constructor(
-    private readonly resultManager: GroupedResultManager,
+    private readonly resultManager: ResultManager,
     private readonly name?: string,
   ) {}
 
@@ -180,19 +191,6 @@ class TestOptions {
   ignoreWrong(ignoreIt: boolean) {
     this.ignoreWrongResult = ignoreIt;
     return this;
-  }
-
-  /**
-   * Execute the test.
-   *
-   * @param accepted - If the test is correct or not.
-   */
-  do(accepted: boolean): void {
-    if (this.enableDiff) {
-      throw new RuntimeException('Cannot request diff if no values are given.');
-    }
-
-    this.out(accepted);
   }
 
   /**
@@ -257,23 +255,77 @@ class TestOptions {
   }
 }
 
+/**
+ * The options for a group in the feedback of the judge.
+ */
 export interface GroupOptions {
+  /**
+   * Optionally link the group to a given sprite.
+   *
+   * While this is not used at the moment, in the future we might link to or
+   * display the sprite.
+   */
   sprite?: string;
+  /**
+   * A summary of the group, to be shown if everything is correct.
+   */
   summary?: string;
+  /**
+   * The visibility of the group. See the general docs for more information.
+   */
   visibility?: Visibility;
+  /**
+   * Optional tags for this group, useful for analytics.
+   */
   tags?: string[];
+  /**
+   * If tests in the group (and the group as a whole) should ignore wrong tests.
+   *
+   * This means that wrong tests will not be outputted; they are thus completely
+   * ignored.
+   */
   ignoreWrong?: boolean;
 }
 
+/**
+ * See {@link GroupOptions}.
+ * The only difference is that the sprite must be given here, instead of being
+ * optional.
+ */
 export interface SpriteGroupOptions extends GroupOptions {
   sprite: string;
 }
 
+/**
+ * Convenience class to create groups and tests.
+ *
+ * The start methods are {@link group} and {@link test}.
+ *
+ * As described in the general documentation, the feedback of the judge is
+ * represented by tests.
+ *
+ * Additional structure is provided by the groups, which can also be nested.
+ *
+ * The _Introduction to testing_ for more high-level information, or consult
+ * the docs of the {@link group} and {@link test} methods for more detailed information.
+ */
 export class GroupLevel {
-  constructor(public readonly resultManager: GroupedResultManager) {}
+  /**
+   * Access the raw result manager.
+   * In most cases, it is recommended to use the {@link group} and {@link test} instead.
+   */
+  public readonly resultManager: ResultManager;
+
+  /** @internal */
+  constructor(resultManager: ResultManager) {
+    this.resultManager = resultManager;
+  }
 
   /**
    * Start a test.
+   *
+   * See the return type for information about what is available for tests.
+   *
    * @param name - Optional name of the test.
    */
   test(name?: string): TestOptions {
@@ -281,31 +333,41 @@ export class GroupLevel {
   }
 
   /**
-   * Groups a bunch of related tests.
+   * Groups a bunch of related tests or subgroups.
    *
-   * This level results in a `context` in the output format.
+   * This is the full function signature, with a name, the options and a group
+   * block.
+   * Other signatures might be more convenient.
    *
-   * @param name - Either the name or the function.
-   * @param options - The options for this function.
-   * @param block - The function if a name is passed.
+   * @param name - The name for this group.
+   * @param options - The options for this group.
+   * @param block - The group function. All groups and tests inside this function
+   * will be part of this group.
    */
   group(name: string, options: GroupOptions, block: () => void): void;
 
   /**
-   * Groups a bunch of related tests.
+   * Groups a bunch of related tests or subgroups.
    *
-   * This level results in a `context` in the output format.
+   * This signature supports no options.
    *
-   * @param name - Either the name or the function.
-   * @param block - The function if a name is passed.
+   * @param name - The name for this group.
+   * @param block - The group function. All groups and tests inside this function
+   * will be part of this group.
    */
   group(name: string, block: () => void): void;
 
   /**
    * Start a group for a certain sprite.
    *
-   * @param options - At least the sprite should be given.
-   * @param block - The block.
+   * In this signature, certain data is extracted from the sprite, such as the
+   * name of the group.
+   * The sprite is also passed to the output as special metadata, meaning the
+   * frontend might one day show a small image of the sprite.
+   *
+   * @param options - The options for this group, with at least the sprite
+   * @param block - The group function. All groups and tests inside this function
+   * will be part of this group.
    */
   group(options: SpriteGroupOptions, block: () => void): void;
 

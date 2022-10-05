@@ -6,16 +6,10 @@ import { anyOrder, checkBlocks } from './matcher/differ';
 import { nodeMatchesPattern, subTreeMatchesScript } from './matcher/node-matcher';
 import { numericEquals, format } from './utils';
 import { Context } from './context';
-import { Project } from './project';
 import { ScheduledEvent } from './scheduler/scheduled-event';
 import { broadcast, delay, sprite } from './scheduler/wait';
-import {
-  asRange,
-  ignoreWaitInProcedureFor,
-  OneHatAllowedTest,
-  TabLevel,
-} from './testplan';
-import { ResultManager, GroupedResultManager, OutputHandler } from './output';
+import { asRange, ignoreWaitInProcedureFor } from './testplan';
+import { ResultManager, OutputHandler } from './output';
 import type VirtualMachine from '@ftrprf/judge-scratch-vm-types';
 import { angle, distSq, findSquares, findTriangles, mergeLines } from './lines';
 import { checkPredefinedBlocks } from './testplan/predefined-blocks';
@@ -190,7 +184,6 @@ function expose() {
   object.sprite = sprite;
   object.broadcast = broadcast;
   object.delay = delay;
-  object.OneHatAllowedTest = OneHatAllowedTest;
   object.ignoreWaitInProcedureFor = ignoreWaitInProcedureFor;
   object.asRange = asRange;
   object.angle = angle;
@@ -392,45 +385,51 @@ enum EvaluationStage {
 }
 
 /**
- * Entry point for the test plan API.
+ * Main entry point for the testplan to interact with the judge.
  *
- * When writing tests, you should limit interaction with Scratch and
- * the judge to this class, if at all possible.
+ * This class provides access to all relevant information and allows
+ * setting various options.
  *
- * While possible, you should limit yourself to the function
+ * All documented properties and methods (that are not internal or private) are
+ * part of the testplan API and can safely be used.
  */
-export class Evaluation extends TabLevel {
+export class Evaluation {
+  /** @internal */
   public stage: EvaluationStage;
-  context: Context;
+  private context: Context;
 
+  /** @internal */
   constructor(context: Context) {
-    super(context.groupedOutput);
     this.context = context;
-    /**
-     * Used to track the stage internally.
-     * @type {number}
-     * @protected
-     */
     this.stage = EvaluationStage.notStarted;
   }
 
   /**
-   * Get access to the log.
+   * Get the log instance.
+   *
+   * Note that how filled the log will be depends on which phase the test is in.
    */
   get log(): Log {
     return this.context.log;
   }
 
   /**
-   * Get access to the scratch VM. This should be considered read-only.
-   * If you modify the VM, there are no guarantees it will keep working.
+   * Get access to the Scratch VM itself.
+   *
+   * In most cases, you should avoid manipulating the VM directly.
+   *
+   * For reading data, it is preferred to use the {@link log}, however, direct
+   * access to the VM can be useful in the _during execution_ phase.
+   *
+   * Writing data should not be done.
+   * This might result in an unstable VM.
    */
   get vm(): VirtualMachine {
     return this.context.vm!;
   }
 
   /**
-   * Get the array of answers provided previously.
+   * Get the array of answers.
    */
   get answers(): string[] {
     return this.context.answers;
@@ -438,42 +437,91 @@ export class Evaluation extends TabLevel {
 
   /**
    * Set the array of answers to provide to the submission.
+   *
+   * These will be used if the Scratch project asks for input from the user.
    */
   set answers(answers: string[]) {
     this.context.answers = answers;
   }
 
-  /** @deprecated */
+  /**
+   * @deprecated Use the {@link output} property.
+   */
+  get groupedOutput(): ResultManager {
+    return this.out.resultManager;
+  }
+
+  /**
+   * @deprecated Use {@link out.resultManager}.
+   */
   get output(): ResultManager {
-    return new ResultManager(this.context.groupedOutput);
+    return this.out.resultManager;
   }
 
-  get groupedOutput(): GroupedResultManager {
-    return this.context.groupedOutput;
-  }
-
+  /**
+   * @deprecated Use the {@link out} property.
+   */
   get group(): GroupLevel {
-    return new GroupLevel(this.groupedOutput);
+    return this.out;
+  }
+
+  /**
+   * Get the convenience functions to create groups and tests.
+   */
+  get out(): GroupLevel {
+    return new GroupLevel(this.context.groupedOutput);
   }
 
   /**
    * Get the event scheduler.
+   *
+   * In most cases, this is useless outside the _during execution_ phase.
    */
   get scheduler(): ScheduledEvent {
     return this.context.event;
   }
 
+  /**
+   * Set the action timeout for the scheduler.
+   *
+   * When waiting for some event to occur or for some action to complete,
+   * this is the maximal waiting time.
+   * If the event does not occur or the action does not complete,
+   * the judge will error with a timeout error.
+   *
+   * Once execution of the Scratch project has begun,
+   * you can no longer change this value.
+   *
+   * This value is affected by the {@link acceleration}.
+   *
+   * @param timeout The timeout in milliseconds.
+   */
   set actionTimeout(timeout: number) {
     this.assertBefore(EvaluationStage.scheduling, 'actionTimeout');
     this.context.actionTimeout = timeout;
   }
 
-  get actionTimeout(): number {
-    return this.context.actionTimeout;
-  }
-
   /**
-   * Set the acceleration factor for the test.
+   * Set the acceleration factor.
+   *
+   * The Scratch VM will run at 60 FPS by default.
+   * This means every 16 or so ms a new step is taken.
+   * This factor allows changing this with a certain factor.
+   *
+   * This will adjust all time-related parameters with the same factor.
+   * For example, timeouts will also be affected by the factor.
+   * If you don't want this, you can use the {@link eventAcceleration} and
+   * {@link timeAcceleration} properties to override this.
+   *
+   * Note that the factor is applied on a best-efforts basis, meaning it cannot
+   * do magic.
+   * The VM cannot run faster than the time needed to calculate in each step.
+   * For example, if a step takes 8ms to run, any factor above 2 will have no
+   * additional speedup.
+   *
+   * Once execution of the Scratch project has begun,
+   * you can no longer change this value.
+   *
    * @param factor - The factor, e.g. 2 will double the speed.
    */
   set acceleration(factor: number) {
@@ -483,13 +531,19 @@ export class Evaluation extends TabLevel {
     };
   }
 
-  get acceleration(): number {
-    return this.context.accelerationFactor.factor;
-  }
-
   /**
-   * Set the acceleration factor for the test's times.
-   * This will be used to set the timeouts for the scheduled events.
+   * Override the acceleration factor for the Scratch waiting times.
+   *
+   * By default, waiting times in Scratch (e.g. wait for blocks) are affected
+   * by the {@link acceleration}.
+   * This property allows you to override this.
+   *
+   * The same caveats apply as for the {@link acceleration} property.
+   * Additionally, this should not be set higher than the {@link acceleration},
+   * as this can create weird situations.
+   *
+   * Once execution of the Scratch project has begun,
+   * you can no longer change this value.
    *
    * @param {number} factor - The factor, e.g. 2 will double the speed.
    */
@@ -498,12 +552,17 @@ export class Evaluation extends TabLevel {
     this.context.accelerationFactor.time = factor;
   }
 
-  get timeAcceleration(): number {
-    return this.context.accelerationFactor.time || 1;
-  }
-
   /**
-   * Set the acceleration factor for the event times.
+   * Override the acceleration factor for the Scratch waiting times.
+   *
+   * By default, waiting times in the scheduler are affected by the
+   * {@link acceleration}.
+   * This property allows you to override this.
+   *
+   * The same caveats apply as for the {@link acceleration} property.
+   * Additionally, this should not be set higher than the {@link acceleration},
+   * as this can create weird situations.
+   *
    * This will be used to set the timeouts for the scheduled events.
    *
    * @param {number} factor - The factor, e.g. 2 will double the speed.
@@ -513,14 +572,13 @@ export class Evaluation extends TabLevel {
     this.context.accelerationFactor.event = factor;
   }
 
-  get eventAcceleration(): number {
-    return this.context.accelerationFactor.event || 1;
-  }
-
   /**
    * Enables or disabled turbo mode.
+   *
+   * This uses the built-in Scratch turbo mode.
+   * If an exercise supports it, you should probably enable this,
+   * as it can result in significant speedups.
    */
-  // eslint-disable-next-line accessor-pairs
   set turboMode(enabled: boolean) {
     this.context.vm!.setTurboMode(enabled);
   }
@@ -573,18 +631,8 @@ export async function run(config: EvalConfig): Promise<void | Judgement> {
   try {
     expose();
 
-    if (beforeExecution.length > 1) {
-      // Run the tests before the execution.
-      beforeExecution(
-        // @ts-ignore
-        new Project(context.templateJson),
-        new Project(context.submissionJson),
-        judge,
-      );
-    } else {
-      // @ts-ignore
-      beforeExecution(judge);
-    }
+    // Run the tests before the execution.
+    beforeExecution(judge);
 
     judge.stage = EvaluationStage.scheduling;
 

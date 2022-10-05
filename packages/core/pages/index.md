@@ -1,36 +1,74 @@
-# Documentation for the Scratch Judge
-
 This is the documentation for the Scratch Judge.
-
-## Scratch primer
-
-It is useful to understand how Scratch works internally.
-The UI and all the stuff that's visible for students in handled in the ScratchGUI project.
-This is a React web app, basically an editor for Sb3 files.
-Note that the canvas is not included.
-
-The core of actually executing the Sb3 files is done using the Scratch VM.
-This is a normal JavaScript library, containing the VM used to run Scratch.
-It reads the blocks from the SB3 files, and executes them.
-The VM also manages the canvas using the Scratch Renderer, which is a WebGL-based rendering engine.
-
-There are few more helper packages used by the VM, but these are less important for the Scratch Judge, as the judge only interacts with the VM and the Renderer.
+It contains high-level information, linking to the JavaScript docs where appropriate.
+Given some Scratch and JavaScript knowledge, you should be able to write test suites after reading this documentation.
+If that is not the case, the documentation should be updated.
 
 ## Components
 
-The repository is a mono-repo with a few components.
+There are quite a few moving parts in the Scratch Judge.
+This section attempts to give an overview.
 
-The code of the judge is located in `/packages/core`.
-Since Scratch is executed in a browser, this is a browser-library, meaning there is no access to the usual NodeJS APIs.
-This package is responsible for the actual judging.
-It will interact with the Scratch VM and Renderer to instrument it, capture everything that happens and event run events.
+### Scratch
 
-While the core is a browser library, we need a better way to run the judge on a solution.
-To this end, the `packages/runner` package exists.
-It allows running the judge manually (via an HTML file) or in a more automated way, using puppeteer.
-This package is used by the AWS repo to actually run the judge.
-See the readme in the package for more information.
-Other relevant information is found in the [feedback documentation](./feedback.md), which explains the format of the results coming out of the judge.
+It is useful to have some knowledge of how Scratch works internally when using the Scratch judge.
+
+Scratch is an umbrella term for a few packages that work together to deliver the full Scratch experience.
+The most important packages are:
+
+- The Scratch GUI.
+  This is the graphical user interface that you see when you open Scratch.
+  It is written in JavaScript and React.
+  FTRPRF has its own fork of this, integrating the Scratch GUI with the FTRPRF platform.
+- The Scratch VM.
+  This is the "brain" of the operation.
+  This takes the Scratch blocks, converts them to an internal representation and executes the code.
+
+Critically, Scratch blocks are not converted to a "normal" programming language when executing.
+There is thus no JavaScript or Python version of a Scratch project.
+The Scratch blocks are executed directly.
+
+Finally, another Scratch package that is important for the judge is the Scratch renderer.
+This package takes commands from the Scratch VM and draws everything you see in the Stage.
+
+### Exercises
+
+Scratch exercises are managed on the FTRPRF platform.
+Each exercise has a "starter" version, which is the Scratch project the students receive when they open a new exercise.
+For teachers, there is also a "solution" version of the exercise, containing a sample solution.
+While students never see this version, we use it extensively in the judge to test stuff.
+
+Each exercise is also associated with a testplan.
+The testplan is a JavaScript file that contains the tests for a certain exercise.
+These are then executed by the judge when testing a solution.
+For those familiar with software development, the testplan is equivalent to a test suite, while the judge is equivalent to a testing library such as jUnit.
+
+Exercises are created in the FTRPRF Studio.
+This is also where the testplan is uploaded and attached to the exercise.
+The exercises are then published (resulting in a fully translated exercise, see the section [Translation](./translation.md)).
+Finally, they are included in lessons, making them accessible to the students and teachers.
+
+### Scratch judge ("Itch")
+
+When an exercise is tested, the judge receives three things:
+
+- The unmodified starter project (although it is the published and thus translated version).
+- The solution project created by the student.
+- The testplan for the exercise in question.
+
+## This repository
+
+The judge's repository is a mono-repo with a few components.
+The most important ones are:
+
+- The code of the judge is located in `/packages/core`.
+  Since Scratch is executed in a browser, this is a browser-library, meaning there is no access to the usual NodeJS APIs.
+  This package is responsible for the actual judging.
+  It will interact with the Scratch VM and Renderer to instrument it, capture everything that happens and event run events.
+- The runner in `packages/runner`.
+  While the core is a browser library, we need a better way to run the judge on a solution.
+  The runner allows running the judge manually (via an HTML file) or in a more automated way, using puppeteer.
+  This package is used by the AWS repo to actually run the judge.
+  See the readme in the package for more information.
 
 There are two more utility packages:
 
@@ -39,5 +77,5 @@ There are two more utility packages:
 
 Finally, there are exercises in `/exercises`.
 Each exercise is its own "JavaScript package", containing one or more test plans.
-Additionally, there are some jest tests, to ensure we don't break the test plan by changing the judge.
-See the [documentation on test plans](./testplan.md) for more information about the test plans.
+
+The next step is to read the [Introduction to testing Scratch exercises](./introduction-to-testing.html).

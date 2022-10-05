@@ -1,8 +1,5 @@
-// noinspection JSUnusedGlobalSymbols
-import { Node } from '../new-blocks';
-
 /**
- * @fileOverview A DSL-like construct to match Scratch blocks against a pattern.
+ * A DSL-like construct to match Scratch blocks against a pattern.
  *
  * The shortest description would be that this is "regex" for Scratch blocks.
  * It provides functions to create block and value patterns, which can then be
@@ -13,14 +10,24 @@ import { Node } from '../new-blocks';
  *
  * Other functions map to the various blocks.
  *
- * For example, to create a pattern that matches a head block:
- *
- * // TODO add example
  * @example
- * const pattern = stack(
+ * script(
+ *   whenIReceive('Start'),
+ *   setEffectTo(transparent(), 0),
+ *   repeat(15, script(
+ *     changeSizeBy(3),
+ *     changeYBy(-2)
+ *   )),
+ *   repeat(20, script(
+ *     changeEffectBy(transparent(), 5),
+ *     changeSizeBy(3)
+ *   )),
+ *   hide(),
+ * );
  *
- * )
+ * @module
  */
+import { Node } from '../blocks';
 
 type Anything = '__any_block_or_value_sentinel__';
 type Nothing = '__never_block_or_value_sentinel__';
@@ -67,7 +74,9 @@ export class BlockScript {
   constructor(public blockPatterns: OnePattern<PatternBlock>[]) {}
 }
 
+/** @internal */
 export const ANYTHING: Anything = '__any_block_or_value_sentinel__';
+/** @internal */
 export const NOTHING: Nothing = '__never_block_or_value_sentinel__';
 
 export interface PatternBlock {

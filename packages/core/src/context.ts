@@ -6,7 +6,7 @@ import { ScheduledEvent } from './scheduler/scheduled-event';
 import { EndAction } from './scheduler/end';
 import { BroadcastReceiver, ThreadListener } from './listener';
 import { installAdvancedBlockProfiler, ProfileEventData } from './profiler';
-import { GroupedResultManager, OutputHandler } from './output';
+import { ResultManager, OutputHandler } from './output';
 import { Event, Log } from './log';
 import { assertType } from './utils';
 import { Events } from './vm';
@@ -47,12 +47,7 @@ export class Context {
   threadListeners: ThreadListener[];
   broadcastListeners: BroadcastReceiver[];
   event: ScheduledEvent;
-  groupedOutput: GroupedResultManager;
-
-  /** @deprecated */
-  readonly submissionJson: Record<string, unknown>;
-  /** @deprecated */
-  readonly templateJson: Record<string, unknown>;
+  groupedOutput: ResultManager;
 
   /**
    * The acceleration factor, used to speed up (or slow down)
@@ -63,13 +58,7 @@ export class Context {
    */
   accelerationFactor: Acceleration;
 
-  constructor(
-    vm: VirtualMachine,
-    log: Log,
-    templateJson: Record<string, unknown>,
-    submissionJson: Record<string, unknown>,
-    callback?: OutputHandler,
-  ) {
+  constructor(vm: VirtualMachine, log: Log, callback?: OutputHandler) {
     this.numberOfRun = 0;
     this.answers = [];
     this.providedAnswers = [];
@@ -78,14 +67,12 @@ export class Context {
     this.threadListeners = [];
     this.broadcastListeners = [];
     this.event = ScheduledEvent.create();
-    this.groupedOutput = new GroupedResultManager(callback);
+    this.groupedOutput = new ResultManager(callback);
     this.accelerationFactor = {
       factor: 1,
     };
     this.vm = vm;
     this.newLog = log;
-    this.submissionJson = submissionJson;
-    this.templateJson = templateJson;
   }
 
   /**

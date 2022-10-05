@@ -15,7 +15,7 @@ import {
 } from '../src/matcher/patterns';
 import { anyOrder, checkBlocks } from '../src/matcher/differ';
 import { GroupLevel } from '../src/testplan/hierarchy';
-import { GroupedResultManager } from '../src/output/index';
+import { ResultManager } from '../src/output/index';
 import { subtreeMatchesOneScript } from '../src/matcher/node-matcher';
 
 function ifCreator(number) {
@@ -39,7 +39,7 @@ function createIfPattern(number) {
 class MockEvaluation {
   constructor() {
     this.results = [];
-    this.groupedOutput = new GroupedResultManager((update) => {
+    this.groupedOutput = new ResultManager((update) => {
       this.results.push(update);
     });
   }

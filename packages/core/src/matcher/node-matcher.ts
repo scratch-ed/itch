@@ -1,4 +1,4 @@
-import { isNode, Node } from '../new-blocks';
+import { isNode, Node } from '../blocks';
 import { assertType } from '../utils';
 import {
   ANYTHING,

@@ -6,7 +6,7 @@ import {
   RotationStyle,
   script,
 } from './matcher/patterns';
-import { asNode, asTree, Node } from './new-blocks';
+import { asNode, asTree, Node } from './blocks';
 import { Position } from './lines';
 import { ensure } from './utils';
 
@@ -286,11 +286,6 @@ export class ScratchTarget {
     const ourBlock = this.block(blockId);
     const blockMap = new Map(this.blocks.map((i) => [i.id, i]));
     return asNode(ourBlock, blockMap);
-  }
-
-  /** @deprecated */
-  getVariable(name: string): ScratchVariable | undefined {
-    return this.variable(name);
   }
 }
 

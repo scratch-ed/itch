@@ -168,16 +168,6 @@ export class Snapshot {
     return firstSprite.touchesPosition({ x: secondSprite.x, y: secondSprite.y });
   }
 
-  /** @deprecated */
-  getSprite(name: string): ScratchSprite | null {
-    return this.findSprite(name) || null;
-  }
-
-  /** @deprecated */
-  getSpriteOr(name: string): ScratchTarget {
-    return this.target(name);
-  }
-
   /**
    * Check if a target has changed between this snapshot and another snapshot,
    * as defined by the predicate. This allows for every flexible checks.
@@ -285,21 +275,6 @@ export class Event {
 
   get timestamp(): number {
     return this.previous.timestamp;
-  }
-
-  /** @deprecated */
-  get time(): number {
-    return this.timestamp;
-  }
-
-  /** @deprecated */
-  get nextFrame(): Snapshot {
-    return this.next;
-  }
-
-  /** @deprecated */
-  get previousFrame(): Snapshot {
-    return this.previous;
   }
 }
 
@@ -444,15 +419,6 @@ export class Log {
     this.vm = vm;
   }
 
-  /** @deprecated */
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  addEvent(): void {}
-
-  /** @deprecated */
-  get sprites(): Snapshot {
-    return this.last;
-  }
-
   /**
    * A read-only list of all snapshots. This includes the pre-execution
    * snapshot of the submission, but not of the template of course.
@@ -463,13 +429,6 @@ export class Log {
 
   get last(): Snapshot {
     return last(this.snapshotList)!;
-  }
-
-  /**
-   * @deprecated
-   */
-  get current(): Snapshot {
-    return this.last;
   }
 
   /**
@@ -557,11 +516,6 @@ export class Log {
       return;
     }
     this.eventList.push(event);
-  }
-
-  /** @deprecated */
-  get frames(): ReadonlyArray<Snapshot> {
-    return this.snapshots;
   }
 
   /**

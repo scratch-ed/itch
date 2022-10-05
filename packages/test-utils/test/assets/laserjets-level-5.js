@@ -39,9 +39,6 @@ function checkPrepare(current, e, procedure, sprite) {
 let laser;
 
 /**
- * Check that the original sprites were not changed.
- * @param {Project} template - The template project.
- * @param {Project} submission - The submission project.
  * @param {Evaluation} e - The output manager.
  */
 function beforeExecution(e) {
