@@ -1,7 +1,10 @@
+import type Target from '@ftrprf/judge-scratch-vm-types/types/engine/target';
+import type Thread from '@ftrprf/judge-scratch-vm-types/types/engine/thread';
 import type VirtualMachine from 'scratch-vm';
 import type Runtime from '@ftrprf/judge-scratch-vm-types/types/engine/runtime';
 
 import { Deferred } from './deferred';
+import { proxiedRenderer, RendererMethods, unproxyRenderer } from './renderer';
 import { ScheduledEvent } from './scheduler/scheduled-event';
 import { EndAction } from './scheduler/end';
 import { BroadcastReceiver, ThreadListener } from './listener';
@@ -21,6 +24,30 @@ interface Acceleration {
   factor: number;
   time?: number;
   event?: number;
+}
+
+interface VmMethods {
+  step: () => void;
+  startHats: (
+    requestedHatOpcode: string,
+    optMatchFields?: object | undefined,
+    optTarget?: Target,
+  ) => Array<Thread>;
+}
+
+interface EventHandles {
+  // eslint-disable-next-line
+  scratchProjectStart: (...args: any[]) => void;
+  // eslint-disable-next-line
+  scratchSayOrThink: (...args: any[]) => void;
+  // eslint-disable-next-line
+  scratchQuestion: (...args: any[]) => void;
+  // eslint-disable-next-line
+  scratchProjectRunStop: (...args: any[]) => void;
+  // eslint-disable-next-line
+  doneThreadsUpdate: (...args: any[]) => void;
+  // eslint-disable-next-line
+  beforeHatsStart: (...args: any[]) => void;
 }
 
 /**
@@ -57,6 +84,10 @@ export class Context {
    * each step in the VM must still have time to run of course.
    */
   accelerationFactor: Acceleration;
+
+  vmMethods?: VmMethods;
+  eventHandles?: EventHandles;
+  renderMethods?: RendererMethods;
 
   constructor(vm: VirtualMachine, log: Log, callback?: OutputHandler) {
     this.numberOfRun = 0;
@@ -121,110 +152,223 @@ export class Context {
     return this.tempAdvancedProfiler.advanced;
   }
 
+  public interceptVmMethods(): void {
+    if (this.vmMethods) {
+      throw new Error('VM methods already intercepted');
+    }
+
+    const oldStepFunction = this.vm.runtime._step.bind(this.vm.runtime);
+
+    // let time = Date.now();
+    this.vm.runtime._step = () => {
+      const oldResult = oldStepFunction();
+      if (this.vm.runtime._lastStepDoneThreads.length > 0) {
+        this.vm.runtime.emit(
+          Events.DONE_THREADS_UPDATE,
+          this.vm.runtime._lastStepDoneThreads,
+        );
+      }
+      return oldResult;
+    };
+
+    const oldHatFunction = this.vm.runtime.startHats.bind(this.vm.runtime);
+
+    this.vm.runtime.startHats = (requestedHatOpcode, optMatchFields, optTarget) => {
+      this.vm.runtime.emit(Events.BEFORE_HATS_START, {
+        requestedHatOpcode,
+        optMatchFields,
+        optTarget,
+      });
+      return oldHatFunction(requestedHatOpcode, optMatchFields, optTarget);
+    };
+
+    this.vmMethods = {
+      step: oldStepFunction,
+      startHats: oldHatFunction,
+    };
+  }
+
+  public restoreVmMethods(): void {
+    if (!this.vmMethods) {
+      throw new Error('VM methods not intercepted');
+    }
+    this.vm.runtime._step = this.vmMethods.step;
+    this.vm.runtime.startHats = this.vmMethods.startHats;
+    this.vmMethods = undefined;
+  }
+
   /**
    * Set up the event handles for a the vm.
    * @private
    */
-  attachEventHandles(): void {
-    this.vm!.runtime.on(Events.SCRATCH_PROJECT_START, () => {
-      console.log(`${this.log.timestamp()}: run number: ${this.numberOfRun}`);
-      this.numberOfRun++;
-    });
+  public attachEventHandles(): void {
+    if (this.eventHandles) {
+      throw new Error('Event handles already attached');
+    }
 
-    this.vm!.runtime.on(Events.SCRATCH_SAY_OR_THINK, (target, type, text) => {
-      // Only save it when something is actually being said.
-      if (text !== '') {
-        console.log(`${this.log.timestamp()}: say: ${text} with ${type}`);
-        const event = new Event('say', {
-          text: text,
-          target: target,
-          type: type,
-          sprite: target.sprite.name,
-        });
-        event.previous = this.log.snap('event.say');
-        event.next = event.previous;
-        this.log.registerEvent(event);
-      }
-    });
-
-    this.vm!.runtime.on(Events.SCRATCH_QUESTION, (question) => {
-      if (question != null) {
-        let x = this.providedAnswers.shift();
-        if (x === undefined) {
-          this.groupedOutput.appendMessage(
-            'Er werd een vraag gesteld waarop geen antwoord voorzien is.',
-          );
-          this.groupedOutput.escalateStatus('wrong');
-          x = undefined;
+    this.eventHandles = {
+      scratchProjectStart: () => {
+        console.log(`${this.log.timestamp()}: run number: ${this.numberOfRun}`);
+        this.numberOfRun++;
+      },
+      scratchSayOrThink: (target, type, text) => {
+        // Only save it when something is actually being said.
+        if (text !== '') {
+          console.log(`${this.log.timestamp()}: say: ${text} with ${type}`);
+          const event = new Event('say', {
+            text: text,
+            target: target,
+            type: type,
+            sprite: target.sprite.name,
+          });
+          event.previous = this.log.snap('event.say');
+          event.next = event.previous;
+          this.log.registerEvent(event);
         }
+      },
+      scratchQuestion: (question) => {
+        if (question != null) {
+          let x = this.providedAnswers.shift();
+          if (x === undefined) {
+            this.groupedOutput.appendMessage(
+              'Er werd een vraag gesteld waarop geen antwoord voorzien is.',
+            );
+            this.groupedOutput.escalateStatus('wrong');
+            x = undefined;
+          }
 
-        console.log(`${this.log.timestamp()}: input: ${x}`);
+          console.log(`${this.log.timestamp()}: input: ${x}`);
 
-        const event = new Event('answer', {
-          question: question,
-          text: x,
-        });
-        event.previous = this.log.snap('event.answer');
-        event.next = event.previous;
-        this.log.registerEvent(event);
+          const event = new Event('answer', {
+            question: question,
+            text: x,
+          });
+          event.previous = this.log.snap('event.answer');
+          event.next = event.previous;
+          this.log.registerEvent(event);
 
-        this.vm!.runtime.emit(Events.SCRATCH_ANSWER, x);
-      }
-    });
-
-    this.vm!.runtime.on(Events.SCRATCH_PROJECT_RUN_STOP, () => {
-      console.log(`${this.log.timestamp()}: Ended run`);
-    });
-
-    this.vm!.runtime.on(Events.DONE_THREADS_UPDATE, (threads) => {
-      for (const thread of threads) {
-        for (const action of this.threadListeners) {
-          if (action.active) {
-            action.update(thread);
+          this.vm.runtime.emit(Events.SCRATCH_ANSWER, x);
+        }
+      },
+      scratchProjectRunStop: () => {
+        console.log(`${this.log.timestamp()}: Ended run`);
+      },
+      doneThreadsUpdate: (threads) => {
+        for (const thread of threads) {
+          for (const action of this.threadListeners) {
+            if (action.active) {
+              action.update(thread);
+            }
           }
         }
-      }
-    });
+      },
+      beforeHatsStart: (opts) => {
+        if (opts.requestedHatOpcode === 'event_whenbroadcastreceived') {
+          this.broadcastListeners
+            .filter((l) => l.active)
+            .forEach((l) =>
+              l.update({
+                matchFields: opts.optMatchFields,
+                target: opts.optTarget,
+              }),
+            );
+        }
+      },
+    };
 
-    this.vm!.runtime.on(Events.BEFORE_HATS_START, (opts) => {
-      if (opts.requestedHatOpcode === 'event_whenbroadcastreceived') {
-        this.broadcastListeners
-          .filter((l) => l.active)
-          .forEach((l) =>
-            l.update({
-              matchFields: opts.optMatchFields,
-              target: opts.optTarget,
-            }),
-          );
-      }
-    });
+    this.vm.runtime.on(
+      Events.SCRATCH_PROJECT_START,
+      this.eventHandles.scratchProjectStart,
+    );
+    this.vm.runtime.on(Events.SCRATCH_SAY_OR_THINK, this.eventHandles.scratchSayOrThink);
+    this.vm.runtime.on(Events.SCRATCH_QUESTION, this.eventHandles.scratchQuestion);
+    this.vm.runtime.on(
+      Events.SCRATCH_PROJECT_RUN_STOP,
+      this.eventHandles.scratchProjectRunStop,
+    );
+    this.vm.runtime.on(Events.DONE_THREADS_UPDATE, this.eventHandles.doneThreadsUpdate);
+    this.vm.runtime.on(Events.BEFORE_HATS_START, this.eventHandles.beforeHatsStart);
+  }
+
+  public detachEventHandles(): void {
+    if (!this.eventHandles) {
+      throw new Error('Event handles not attached');
+    }
+    this.vm.runtime.off(
+      Events.SCRATCH_PROJECT_START,
+      this.eventHandles.scratchProjectStart,
+    );
+    this.vm.runtime.off(Events.SCRATCH_SAY_OR_THINK, this.eventHandles.scratchSayOrThink);
+    this.vm.runtime.off(Events.SCRATCH_QUESTION, this.eventHandles.scratchQuestion);
+    this.vm.runtime.off(
+      Events.SCRATCH_PROJECT_RUN_STOP,
+      this.eventHandles.scratchProjectRunStop,
+    );
+    this.vm.runtime.off(Events.DONE_THREADS_UPDATE, this.eventHandles.doneThreadsUpdate);
+    this.vm.runtime.off(Events.BEFORE_HATS_START, this.eventHandles.beforeHatsStart);
+    this.eventHandles = undefined;
   }
 
   /**
    * Create a profile and attach it to the VM.
    * @private
    */
-  createProfiler(): void {
-    this.vm!.runtime.enableProfiling();
-    const blockId = this.vm!.runtime.profiler.idByName('blockFunction');
-    this.vm!.runtime.profiler.onFrame = (frame) => {
+  createProfiler(enabledAdvanced: boolean): void {
+    this.vm.runtime.enableProfiling();
+    const blockId = this.vm.runtime.profiler.idByName('blockFunction');
+    this.vm.runtime.profiler.onFrame = (frame) => {
       if (frame.id === blockId) {
-        this.log.snap('profiler.basic');
+        this.log.snap('profiler.basic', frame.arg.blockId);
       }
     };
 
-    installAdvancedBlockProfiler(this.vm!, this.log!);
+    if (enabledAdvanced) {
+      installAdvancedBlockProfiler(this.vm, this.log);
+    }
+  }
+
+  uncreateProfiler(): void {
+    this.vm.runtime.disableProfiling();
+  }
+
+  proxyRenderer(): void {
+    if (this.renderMethods) {
+      throw new Error('Renderer already proxied');
+    }
+
+    this.renderMethods = proxiedRenderer(this.log, this.vm.renderer);
+  }
+
+  unproxyRenderer(): void {
+    if (!this.renderMethods) {
+      throw new Error('Renderer not proxied');
+    }
+    unproxyRenderer(this.vm.renderer, this.renderMethods);
+  }
+
+  public instrumentVm(enableAdvancedProfiler = true): void {
+    this.interceptVmMethods();
+    this.attachEventHandles();
+    this.proxyRenderer();
+    this.createProfiler(enableAdvancedProfiler);
+  }
+
+  public deinstrumentVm(): void {
+    this.uncreateProfiler();
+    this.unproxyRenderer();
+    this.detachEventHandles();
+    this.restoreVmMethods();
   }
 
   /**
-   * Prepare the VM for execution. This will prepare the answers for
-   * questions (if applicable) and instrument the VM to take the
-   * acceleration factor into account.
+   * Prepare the VM for execution for the judge.
+   *
+   * This will prepare the answers for questions (if applicable) and instrument
+   * the VM to take the acceleration factor into account.
+   *
+   * If running the debugger, you might want to do some of this manually for now.
    */
-  prepareAndRunVm(): void {
-    this.attachEventHandles();
-    this.createProfiler();
-
+  runVm(): void {
     this.providedAnswers = this.answers.slice();
 
     // Optimisation.
@@ -253,7 +397,7 @@ export class Context {
     }
 
     // Start the vm.
-    this.vm!.start();
+    this.vm.start();
   }
 
   /**
@@ -269,9 +413,9 @@ export class Context {
    * @private
    */
   acceleratePrimitive(opcode: string, argument = 'SECS'): void {
-    const original = this.vm!.runtime.getOpcodeFunction(opcode);
+    const original = this.vm.runtime.getOpcodeFunction(opcode);
     const factor = this.accelerationFactor.time || this.accelerationFactor.factor;
-    this.vm!.runtime._primitives[opcode] = (
+    this.vm.runtime._primitives[opcode] = (
       originalArgs: Record<string, unknown>,
       util: unknown,
     ) => {
@@ -292,7 +436,7 @@ export class Context {
    */
   accelerateTimer(): void {
     const factor = this.accelerationFactor.time || this.accelerationFactor.factor;
-    const device = this.vm!.runtime.ioDevices.clock;
+    const device = this.vm.runtime.ioDevices.clock;
     const original = device.projectTimer;
 
     device.projectTimer = () => {

@@ -2,13 +2,14 @@ import type Comment from '@ftrprf/judge-scratch-vm-types/types/engine/comment';
 import type Variable from '@ftrprf/judge-scratch-vm-types/types/engine/variable';
 import type RenderedTarget from '@ftrprf/judge-scratch-vm-types/types/sprites/rendered-target';
 import type VirtualMachine from '@ftrprf/judge-scratch-vm-types/types/virtual-machine';
-import { isEqual, last } from 'lodash-es';
+import { cloneDeep, isEqual, last } from 'lodash-es';
 import { Line } from './lines';
 import { RotationStyle } from './matcher/patterns';
 
 import {
   blockFromSb3,
   Bounds,
+  BubbleState,
   ScratchBlock,
   ScratchComment,
   ScratchCostume,
@@ -70,8 +71,30 @@ function vmTargetToScratchTarget(
     costumes.push(costume as ScratchCostume);
   }
 
+  const internalBubbleState = target.getCustomState('Scratch.looks');
+  let bubbleState: BubbleState | undefined;
+  if (internalBubbleState) {
+    bubbleState = {
+      onSpriteRight: internalBubbleState.onSpriteRight,
+      text: internalBubbleState.text.slice(),
+      type: internalBubbleState.type.slice(),
+    };
+  }
+
+  const clones: ScratchSprite[] = [];
+  if (target.isOriginal) {
+    for (const clone of target.sprite.clones) {
+      if (!clone.isOriginal) {
+        clones.push(<ScratchSprite>vmTargetToScratchTarget(clone, false, []));
+      }
+    }
+  }
+
+  const effects: { [x: string]: number } = cloneDeep(target.effects);
+
   if (isStage) {
     return new ScratchStage(
+      target.id,
       target.getName(),
       variables,
       blocks,
@@ -86,6 +109,7 @@ function vmTargetToScratchTarget(
     );
   } else {
     return new ScratchSprite(
+      target.id,
       target.getName(),
       variables,
       blocks,
@@ -101,7 +125,10 @@ function vmTargetToScratchTarget(
       target.direction,
       target.draggable,
       target.rotationStyle as RotationStyle,
+      clones,
+      effects,
       target.getBounds() as Bounds,
+      bubbleState,
     );
   }
 }
@@ -120,11 +147,13 @@ export class Snapshot {
    * @param timestamp When the snapshot was taken.
    * @param origin Why it was taken. You can use anything you want.
    * @param targets The actual data that was captured.
+   * @param blockId Optional originating blockID. TODO: move this to events?
    */
   constructor(
     readonly timestamp: number,
     readonly origin: string,
     readonly targets: ScratchTarget[],
+    readonly blockId?: string,
   ) {}
 
   get sprites(): ScratchSprite[] {
@@ -139,8 +168,16 @@ export class Snapshot {
     return this.sprites.find((s) => s.name === name);
   }
 
+  findSpriteById(id: string): ScratchSprite | undefined {
+    return this.sprites.find((s) => s.id === id);
+  }
+
   findTarget(name: string): ScratchTarget | undefined {
     return this.targets.find((t) => t.name === name);
+  }
+
+  spriteById(id: string): ScratchSprite {
+    return ensure(this.findSpriteById(id));
   }
 
   sprite(name: string): ScratchSprite {
@@ -333,6 +370,7 @@ function targetFromSb3(
 
   if (isStage) {
     return new ScratchStage(
+      target.id,
       target.name,
       variables,
       blocks,
@@ -347,6 +385,7 @@ function targetFromSb3(
     );
   } else {
     return new ScratchSprite(
+      target.id,
       target.name,
       variables,
       blocks,
@@ -362,6 +401,8 @@ function targetFromSb3(
       target.direction,
       target.draggable,
       target.rotationStyle as RotationStyle,
+      [],
+      {},
     );
   }
 }
@@ -419,6 +460,16 @@ export class Log {
     this.vm = vm;
   }
 
+  public reset(): void {
+    this.snapshotList.length = 0;
+    this.eventList.length = 0;
+    this.templateSnapshot = undefined;
+    this.renderer.lines.length = 0;
+    this.renderer.color = null;
+    this.renderer.points.length = 0;
+    this.renderer.responses.length = 0;
+  }
+
   /**
    * A read-only list of all snapshots. This includes the pre-execution
    * snapshot of the submission, but not of the template of course.
@@ -463,7 +514,7 @@ export class Log {
    * @param template The snapshot of the template file.
    * @param submission The snapshot of the submission file.
    */
-  registerStartSnapshots(template: Snapshot, submission: Snapshot): void {
+  public registerStartSnapshots(template: Snapshot, submission: Snapshot): void {
     this.registerSnapshot(submission);
     this.templateSnapshot = template;
   }
@@ -471,11 +522,12 @@ export class Log {
   /**
    * Register a snapshot into the log.
    */
-  private registerSnapshot(snapshot: Snapshot): void {
+  private registerSnapshot(snapshot: Snapshot): boolean {
     if (!this.started) {
-      return;
+      return false;
     }
     this.snapshotList.push(snapshot);
+    return true;
   }
 
   /**
@@ -483,8 +535,9 @@ export class Log {
    *
    * @internal
    * @param origin Why the snapshot is being taken.
+   * @param originBlockId Optional ID of block that triggered this snapshot.
    */
-  snap(origin: string): Snapshot {
+  snap(origin: string, originBlockId?: string): Snapshot {
     const stage = this.vm.runtime.getTargetForStage()!;
     const targets = this.vm.runtime.targets.map((t) => {
       return vmTargetToScratchTarget(
@@ -494,7 +547,7 @@ export class Log {
       );
     });
 
-    const snapshot = new Snapshot(this.timestamp(), origin, targets);
+    const snapshot = new Snapshot(this.timestamp(), origin, targets, originBlockId);
     this.registerSnapshot(snapshot);
     return snapshot;
   }

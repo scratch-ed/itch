@@ -2,8 +2,9 @@ import VirtualMachine from 'scratch-vm';
 import ScratchStorage from 'scratch-storage';
 import AudioEngine from 'scratch-audio';
 import ScratchSVGRenderer from 'scratch-svg-renderer';
-import { Log, snapshotFromSb3 } from './log';
-import { makeProxiedRenderer } from './renderer';
+import ScratchRender from 'scratch-render';
+import { Log, Snapshot, snapshotFromSb3 } from './log';
+import { OutputHandler } from './output';
 import { Context } from './context';
 import { EvalConfig } from './evaluation';
 
@@ -19,38 +20,22 @@ export const Events: Record<string, string> = {
 };
 
 /**
- * Wrap the stepper function.
+ * Create a context with an existing virtual machine.
  *
- * @param {VirtualMachine} vm
+ * This implies that project loading does not need to happen, so this function
+ * won't do that.
  */
-function wrapStep(vm: VirtualMachine) {
-  const oldFunction = vm.runtime._step.bind(vm.runtime);
-
-  // let time = Date.now();
-  vm.runtime._step = () => {
-    const oldResult = oldFunction();
-    if (vm.runtime._lastStepDoneThreads.length > 0) {
-      vm.runtime.emit(Events.DONE_THREADS_UPDATE, vm.runtime._lastStepDoneThreads);
-    }
-    return oldResult;
-  };
+export async function createContextWithVm(
+  vm: VirtualMachine,
+  callback?: OutputHandler,
+): Promise<Context> {
+  const log = new Log(vm);
+  return new Context(vm, log, callback);
 }
 
-/**
- * Wrap the start hats function to emit an event when this happens.
- * @param {VirtualMachine} vm
- */
-function wrapStartHats(vm: VirtualMachine) {
-  const oldFunction = vm.runtime.startHats.bind(vm.runtime);
-
-  vm.runtime.startHats = (requestedHatOpcode, optMatchFields, optTarget) => {
-    vm.runtime.emit(Events.BEFORE_HATS_START, {
-      requestedHatOpcode,
-      optMatchFields,
-      optTarget,
-    });
-    return oldFunction(requestedHatOpcode, optMatchFields, optTarget);
-  };
+export function snapshotFromVm(vm: VirtualMachine): Snapshot {
+  const data: Record<string, unknown> = JSON.parse(vm.toJSON());
+  return snapshotFromSb3(data);
 }
 
 /**
@@ -70,7 +55,6 @@ function wrapStartHats(vm: VirtualMachine) {
  */
 export async function createContext(config: EvalConfig): Promise<Context> {
   const vm = new VirtualMachine();
-  const log = new Log(vm);
 
   // Disable turbo mode by default.
   vm.setTurboMode(false);
@@ -80,32 +64,25 @@ export async function createContext(config: EvalConfig): Promise<Context> {
   vm.attachAudioEngine(new AudioEngine());
   vm.attachV2SVGAdapter(new ScratchSVGRenderer.SVGRenderer());
   vm.attachV2BitmapAdapter(new ScratchSVGRenderer.BitmapAdapter());
+  vm.attachRenderer(new ScratchRender(config.canvas));
 
-  // Set up our renderer. We inject a proxy, to be able to intercept various
-  // interactions with the renderer.
-  const renderer = makeProxiedRenderer(log, config.canvas);
-  vm.attachRenderer(renderer);
-
-  // Wrap some function to intercept even more data.
-  wrapStep(vm);
-  wrapStartHats(vm);
+  const context = await createContextWithVm(vm, config.callback);
+  context.instrumentVm();
 
   // First, load the template project and save the JSON.
   await vm.loadProject(config.template);
-  const templateData: Record<string, unknown> = JSON.parse(vm.toJSON());
+  const template = snapshotFromVm(vm);
 
   // Second, load the submission and also save the JSON.
   await vm.clear();
   await vm.loadProject(config.submission);
-  const submissionData: Record<string, unknown> = JSON.parse(vm.toJSON());
+  const submission = snapshotFromVm(vm);
 
   // The log may start.
-  log.started = true;
+  context.log.started = true;
 
   // Register the two snapshots in the log.
-  const templateSnapshot = snapshotFromSb3(templateData);
-  const submissionSnapshot = snapshotFromSb3(submissionData);
-  log.registerStartSnapshots(templateSnapshot, submissionSnapshot);
+  context.log.registerStartSnapshots(template, submission);
 
-  return new Context(vm, log, config.callback);
+  return context;
 }

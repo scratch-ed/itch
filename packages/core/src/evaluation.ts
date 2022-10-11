@@ -641,7 +641,7 @@ export async function run(config: EvalConfig): Promise<void | Judgement> {
 
     judge.stage = EvaluationStage.executing;
     // Prepare the context for execution.
-    context.prepareAndRunVm();
+    context.runVm();
 
     // Run the events.
     await context.event.run(context);

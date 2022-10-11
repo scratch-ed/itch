@@ -184,6 +184,12 @@ export interface ScratchSound extends ScratchAsset {
   sampleCount: number;
 }
 
+export interface BubbleState {
+  onSpriteRight: boolean;
+  text: string;
+  type: string;
+}
+
 /**
  * The base sprite class.
  *
@@ -191,6 +197,7 @@ export interface ScratchSound extends ScratchAsset {
  */
 export class ScratchTarget {
   constructor(
+    readonly id: string,
     readonly name: string,
     readonly variables: ScratchVariable[],
     readonly blocks: ScratchBlock[],
@@ -293,6 +300,7 @@ export type VideoState = 'on' | 'on-flipped' | 'off';
 
 export class ScratchStage extends ScratchTarget {
   constructor(
+    id: string,
     name: string,
     variables: ScratchVariable[],
     blocks: ScratchBlock[],
@@ -306,6 +314,7 @@ export class ScratchStage extends ScratchTarget {
     readonly videoState: VideoState,
   ) {
     super(
+      id,
       name,
       variables,
       blocks,
@@ -322,6 +331,7 @@ export type Bounds = { left: number; right: number; top: number; bottom: number 
 
 export class ScratchSprite extends ScratchTarget {
   constructor(
+    id: string,
     name: string,
     variables: ScratchVariable[],
     blocks: ScratchBlock[],
@@ -337,9 +347,13 @@ export class ScratchSprite extends ScratchTarget {
     readonly direction: number,
     readonly draggable: boolean,
     readonly rotationStyle: RotationStyle,
+    readonly clones: ScratchSprite[],
+    readonly effects: { [x: string]: number },
     readonly bounds?: Bounds,
+    readonly bubbleState?: BubbleState,
   ) {
     super(
+      id,
       name,
       variables,
       blocks,

@@ -2,6 +2,26 @@
 import ScratchRender from 'scratch-render';
 import { Event, Log } from './log';
 
+interface BaseMethods {
+  // eslint-disable-next-line
+  createTextSkin: Function;
+  // eslint-disable-next-line
+  updateTextSkin: Function;
+  // eslint-disable-next-line
+  destroySkin: Function;
+}
+
+interface PenExtensionMethods {
+  // eslint-disable-next-line
+  penLine: Function;
+  // eslint-disable-next-line
+  penPoint: Function;
+  // eslint-disable-next-line
+  penClear: Function;
+}
+
+export type RendererMethods = BaseMethods & PenExtensionMethods;
+
 /**
  * Intercept events from pen extension.
  *
@@ -10,7 +30,7 @@ import { Event, Log } from './log';
  *
  * @see https://en.scratch-wiki.info/wiki/Pen_Extension
  */
-function interceptPen(log: Log, renderer: ScratchRender) {
+function interceptPen(log: Log, renderer: ScratchRender): PenExtensionMethods {
   console.log('Intercepting pen events...');
 
   // Intercept lines
@@ -70,21 +90,24 @@ function interceptPen(log: Log, renderer: ScratchRender) {
       return target.apply(thisArg, argumentsList);
     },
   });
+
+  return {
+    penLine: oldLine,
+    penPoint: penPointOld,
+    penClear: penClearOld,
+  };
 }
 
 /**
  * Create a proxied renderer, allowing us to intercept various stuff.
  *
- * @param {Log} log - The context.
- * @param {HTMLCanvasElement} canvas - The canvas where the renderer should work.
- *
- * @return {ScratchRender}
+ * @param log - The context.
+ * @param render - The canvas where the renderer should work.
  */
-export function makeProxiedRenderer(log: Log, canvas: HTMLCanvasElement): ScratchRender {
-  const render = new ScratchRender(canvas);
+export function proxiedRenderer(log: Log, render: ScratchRender): RendererMethods {
   console.log('renderer created');
 
-  interceptPen(log, render);
+  const oldPenMethods = interceptPen(log, render);
 
   // text bubble creation
   const createTextSkinOld = render.createTextSkin;
@@ -135,5 +158,19 @@ export function makeProxiedRenderer(log: Log, canvas: HTMLCanvasElement): Scratc
     },
   });
 
-  return render;
+  return {
+    ...oldPenMethods,
+    createTextSkin: createTextSkinOld,
+    updateTextSkin: updateTextSkinOld,
+    destroySkin: destroySkinOld,
+  };
+}
+
+export function unproxyRenderer(render: ScratchRender, methods: RendererMethods): void {
+  render.createTextSkin = methods.createTextSkin;
+  render.updateTextSkin = methods.updateTextSkin;
+  render.destroySkin = methods.destroySkin;
+  render.penLine = methods.penLine;
+  render.penPoint = methods.penPoint;
+  render.penClear = methods.penClear;
 }
