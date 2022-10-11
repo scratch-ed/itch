@@ -41,14 +41,18 @@ function valueMatchesOneValuePattern(
   //    Conversely, if the pattern is nothing, the value needs to be undefined
   //    or null. This will handle both cases. If only one condition is satisfied,
   //    we cannot match.
-  if (value === undefined || value === null || valuePattern === NOTHING) {
-    return (value === undefined || value === null) && valuePattern === NOTHING;
-  }
-
   // 2. If the pattern is a wildcard, accept everything.
   //    This does imply that null or undefined is not accepted.
-  if (valuePattern === ANYTHING) {
-    return true;
+  if (
+    valuePattern === ANYTHING ||
+    value === undefined ||
+    value === null ||
+    valuePattern === NOTHING
+  ) {
+    return (
+      valuePattern === ANYTHING ||
+      ((value === undefined || value === null) && valuePattern === NOTHING)
+    );
   }
 
   // The pattern could be a reporter block.
@@ -92,9 +96,6 @@ function matchesFieldsOrInputs(
 ): boolean {
   for (const [name, valuePattern] of Object.entries(patterns)) {
     // If the value does not exist, we don't match.
-    if (!(name in fieldOrInputs)) {
-      return false;
-    }
     const actualValue = fieldOrInputs[name];
     if (!valueMatchesValuePatterns(actualValue, valuePattern)) {
       return false;
@@ -121,13 +122,16 @@ function matchesOnePattern(
     return pattern(node);
   }
 
-  if (node === null || node === undefined || pattern === NOTHING) {
-    return (node === null || node === undefined) && pattern === NOTHING;
-  }
-
-  // If the pattern is a wildcard, we match.
-  if (pattern === ANYTHING) {
-    return true;
+  if (
+    node === null ||
+    node === undefined ||
+    pattern === NOTHING ||
+    pattern === ANYTHING
+  ) {
+    return (
+      pattern === ANYTHING ||
+      ((node === null || node === undefined) && pattern === NOTHING)
+    );
   }
 
   // If the opcode doesn't match, end it now.

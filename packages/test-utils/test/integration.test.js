@@ -69,3 +69,14 @@ describe('Agario', () => {
     });
   });
 });
+
+test('Nothing is accepted with anything pattern', () => {
+  return executeTest(
+    'anything-empty-stack',
+    'anything-empty-stack',
+    'anything-order',
+  ).then((result) => {
+    expect(result).exactStatuses('correct', 1);
+    expect(result).toMatchSnapshot();
+  });
+});

@@ -7263,3 +7263,33 @@ exports[`Laserjets level 5 Template is rejected 1`] = `
   },
 ]
 `;
+
+exports[`Nothing is accepted with anything pattern 1`] = `
+[
+  {
+    "command": "start-judgement",
+    "version": 2,
+  },
+  {
+    "command": "start-group",
+    "name": "Groep 0.41008109820294864",
+    "tags": [],
+    "visibility": "show",
+  },
+  {
+    "command": "start-test",
+    "name": "Herhaal",
+    "tags": [],
+  },
+  {
+    "command": "close-test",
+    "status": "correct",
+  },
+  {
+    "command": "close-group",
+  },
+  {
+    "command": "close-judgement",
+  },
+]
+`;
