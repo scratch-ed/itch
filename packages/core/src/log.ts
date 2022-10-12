@@ -147,13 +147,11 @@ export class Snapshot {
    * @param timestamp When the snapshot was taken.
    * @param origin Why it was taken. You can use anything you want.
    * @param targets The actual data that was captured.
-   * @param blockId Optional originating blockID. TODO: move this to events?
    */
   constructor(
     readonly timestamp: number,
     readonly origin: string,
     readonly targets: ScratchTarget[],
-    readonly blockId?: string,
   ) {}
 
   get sprites(): ScratchSprite[] {
@@ -267,7 +265,7 @@ type EventData =
   | ClickEventData
   | Record<string, unknown>;
 
-type EventTypes = 'block_execution' | 'key';
+type EventTypes = 'block_execution' | 'key' | 'opts';
 
 /**
  * An event is a high-level event in the VM.
@@ -493,6 +491,10 @@ export class Log {
     return this.eventList;
   }
 
+  get ops(): ReadonlyArray<Event> {
+    return this.events.filter((e) => e.type === 'ops');
+  }
+
   /**
    * Get the submission's snapshot.
    */
@@ -535,9 +537,8 @@ export class Log {
    *
    * @internal
    * @param origin Why the snapshot is being taken.
-   * @param originBlockId Optional ID of block that triggered this snapshot.
    */
-  snap(origin: string, originBlockId?: string): Snapshot {
+  snap(origin: string): Snapshot {
     const stage = this.vm.runtime.getTargetForStage()!;
     const targets = this.vm.runtime.targets.map((t) => {
       return vmTargetToScratchTarget(
@@ -547,7 +548,7 @@ export class Log {
       );
     });
 
-    const snapshot = new Snapshot(this.timestamp(), origin, targets, originBlockId);
+    const snapshot = new Snapshot(this.timestamp(), origin, targets);
     this.registerSnapshot(snapshot);
     return snapshot;
   }
@@ -564,11 +565,12 @@ export class Log {
    *
    * @internal
    */
-  registerEvent(event: Event): void {
+  public registerEvent(event: Event): boolean {
     if (!this.started) {
-      return;
+      return false;
     }
     this.eventList.push(event);
+    return true;
   }
 
   /**

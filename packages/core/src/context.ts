@@ -1,16 +1,16 @@
+import type Runtime from '@ftrprf/judge-scratch-vm-types/types/engine/runtime';
 import type Target from '@ftrprf/judge-scratch-vm-types/types/engine/target';
 import type Thread from '@ftrprf/judge-scratch-vm-types/types/engine/thread';
 import type VirtualMachine from 'scratch-vm';
-import type Runtime from '@ftrprf/judge-scratch-vm-types/types/engine/runtime';
 
 import { Deferred } from './deferred';
-import { proxiedRenderer, RendererMethods, unproxyRenderer } from './renderer';
-import { ScheduledEvent } from './scheduler/scheduled-event';
-import { EndAction } from './scheduler/end';
 import { BroadcastReceiver, ThreadListener } from './listener';
-import { installAdvancedBlockProfiler, ProfileEventData } from './profiler';
-import { ResultManager, OutputHandler } from './output';
 import { Event, Log } from './log';
+import { OutputHandler, ResultManager } from './output';
+import { installAdvancedBlockProfiler, ProfileEventData } from './profiler';
+import { proxiedRenderer, RendererMethods, unproxyRenderer } from './renderer';
+import { EndAction } from './scheduler/end';
+import { ScheduledEvent } from './scheduler/scheduled-event';
 import { assertType } from './utils';
 import { Events } from './vm';
 
@@ -48,6 +48,8 @@ interface EventHandles {
   doneThreadsUpdate: (...args: any[]) => void;
   // eslint-disable-next-line
   beforeHatsStart: (...args: any[]) => void;
+  // eslint-disable-next-line
+  ops: (...args: any[]) => void;
 }
 
 /**
@@ -201,7 +203,7 @@ export class Context {
    * Set up the event handles for a the vm.
    * @private
    */
-  public attachEventHandles(): void {
+  public attachEventHandles(enableOps: boolean): void {
     if (this.eventHandles) {
       throw new Error('Event handles already attached');
     }
@@ -274,6 +276,25 @@ export class Context {
             );
         }
       },
+      ops: (ops) => {
+        if (ops.length === 0) {
+          return;
+        }
+        const block = ops[ops.length - 1]; // Only log the last outer block
+
+        // @ts-ignore
+        const isMonitored = this.vm.runtime.monitorBlocks.getBlock(block.id)?.isMonitored;
+        if (isMonitored) {
+          return;
+        }
+
+        const event = new Event('ops', {
+          blockId: block.id,
+        });
+        event.previous = this.log.snap('event.ops');
+        event.next = event.previous;
+        this.log.registerEvent(event);
+      },
     };
 
     this.vm.runtime.on(
@@ -288,6 +309,9 @@ export class Context {
     );
     this.vm.runtime.on(Events.DONE_THREADS_UPDATE, this.eventHandles.doneThreadsUpdate);
     this.vm.runtime.on(Events.BEFORE_HATS_START, this.eventHandles.beforeHatsStart);
+    if (enableOps) {
+      this.vm.runtime.on(Events.OPS, this.eventHandles.ops);
+    }
   }
 
   public detachEventHandles(): void {
@@ -306,6 +330,7 @@ export class Context {
     );
     this.vm.runtime.off(Events.DONE_THREADS_UPDATE, this.eventHandles.doneThreadsUpdate);
     this.vm.runtime.off(Events.BEFORE_HATS_START, this.eventHandles.beforeHatsStart);
+    this.vm.runtime.off(Events.OPS, this.eventHandles.ops);
     this.eventHandles = undefined;
   }
 
@@ -313,18 +338,15 @@ export class Context {
    * Create a profile and attach it to the VM.
    * @private
    */
-  createProfiler(enabledAdvanced: boolean): void {
-    this.vm.runtime.enableProfiling();
-    const blockId = this.vm.runtime.profiler.idByName('blockFunction');
-    this.vm.runtime.profiler.onFrame = (frame) => {
-      if (frame.id === blockId) {
-        this.log.snap('profiler.basic', frame.arg.blockId);
-      }
-    };
-
-    if (enabledAdvanced) {
-      installAdvancedBlockProfiler(this.vm, this.log);
-    }
+  createProfiler(): void {
+    // this.vm.runtime.enableProfiling();
+    // const blockId = this.vm.runtime.profiler.idByName('blockFunction');
+    // this.vm.runtime.profiler.onFrame = (frame) => {
+    //   if (frame.id === blockId) {
+    //     this.log.snap('profiler.basic', frame.arg.blockId);
+    //   }
+    // };
+    installAdvancedBlockProfiler(this.vm, this.log);
   }
 
   uncreateProfiler(): void {
@@ -346,11 +368,13 @@ export class Context {
     unproxyRenderer(this.vm.renderer, this.renderMethods);
   }
 
-  public instrumentVm(enableAdvancedProfiler = true): void {
+  public instrumentVm(enableProfiler = true, enableOps = false): void {
     this.interceptVmMethods();
-    this.attachEventHandles();
+    this.attachEventHandles(enableOps);
     this.proxyRenderer();
-    this.createProfiler(enableAdvancedProfiler);
+    if (enableProfiler) {
+      this.createProfiler();
+    }
   }
 
   public deinstrumentVm(): void {

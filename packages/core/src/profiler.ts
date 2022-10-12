@@ -4,11 +4,14 @@ import { Event, Log } from './log';
 import { ScratchBlock } from './model';
 import { memoize } from './utils';
 
-export interface ProfileEventData {
+export interface BasicProfileEventData {
   /**
-   * The ID of the block that executed.
+   * THe ID of the block that executed.
    */
   readonly blockId: string;
+}
+
+export interface ProfileEventData extends BasicProfileEventData {
   /**
    * The name of the target that executed the block.
    */

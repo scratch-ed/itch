@@ -17,6 +17,8 @@ export const Events: Record<string, string> = {
   // Custom events,
   DONE_THREADS_UPDATE: 'DONE_THREADS_UPDATE',
   BEFORE_HATS_START: 'BEFORE_HATS_START',
+  // Custom event for the debugger.
+  OPS: 'OPS_EXECUTED',
 };
 
 /**
