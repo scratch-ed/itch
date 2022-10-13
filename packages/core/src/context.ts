@@ -325,6 +325,14 @@ export class Context {
       throw new Error('Profiler already created');
     }
 
+    this.vm.runtime.enableProfiling();
+    const blockId = this.vm.runtime.profiler.idByName('blockFunction');
+    this.vm.runtime.profiler.onFrame = (frame) => {
+      if (frame.id === blockId) {
+        this.log.snap('profiler.basic');
+      }
+    };
+
     console.log('Installing advanced block profiler...');
     // Attach the advanced profiler.
     this.blockMethods = {};
@@ -352,7 +360,7 @@ export class Context {
               }),
             };
             const event = new Event('block_execution', data);
-            event.previous = log.snap('profiler.advanced');
+            event.previous = log.last;
             event.next = event.previous;
             log.registerEvent(event);
           }
@@ -367,6 +375,8 @@ export class Context {
       console.log('No profiler found to remove, doing nothing.');
       return;
     }
+
+    this.vm.runtime.disableProfiling();
 
     for (const [opcode, blockFunction] of Object.entries(this.blockMethods)) {
       this.vm.runtime._primitives[opcode] = blockFunction;
