@@ -7,11 +7,11 @@ import { Deferred } from './deferred';
 import { BroadcastReceiver, ThreadListener } from './listener';
 import { Event, Log } from './log';
 import { OutputHandler, ResultManager } from './output';
-import { installAdvancedBlockProfiler, ProfileEventData } from './profiler';
+import { ProfileEventData } from './profiler';
 import { proxiedRenderer, RendererMethods, unproxyRenderer } from './renderer';
 import { EndAction } from './scheduler/end';
 import { ScheduledEvent } from './scheduler/scheduled-event';
-import { assertType } from './utils';
+import { memoize } from './utils';
 import { Events } from './vm';
 
 /**
@@ -52,6 +52,8 @@ interface EventHandles {
   ops: (...args: any[]) => void;
 }
 
+type LogMode = 'judge' | 'debugger';
+
 /**
  * Contains common information and parameters for the
  * judge. This is passed around in lieu of using globals.
@@ -90,6 +92,8 @@ export class Context {
   vmMethods?: VmMethods;
   eventHandles?: EventHandles;
   renderMethods?: RendererMethods;
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  blockMethods?: Record<string, Function>;
 
   constructor(vm: VirtualMachine, log: Log, callback?: OutputHandler) {
     this.numberOfRun = 0;
@@ -117,44 +121,7 @@ export class Context {
     return this.log.timestamp();
   }
 
-  private tempAdvancedProfiler = {
-    advanced: undefined,
-    at: 0,
-  };
-
-  /** @deprecated */
-  get advancedProfiler(): unknown {
-    if (
-      this.tempAdvancedProfiler.advanced === undefined ||
-      this.log.events.length > this.tempAdvancedProfiler.at
-    ) {
-      this.tempAdvancedProfiler = {
-        // @ts-ignore
-        advanced: {
-          executions: this.log.events
-            .filter((e) => e.type === 'block_execution')
-            .map((e) => {
-              assertType<ProfileEventData>(e.data);
-              const block = e.previous
-                .target(e.data.target as string)
-                .block(e.data.blockId as string);
-              return {
-                timestamp: e.timestamp,
-                opcode: block.opcode,
-                args: {
-                  mutation: block.mutation,
-                },
-                target: e.data.target,
-              };
-            }),
-        },
-        at: this.log.events.length,
-      };
-    }
-    return this.tempAdvancedProfiler.advanced;
-  }
-
-  public interceptVmMethods(): void {
+  private interceptVmMethods(): void {
     if (this.vmMethods) {
       throw new Error('VM methods already intercepted');
     }
@@ -190,9 +157,10 @@ export class Context {
     };
   }
 
-  public restoreVmMethods(): void {
+  private restoreVmMethods(): void {
     if (!this.vmMethods) {
-      throw new Error('VM methods not intercepted');
+      console.log('VM methods not intercepted, doing nothing.');
+      return;
     }
     this.vm.runtime._step = this.vmMethods.step;
     this.vm.runtime.startHats = this.vmMethods.startHats;
@@ -200,10 +168,13 @@ export class Context {
   }
 
   /**
-   * Set up the event handles for a the vm.
-   * @private
+   * Attach event handles to the VM.
+   *
+   * @param logMode - The mode in which logging should happen. When using
+   *   the "judge" mode, we listen to various input events, but we don't listen
+   *   to the custom "ops" event, which is only emitted by our forked VM.
    */
-  public attachEventHandles(enableOps: boolean): void {
+  private attachEventHandles(logMode: LogMode = 'judge'): void {
     if (this.eventHandles) {
       throw new Error('Event handles already attached');
     }
@@ -297,26 +268,38 @@ export class Context {
       },
     };
 
-    this.vm.runtime.on(
-      Events.SCRATCH_PROJECT_START,
-      this.eventHandles.scratchProjectStart,
-    );
-    this.vm.runtime.on(Events.SCRATCH_SAY_OR_THINK, this.eventHandles.scratchSayOrThink);
-    this.vm.runtime.on(Events.SCRATCH_QUESTION, this.eventHandles.scratchQuestion);
-    this.vm.runtime.on(
-      Events.SCRATCH_PROJECT_RUN_STOP,
-      this.eventHandles.scratchProjectRunStop,
-    );
-    this.vm.runtime.on(Events.DONE_THREADS_UPDATE, this.eventHandles.doneThreadsUpdate);
-    this.vm.runtime.on(Events.BEFORE_HATS_START, this.eventHandles.beforeHatsStart);
-    if (enableOps) {
+    if (logMode === 'judge') {
+      console.log('Attaching event listeners for judge log mode...');
+      this.vm.runtime.on(
+        Events.SCRATCH_PROJECT_START,
+        this.eventHandles.scratchProjectStart,
+      );
+      this.vm.runtime.on(
+        Events.SCRATCH_SAY_OR_THINK,
+        this.eventHandles.scratchSayOrThink,
+      );
+      this.vm.runtime.on(Events.SCRATCH_QUESTION, this.eventHandles.scratchQuestion);
+      this.vm.runtime.on(
+        Events.SCRATCH_PROJECT_RUN_STOP,
+        this.eventHandles.scratchProjectRunStop,
+      );
+      this.vm.runtime.on(Events.DONE_THREADS_UPDATE, this.eventHandles.doneThreadsUpdate);
+      this.vm.runtime.on(Events.BEFORE_HATS_START, this.eventHandles.beforeHatsStart);
+    }
+
+    if (logMode === 'debugger') {
+      console.log('Attaching event listeners for debugger log mode...');
       this.vm.runtime.on(Events.OPS, this.eventHandles.ops);
     }
   }
 
-  public detachEventHandles(): void {
+  /**
+   * Detach event handles from the VM.
+   */
+  private detachEventHandles(): void {
     if (!this.eventHandles) {
-      throw new Error('Event handles not attached');
+      console.log('No event handles found to detach, doing nothing.');
+      return;
     }
     this.vm.runtime.off(
       Events.SCRATCH_PROJECT_START,
@@ -336,24 +319,61 @@ export class Context {
 
   /**
    * Create a profile and attach it to the VM.
-   * @private
    */
-  createProfiler(): void {
-    // this.vm.runtime.enableProfiling();
-    // const blockId = this.vm.runtime.profiler.idByName('blockFunction');
-    // this.vm.runtime.profiler.onFrame = (frame) => {
-    //   if (frame.id === blockId) {
-    //     this.log.snap('profiler.basic', frame.arg.blockId);
-    //   }
-    // };
-    installAdvancedBlockProfiler(this.vm, this.log);
+  private createProfiler(): void {
+    if (this.blockMethods) {
+      throw new Error('Profiler already created');
+    }
+
+    console.log('Installing advanced block profiler...');
+    // Attach the advanced profiler.
+    this.blockMethods = {};
+    // Allow use inside the nested function below.
+    const log = this.log;
+    for (const [opcode, blockFunction] of Object.entries(this.vm.runtime._primitives)) {
+      this.blockMethods[opcode] = blockFunction;
+      this.vm.runtime._primitives[opcode] = new Proxy(blockFunction, {
+        apply: function (target, thisArg, argumentsList) {
+          const vmTarget = argumentsList[1].target;
+          const targetName = vmTarget.getName();
+          const currentBlockId = argumentsList[1].thread.peekStack();
+          // Only register block executions that exist; other blocks we don't care about.
+          if (vmTarget.blocks.getBlock(currentBlockId)) {
+            const data: ProfileEventData = {
+              blockId: currentBlockId,
+              target: targetName,
+              block: memoize(() => {
+                const target = log.last.target(targetName);
+                return target.block(currentBlockId);
+              }),
+              node: memoize(() => {
+                const target = log.last.target(targetName);
+                return target.node(currentBlockId);
+              }),
+            };
+            const event = new Event('block_execution', data);
+            event.previous = log.last;
+            event.next = event.previous;
+            log.registerEvent(event);
+          }
+          return target.apply(thisArg, argumentsList);
+        },
+      });
+    }
   }
 
-  uncreateProfiler(): void {
-    this.vm.runtime.disableProfiling();
+  private removeProfiler(): void {
+    if (!this.blockMethods) {
+      console.log('No profiler found to remove, doing nothing.');
+      return;
+    }
+
+    for (const [opcode, blockFunction] of Object.entries(this.blockMethods)) {
+      this.vm.runtime._primitives[opcode] = blockFunction;
+    }
   }
 
-  proxyRenderer(): void {
+  private proxyRenderer(): void {
     if (this.renderMethods) {
       throw new Error('Renderer already proxied');
     }
@@ -361,24 +381,35 @@ export class Context {
     this.renderMethods = proxiedRenderer(this.log, this.vm.renderer);
   }
 
-  unproxyRenderer(): void {
+  private unproxyRenderer(): void {
     if (!this.renderMethods) {
-      throw new Error('Renderer not proxied');
+      console.log('No renderer found to unproxy, doing nothing.');
+      return;
     }
     unproxyRenderer(this.vm.renderer, this.renderMethods);
+    this.renderMethods = undefined;
   }
 
-  public instrumentVm(enableProfiler = true, enableOps = false): void {
+  /**
+   * Instrument the VM, based on the log mode.
+   *
+   * @param logMode
+   */
+  public instrumentVm(logMode: LogMode = 'judge'): void {
     this.interceptVmMethods();
-    this.attachEventHandles(enableOps);
+    this.attachEventHandles(logMode);
     this.proxyRenderer();
-    if (enableProfiler) {
+    if (logMode === 'judge') {
       this.createProfiler();
     }
   }
 
+  /**
+   * Remove all instrumentations from the VM.
+   * This should restore the VM to its original state.
+   */
   public deinstrumentVm(): void {
-    this.uncreateProfiler();
+    this.removeProfiler();
     this.unproxyRenderer();
     this.detachEventHandles();
     this.restoreVmMethods();
@@ -389,10 +420,8 @@ export class Context {
    *
    * This will prepare the answers for questions (if applicable) and instrument
    * the VM to take the acceleration factor into account.
-   *
-   * If running the debugger, you might want to do some of this manually for now.
    */
-  runVm(): void {
+  public runVm(): void {
     this.providedAnswers = this.answers.slice();
 
     // Optimisation.

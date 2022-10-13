@@ -14,6 +14,10 @@ module.exports = {
             source: './index.md',
           },
           {
+            title: 'Using the judge in other projects',
+            source: './other-projects.md',
+          },
+          {
             title: 'Introduction to testing',
             source: './introduction-to-testing.md',
           },
