@@ -352,7 +352,7 @@ export class Context {
               }),
             };
             const event = new Event('block_execution', data);
-            event.previous = log.last;
+            event.previous = log.snap('profiler.advanced');
             event.next = event.previous;
             log.registerEvent(event);
           }

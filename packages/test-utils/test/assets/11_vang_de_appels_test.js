@@ -5,11 +5,11 @@ function beforeExecution(e) {
     // Controleer of er aan de sprites geprutst is.
     e.group
       .test('Niet geprutst met andere sprites')
-      .expect(e.log.template.sprites.map((s) => s.name))
-      .toBe(e.log.submission.sprites.map((s) => s.name));
+      .expect(e.log.template.sprites.map((s) => s.name).sort())
+      .toBe(e.log.submission.sprites.map((s) => s.name).sort());
 
     // Controleer of de variable 'score' bestaat.
-    const scoreVariable = e.log.submission.sprites.map((s) => s.variable('Score'))[0];
+    const scoreVariable = e.log.submission.targets.map((s) => s.variable('Score'))[0];
     e.group
       .test('De variable Score moet bestaan')
       .feedback({
@@ -44,7 +44,7 @@ function duringExecution(e) {
       e.group
         .test('Score moet starten op 0')
         .expect(
-          e.log.last.sprites.find((s) => s.variable('Score'))?.variable('Score').value,
+          e.log.last.targets.find((s) => s.variable('Score'))?.variable('Score').value,
         )
         .toBe('0');
       const sprite = e.log.last.sprite('Kom');
@@ -118,16 +118,6 @@ function afterExecution(e) {
   const random = new Set(locations.map((location) => location.x)).size;
 
   e.group.test('Appels komen op willekeurige positie').acceptIf(random >= 18);
-
-  // Check the speed of the apples.
-  // For every position, either the y is 180 or it is 5 less than the previous frame.
-  const speed = locations.every((value, index, arr) => {
-    if (value.y === 180 || index === 0) {
-      return true;
-    }
-    return value.y === arr[index - 1].y - 5;
-  });
-  e.group.test('Appelsnelheid').acceptIf(speed);
 
   // Check end score.
   const end = e.log.last.target('Stage').variable('Score');

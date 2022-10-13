@@ -65,7 +65,7 @@ test('09_flauw_mopje', () => {
 
 test('11_vang_de_appels', () => {
   return runTest().then((result) => {
-    expect(result).exactStatuses('correct', 7);
+    expect(result).exactStatuses('correct', 8);
     expect(result).toMatchSnapshot();
   });
 });

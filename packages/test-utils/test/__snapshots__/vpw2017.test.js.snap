@@ -852,8 +852,8 @@ exports[`11_vang_de_appels 1`] = `
   },
   {
     "command": "close-test",
-    "feedback": "Er moet een variable Score zijn.",
-    "status": "wrong",
+    "feedback": "Er is een variabele met de naam Score.",
+    "status": "correct",
   },
   {
     "command": "close-group",
@@ -871,7 +871,7 @@ exports[`11_vang_de_appels 1`] = `
   },
   {
     "command": "close-test",
-    "status": "wrong",
+    "status": "correct",
   },
   {
     "command": "start-test",
@@ -895,15 +895,6 @@ exports[`11_vang_de_appels 1`] = `
   {
     "command": "start-test",
     "name": "Appels komen op willekeurige positie",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
-    "name": "Appelsnelheid",
     "tags": [],
   },
   {

@@ -69,7 +69,6 @@ export async function createContext(config: EvalConfig): Promise<Context> {
   vm.attachRenderer(new ScratchRender(config.canvas));
 
   const context = await createContextWithVm(vm, config.callback);
-  context.instrumentVm();
 
   // First, load the template project and save the JSON.
   await vm.loadProject(config.template);
@@ -79,6 +78,10 @@ export async function createContext(config: EvalConfig): Promise<Context> {
   await vm.clear();
   await vm.loadProject(config.submission);
   const submission = snapshotFromVm(vm);
+
+  // Instrument the VM after the project has been loaded.
+  // This means extensions will be added already.
+  context.instrumentVm();
 
   // The log may start.
   context.log.started = true;
