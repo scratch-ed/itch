@@ -87,9 +87,9 @@ describe.each([
   ['rommelruimend', 'Level 1 V2', 'Level 1 oplossing V2', 'plan-1'],
   ['rommelruimend', 'Level 2 V2', 'Level 2 oplossing V2', 'plan-2'],
   ['sloopbal'],
-  ['vang-de-items', 'Opgave', 'Oplossing Basis'],
-  ['vang-de-items', 'Opgave', 'Oplossing Medium'],
-  ['vang-de-items', 'Opgave', 'Oplossing Extra'],
+  // ['vang-de-items', 'Opgave', 'Oplossing Basis'],
+  // ['vang-de-items', 'Opgave', 'Oplossing Medium'],
+  // ['vang-de-items', 'Opgave', 'Oplossing Extra'],
   ['vernietig-de-asteroiden', 'Starter'],
   ['verzamel-de-grondstoffen'],
   ['vliegtest', 'Level 1', 'Level 1 oplossing'],
@@ -106,7 +106,7 @@ describe.each([
   ['vliegtest', 'extra-Level 4', 'extra-Level 4 oplossing'],
   ['zet-de-lasers-uit', 'Starter'],
 ])(
-  '%s',
+  '%s %s %s',
   (name, template = 'Opgave', solution = 'Oplossing', plan = 'plan', only = false) => {
     if (only) {
       return;
