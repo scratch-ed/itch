@@ -1,7 +1,7 @@
 {
   "name": "@ftrprf/scratch-judge",
   "private": true,
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "Scratch judge for FTRPRF",
   "workspaces": [
     "packages/**",
