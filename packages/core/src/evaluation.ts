@@ -584,6 +584,25 @@ export class Evaluation {
   }
 
   /**
+   * Enable the advanced profiler for the given sprites, or if nothing is given,
+   * for all sprites.
+   *
+   * In some exercises, with a lot of blocks, the advanced profiler adds an
+   * unreasonable amount of overhead. In most cases, you don't actually need it,
+   * so we disable it by default.
+   */
+  enableAdvancedProfiler(sprites?: string[]) {
+    this.context.createAdvancedProfiler(sprites);
+  }
+
+  /**
+   * Disable the advanced profiler.
+   */
+  disableAdvancedProfiler() {
+    this.context.removeAdvancedProfiler();
+  }
+
+  /**
    * Check that we are before or on a given stage.
    */
   private assertBefore(stage: EvaluationStage, func: string) {

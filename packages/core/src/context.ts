@@ -321,10 +321,6 @@ export class Context {
    * Create a profile and attach it to the VM.
    */
   private createProfiler(): void {
-    if (this.blockMethods) {
-      throw new Error('Profiler already created');
-    }
-
     this.vm.runtime.enableProfiling();
     const blockId = this.vm.runtime.profiler.idByName('blockFunction');
     this.vm.runtime.profiler.onFrame = (frame) => {
@@ -332,6 +328,13 @@ export class Context {
         this.log.snap('profiler.basic');
       }
     };
+  }
+
+  /** @internal */
+  public createAdvancedProfiler(onlyThese?: string[]) {
+    if (this.blockMethods) {
+      throw new Error('Profiler already created');
+    }
 
     console.log('Installing advanced block profiler...');
     // Attach the advanced profiler.
@@ -344,43 +347,50 @@ export class Context {
         apply: function (target, thisArg, argumentsList) {
           const vmTarget = argumentsList[1].target;
           const targetName = vmTarget.getName();
-          const currentBlockId = argumentsList[1].thread.peekStack();
-          // Only register block executions that exist; other blocks we don't care about.
-          if (vmTarget.blocks.getBlock(currentBlockId)) {
-            const data: ProfileEventData = {
-              blockId: currentBlockId,
-              target: targetName,
-              block: memoize(() => {
-                const target = log.last.target(targetName);
-                return target.block(currentBlockId);
-              }),
-              node: memoize(() => {
-                const target = log.last.target(targetName);
-                return target.node(currentBlockId);
-              }),
-            };
-            const event = new Event('block_execution', data);
-            event.previous = log.last;
-            event.next = event.previous;
-            log.registerEvent(event);
+          // Only track sprites we care about if given.
+          if (onlyThese === undefined || onlyThese.includes(targetName)) {
+            const currentBlockId = argumentsList[1].thread.peekStack();
+            // Only register block executions that exist; other blocks we don't care about.
+            if (vmTarget.blocks.getBlock(currentBlockId)) {
+              const data: ProfileEventData = {
+                blockId: currentBlockId,
+                target: targetName,
+                block: memoize(() => {
+                  const target = log.last.target(targetName);
+                  return target.block(currentBlockId);
+                }),
+                node: memoize(() => {
+                  const target = log.last.target(targetName);
+                  return target.node(currentBlockId);
+                }),
+              };
+              const event = new Event('block_execution', data);
+              event.previous = log.last;
+              event.next = event.previous;
+              log.registerEvent(event);
+            }
           }
+
           return target.apply(thisArg, argumentsList);
         },
       });
     }
   }
 
-  private removeProfiler(): void {
+  /** @internal */
+  public removeAdvancedProfiler() {
     if (!this.blockMethods) {
       console.log('No profiler found to remove, doing nothing.');
       return;
     }
 
-    this.vm.runtime.disableProfiling();
-
     for (const [opcode, blockFunction] of Object.entries(this.blockMethods)) {
       this.vm.runtime._primitives[opcode] = blockFunction;
     }
+  }
+
+  private removeProfiler(): void {
+    this.vm.runtime.disableProfiling();
   }
 
   private proxyRenderer(): void {
@@ -411,6 +421,7 @@ export class Context {
     this.proxyRenderer();
     if (logMode === 'judge') {
       this.createProfiler();
+      this.createAdvancedProfiler();
     }
   }
 
@@ -423,6 +434,7 @@ export class Context {
     this.unproxyRenderer();
     this.detachEventHandles();
     this.restoreVmMethods();
+    this.removeAdvancedProfiler();
   }
 
   /**
