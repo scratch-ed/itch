@@ -13,7 +13,7 @@
     "scratch-audio": "0.1.0-prerelease.20200528195344",
     "scratch-render": "0.1.0-prerelease.20221024201900",
     "scratch-storage": "^2.0.2",
-    "scratch-svg-renderer": "^0.2.0-prerelease.20220912180225",
+    "scratch-svg-renderer": "^0.2.0-prerelease.20221102163324",
     "scratch-vm": "^1.2.54",
     "lodash": "^4.17.21"
   },
