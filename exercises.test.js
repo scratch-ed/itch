@@ -106,6 +106,14 @@ describe.each([
   ['vliegtest', 'extra-Level 4', 'extra-Level 4 oplossing'],
   ['zet-de-lasers-uit', 'Starter'],
   ['julia-op-pad'],
+  ['deliverice', 'Level 1 opgave', 'Level 1 oplossing', 'plan-1'],
+  ['deliverice', 'Level 2 opgave', 'Level 2 oplossing', 'plan-2'],
+  ['deliverice', 'Level 3 opgave', 'Level 3 oplossing', 'plan-3'],
+  ['deliverice', 'Level 4 opgave', 'Level 4 oplossing', 'plan-4'],
+  ['deliverice', 'Level 5 opgave', 'Level 5 oplossing', 'plan-5'],
+  ['deliverice', 'Level 6 opgave', 'Level 6 oplossing', 'plan-6'],
+  ['deliverice', 'Level 7 opgave', 'Level 7 oplossing', 'plan-7'],
+  ['deliverice', 'Level 8 opgave', 'Level 8 oplossing', 'plan-8'],
 ])(
   '%s %s %s',
   (name, template = 'Opgave', solution = 'Oplossing', plan = 'plan', only = false) => {
