@@ -191,7 +191,8 @@ export function retrieveStarterAndSubmissionForLevel(result, level) {
       (v) =>
         v.versionType === 'SOLUTION' &&
         (regex.test(v.name?.toLowerCase()) || !level) &&
-        v.name?.toLowerCase()?.includes('oplossing'),
+        (v.name?.toLowerCase()?.includes('oplossing') ||
+          v.name?.toLowerCase()?.includes('solution')),
     )
     .sort((a, b) => b.id - a.id)
     .find((_) => true);

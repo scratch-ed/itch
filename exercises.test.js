@@ -121,6 +121,7 @@ describe.each([
   ['rijexamen', 'Opgave Level 5', 'Oplossing Level 5'],
   ['rijexamen', 'Opgave Level 6', 'Oplossing Level 6'],
   ['save-the-icecream', 'STARTER', 'SOLUTION'],
+  ['color-connect', 'Starter', 'Solution'],
 ])(
   '%s %s %s',
   (name, template = 'Opgave', solution = 'Oplossing', plan = 'plan', only = false) => {
