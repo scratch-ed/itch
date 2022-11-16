@@ -453,9 +453,11 @@ export class Log {
   public readonly renderer: RenderLog = new RenderLog();
   private templateSnapshot?: Snapshot;
   public started = false;
+  public readonly reloadable;
 
-  constructor(vm: VirtualMachine) {
+  constructor(vm: VirtualMachine, reloadable = false) {
     this.vm = vm;
+    this.reloadable = reloadable;
   }
 
   public reset(): void {
