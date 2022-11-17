@@ -114,7 +114,8 @@ async function sendTestplan(exerciseId, testplanPath, token) {
     throw new Error();
   }
 
-  console.log(await response.json());
+  const result = await response.json();
+  console.log(`Created testplan with id ${result.data.createExerciseTestPlan.id}`);
 }
 
 function findLocalTestplan(relativePath, level) {
