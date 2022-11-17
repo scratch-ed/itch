@@ -176,6 +176,9 @@ export function retrieveStarterAndSubmissionForLevel(result, level) {
       (v) =>
         v.versionType === 'STARTER' &&
         (regex.test(v.name?.toLowerCase()) || !level) &&
+        // Needed for "vang-de-ijsjes"
+        !v.name?.toLowerCase()?.includes('versie 6 lj') &&
+        !v.name?.toLowerCase()?.includes('versie 6e lj') &&
         !v.name?.toLowerCase()?.includes('oplossing') &&
         !v.name?.toLowerCase()?.includes('v0'),
     )
