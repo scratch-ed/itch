@@ -676,7 +676,7 @@ export function greenFlag(): PatternBlock {
   };
 }
 
-type KeyPress =
+export type KeyPress =
   | 'space'
   | 'left arrow'
   | 'up arrow'

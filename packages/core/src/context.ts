@@ -421,7 +421,6 @@ export class Context {
     this.proxyRenderer();
     if (logMode === 'judge') {
       this.createProfiler();
-      this.createAdvancedProfiler();
     }
   }
 

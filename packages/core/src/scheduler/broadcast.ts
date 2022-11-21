@@ -22,6 +22,7 @@ export class SendBroadcastAction extends ScheduledAction {
       ? this.targetRestriction(context)
       : undefined;
     const event = new Event('broadcast', {
+      name: this.name,
       target: target.getName(),
       restrict: restrictTo?.getName(),
     });

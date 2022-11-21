@@ -458,9 +458,6 @@ export class Evaluation {
     return this.out.resultManager;
   }
 
-  /**
-   * @deprecated Use the {@link out} property.
-   */
   get group(): GroupLevel {
     return this.out;
   }

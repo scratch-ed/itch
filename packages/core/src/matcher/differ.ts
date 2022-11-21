@@ -288,15 +288,16 @@ export function anyOrder(subScriptList: AnnotatedSubscript[]): AnyOrderContainer
  * without regard to the order in which they are executed, as long as they are
  * executed once.
  *
- * @param e
- * @param startNode
- * @param subScriptList
+ * @param e The evaluation to output the results of the check.
+ * @param startNode The block node at which the check should start.
+ * @param subScriptList A list of checks.
+ * @return The node after executing the checks.
  */
 export function checkBlocks(
   e: Evaluation,
   startNode: Node | null | undefined,
   subScriptList: Array<AnnotatedSubscript | AnyOrderContainer>,
-) {
+): Node | null | undefined {
   let currentNode = startNode;
   for (const element of subScriptList) {
     // If we have a normal subscript, just pass it to the other function.
@@ -353,4 +354,5 @@ export function checkBlocks(
       internalCheckBlocks(e, null, [nullableSubscripts[i]!], false);
     }
   }
+  return currentNode;
 }

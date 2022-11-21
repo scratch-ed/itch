@@ -265,7 +265,7 @@ type EventData =
   | ClickEventData
   | Record<string, unknown>;
 
-type EventTypes = 'block_execution' | 'key' | 'opts';
+type EventTypes = 'block_execution' | 'key' | 'opts' | 'broadcast';
 
 /**
  * An event is a high-level event in the VM.
@@ -593,5 +593,23 @@ export class Log {
       );
     }
     return this.snapshots.slice(startIndex, endIndex);
+  }
+
+  /**
+   * Get all events taking during the given events.
+   *
+   * This will include any events that occurred during the start and end
+   * moment of the given event.
+   *
+   * @param e The main event
+   */
+  eventsDuring(e?: Event): ReadonlyArray<Event> {
+    if (!e) {
+      return [];
+    }
+    const start = e.previous.timestamp;
+    const end = e.next.timestamp;
+
+    return this.events.filter((s) => s.timestamp >= start && s.timestamp <= end);
   }
 }
