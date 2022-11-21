@@ -15,6 +15,7 @@ function beforeExecution(e) {
 /** @param {Evaluation} e */
 function duringExecution(e) {
   e.actionTimeout = 7000; // Indien een actie langer dan 7 seconden duurt, geef een timeout error.
+  e.enableAdvancedProfiler();
 
   const heksPositie = {}; // We slaan de positie van de heks op om op te testen tijdens de uitvoering
 

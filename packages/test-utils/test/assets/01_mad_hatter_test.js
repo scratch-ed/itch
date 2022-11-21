@@ -18,6 +18,7 @@ function beforeExecution(e) {
 
 /** @param {Evaluation} e */
 function duringExecution(e) {
+  e.enableAdvancedProfiler(['Hat']);
   let firstHat = null;
 
   e.scheduler

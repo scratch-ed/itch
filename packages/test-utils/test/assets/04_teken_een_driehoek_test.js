@@ -2,6 +2,7 @@
 /** @param {Evaluation} e */
 function duringExecution(e) {
   e.actionTimeout = 2000;
+  e.enableAdvancedProfiler();
 
   e.scheduler.greenFlag().end();
 }
