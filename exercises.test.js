@@ -123,6 +123,7 @@ describe.each([
   ['save-the-icecream', 'STARTER', 'SOLUTION'],
   ['color-connect', 'Starter', 'Solution'],
   ['beat-the-monsters', 'Opgave', 'Oplossing'],
+  ['agario-lager-onderwijs', 'Opgave', 'Oplossing'],
 ])(
   '%s %s %s',
   (name, template = 'Opgave', solution = 'Oplossing', plan = 'plan', only = false) => {
