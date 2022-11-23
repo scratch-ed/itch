@@ -40,7 +40,7 @@ export function ignoreWaitInProcedureFor(vm: VirtualMachine, sprite: string): vo
   const original = vm.runtime._primitives.control_wait;
   vm.runtime._primitives.control_wait = (args: unknown, util: BlockUtility) => {
     // Big hack to ignore wait in movement steps.
-    if (util.thread!.target.getName() === sprite) {
+    if (util.thread!.target?.getName() === sprite) {
       const glowId = util.thread!.blockGlowInFrame;
       if (glowId) {
         let current = util.thread!.blockContainer.getBlock(glowId);

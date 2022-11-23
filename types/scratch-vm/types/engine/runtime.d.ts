@@ -2,6 +2,14 @@ import Target = require('./target');
 
 export = Runtime;
 
+import EventEmitter = require("events");
+import Thread = require("./thread");
+import Sequencer = require("./sequencer");
+import Blocks = require("./blocks");
+import { OrderedMap } from "immutable";
+import Profiler = require("./profiler");
+import Variable = require("./variable");
+
 /**
  * Manages targets, scripts, and the sequencer.
  * @constructor
@@ -38,7 +46,7 @@ declare class Runtime extends EventEmitter {
      */
     static get BLOCK_GLOW_OFF(): string;
     /**
-     * Event name for a cloud data update
+     * Event name for a cloud data onThreadStopped
      * to this project.
      * @const {string}
      */
@@ -104,17 +112,17 @@ declare class Runtime extends EventEmitter {
      */
     static get TOOLBOX_EXTENSIONS_NEED_UPDATE(): string;
     /**
-     * Event name for targets update report.
+     * Event name for targets onThreadStopped report.
      * @const {string}
      */
     static get TARGETS_UPDATE(): string;
     /**
-     * Event name for monitors update.
+     * Event name for monitors onThreadStopped.
      * @const {string}
      */
     static get MONITORS_UPDATE(): string;
     /**
-     * Event name for block drag update.
+     * Event name for block drag onThreadStopped.
      * @const {string}
      */
     static get BLOCK_DRAG_UPDATE(): string;
@@ -135,7 +143,7 @@ declare class Runtime extends EventEmitter {
     static get EXTENSION_FIELD_ADDED(): string;
     /**
      * Event name for updating the available set of peripheral devices.
-     * This causes the peripheral connection modal to update a list of
+     * This causes the peripheral connection modal to onThreadStopped a list of
      * available peripherals.
      * @const {string}
      */
@@ -292,7 +300,7 @@ declare class Runtime extends EventEmitter {
      */
     _cloneCounter: number;
     /**
-     * Flag to emit a targets update at the end of a step. When target data
+     * Flag to emit a targets onThreadStopped at the end of a step. When target data
      * changes, this flag is set to true.
      * @type {boolean}
      */
@@ -374,14 +382,14 @@ declare class Runtime extends EventEmitter {
     /**
      * A function that tracks a new cloud variable in the runtime,
      * updating the cloud variable limit. Calling this function will
-     * emit a cloud data update event if this is the first cloud variable
+     * emit a cloud data onThreadStopped event if this is the first cloud variable
      * being added.
      * @type {function}
      */
     addCloudVariable: Function;
     /**
      * A function which updates the runtime's cloud variable limit
-     * when removing a cloud variable and emits a cloud update event
+     * when removing a cloud variable and emits a cloud onThreadStopped event
      * if the last of the cloud variables is being removed.
      * @type {function}
      */
@@ -639,7 +647,7 @@ declare class Runtime extends EventEmitter {
      * @param {!Target} target Target to run thread on.
      * @param {?object} opts optional arguments
      * @param {?boolean} opts.stackClick true if the script was activated by clicking on the stack
-     * @param {?boolean} opts.updateMonitor true if the script should update a monitor value
+     * @param {?boolean} opts.updateMonitor true if the script should onThreadStopped a monitor value
      * @return {!Thread} The newly created thread.
      */
     _pushThread(id: string, target: any, opts: object | null): Thread;
@@ -678,7 +686,7 @@ declare class Runtime extends EventEmitter {
      */
     toggleScript(topBlockId: string, opts: object | null): void;
     /**
-     * Enqueue a script that when finished will update the monitor for the block.
+     * Enqueue a script that when finished will onThreadStopped the monitor for the block.
      * @param {!string} topBlockId ID of block that starts the script.
      * @param {?Target} optTarget target Target to run script on. If not supplied, uses editing target.
      */
@@ -765,7 +773,7 @@ declare class Runtime extends EventEmitter {
     _step(): void;
     /**
      * Get the number of threads in the given array that are monitor threads (threads
-     * that update monitor values, and don't count as running a script).
+     * that onThreadStopped monitor values, and don't count as running a script).
      * @param {!Array.<Thread>} threads The set of threads to look through.
      * @return {number} The number of monitor threads in threads.
      */
@@ -806,13 +814,13 @@ declare class Runtime extends EventEmitter {
     quietGlow(scriptBlockId: string): void;
     /**
      * Emit feedback for block glowing (used in the sequencer).
-     * @param {?string} blockId ID for the block to update glow
+     * @param {?string} blockId ID for the block to onThreadStopped glow
      * @param {boolean} isGlowing True to turn on glow; false to turn off.
      */
     glowBlock(blockId: string | null, isGlowing: boolean): void;
     /**
      * Emit feedback for script glowing.
-     * @param {?string} topBlockId ID for the top block to update glow
+     * @param {?string} topBlockId ID for the top block to onThreadStopped glow
      * @param {boolean} isGlowing True to turn on glow; false to turn off.
      */
     glowScript(topBlockId: string | null, isGlowing: boolean): void;
@@ -840,8 +848,8 @@ declare class Runtime extends EventEmitter {
      */
     requestAddMonitor(monitor: any): void;
     /**
-     * Update a monitor in the state and report success/failure of update.
-     * @param {!Map} monitor Monitor values to update. Values on the monitor with overwrite
+     * Update a monitor in the state and report success/failure of onThreadStopped.
+     * @param {!Map} monitor Monitor values to onThreadStopped. Values on the monitor with overwrite
      *     values on the old monitor with the same ID. If a value isn't defined on the new monitor,
      *     the old monitor will keep its old value.
      * @return {boolean} true if monitor exists in the state and was updated, false if it did not exist.
@@ -957,9 +965,9 @@ declare class Runtime extends EventEmitter {
      */
     requestRedraw(): void;
     /**
-     * Emit a targets update at the end of the step if the provided target is
+     * Emit a targets onThreadStopped at the end of the step if the provided target is
      * the original sprite
-     * @param {!Target} target Target requesting the targets update
+     * @param {!Target} target Target requesting the targets onThreadStopped
      */
     requestTargetsUpdate(target: any): void;
     /**
@@ -992,40 +1000,3 @@ declare class Runtime extends EventEmitter {
     updateCurrentMSecs(): void;
     currentMSecs: number;
 }
-declare namespace Runtime {
-    export { CloudDataManager };
-}
-import EventEmitter = require("events");
-import Thread = require("./thread");
-import Sequencer = require("./sequencer");
-import Blocks = require("./blocks");
-import { OrderedMap } from "immutable";
-import Profiler = require("./profiler");
-import Variable = require("./variable");
-
-/**
- * A pair of functions used to manage the cloud variable limit,
- * to be used when adding (or attempting to add) or removing a cloud variable.
- */
-type CloudDataManager = {
-    /**
-     * A function to call to check that
-     * a cloud variable can be added.
-     */
-    canAddCloudVariable: Function;
-    /**
-     * A function to call to track a new
-     * cloud variable on the runtime.
-     */
-    addCloudVariable: Function;
-    /**
-     * A function to call when
-     * removing an existing cloud variable.
-     */
-    removeCloudVariable: Function;
-    /**
-     * A function to call to check that
-     * the runtime has any cloud variables.
-     */
-    hasCloudVariables: Function;
-};

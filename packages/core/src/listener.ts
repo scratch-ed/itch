@@ -44,12 +44,17 @@ export class ThreadListener extends Listener {
   }
 
   /**
-   * Update the threads. This is called when the VM emits
-   * a thread update event.
+   * Resolve a single thread.
+   *
+   * While we only resolve on thread, we might listen to it multiple times,
+   * so we just filter out the terminated thread.
+   *
+   * This is called when the VM emits a {@link Events.STOPPED_THREAD} event.
+   * That is a custom event we inject ourselves into the VM.
    *
    * @param thread - A thread that has finished running.
    */
-  update(thread: Thread): void {
+  onThreadStopped(thread: Thread): void {
     this.threads = this.threads.filter((t) => t !== thread);
     if (this.threads.length === 0) {
       this.deferred.resolve('all threads completed');

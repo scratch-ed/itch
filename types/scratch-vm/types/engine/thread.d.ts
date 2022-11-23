@@ -1,3 +1,5 @@
+import Target = require("./target");
+
 export = Thread;
 /**
  * A thread is a running stack context and all the metadata needed.
@@ -66,7 +68,7 @@ declare class Thread {
      * Target of this thread.
      * @type {?Target}
      */
-    target: any;
+    target: Target | undefined;
     /**
      * The Blocks this thread will execute.
      * @type {Blocks}
