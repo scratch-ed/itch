@@ -9,7 +9,8 @@ describe.each([
   // TODO: https://github.com/FTRPRF/scratch-judge/issues/971
   // ['battle-royale'],
   ['bouw-de-raket', 'Start V2'],
-  ['breng-de-groep-veilig'],
+  // TODO: https://github.com/FTRPRF/scratch-judge/issues/971
+  // ['breng-de-groep-veilig'],
   ['catch-the-aliens'],
   ['chaos-in-de-raket', 'Starter V2'],
   ['cosmos-flight'],
