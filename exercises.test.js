@@ -6,7 +6,8 @@ describe.each([
   ['agario', 'Starter'],
   ['alien-claw'],
   ['alientje-klop'],
-  ['battle-royale'],
+  // TODO: https://github.com/FTRPRF/scratch-judge/issues/971
+  // ['battle-royale'],
   ['bouw-de-raket', 'Start V2'],
   ['breng-de-groep-veilig'],
   ['catch-the-aliens'],
