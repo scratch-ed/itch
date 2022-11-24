@@ -30,7 +30,8 @@ describe.each([
   ['dinner-time', 'extra-Level 3', 'extra-Level 3 oplossing'],
   ['dinner-time', 'extra-Level 4', 'extra-Level 4 oplossing'],
   ['dinner-time', 'extra-Level 5', 'extra-Level 5 oplossing'],
-  ['dokter-david-training'],
+  // TODO: https://github.com/FTRPRF/scratch-judge/issues/971
+  // ['dokter-david-training'],
   ['eerste-testvlucht', 'Starter'],
   ['feverswitch'],
   ['geld-inzamelen', 'Level 1', 'Level 1 oplossing', 'plan-1'],
