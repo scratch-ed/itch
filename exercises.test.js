@@ -6,10 +6,8 @@ describe.each([
   ['agario', 'Starter'],
   ['alien-claw'],
   ['alientje-klop'],
-  // TODO: https://github.com/FTRPRF/scratch-judge/issues/971
   // ['battle-royale'],
   ['bouw-de-raket', 'Start V2'],
-  // TODO: https://github.com/FTRPRF/scratch-judge/issues/971
   // ['breng-de-groep-veilig'],
   ['catch-the-aliens'],
   ['chaos-in-de-raket', 'Starter V2'],
@@ -30,17 +28,14 @@ describe.each([
   ['dinner-time', 'extra-Level 3', 'extra-Level 3 oplossing'],
   ['dinner-time', 'extra-Level 4', 'extra-Level 4 oplossing'],
   ['dinner-time', 'extra-Level 5', 'extra-Level 5 oplossing'],
-  // TODO: https://github.com/FTRPRF/scratch-judge/issues/971
   // ['dokter-david-training'],
   ['eerste-testvlucht', 'Starter'],
-  // TODO: https://github.com/FTRPRF/scratch-judge/issues/971
   // ['feverswitch'],
   ['geld-inzamelen', 'Level 1', 'Level 1 oplossing', 'plan-1'],
   ['geld-inzamelen', 'Level 2', 'Level 2 oplossing', 'plan-2'],
   ['geld-inzamelen', 'Level 3', 'Level 3 oplossing', 'plan-3'],
   ['geld-inzamelen', 'Level 4', 'Level 4 oplossing', 'plan-4'],
   ['geld-inzamelen', 'Level 5', 'Level 5 oplossing', 'plan-5'],
-  // TODO: https://github.com/FTRPRF/scratch-judge/issues/971
   // ['help-dokter-david', 'Level 1', 'Level 1 oplossing', 'plan-1'],
   // ['help-dokter-david', 'Level 2', 'Level 2 oplossing', 'plan-2'],
   // ['help-dokter-david', 'Level 3', 'Level 3 oplossing', 'plan-3'],
@@ -52,15 +47,11 @@ describe.each([
   // ['help-dokter-david', 'extra-Level 3', 'extra-Level 3 oplossing', 'plan-extra3'],
   // ['herverdeel-de-stroom', 'Starter'],
   ['introductie'],
-  // TODO: https://github.com/FTRPRF/scratch-judge/issues/971
   // ['jetpack', 'Starter'],
-  // TODO: https://github.com/FTRPRF/scratch-judge/issues/971
   // ['koppel-motoren-los', 'Starter'],
-  // TODO: https://github.com/FTRPRF/scratch-judge/issues/971
   // ['laserjets', 'Level 1', 'Level 1 oplossing', 'plan-1'],
   ['laserjets', 'Level 2', 'Level 2 oplossing', 'plan-2'],
   ['laserjets', 'Level 3', 'Level 3 oplossing', 'plan-3'],
-  // TODO: https://github.com/FTRPRF/scratch-judge/issues/971
   // ['laserjets', 'Level 4', 'Level 4 oplossing', 'plan-4'],
   ['laserjets', 'Level 5', 'Level 5 oplossing', 'plan-5'],
   ['laserjets', 'Level 6', 'Level 6 oplossing', 'plan-6'],
@@ -71,7 +62,6 @@ describe.each([
   ['laserjets', 'extra-Level 1', 'extra-Oplossing level 1', 'plan-extra1'],
   ['laserjets', 'extra-Level 2', 'extra-Oplossing level 2', 'plan-extra2'],
   // ['laserjets', 'extra-Level 3', 'extra-Oplossing level 3', 'plan-extra3'],
-  // TODO: https://github.com/FTRPRF/scratch-judge/issues/971
   // ['laserjets', 'extra-Level 4', 'extra-Oplossing level 4', 'plan-extra4'],
   // ['laserjets', 'extra-Level 5', 'extra-Oplossing level 5', 'plan-extra5'],
   ['maanbal', 'Starter'],
@@ -97,6 +87,7 @@ describe.each([
   ['rommelruimend', 'Level 1 V2', 'Level 1 oplossing V2', 'plan-1'],
   ['rommelruimend', 'Level 2 V2', 'Level 2 oplossing V2', 'plan-2'],
   ['sloopbal'],
+  // These are just broken...
   // ['vang-de-items', 'Opgave', 'Oplossing Basis'],
   // ['vang-de-items', 'Opgave', 'Oplossing Medium'],
   // ['vang-de-items', 'Opgave', 'Oplossing Extra'],
