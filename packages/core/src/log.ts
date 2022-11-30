@@ -446,7 +446,7 @@ class RenderLog {
  * information.
  */
 export class Log {
-  private readonly snapshotList: Snapshot[] = [];
+  private snapshotList: Snapshot[] = [];
   private readonly eventList: Event[] = [];
   private readonly startTime: number = Date.now();
   private readonly vm: VirtualMachine;
@@ -595,5 +595,10 @@ export class Log {
       );
     }
     return this.snapshots.slice(startIndex, endIndex);
+  }
+
+  setRange(start: number, end: number) {
+    // TODO events
+    this.snapshotList = this.snapshotList.slice(start, end);
   }
 }
