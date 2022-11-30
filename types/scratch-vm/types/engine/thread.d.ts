@@ -166,6 +166,20 @@ declare class Thread {
      * @return {boolean} True if the call appears recursive.
      */
     isRecursiveCall(procedureCode: string): boolean;
+    /**
+     * Serialize the thread to be able to restore this later
+     * @return {string} The JSON string representation of the Thread
+     */
+    toJSON(): string;
+    /**
+     * Restores a thread from JSON string representation (by toJSON())
+     * A list of targets has to be provided because a thread has a reference
+     * to a target. In the JSON the id of the target is saved.
+     * @param {string} json The JSON string
+     * @param {Array<Target>} targets The list of targets
+     * @return {Thread} A new Thread
+     */
+    static restoreJSON(json: string, targets: Array<Target>): Thread;
 }
 /**
  * A frame used for each level of the stack. A general purpose

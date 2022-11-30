@@ -24,7 +24,6 @@ const STOPPED_THREAD = 'STOPPED_THREAD';
 const BEFORE_HATS_START = 'BEFORE_HATS_START';
 // Custom event for the debugger.
 export const OPS = 'OPS_EXECUTED';
-import StringUtil from "@ftrprf/judge-scratch-vm-types/types/util/string-util";
 
 /**
  * @typedef {object} Acceleration
@@ -71,7 +70,7 @@ export class Context {
   readonly newLog: Log;
   answers: string[];
   providedAnswers: string[];
-  advancedLog: string[];
+  runtimeLog: string[][];
   /**
    * Resolves once the simulation has ended.
    */
@@ -118,7 +117,7 @@ export class Context {
     };
     this.vm = vm;
     this.newLog = log;
-    this.advancedLog = [];
+    this.runtimeLog = [];
   }
 
   /**
@@ -282,7 +281,7 @@ export class Context {
         event.next = event.previous;
         this.log.registerEvent(event);
 
-        this.makeAdvancedSnapshot();
+        this.makeRuntimeSnapshot();
       },
     };
 
@@ -305,40 +304,24 @@ export class Context {
     }
   }
 
-  public clearAdvancedLog(): void {
-    this.advancedLog = [];
+  public clearRuntimeLog(): void {
+    this.runtimeLog = [];
   }
 
-  public makeAdvancedSnapshot(): void {
-    this.advancedLog.push(JSON.stringify({
-      threads: this.vm.runtime.threads,
-      targets: this.vm.runtime.targets,
-      executableTargets: this.vm.runtime.executableTargets,
-      _cloneCounter: this.vm.runtime._cloneCounter,
-      _editingTarget: this.vm.runtime._editingTarget,
-      _hats: this.vm.runtime._hats,
-      _lastStepDoneThreads: this.vm.runtime._lastStepDoneThreads,
-      _linkSocketFactory: this.vm.runtime._linkSocketFactory,
-      _monitorState: this.vm.runtime._monitorState,
-      _nonMonitorThreadCount: this.vm.runtime._nonMonitorThreadCount,
-      _prevMonitorState: this.vm.runtime._prevMonitorState,
-      _primitives: this.vm.runtime._primitives,
-      _refreshTargets: this.vm.runtime._refreshTargets,
-      _scriptGlowsPreviousFrame: this.vm.runtime._scriptGlowsPreviousFrame,
-      _steppingInterval: this.vm.runtime._steppingInterval,
-      // storage: this.vm.runtime.storage,
-      audioEngine: this.vm.runtime.audioEngine,
-      canAddCloudVariable: this.vm.runtime.canAddCloudVariable,
-      compatibilityMode: this.vm.runtime.compatibilityMode,
-      currentMSecs: this.vm.runtime.currentMSecs,
-      currentStepTime: this.vm.runtime.currentStepTime,
-      flyoutBlocks: this.vm.runtime.flyoutBlocks,
-      ioDevices: this.vm.runtime.ioDevices,
-      monitorBlocks: this.vm.runtime.monitorBlocks,
-      origin: this.vm.runtime.origin,
-      peripheralExtensions: this.vm.runtime.peripheralExtensions,
-      turboMode: this.vm.runtime.turboMode
-    }));
+  public makeRuntimeSnapshot(): void {
+    this.runtimeLog.push(
+      this.vm.runtime.threads.map(thread => thread.toJSON())
+    );
+  }
+
+  public async restoreRuntimeSnapshot(snapshot: Array<string>): Promise<void> {
+    this.vm.runtime.threads = [];
+    snapshot.map((thread: string) => this.vm.runtime.restoreThread(thread));
+  }
+
+  public setLogRange(start: number, end: number): void {
+    this.log.setRange(start, end);
+    this.runtimeLog = this.runtimeLog.slice(start, end);
   }
 
   /**

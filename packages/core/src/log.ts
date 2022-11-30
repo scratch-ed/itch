@@ -449,7 +449,7 @@ class RenderLog {
  * information.
  */
 export class Log {
-  private readonly snapshotList: Snapshot[] = [];
+  private snapshotList: Snapshot[] = [];
   private readonly eventList: Event[] = [];
   private readonly startTime: number = Date.now();
   private readonly vm: VirtualMachine;
@@ -616,5 +616,10 @@ export class Log {
     const end = e.next.timestamp;
 
     return this.events.filter((s) => s.timestamp >= start && s.timestamp <= end);
+  }
+
+  setRange(start: number, end: number) {
+    // TODO events
+    this.snapshotList = this.snapshotList.slice(start, end);
   }
 }
