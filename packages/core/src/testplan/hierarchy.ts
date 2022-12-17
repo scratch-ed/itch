@@ -343,8 +343,9 @@ export class GroupLevel {
    * @param options - The options for this group.
    * @param block - The group function. All groups and tests inside this function
    * will be part of this group.
+   * @return true or false if the option ignoreWrong is set
    */
-  group(name: string, options: GroupOptions, block: () => void): void;
+  group(name: string, options: GroupOptions, block: () => void): boolean | void;
 
   /**
    * Groups a bunch of related tests or subgroups.
@@ -354,8 +355,9 @@ export class GroupLevel {
    * @param name - The name for this group.
    * @param block - The group function. All groups and tests inside this function
    * will be part of this group.
+   * @return true or false if the option ignoreWrong is set
    */
-  group(name: string, block: () => void): void;
+  group(name: string, block: () => void): boolean | void;
 
   /**
    * Start a group for a certain sprite.
@@ -368,14 +370,15 @@ export class GroupLevel {
    * @param options - The options for this group, with at least the sprite
    * @param block - The group function. All groups and tests inside this function
    * will be part of this group.
+   * @return true or false if the option ignoreWrong is set
    */
-  group(options: SpriteGroupOptions, block: () => void): void;
+  group(options: SpriteGroupOptions, block: () => void): boolean | void;
 
   group(
     nameOrOptions: string | SpriteGroupOptions,
     optionsOrBlock: GroupOptions | (() => void),
     maybeBlock?: () => void,
-  ): void {
+  ): boolean | void {
     let name: string;
     let block: () => void;
     let options: GroupOptions | undefined = undefined;
@@ -427,6 +430,7 @@ export class GroupLevel {
       // wrong tests. If there are any, discard the output, otherwise, print it.
       const shouldDiscard = this.resultManager.hasWrongTestInBuffer();
       this.resultManager.unpauzeOutput(shouldDiscard);
+      return !shouldDiscard;
     }
   }
 }
