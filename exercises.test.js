@@ -141,6 +141,7 @@ describe.each([
   // ['survival-of-the-fittest', 'Level 7 Opgave', 'Level 7 Oplossing'],
   // ['survival-of-the-fittest', 'Level 8 Opgave', 'Level 8 Oplossing'],
   ['spacegems-zoek-de-bug', 'STARTER', 'SOLUTION'],
+  ['meteorenslag-zoek-de-bug', 'STARTER', 'SOLUTION'],
 ])(
   '%s %s %s',
   (name, template = 'Opgave', solution = 'Oplossing', plan = 'plan', only = false) => {
