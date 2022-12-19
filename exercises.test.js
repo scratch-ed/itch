@@ -143,6 +143,7 @@ describe.each([
   ['spacegems-zoek-de-bug', 'STARTER', 'SOLUTION'],
   ['meteorenslag-zoek-de-bug', 'STARTER', 'SOLUTION'],
   ['bomberman-zoek-de-bug', 'STARTER', 'SOLUTION'],
+  ['agario-zoek-de-bug', 'STARTER', 'SOLUTION']
 ])(
   '%s %s %s',
   (name, template = 'Opgave', solution = 'Oplossing', plan = 'plan', only = false) => {
