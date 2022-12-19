@@ -61,6 +61,12 @@ export class ThreadListener extends Listener {
       this.active = false;
     }
   }
+
+  onStopped(): void {
+    this.threads = [];
+    this.deferred.resolve('all threads completed');
+    this.active = false;
+  }
 }
 
 export interface BroadcastUpdate {

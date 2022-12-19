@@ -234,6 +234,11 @@ export class Context {
         }
       },
       scratchProjectRunStop: () => {
+        for (const action of this.threadListeners) {
+          if (action.active) {
+            action.onStopped();
+          }
+        }
         console.log(`${this.log.timestamp()}: Ended run`);
       },
       threadStopped: (thread) => {
