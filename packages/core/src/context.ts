@@ -70,7 +70,6 @@ export class Context {
   readonly newLog: Log;
   answers: string[];
   providedAnswers: string[];
-  runtimeLog: string[][];
   /**
    * Resolves once the simulation has ended.
    */
@@ -117,7 +116,6 @@ export class Context {
     };
     this.vm = vm;
     this.newLog = log;
-    this.runtimeLog = [];
   }
 
   /**
@@ -280,8 +278,6 @@ export class Context {
         event.previous = this.log.snap('event.ops');
         event.next = event.previous;
         this.log.registerEvent(event);
-
-        this.makeRuntimeSnapshot();
       },
     };
 
@@ -304,24 +300,8 @@ export class Context {
     }
   }
 
-  public clearRuntimeLog(): void {
-    this.runtimeLog = [];
-  }
-
-  public makeRuntimeSnapshot(): void {
-    this.runtimeLog.push(
-      this.vm.runtime.threads.map(thread => thread.toJSON())
-    );
-  }
-
-  public async restoreRuntimeSnapshot(snapshot: Array<string>): Promise<void> {
-    this.vm.runtime.threads = [];
-    snapshot.map((thread: string) => this.vm.runtime.restoreThread(thread));
-  }
-
   public setLogRange(start: number, end: number): void {
     this.log.setRange(start, end);
-    this.runtimeLog = this.runtimeLog.slice(start, end);
   }
 
   /**
