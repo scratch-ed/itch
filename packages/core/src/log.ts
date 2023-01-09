@@ -24,6 +24,8 @@ import { ProfileEventData } from './profiler';
 import { SavedRangeEventData } from './scheduler/callback';
 import { ClickEventData } from './scheduler/click';
 import { assertType, ensure } from './utils';
+import Thread from "@ftrprf/judge-scratch-vm-types/types/engine/thread";
+import Runtime from "@ftrprf/judge-scratch-vm-types/types/engine/runtime";
 
 /**
  * Convert a scratch target from the VM to one we save in the log.
@@ -134,6 +136,28 @@ function vmTargetToScratchTarget(
 }
 
 /**
+ * The state of the runtime threads at a certain point in time.
+ *
+ * The snapshot consists of all threads.
+ * It has no extra data (like timestamp) because it's meant to be used inside a Snapshot.
+ */
+export class RuntimeSnapshot {
+  readonly threads: string[];
+  /**
+   *
+   * @param threads A list of Runtime treads.
+   */
+  constructor(threads: Thread[]) {
+    this.threads = threads.map((thread: Thread) => thread.toJSON())
+  }
+
+  restore(runtime: Runtime) {
+    runtime.threads = [];
+    this.threads.map((thread: string) => runtime.restoreThread(thread));
+  }
+}
+
+/**
  * The state of the VM at a certain point in time.
  *
  * The snapshot consists of all the current sprites' state when the snapshot
@@ -142,17 +166,22 @@ function vmTargetToScratchTarget(
  * mode, which will contain more information.
  */
 export class Snapshot {
+  runtimeSnapshot: RuntimeSnapshot | null;
   /**
    *
    * @param timestamp When the snapshot was taken.
    * @param origin Why it was taken. You can use anything you want.
    * @param targets The actual data that was captured.
+   * @param runtime A Runtime object to make a runtime snapshot from
    */
   constructor(
     readonly timestamp: number,
     readonly origin: string,
     readonly targets: ScratchTarget[],
-  ) {}
+    runtime: Runtime | null = null
+  ) {
+    this.runtimeSnapshot = runtime && new RuntimeSnapshot(runtime.threads);
+  }
 
   get sprites(): ScratchSprite[] {
     return this.targets.filter((t) => t instanceof ScratchSprite) as ScratchSprite[];
@@ -256,6 +285,13 @@ export class Snapshot {
 
   get time(): number {
     return this.timestamp;
+  }
+
+  restoreRuntime(runtime: Runtime): boolean {
+    if (this.runtimeSnapshot) {
+      this.runtimeSnapshot.restore(runtime);
+    }
+    return this.runtimeSnapshot != null;
   }
 }
 
@@ -447,7 +483,7 @@ class RenderLog {
  */
 export class Log {
   private snapshotList: Snapshot[] = [];
-  private readonly eventList: Event[] = [];
+  private eventList: Event[] = [];
   private readonly startTime: number = Date.now();
   private readonly vm: VirtualMachine;
   public readonly renderer: RenderLog = new RenderLog();
@@ -550,7 +586,7 @@ export class Log {
       );
     });
 
-    const snapshot = new Snapshot(this.timestamp(), origin, targets);
+    const snapshot = new Snapshot(this.timestamp(), origin, targets, this.vm.runtime);
     this.registerSnapshot(snapshot);
     return snapshot;
   }
@@ -598,7 +634,12 @@ export class Log {
   }
 
   setRange(start: number, end: number) {
-    // TODO events
-    this.snapshotList = this.snapshotList.slice(start, end);
+    let index = 0;
+    this.eventList = this.eventList.filter((e) => {
+      if (e.type === 'ops') {
+        index += 1;
+      }
+      return start < index && index <= end;
+    });
   }
 }
