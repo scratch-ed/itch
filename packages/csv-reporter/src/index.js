@@ -46,7 +46,8 @@ class CsvReporter {
 
 ### Details
 | Oefening | Level | Test  | Resultaat |
-|---------|--------|-------|-----------|`;
+|---------|--------|-------|-----------|
+`;
 
     for (const line of data) {
       let status;
