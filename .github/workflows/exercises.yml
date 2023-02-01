@@ -31,3 +31,8 @@ jobs:
       - name: Write test summary
         if: success() || failure()
         run: cat results.md >> $GITHUB_STEP_SUMMARY
+      - uses: actions/upload-artifact@v3
+        name: Upload test summary
+        with:
+          name: result
+          path: results.csv
