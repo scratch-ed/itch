@@ -40,5 +40,11 @@
     "release:patch": "npm version patch --workspace packages --include-workspace-root --no-git-tag-version",
     "release:minor": "npm version minor --workspace packages --include-workspace-root --no-git-tag-version",
     "release:major": "npm version major --workspace packages --include-workspace-root --no-git-tag-version"
+  },
+  "jest": {
+    "reporters": [
+      "default",
+      "@ftrprf/csv-reporter"
+    ]
   }
 }
