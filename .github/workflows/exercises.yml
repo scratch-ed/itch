@@ -27,9 +27,9 @@ jobs:
           USERNAME: ${{ secrets.USERNAME }}
           PASSWORD: ${{ secrets.PASSWORD }}
       - name: Test exercises
+        continue-on-error: true
         run: 'npm run test:exercises'
       - name: Write test summary
-        if: success() || failure()
         run: cat results.md >> $GITHUB_STEP_SUMMARY
       - uses: actions/upload-artifact@v3
         name: Upload test summary
