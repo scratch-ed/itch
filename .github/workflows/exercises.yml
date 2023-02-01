@@ -28,3 +28,6 @@ jobs:
           PASSWORD: ${{ secrets.PASSWORD }}
       - name: Test exercises
         run: 'npm run test:exercises'
+      - name: Write test summary
+        if: success() || failure()
+        run: cat results.md >> $GITHUB_STEP_SUMMARY
