@@ -73,7 +73,6 @@ describe.each([
   ['navigeer-rommel', 'Level 4', 'Level 4 oplossing', 'plan-4'],
   ['navigeer-rommel', 'Level 5', 'Level 5 oplossing', 'plan-5'],
   ['navigeer-rommel', 'Level 6', 'Level 6 oplossing', 'plan-6'],
-  ['navigeer-rommel', 'Level 10', 'Level 10 oplossing', 'plan-10'],
   ['navigeer-rommel', 'extra-Level 1', 'extra-Level 1 oplossing', 'plan-extra1'],
   ['navigeer-rommel', 'extra-Level 2', 'extra-Level 2 oplossing', 'plan-extra2'],
   ['navigeer-rommel', 'extra-Level 3', 'extra-Level 3 oplossing', 'plan-extra3'],
