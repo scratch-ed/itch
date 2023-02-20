@@ -63,7 +63,7 @@ class CsvReporter {
 
     fs.writeFileSync('results.md', markdown);
 
-    let stringData = 'Oefening, Level, Test, Resultaat';
+    let stringData = 'Oefening, Level, Test, Resultaat\r\n';
     for (const line of data) {
       stringData += line.join(',');
       stringData += '\r\n';
