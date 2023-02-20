@@ -25,11 +25,6 @@
       "correct": "Goed zo! Je hebt geen losse blokjes laten rondslingeren.",
       "wrong": "Probeer je rondslingerende blokjes te verwijderen of te gebruiken."
     },
-    "preprogrammed": {
-      "name": "Voorgeprogrammeerde blokjes",
-      "wrong": "Je hebt aan de voorgeprogrammeerde blokjes van de sprite {0} wijzigingen aangebracht.",
-      "correct": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite {0}."
-    },
     "allowed": {
       "name": "Juiste blokjes",
       "correct": "Goed zo! Je gebruikt geen verkeerde blokjes.",

@@ -9,7 +9,7 @@ jest.setTimeout(50000);
 
 test('01_mad_hatter', () => {
   return runTest().then((result) => {
-    expect(result).exactStatuses('correct', 29);
+    expect(result).exactStatuses('correct', 26);
     expect(result).toMatchSnapshot();
   });
 });

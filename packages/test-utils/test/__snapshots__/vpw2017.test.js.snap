@@ -31,16 +31,6 @@ exports[`01_mad_hatter 1`] = `
   },
   {
     "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Stage.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
     "name": "Controle op bestaande code",
     "tags": [],
   },
@@ -81,16 +71,6 @@ exports[`01_mad_hatter 1`] = `
   },
   {
     "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Nori.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
     "name": "Controle op bestaande code",
     "tags": [],
   },
@@ -127,16 +107,6 @@ exports[`01_mad_hatter 1`] = `
   {
     "command": "close-test",
     "feedback": "Top, de sprite Hat is niet verwijderd.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Hat.",
     "status": "correct",
   },
   {

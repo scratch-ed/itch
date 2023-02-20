@@ -285,7 +285,8 @@ function checkSpriteSensuStricto(
 ) {
   const submissionSprite = submission.findTarget(name);
 
-  e.test(t('predefined.deleted.name'))
+  const deleted = e
+    .test(t('predefined.deleted.name'))
     .fatal()
     .feedback({
       wrong: t('predefined.deleted.wrong', name),
@@ -294,15 +295,7 @@ function checkSpriteSensuStricto(
     .expect(submissionSprite)
     .toNotBe(undefined);
 
-  const targetComparison = e
-    .test(t('predefined.preprogrammed.name'))
-    .feedback({
-      wrong: t('predefined.preprogrammed.wrong', name),
-      correct: t('predefined.preprogrammed.correct', name),
-    })
-    .expect(template.hasChangedTarget(submission, name))
-    .toBe(false);
-  if (config.debug && !targetComparison) {
+  if (config.debug && deleted === undefined) {
     const templateTarget = template.target(name);
     const submissionTarget = submission.target(name);
     const ddd = deepDiff(

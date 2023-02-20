@@ -25,11 +25,6 @@
       "correct": "Good job! There were no unnecessary blocks lying around.",
       "wrong": "Try to remove the blocks lying around or use them."
     },
-    "preprogrammed": {
-      "name": "Existing blocks",
-      "wrong": "You made changes to the existing blocks of sprite {0}.",
-      "correct": "You didn't make changes to the existing blocks of sprite {0}."
-    },
     "allowed": {
       "name": "Correct blocks",
       "correct": "Good job! You don't use any disallowed blocks.",

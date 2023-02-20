@@ -31,16 +31,6 @@ exports[`Agario Correct solution is accepted 1`] = `
   },
   {
     "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Stage.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
     "name": "Controle op bestaande code",
     "tags": [],
   },
@@ -77,16 +67,6 @@ exports[`Agario Correct solution is accepted 1`] = `
   {
     "command": "close-test",
     "feedback": "Top, de sprite Planeet is niet verwijderd.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Planeet.",
     "status": "correct",
   },
   {
@@ -131,16 +111,6 @@ exports[`Agario Correct solution is accepted 1`] = `
   },
   {
     "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Vijand 1.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
     "name": "Controle op bestaande code",
     "tags": [],
   },
@@ -177,16 +147,6 @@ exports[`Agario Correct solution is accepted 1`] = `
   {
     "command": "close-test",
     "feedback": "Top, de sprite Vijand 2 is niet verwijderd.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Vijand 2.",
     "status": "correct",
   },
   {
@@ -231,16 +191,6 @@ exports[`Agario Correct solution is accepted 1`] = `
   },
   {
     "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Voedsel 1.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
     "name": "Controle op bestaande code",
     "tags": [],
   },
@@ -277,16 +227,6 @@ exports[`Agario Correct solution is accepted 1`] = `
   {
     "command": "close-test",
     "feedback": "Top, de sprite Voedsel 2 is niet verwijderd.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Voedsel 2.",
     "status": "correct",
   },
   {
@@ -331,16 +271,6 @@ exports[`Agario Correct solution is accepted 1`] = `
   },
   {
     "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Voedsel 3.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
     "name": "Controle op bestaande code",
     "tags": [],
   },
@@ -377,16 +307,6 @@ exports[`Agario Correct solution is accepted 1`] = `
   {
     "command": "close-test",
     "feedback": "Top, de sprite Voedsel 4 is niet verwijderd.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Voedsel 4.",
     "status": "correct",
   },
   {
@@ -431,16 +351,6 @@ exports[`Agario Correct solution is accepted 1`] = `
   },
   {
     "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Scherm.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
     "name": "Controle op bestaande code",
     "tags": [],
   },
@@ -477,16 +387,6 @@ exports[`Agario Correct solution is accepted 1`] = `
   {
     "command": "close-test",
     "feedback": "Top, de sprite Boodschap 1 is niet verwijderd.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Boodschap 1.",
     "status": "correct",
   },
   {
@@ -989,16 +889,6 @@ exports[`Agario Deleted stack is detected 1`] = `
   },
   {
     "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Stage.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
     "name": "Controle op bestaande code",
     "tags": [],
   },
@@ -1039,16 +929,6 @@ exports[`Agario Deleted stack is detected 1`] = `
   },
   {
     "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Planeet.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
     "name": "Controle op bestaande code",
     "tags": [],
   },
@@ -1075,16 +955,6 @@ exports[`Agario Deleted stack is detected 1`] = `
   {
     "command": "close-test",
     "feedback": "Top, de sprite Vijand 1 is niet verwijderd.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Vijand 1.",
     "status": "correct",
   },
   {
@@ -1129,16 +999,6 @@ exports[`Agario Deleted stack is detected 1`] = `
   },
   {
     "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Vijand 2.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
     "name": "Controle op bestaande code",
     "tags": [],
   },
@@ -1175,16 +1035,6 @@ exports[`Agario Deleted stack is detected 1`] = `
   {
     "command": "close-test",
     "feedback": "Top, de sprite Voedsel 1 is niet verwijderd.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Voedsel 1.",
     "status": "correct",
   },
   {
@@ -1229,16 +1079,6 @@ exports[`Agario Deleted stack is detected 1`] = `
   },
   {
     "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Voedsel 2.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
     "name": "Controle op bestaande code",
     "tags": [],
   },
@@ -1275,16 +1115,6 @@ exports[`Agario Deleted stack is detected 1`] = `
   {
     "command": "close-test",
     "feedback": "Top, de sprite Voedsel 3 is niet verwijderd.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Voedsel 3.",
     "status": "correct",
   },
   {
@@ -1329,16 +1159,6 @@ exports[`Agario Deleted stack is detected 1`] = `
   },
   {
     "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Voedsel 4.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
     "name": "Controle op bestaande code",
     "tags": [],
   },
@@ -1379,16 +1199,6 @@ exports[`Agario Deleted stack is detected 1`] = `
   },
   {
     "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Scherm.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
     "name": "Controle op bestaande code",
     "tags": [],
   },
@@ -1425,16 +1235,6 @@ exports[`Agario Deleted stack is detected 1`] = `
   {
     "command": "close-test",
     "feedback": "Top, de sprite Boodschap 1 is niet verwijderd.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Boodschap 1.",
     "status": "correct",
   },
   {
@@ -1937,16 +1737,6 @@ exports[`Agario Modified stack is detected 1`] = `
   },
   {
     "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Stage.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
     "name": "Controle op bestaande code",
     "tags": [],
   },
@@ -1987,16 +1777,6 @@ exports[`Agario Modified stack is detected 1`] = `
   },
   {
     "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Planeet.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
     "name": "Controle op bestaande code",
     "tags": [],
   },
@@ -2023,16 +1803,6 @@ exports[`Agario Modified stack is detected 1`] = `
   {
     "command": "close-test",
     "feedback": "Top, de sprite Vijand 1 is niet verwijderd.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Vijand 1.",
     "status": "correct",
   },
   {
@@ -2077,16 +1847,6 @@ exports[`Agario Modified stack is detected 1`] = `
   },
   {
     "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Vijand 2.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
     "name": "Controle op bestaande code",
     "tags": [],
   },
@@ -2123,16 +1883,6 @@ exports[`Agario Modified stack is detected 1`] = `
   {
     "command": "close-test",
     "feedback": "Top, de sprite Voedsel 1 is niet verwijderd.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Voedsel 1.",
     "status": "correct",
   },
   {
@@ -2177,16 +1927,6 @@ exports[`Agario Modified stack is detected 1`] = `
   },
   {
     "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Voedsel 2.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
     "name": "Controle op bestaande code",
     "tags": [],
   },
@@ -2223,16 +1963,6 @@ exports[`Agario Modified stack is detected 1`] = `
   {
     "command": "close-test",
     "feedback": "Top, de sprite Voedsel 3 is niet verwijderd.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Voedsel 3.",
     "status": "correct",
   },
   {
@@ -2277,16 +2007,6 @@ exports[`Agario Modified stack is detected 1`] = `
   },
   {
     "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Voedsel 4.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
     "name": "Controle op bestaande code",
     "tags": [],
   },
@@ -2327,16 +2047,6 @@ exports[`Agario Modified stack is detected 1`] = `
   },
   {
     "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Scherm.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
     "name": "Controle op bestaande code",
     "tags": [],
   },
@@ -2373,16 +2083,6 @@ exports[`Agario Modified stack is detected 1`] = `
   {
     "command": "close-test",
     "feedback": "Top, de sprite Boodschap 1 is niet verwijderd.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Boodschap 1.",
     "status": "correct",
   },
   {
@@ -2885,16 +2585,6 @@ exports[`Agario No loop has one error 1`] = `
   },
   {
     "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Stage.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
     "name": "Controle op bestaande code",
     "tags": [],
   },
@@ -2931,16 +2621,6 @@ exports[`Agario No loop has one error 1`] = `
   {
     "command": "close-test",
     "feedback": "Top, de sprite Planeet is niet verwijderd.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Planeet.",
     "status": "correct",
   },
   {
@@ -2985,16 +2665,6 @@ exports[`Agario No loop has one error 1`] = `
   },
   {
     "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Vijand 1.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
     "name": "Controle op bestaande code",
     "tags": [],
   },
@@ -3031,16 +2701,6 @@ exports[`Agario No loop has one error 1`] = `
   {
     "command": "close-test",
     "feedback": "Top, de sprite Vijand 2 is niet verwijderd.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Vijand 2.",
     "status": "correct",
   },
   {
@@ -3085,16 +2745,6 @@ exports[`Agario No loop has one error 1`] = `
   },
   {
     "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Voedsel 1.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
     "name": "Controle op bestaande code",
     "tags": [],
   },
@@ -3131,16 +2781,6 @@ exports[`Agario No loop has one error 1`] = `
   {
     "command": "close-test",
     "feedback": "Top, de sprite Voedsel 2 is niet verwijderd.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Voedsel 2.",
     "status": "correct",
   },
   {
@@ -3185,16 +2825,6 @@ exports[`Agario No loop has one error 1`] = `
   },
   {
     "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Voedsel 3.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
     "name": "Controle op bestaande code",
     "tags": [],
   },
@@ -3231,16 +2861,6 @@ exports[`Agario No loop has one error 1`] = `
   {
     "command": "close-test",
     "feedback": "Top, de sprite Voedsel 4 is niet verwijderd.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Voedsel 4.",
     "status": "correct",
   },
   {
@@ -3285,16 +2905,6 @@ exports[`Agario No loop has one error 1`] = `
   },
   {
     "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Scherm.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
     "name": "Controle op bestaande code",
     "tags": [],
   },
@@ -3331,16 +2941,6 @@ exports[`Agario No loop has one error 1`] = `
   {
     "command": "close-test",
     "feedback": "Top, de sprite Boodschap 1 is niet verwijderd.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Boodschap 1.",
     "status": "correct",
   },
   {
@@ -3843,16 +3443,6 @@ exports[`Agario Switched block order in planet is accepted 1`] = `
   },
   {
     "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Stage.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
     "name": "Controle op bestaande code",
     "tags": [],
   },
@@ -3889,16 +3479,6 @@ exports[`Agario Switched block order in planet is accepted 1`] = `
   {
     "command": "close-test",
     "feedback": "Top, de sprite Planeet is niet verwijderd.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Planeet.",
     "status": "correct",
   },
   {
@@ -3943,16 +3523,6 @@ exports[`Agario Switched block order in planet is accepted 1`] = `
   },
   {
     "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Vijand 1.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
     "name": "Controle op bestaande code",
     "tags": [],
   },
@@ -3989,16 +3559,6 @@ exports[`Agario Switched block order in planet is accepted 1`] = `
   {
     "command": "close-test",
     "feedback": "Top, de sprite Vijand 2 is niet verwijderd.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Vijand 2.",
     "status": "correct",
   },
   {
@@ -4043,16 +3603,6 @@ exports[`Agario Switched block order in planet is accepted 1`] = `
   },
   {
     "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Voedsel 1.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
     "name": "Controle op bestaande code",
     "tags": [],
   },
@@ -4089,16 +3639,6 @@ exports[`Agario Switched block order in planet is accepted 1`] = `
   {
     "command": "close-test",
     "feedback": "Top, de sprite Voedsel 2 is niet verwijderd.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Voedsel 2.",
     "status": "correct",
   },
   {
@@ -4143,16 +3683,6 @@ exports[`Agario Switched block order in planet is accepted 1`] = `
   },
   {
     "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Voedsel 3.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
     "name": "Controle op bestaande code",
     "tags": [],
   },
@@ -4189,16 +3719,6 @@ exports[`Agario Switched block order in planet is accepted 1`] = `
   {
     "command": "close-test",
     "feedback": "Top, de sprite Voedsel 4 is niet verwijderd.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Voedsel 4.",
     "status": "correct",
   },
   {
@@ -4243,16 +3763,6 @@ exports[`Agario Switched block order in planet is accepted 1`] = `
   },
   {
     "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Scherm.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
     "name": "Controle op bestaande code",
     "tags": [],
   },
@@ -4289,16 +3799,6 @@ exports[`Agario Switched block order in planet is accepted 1`] = `
   {
     "command": "close-test",
     "feedback": "Top, de sprite Boodschap 1 is niet verwijderd.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Boodschap 1.",
     "status": "correct",
   },
   {
@@ -4801,16 +4301,6 @@ exports[`Agario Template is rejected 1`] = `
   },
   {
     "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Stage.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
     "name": "Controle op bestaande code",
     "tags": [],
   },
@@ -4847,16 +4337,6 @@ exports[`Agario Template is rejected 1`] = `
   {
     "command": "close-test",
     "feedback": "Top, de sprite Planeet is niet verwijderd.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Planeet.",
     "status": "correct",
   },
   {
@@ -4901,16 +4381,6 @@ exports[`Agario Template is rejected 1`] = `
   },
   {
     "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Vijand 1.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
     "name": "Controle op bestaande code",
     "tags": [],
   },
@@ -4947,16 +4417,6 @@ exports[`Agario Template is rejected 1`] = `
   {
     "command": "close-test",
     "feedback": "Top, de sprite Vijand 2 is niet verwijderd.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Vijand 2.",
     "status": "correct",
   },
   {
@@ -5001,16 +4461,6 @@ exports[`Agario Template is rejected 1`] = `
   },
   {
     "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Voedsel 1.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
     "name": "Controle op bestaande code",
     "tags": [],
   },
@@ -5047,16 +4497,6 @@ exports[`Agario Template is rejected 1`] = `
   {
     "command": "close-test",
     "feedback": "Top, de sprite Voedsel 2 is niet verwijderd.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Voedsel 2.",
     "status": "correct",
   },
   {
@@ -5101,16 +4541,6 @@ exports[`Agario Template is rejected 1`] = `
   },
   {
     "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Voedsel 3.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
     "name": "Controle op bestaande code",
     "tags": [],
   },
@@ -5147,16 +4577,6 @@ exports[`Agario Template is rejected 1`] = `
   {
     "command": "close-test",
     "feedback": "Top, de sprite Voedsel 4 is niet verwijderd.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Voedsel 4.",
     "status": "correct",
   },
   {
@@ -5201,16 +4621,6 @@ exports[`Agario Template is rejected 1`] = `
   },
   {
     "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Scherm.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
     "name": "Controle op bestaande code",
     "tags": [],
   },
@@ -5247,16 +4657,6 @@ exports[`Agario Template is rejected 1`] = `
   {
     "command": "close-test",
     "feedback": "Top, de sprite Boodschap 1 is niet verwijderd.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Boodschap 1.",
     "status": "correct",
   },
   {
@@ -5759,16 +5159,6 @@ exports[`Laserjets level 5 Correct solution is accepted 1`] = `
   },
   {
     "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Stage.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
     "name": "Controle op bestaande code",
     "tags": [],
   },
@@ -5805,16 +5195,6 @@ exports[`Laserjets level 5 Correct solution is accepted 1`] = `
   {
     "command": "close-test",
     "feedback": "Top, de sprite Laser is niet verwijderd.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Laser.",
     "status": "correct",
   },
   {
@@ -5859,16 +5239,6 @@ exports[`Laserjets level 5 Correct solution is accepted 1`] = `
   },
   {
     "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Start.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
     "name": "Controle op bestaande code",
     "tags": [],
   },
@@ -5905,16 +5275,6 @@ exports[`Laserjets level 5 Correct solution is accepted 1`] = `
   {
     "command": "close-test",
     "feedback": "Top, de sprite Finish is niet verwijderd.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Finish.",
     "status": "correct",
   },
   {
@@ -5959,16 +5319,6 @@ exports[`Laserjets level 5 Correct solution is accepted 1`] = `
   },
   {
     "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite RodeSpiegel.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
     "name": "Controle op bestaande code",
     "tags": [],
   },
@@ -6005,16 +5355,6 @@ exports[`Laserjets level 5 Correct solution is accepted 1`] = `
   {
     "command": "close-test",
     "feedback": "Top, de sprite Blauwe spiegel is niet verwijderd.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Blauwe spiegel.",
     "status": "correct",
   },
   {
@@ -6059,16 +5399,6 @@ exports[`Laserjets level 5 Correct solution is accepted 1`] = `
   },
   {
     "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Gele spiegel.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
     "name": "Controle op bestaande code",
     "tags": [],
   },
@@ -6105,16 +5435,6 @@ exports[`Laserjets level 5 Correct solution is accepted 1`] = `
   {
     "command": "close-test",
     "feedback": "Top, de sprite Groene spiegel is niet verwijderd.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Groene spiegel.",
     "status": "correct",
   },
   {
@@ -6159,16 +5479,6 @@ exports[`Laserjets level 5 Correct solution is accepted 1`] = `
   },
   {
     "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Glas blok.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
     "name": "Controle op bestaande code",
     "tags": [],
   },
@@ -6209,16 +5519,6 @@ exports[`Laserjets level 5 Correct solution is accepted 1`] = `
   },
   {
     "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Tina.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
     "name": "Controle op bestaande code",
     "tags": [],
   },
@@ -6255,16 +5555,6 @@ exports[`Laserjets level 5 Correct solution is accepted 1`] = `
   {
     "command": "close-test",
     "feedback": "Top, de sprite Startknop is niet verwijderd.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Startknop.",
     "status": "correct",
   },
   {
@@ -6527,16 +5817,6 @@ exports[`Laserjets level 5 Template is rejected 1`] = `
   },
   {
     "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Stage.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
     "name": "Controle op bestaande code",
     "tags": [],
   },
@@ -6573,16 +5853,6 @@ exports[`Laserjets level 5 Template is rejected 1`] = `
   {
     "command": "close-test",
     "feedback": "Top, de sprite Laser is niet verwijderd.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Laser.",
     "status": "correct",
   },
   {
@@ -6627,16 +5897,6 @@ exports[`Laserjets level 5 Template is rejected 1`] = `
   },
   {
     "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Start.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
     "name": "Controle op bestaande code",
     "tags": [],
   },
@@ -6673,16 +5933,6 @@ exports[`Laserjets level 5 Template is rejected 1`] = `
   {
     "command": "close-test",
     "feedback": "Top, de sprite Finish is niet verwijderd.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Finish.",
     "status": "correct",
   },
   {
@@ -6727,16 +5977,6 @@ exports[`Laserjets level 5 Template is rejected 1`] = `
   },
   {
     "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite RodeSpiegel.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
     "name": "Controle op bestaande code",
     "tags": [],
   },
@@ -6773,16 +6013,6 @@ exports[`Laserjets level 5 Template is rejected 1`] = `
   {
     "command": "close-test",
     "feedback": "Top, de sprite Blauwe spiegel is niet verwijderd.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Blauwe spiegel.",
     "status": "correct",
   },
   {
@@ -6827,16 +6057,6 @@ exports[`Laserjets level 5 Template is rejected 1`] = `
   },
   {
     "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Gele spiegel.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
     "name": "Controle op bestaande code",
     "tags": [],
   },
@@ -6873,16 +6093,6 @@ exports[`Laserjets level 5 Template is rejected 1`] = `
   {
     "command": "close-test",
     "feedback": "Top, de sprite Groene spiegel is niet verwijderd.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Groene spiegel.",
     "status": "correct",
   },
   {
@@ -6927,16 +6137,6 @@ exports[`Laserjets level 5 Template is rejected 1`] = `
   },
   {
     "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Glas blok.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
     "name": "Controle op bestaande code",
     "tags": [],
   },
@@ -6977,16 +6177,6 @@ exports[`Laserjets level 5 Template is rejected 1`] = `
   },
   {
     "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Tina.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
     "name": "Controle op bestaande code",
     "tags": [],
   },
@@ -7023,16 +6213,6 @@ exports[`Laserjets level 5 Template is rejected 1`] = `
   {
     "command": "close-test",
     "feedback": "Top, de sprite Startknop is niet verwijderd.",
-    "status": "correct",
-  },
-  {
-    "command": "start-test",
-    "name": "Voorgeprogrammeerde blokjes",
-    "tags": [],
-  },
-  {
-    "command": "close-test",
-    "feedback": "Je hebt niets veranderd aan de voorgeprogrammeerde blokjes van de sprite Startknop.",
     "status": "correct",
   },
   {
