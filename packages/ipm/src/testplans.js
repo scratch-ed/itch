@@ -120,10 +120,16 @@ async function sendTestplan(exerciseId, testplanPath, token) {
 
 function findLocalTestplan(relativePath, level) {
   const regex = new RegExp(`plan${level ? '-' + level : ''}.js`);
-  return fs
+  const leveled = fs
     .readdirSync(relativePath, { withFileTypes: true })
     .filter((v) => v.isFile() && regex.test(v.name))
     .find(() => true);
+  if (!leveled && level) {
+    // We could not find a testplan for the given level, so try again without level.
+    return findLocalTestplan(relativePath, undefined);
+  } else {
+    return leveled;
+  }
 }
 
 async function uploadTestplan(relativePath, result, level, name, token) {
