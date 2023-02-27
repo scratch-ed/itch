@@ -6,7 +6,7 @@ Repo for the Scratch judge.
 
 This repo uses _npm_ workspaces, so you need a recent version of npm (> 7.7):
 
-- node: 15+
+- node: 15.x.x
 - npm: 7.7+
 
 If you use `nvm`, you can simply execute `nvm use` to get the desired `node` and `npm` version.
