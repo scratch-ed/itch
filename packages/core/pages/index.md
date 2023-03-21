@@ -78,5 +78,7 @@ There are two more utility packages:
 Finally, there are exercises in `/exercises`.
 Each exercise is its own "JavaScript package", containing one or more test plans.
 
-The next step is to read the [Introduction to testing Scratch exercises](./introduction-to-testing.html).
+The next step is to read the [_Introduction to testing Scratch exercises_](./introduction-to-testing.html).
 Alternatively, you can read the documentation on using the judge in other projects, such as the debugger.
+
+Finally, if you are interested in running the judge yourself, consult [_Using the judge_](./using-the-judge.html).

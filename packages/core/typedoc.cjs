@@ -15,7 +15,7 @@ module.exports = {
           },
           {
             title: 'Using the judge in other projects',
-            source: './other-projects.md',
+            source: './using-the-judge.md',
           },
           {
             title: 'Introduction to testing',

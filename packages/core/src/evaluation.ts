@@ -652,21 +652,25 @@ export async function run(config: EvalConfig): Promise<void | Judgement> {
 
     judge.stage = EvaluationStage.scheduling;
 
-    // Schedule the commands for the duration.
-    duringExecution(judge);
+    if (config.canvas) {
+      // Schedule the commands for the duration.
+      duringExecution(judge);
 
-    judge.stage = EvaluationStage.executing;
-    // Prepare the context for execution.
-    context.runVm();
+      judge.stage = EvaluationStage.executing;
+      // Prepare the context for execution.
+      context.runVm();
 
-    // Run the events.
-    await context.event.run(context);
-    await context.simulationEnd.promise;
+      // Run the events.
+      await context.event.run(context);
+      await context.simulationEnd.promise;
 
-    judge.stage = EvaluationStage.after;
+      judge.stage = EvaluationStage.after;
 
-    // Do post-mortem tests.
-    afterExecution(judge);
+      // Do post-mortem tests.
+      afterExecution(judge);
+    } else {
+      console.warn('No canvas given, not attempting to run phase 1 and 2.');
+    }
   } catch (e) {
     // @ts-ignore
     if (e.type !== 'FatalErrorException') {
