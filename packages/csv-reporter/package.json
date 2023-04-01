@@ -13,6 +13,6 @@
   ],
   "devDependencies": {
     "jest": "^29.4.3",
-    "@jest/reporters": "^29.3.1"
+    "@jest/reporters": "^29.5.0"
   }
 }
