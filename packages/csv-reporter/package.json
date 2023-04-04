@@ -1,6 +1,6 @@
 {
   "name": "@ftrprf/csv-reporter",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "Reports Jest tests as CSV",
   "main": "src/index.js",
   "repository": {
