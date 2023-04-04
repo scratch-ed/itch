@@ -71,6 +71,11 @@ async function executePlan(template, submission, testplan, options = {}) {
 
   const data = fs.readFileSync(testplan).toString();
 
+  page.on('pageerror', (err) => {
+    console.error('An error occurred on the puppeteer page', err);
+    throw err;
+  });
+
   await runOnPage(page, {
     template: template,
     testplanData: data,
