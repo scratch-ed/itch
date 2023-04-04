@@ -43,6 +43,8 @@ interface EventHandles {
   // eslint-disable-next-line
   scratchQuestion: (...args: any[]) => void;
   // eslint-disable-next-line
+  scratchAnswer: (...args: any[]) => void;
+  // eslint-disable-next-line
   scratchProjectRunStop: (...args: any[]) => void;
   // eslint-disable-next-line
   doneThreadsUpdate: (...args: any[]) => void;
@@ -204,7 +206,7 @@ export class Context {
           let x = this.providedAnswers.shift();
           if (x === undefined) {
             this.groupedOutput.appendMessage(
-              'Er werd een vraag gesteld waarop geen antwoord voorzien is.',
+                'Er werd een vraag gesteld waarop geen antwoord voorzien is.',
             );
             this.groupedOutput.escalateStatus('wrong');
             x = undefined;
@@ -222,6 +224,15 @@ export class Context {
 
           this.vm.runtime.emit(Events.SCRATCH_ANSWER, x);
         }
+      },
+      // The following is only used by the debugger
+      scratchAnswer: (answer) => {
+        const event = new Event('answer', {
+          text: answer,
+        });
+        event.previous = this.log.snap('event.answer');
+        event.next = event.previous;
+        this.log.registerEvent(event);
       },
       scratchProjectRunStop: () => {
         console.log(`${this.log.timestamp()}: Ended run`);
@@ -290,6 +301,7 @@ export class Context {
     if (logMode === 'debugger') {
       console.log('Attaching event listeners for debugger log mode...');
       this.vm.runtime.on(Events.OPS, this.eventHandles.ops);
+      this.vm.runtime.on(Events.SCRATCH_ANSWER, this.eventHandles.scratchAnswer);
     }
   }
 

@@ -143,12 +143,13 @@ function vmTargetToScratchTarget(
  */
 export class RuntimeSnapshot {
   readonly threads: string[];
+
   /**
    *
-   * @param threads A list of Runtime treads.
+   * @param runtime A Runtime object.
    */
-  constructor(threads: Thread[]) {
-    this.threads = threads.map((thread: Thread) => thread.toJSON())
+  constructor(runtime: Runtime) {
+    this.threads = runtime.threads.map((thread: Thread) => thread.toJSON());
   }
 
   restore(runtime: Runtime) {
@@ -180,7 +181,7 @@ export class Snapshot {
     readonly targets: ScratchTarget[],
     runtime: Runtime | null = null
   ) {
-    this.runtimeSnapshot = runtime && new RuntimeSnapshot(runtime.threads);
+    this.runtimeSnapshot = runtime && new RuntimeSnapshot(runtime);
   }
 
   get sprites(): ScratchSprite[] {
@@ -209,6 +210,10 @@ export class Snapshot {
 
   sprite(name: string): ScratchSprite {
     return ensure(this.findSprite(name));
+  }
+
+  findTargetById(id: string): ScratchTarget | undefined {
+    return this.targets.find((t) => t.id === id);
   }
 
   target(name: string): ScratchTarget {
