@@ -1,6 +1,6 @@
 {
   "name": "@ftrprf/judge-test-utils",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "description": "Some utilities to run tests for exercises",
   "main": "src/index.js",
   "types": "src/index.d.ts",
