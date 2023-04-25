@@ -3,6 +3,7 @@
  *   this will replace the existing groups.
  */
 
+import { Judgement } from './full-schema';
 import { Status, Update, Visibility } from './partial-schema';
 
 /**
@@ -10,7 +11,7 @@ import { Status, Update, Visibility } from './partial-schema';
  * You can overwrite this by setting a global `handleOut` callback,
  * which will be used instead if present.
  */
-function toOutput(output: Update): void {
+function toOutput(output: Update | Judgement): void {
   // @ts-ignore
   if (typeof window.handleOut !== 'undefined') {
     // @ts-ignore
@@ -21,7 +22,7 @@ function toOutput(output: Update): void {
 }
 
 export interface OutputHandler {
-  (obj: Update, force?: boolean): void;
+  (obj: Update | Judgement, force?: boolean): void;
 }
 
 export class ResultManager {
@@ -40,9 +41,9 @@ export class ResultManager {
   private outputBuffer: Update[] = [];
 
   constructor(out: OutputHandler = toOutput) {
-    this.out = (update: Update, force) => {
+    this.out = (update: Update | Judgement, force) => {
       if (this.isPaused && !force) {
-        this.outputBuffer.push(update);
+        this.outputBuffer.push(update as Update);
       } else {
         out(update);
       }

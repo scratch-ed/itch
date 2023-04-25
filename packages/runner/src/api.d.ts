@@ -1,3 +1,4 @@
+import type { OutputHandler } from '@ftrprf/judge-core/src/output';
 import type { Page as PuppeteerPage } from 'puppeteer';
 import type { Page as CorePage } from 'puppeteer-core';
 import type { LanguageData } from '@ftrprf/judge-core/src/i18n';
@@ -30,6 +31,21 @@ interface Options {
   fullFormat?: boolean;
   /** Path to translations file. Will be used to populate language data. */
   translations?: string | LanguageData;
+
+  /**
+   * Handle the output.
+   *
+   * If `fullFormat` is true, this will be called once with a full Judgement.
+   * If it is false, this will be called for every update.
+   *
+   * @param update An Update object for every update or one Judgement.
+   */
+  outputHandler: OutputHandler;
+
+  /**
+   * If Puppeteer should pause before beginning the execution.
+   */
+  pause: boolean;
 }
 
 interface UrlOptions extends Options, TestplanUrlOptions {}
@@ -52,18 +68,3 @@ export function runOnPage(
   page: CorePage | PuppeteerPage,
   options: JudgeOptions,
 ): Promise<Judgement | undefined>;
-
-/**
- * Run the tests on an existing page from puppeteer.
- *
- * This function does not manage puppeteer.
- *
- * @param page - Puppeteer page to run on.
- * @param options - Options for the run.
- *
- * @returns The result of the judge.
- */
-export function runFullJudgement(
-  page: CorePage | PuppeteerPage,
-  options: JudgeOptions,
-): Promise<Judgement>;

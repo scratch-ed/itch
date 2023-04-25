@@ -4,6 +4,7 @@ import 'regenerator-runtime/runtime';
 import seed from 'seed-random';
 import { anyOrder, checkBlocks } from './matcher/differ';
 import { nodeMatchesPattern, subTreeMatchesScript } from './matcher/node-matcher';
+import { Judgement } from './output/full-schema';
 import { numericEquals, format } from './utils';
 import { Context } from './context';
 import { ScheduledEvent } from './scheduler/scheduled-event';
@@ -17,7 +18,6 @@ import { GroupLevel } from './testplan/hierarchy';
 import { Log } from './log';
 import { initialiseTranslations, LanguageData, t } from './i18n';
 import { OutputCollector } from './output/collector';
-import { Judgement } from './output/full-schema';
 import { Update } from './output/partial-schema';
 import { createContext } from './vm';
 import {
@@ -367,7 +367,7 @@ export interface EvalConfig {
    * Optional callback for the results of the judge. This function will
    * be called each time a result is available.
    */
-  callback?: OutputHandler;
+  callback: OutputHandler;
   /**
    * The language of the exercise.
    */
@@ -616,20 +616,21 @@ export class Evaluation {
  *
  * @param config - The config with the inputs for the judge.
  */
-export async function run(config: EvalConfig): Promise<void | Judgement> {
+export async function run(config: EvalConfig): Promise<void> {
   // Seed random data.
   seed('itch-judge', { global: true });
 
   // Set language from parameters.
   initialiseTranslations(config.language, config.translations);
 
+  const originalHandler = config.callback;
   let handler: OutputCollector;
   if (config.fullFormat) {
     handler = new OutputCollector();
-    config.callback = (update: Update) => {
+    config.callback = (update: Update | Judgement) => {
       // Output partial updates for debug purposes.
-      console.debug(update);
-      handler.handle(update);
+      console.debug(update as Update);
+      handler.handle(update as Update);
     };
   }
 
@@ -686,7 +687,7 @@ export async function run(config: EvalConfig): Promise<void | Judgement> {
   console.log('--- END OF EVALUATION ---');
 
   if (config.fullFormat) {
-    return handler!.judgement;
+    originalHandler(handler!.judgement!);
   }
 }
 

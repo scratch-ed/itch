@@ -27,9 +27,7 @@ async function loadModuleInPage(page, moduleName, internalPath) {
  * This function does not manage puppeteer.
  *
  * @param {Page} page
- * @param {JudgeOptions | {outputHandler: function(Update): void, pause: boolean}} options
- *
- * @returns {Promise<void|Judgement>} The result of the judge.
+ * @param {JudgeOptions} options*
  */
 async function runOnPage(page, options) {
   await page.evaluateOnNewDocument(() => {
@@ -71,9 +69,7 @@ async function runOnPage(page, options) {
     await submissionHandle.uploadFile(options.submission);
   }
 
-  if (options.outputHandler) {
-    await page.exposeFunction('handleOut', options.outputHandler);
-  }
+  await page.exposeFunction('handleOut', options.outputHandler);
 
   // Capture logs.
   page.on('console', (msg) => console.debug('PAGE LOG:', msg.text()));
@@ -88,32 +84,14 @@ async function runOnPage(page, options) {
     });
   }
 
-  const result = await page.evaluate(async (config) => {
+  await page.evaluate(async (config) => {
     return await runTests(config);
   }, options);
 
   console.info('Tests have completed.');
-  return result;
 }
 
-/**
- * Run the tests on an existing page from puppeteer.
- *
- * This function does not manage puppeteer.
- *
- * @param {Page} page
- * @param {JudgeOptions | {testplanData: string}} options
- *
- * @returns {Promise<Judgement>} The result of the judge.
- */
-async function runFullJudgement(page, options) {
-  return await runOnPage(page, {
-    ...options,
-    fullFormat: true,
-  });
-}
-
+// noinspection JSUnusedGlobalSymbols
 module.exports = {
   runOnPage,
-  runFullJudgement,
 };

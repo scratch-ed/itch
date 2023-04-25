@@ -49,7 +49,6 @@ async function download(url, token) {
  * in the environment.
  *
  * @param {JudgeOptions} config
- * @returns {Promise<void|Judgement>}
  */
 async function runTests(config) {
   console.info('Running tests...');
@@ -68,7 +67,7 @@ async function runTests(config) {
   console.info('Starting judgement...');
 
   // Run the actual judge.
-  return await window.run({
+  await window.run({
     ...config,
     template,
     submission,
