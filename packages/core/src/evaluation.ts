@@ -623,7 +623,7 @@ export async function run(config: EvalConfig): Promise<void> {
   // Set language from parameters.
   initialiseTranslations(config.language, config.translations);
 
-  const originalHandler = config.callback;
+  const originalHandler = config.callback || window.handleOut;
   let handler: OutputCollector;
   if (config.fullFormat) {
     handler = new OutputCollector();

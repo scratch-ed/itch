@@ -1,5 +1,6 @@
 import { anyOrder, checkBlocks } from './matcher/differ';
 import { nodeMatchesPattern, subTreeMatchesScript } from './matcher/node-matcher';
+import { OutputHandler } from './output';
 import { format, numericEquals } from './utils';
 import { broadcast, delay, sprite } from './scheduler/wait';
 import { asRange, ignoreWaitInProcedureFor } from './testplan';
@@ -327,6 +328,8 @@ declare global {
 
     beforeExecution?: CallbackFunction;
     duringExecution?: CallbackFunction;
+
+    handleOut?: OutputHandler;
     afterExecution?: CallbackFunction;
 
     run: typeof run;
