@@ -22,7 +22,7 @@
     "jest-html-reporter": "^3.7.1",
     "prettier": "^2.8.7",
     "rimraf": "^3.0.2",
-    "typescript-json-schema": "^0.55.0"
+    "typescript-json-schema": "^0.56.0"
   },
   "scripts": {
     "generate:output": "npm run generate:output --workspace @ftrprf/judge-core",
