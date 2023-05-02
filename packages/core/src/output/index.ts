@@ -11,18 +11,18 @@ import { Status, Update, Visibility } from './partial-schema';
  * You can overwrite this by setting a global `handleOut` callback,
  * which will be used instead if present.
  */
-function toOutput(output: Update | Judgement): void {
+async function toOutput(output: Update | Judgement): Promise<void> {
   // @ts-ignore
   if (typeof window.handleOut !== 'undefined') {
     // @ts-ignore
-    window.handleOut(output);
+    await window.handleOut(output);
   } else {
     console.log(output);
   }
 }
 
 export interface OutputHandler {
-  (obj: Update | Judgement, force?: boolean): void;
+  (obj: Update | Judgement, force?: boolean): void | Promise<void>;
 }
 
 export class ResultManager {
@@ -41,12 +41,19 @@ export class ResultManager {
   private outputBuffer: Update[] = [];
 
   constructor(out: OutputHandler = toOutput) {
-    this.out = (update: Update | Judgement, force) => {
+    const asyncOut = async (update: Update | Judgement, force?: boolean) => {
       if (this.isPaused && !force) {
         this.outputBuffer.push(update as Update);
       } else {
-        out(update);
+        await out(update);
       }
+    };
+
+    this.out = (update: Update | Judgement, force) => {
+      asyncOut(update, force).catch((e) => {
+        console.error('Callback failed, aborting...');
+        throw e;
+      });
     };
   }
 
