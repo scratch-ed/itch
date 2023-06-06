@@ -131,6 +131,10 @@ import {
   stop,
   script,
   stringNumberArgument,
+  penEraseAll,
+  penUp,
+  penDown,
+  penSetColor,
 } from './matcher/patterns';
 
 declare interface Itch {
@@ -278,6 +282,10 @@ declare interface BlockMatch {
   subTreeMatchesScript: typeof subTreeMatchesScript;
   checkBlocks: typeof checkBlocks;
   anyOrder: typeof anyOrder;
+  penEraseAll: typeof penEraseAll;
+  penUp: typeof penUp;
+  penDown: typeof penDown;
+  penSetColor: typeof penSetColor;
 }
 
 /**

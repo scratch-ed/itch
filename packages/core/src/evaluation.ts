@@ -143,6 +143,10 @@ import {
   listContains,
   stop,
   script,
+  penEraseAll,
+  penUp,
+  penDown,
+  penSetColor,
 } from './matcher/patterns';
 
 const object: Window = window;
@@ -333,6 +337,10 @@ function expose() {
     subTreeMatchesScript,
     checkBlocks,
     anyOrder,
+    penEraseAll,
+    penUp,
+    penDown,
+    penSetColor,
   };
 }
 

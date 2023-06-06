@@ -1679,3 +1679,30 @@ export function stringNumberArgument(name: Pattern<string>): ArgumentBlock {
     },
   };
 }
+
+export function penEraseAll(): PatternBlock {
+  return {
+    opcode: 'pen_clear',
+  };
+}
+
+export function penUp(): PatternBlock {
+  return {
+    opcode: 'pen_penUp',
+  };
+}
+
+export function penDown(): PatternBlock {
+  return {
+    opcode: 'pen_penDown',
+  };
+}
+
+export function penSetColor(color: ValuePattern<string>): PatternBlock {
+  return {
+    opcode: 'pen_setPenColorToColor',
+    inputs: {
+      COLOR: color,
+    },
+  };
+}
