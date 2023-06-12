@@ -258,21 +258,8 @@ export class Context {
             );
         }
       },
-      ops: (ops) => {
-        if (ops.length === 0) {
-          return;
-        }
-        const block = ops[ops.length - 1]; // Only log the last outer block
-
-        // @ts-ignore
-        const isMonitored = this.vm.runtime.monitorBlocks.getBlock(block.id)?.isMonitored;
-        if (isMonitored) {
-          return;
-        }
-
-        const event = new Event('ops', {
-          blockId: block.id,
-        });
+      ops: () => {
+        const event = new Event('ops');
         event.previous = this.log.snap('event.ops');
         event.next = event.previous;
         this.log.registerEvent(event);
@@ -300,7 +287,8 @@ export class Context {
 
     if (logMode === 'debugger') {
       console.log('Attaching event listeners for debugger log mode...');
-      this.vm.runtime.on(Events.OPS, this.eventHandles.ops);
+
+      this.vm.runtime.on(Events.THREADS_EXECUTED, this.eventHandles.ops);
       this.vm.runtime.on(Events.SCRATCH_ANSWER, this.eventHandles.scratchAnswer);
     }
   }
@@ -329,7 +317,9 @@ export class Context {
     );
     this.vm.runtime.off(Events.DONE_THREADS_UPDATE, this.eventHandles.doneThreadsUpdate);
     this.vm.runtime.off(Events.BEFORE_HATS_START, this.eventHandles.beforeHatsStart);
-    this.vm.runtime.off(Events.OPS, this.eventHandles.ops);
+
+    this.vm.runtime.off(Events.THREADS_EXECUTED, this.eventHandles.ops);
+    this.vm.runtime.off(Events.SCRATCH_ANSWER, this.eventHandles.scratchAnswer);
     this.eventHandles = undefined;
   }
 

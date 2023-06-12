@@ -19,6 +19,7 @@ export const Events: Record<string, string> = {
   BEFORE_HATS_START: 'BEFORE_HATS_START',
   // Custom event for the debugger.
   OPS: 'OPS_EXECUTED',
+  THREADS_EXECUTED: 'THREADS_EXECUTED',
 };
 
 /**
