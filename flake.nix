@@ -29,7 +29,7 @@
             name = "scratch-judge";
             packages = with pkgs; [
 #               nodePackages.npm
-              nodejs-16_x
+              nodejs-18_x
               chromium
               git
             ];
