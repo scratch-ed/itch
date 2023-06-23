@@ -82,25 +82,17 @@ To deploy the judge, you'll need to do 4 things:
 Steps to take:
 
 1. On scratch judge (this repo):
-    1. `npm run release:[prerelease|patch|minor|major]`
-    2. `git add . && git commit -m "Nieuwe versie"`
-    3. `git tag <tagname>`
-    4. `git push && git push --tags`
-    5. GitHub maakt een nieuwe package
+   1. `npm run release:[prerelease|patch|minor|major]`
+   2. `git add . && git commit -m "Nieuwe versie"`
+   3. `git tag <tagname>`
+   4. `git push && git push --tags`
+   5. GitHub maakt een nieuwe package
 2. On the scratch judge aws wrapper:
-    1. Manueel versies van de judge bumpen in de AWS repo
-    2. `npm install` om de nieuwe versie van de judge in de wrapper te installeren
-    3. Committen en pushen in de AWS repo
-    4. GitHub upload de code naar AWS S3
-    5. Installeer artifact uit AWS S3 naar AWS lambda
-
-### Tagging a new version
-
-Some presets are available: `npm run release:prerelease|patch|minor|major`.
-Otherwise, use `npm version` to do it.
-
-Until https://github.com/npm/cli/issues/4017 is fixed, you'll need to manually
-commit all changed files and tag the commit with the version.
+   1. Manueel versies van de judge bumpen in de AWS repo
+   2. `npm install` om de nieuwe versie van de judge in de wrapper te installeren
+   3. Committen en pushen in de AWS repo
+   4. GitHub upload de code naar AWS S3
+   5. Installeer artifact uit AWS S3 naar AWS lambda
 
 ### Creating a new package
 
@@ -113,9 +105,9 @@ After pushing the tag to GitHub, a new version will be made automatically.
 ```
 ➜  scratch-judge-serverless-api-aws git:(main) npm installnpm ERR! code E404
 npm ERR! 404 Not Found - GET https://registry.npmjs.org/@ftrprf%2fjudge-runner - Not found
-npm ERR! 404 
+npm ERR! 404
 npm ERR! 404  '@ftrprf/judge-runner@^1.8.0' is not in this registry.
-npm ERR! 404 
+npm ERR! 404
 npm ERR! 404 Note that you can also install from a
 npm ERR! 404 tarball, folder, http url, or git url.
 ```
@@ -132,5 +124,4 @@ Hier bij is `<TOKEN>` een github personal access token van jezelf.
 
 Meer info over de registry: https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry#publishing-a-package-using-a-local-npmrc-file
 
-Personal access tokens:  https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-personal-access-token-classic
-
+Personal access tokens: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-personal-access-token-classic
