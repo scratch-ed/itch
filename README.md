@@ -88,11 +88,7 @@ Steps to take:
    4. `git push && git push --tags`
    5. GitHub maakt een nieuwe package
 2. On the scratch judge aws wrapper:
-   1. Manueel versies van de judge bumpen in de AWS repo
-   2. `npm install` om de nieuwe versie van de judge in de wrapper te installeren
-   3. Committen en pushen in de AWS repo
-   4. GitHub upload de code naar AWS S3
-   5. Installeer artifact uit AWS S3 naar AWS lambda
+   https://github.com/FTRPRF/scratch-judge-serverless-api-aws/edit/main/README.md#deploy-a-new-version
 
 ### Creating a new package
 
