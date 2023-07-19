@@ -6,7 +6,7 @@
   "main": "src/index.js",
   "type": "module",
   "dependencies": {
-    "commander": "^10.0.0",
+    "commander": "^11.0.0",
     "dotenv": "^16.3.1",
     "node-fetch": "^3.3.1",
     "zip-lib": "^0.7.3",
