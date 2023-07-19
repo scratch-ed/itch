@@ -45,7 +45,7 @@
     "jest": "^29.5.0",
     "typedoc": "^0.23.28",
     "@knodes/typedoc-plugin-pages": "^0.23.4",
-    "webpack": "^5.85.0",
+    "webpack": "^5.88.2",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^4.15.1",
     "@types/lodash-es": "^4.17.7",
