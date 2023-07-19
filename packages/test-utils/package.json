@@ -16,7 +16,7 @@
   ],
   "dependencies": {
     "@ftrprf/judge-runner": "*",
-    "puppeteer": "^10.4.0"
+    "puppeteer": "^20.8.3"
   },
   "devDependencies": {
     "jest": "^29.5.0"
