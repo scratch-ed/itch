@@ -31,7 +31,7 @@
     "scratch-vm": "*"
   },
   "devDependencies": {
-    "@babel/cli": "^7.22.5",
+    "@babel/cli": "^7.22.9",
     "@babel/core": "^7.22.1",
     "@babel/plugin-proposal-object-rest-spread": "^7.20.7",
     "@babel/plugin-syntax-dynamic-import": "^7.0.0",
