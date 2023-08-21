@@ -1,3 +1,4 @@
+/* Copyright (C) 2019 Ghent University - All Rights Reserved */
 let startTimestamp = 0;
 
 function getTimeStamp() {

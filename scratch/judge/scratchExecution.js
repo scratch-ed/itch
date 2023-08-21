@@ -1,3 +1,4 @@
+/* Copyright (C) 2019 Ghent University - All Rights Reserved */
 // Create global Scratch variable
 const Scratch = window.Scratch = window.Scratch || {};
 

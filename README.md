@@ -1,10 +1,6 @@
 # scratch4d-judge
-Gives feedback on ScratchJudge 3.0 exercises using behavior driven testing
 
-Change hard coded file name in judge.js
+Gives feedback on ScratchJudge 3.0 exercises using behavior driven testing.
 
-to get output in terminal
-```./run < runconfig.json ```
-
-to get output in out file
-```./runJudge```
+1. Modify runconfig.json to select exercise
+2. Run ```./run < runconfig.json ```

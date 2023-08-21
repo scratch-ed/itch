@@ -1,4 +1,4 @@
-
+/* Copyright (C) 2019 Ghent University - All Rights Reserved */
 function hasRemovedSprites(templateJSON, testJSON) {
     let names = [];
     for (let target of templateJSON.targets) {

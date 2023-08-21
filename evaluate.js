@@ -1,3 +1,4 @@
+/* Copyright (C) 2019 Ghent University - All Rights Reserved */
 process.stdin.on("data", function(data) {
 
     const path = require("path");
@@ -17,7 +18,7 @@ process.stdin.on("data", function(data) {
 
     // process tests
     const judge = new Judge(
-        path.join(resourcesDir, "test.js"),
+        path.join(resourcesDir, config["plan"]),
         {
             // convert time limit from seconds to millisecond and only consume
             // 90% of the available time in order to have some spare time to

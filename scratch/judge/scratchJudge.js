@@ -1,4 +1,4 @@
-
+/* Copyright (C) 2019 Ghent University - All Rights Reserved */
 class ScratchJudge {
 
     constructor() {

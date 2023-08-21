@@ -1,4 +1,4 @@
-
+/* Copyright (C) 2019 Ghent University - All Rights Reserved */
 async function promiseTimeout(future, ms){
 
     // Create a promise that rejects in <ms> milliseconds

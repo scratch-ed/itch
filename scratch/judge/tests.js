@@ -1,3 +1,4 @@
+/* Copyright (C) 2019 Ghent University - All Rights Reserved */
 function addTest(testName, expected, generated, message, correct = null) {
     let status;
     dodona.startTestCase(testName);

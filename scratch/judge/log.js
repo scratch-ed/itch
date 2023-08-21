@@ -1,3 +1,4 @@
+/* Copyright (C) 2019 Ghent University - All Rights Reserved */
 /**
  * Frame describes one captured moment during execution. It saves a snapshot of the current state of the sprites.
  * @example

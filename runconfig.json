@@ -1,8 +1,9 @@
 {
-  "resources" : "/home/nils/Thesis/scratch4d-judge/tests",
-  "source" : "/home/nils/Thesis/scratch4d-judge/source/sourceFile.sb3",
-  "time_limit" :10,
-  "memory_limit" : 5000000,
-  "natural_language" : "nl",
-  "programming_language" : "Scratch"
+  "resources": "tests",
+  "source": "tests/projects/vpw2017/13_cijfersom.sb3",
+  "plan": "plans/vpw2017/13_cijfersom_test.js",
+  "time_limit": 20000,
+  "memory_limit": 5000000,
+  "natural_language": "nl",
+  "programming_language": "Scratch"
 }

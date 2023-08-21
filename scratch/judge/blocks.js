@@ -1,3 +1,4 @@
+/* Copyright (C) 2019 Ghent University - All Rights Reserved */
 function containsLoop(blocks) {
   for (let key in blocks) {
     if (key === "control_repeat" || key === "control_forever") return true;

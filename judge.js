@@ -1,18 +1,6 @@
-// file system access
-//const fs = require("fs");
-
+/* Copyright (C) 2019 Ghent University - All Rights Reserved */
 const path = require('path');
 const url = path.resolve(__dirname, 'scratch/scratch-test-environment.html');
-
-/*
-const sourceFileTest = path.resolve(__dirname, 'source/sourceFile.sb3');
-const testFile = path.resolve(__dirname, 'tests/test.js');
-*/
-
-const oefening = '02_papegaai';
-const sourceFileTest = path.resolve(__dirname, `scratch_code/vpw2017/${oefening}.sb3`);
-const sourceFileTemplate = path.resolve(__dirname, `scratch_code/vpw2017/${oefening}.sb3`);
-const testFile = path.resolve(__dirname, `tests/vpw2017/${oefening}_test.js`);
 
 const DEBUG = false;
 let acceptsOutput = true;
@@ -23,7 +11,7 @@ const yauzl = require("yauzl");
 // puppeteer
 const puppeteer = require('puppeteer');
 
-function toDodona(output) {
+function toStdOut(output) {
     if (acceptsOutput) {
         process.stdout.write(JSON.stringify(output));
     }
@@ -35,7 +23,7 @@ function toDodona(output) {
 
 class Judge {
 
-    constructor(testFile, options) {
+    constructor(testFile, options, toDodona = toStdOut) {
 
         // options parameter is optional
         options = options || {};
@@ -46,8 +34,9 @@ class Judge {
         // extract options
         this.time_limit = options.time_limit || 10000;
 
-        this.test_file = testFile;
+        this.test_file = path.resolve(__dirname, testFile);
 
+        this.toDodona = toDodona;
     }
 
     async run(sourceFile) {
@@ -60,6 +49,7 @@ class Judge {
         }
 
         const page = await browser.newPage();
+        
 
         if (DEBUG) {
             page.on('console', msg => console.debug('PAGE LOG:', msg.text()));
@@ -68,51 +58,51 @@ class Judge {
         await page.goto(`file://${url}`);
 
         await page.exposeFunction('appendMessage', (message) => {
-            toDodona({command: "append-message", message: message});
+            this.toDodona({command: "append-message", message: message});
         });
         await page.exposeFunction('annotate', (row, column, text) => {
-            toDodona({command: "annotate", row: row, column: column, text: text});
+            this.toDodona({command: "annotate", row: row, column: column, text: text});
         });
         await page.exposeFunction('startTab', (title) => {
-            toDodona({command: "start-tab", title: title});
+            this.toDodona({command: "start-tab", title: title});
         });
         await page.exposeFunction('startContext', () => {
-            toDodona({command: "start-context"});
+            this.toDodona({command: "start-context"});
         });
         await page.exposeFunction('startTestcase', (description) => {
-            toDodona({command: "start-testcase", description: description});
+            this.toDodona({command: "start-testcase", description: description});
         });
         await page.exposeFunction('startTest', (expected) => {
-            toDodona({command: "start-test", expected: expected.toString()});
+            this.toDodona({command: "start-test", expected: expected.toString()});
         });
         await page.exposeFunction('closeTest', (generated, status) => {
-            toDodona({command: "close-test", generated: generated.toString(), status: status});
+            this.toDodona({command: "close-test", generated: generated.toString(), status: status});
         });
         await page.exposeFunction('closeTestcase', (accepted = undefined) => {
             if (accepted !== null && accepted !== undefined && accepted !== true) {
-                //toDodona({command: "close-testcase", accepted: accepted.toString()});
-                toDodona({command: "start-test", expected: "true"});
+                //this.toDodona({command: "close-testcase", accepted: accepted.toString()});
+                this.toDodona({command: "start-test", expected: "true"});
                 let status = {};
                 if (accepted) {
                     status = {enum: 'correct', human: 'Correct'};
                 } else {
                     status = {enum: 'wrong', human: 'Wrong'};
                 }
-                toDodona({command: "close-test", generated: accepted.toString(), status: status});
-                toDodona({command: "close-testcase"});
+                this.toDodona({command: "close-test", generated: accepted.toString(), status: status});
+                this.toDodona({command: "close-testcase"});
             } else {
-                toDodona({command: "close-testcase"});
+                this.toDodona({command: "close-testcase"});
             }
         });
         await page.exposeFunction('closeContext', () => {
-            toDodona({command: "close-context"});
+            this.toDodona({command: "close-context"});
         });
         await page.exposeFunction('closeTab', () => {
-            toDodona({command: "close-tab"});
+            this.toDodona({command: "close-tab"});
         });
         await page.exposeFunction('closeJudge', (accepted = undefined) => {
             if (accepted !== null && accepted !== undefined) {
-                toDodona({command: "close-judgement"});
+                this.toDodona({command: "close-judgement"});
             } else {
                 let status = {};
                 if (accepted) {
@@ -120,14 +110,15 @@ class Judge {
                 } else {
                     status = {enum: 'wrong', human: 'Wrong'};
                 }
-                toDodona({command: "close-judgement", accepted: accepted.toString(), status: status});
+                this.toDodona({command: "close-judgement", accepted: accepted.toString(), status: status});
             }
             acceptsOutput = false;
         });
 
-        await page.addScriptTag({url: testFile});
+        await page.addScriptTag({url: this.test_file});
 
         let templateJSON = "";
+        const sourceFileTemplate = path.resolve(__dirname, sourceFile);
         yauzl.open(sourceFileTemplate, {lazyEntries: true}, function(err, zipfile) {
             if (err) throw err;
             zipfile.readEntry();
@@ -149,7 +140,8 @@ class Judge {
         });
 
         let testJSON = "";
-        yauzl.open(sourceFileTest, {lazyEntries: true}, function(err, zipfile) {
+        // TODO: use file test
+        yauzl.open(sourceFileTemplate, {lazyEntries: true}, function(err, zipfile) {
             if (err) throw err;
             zipfile.readEntry();
             zipfile.on("entry", function(entry) {
@@ -171,16 +163,17 @@ class Judge {
         });
 
         // START JUDGE
-        toDodona({command: "start-judgement"});
+        this.toDodona({command: "start-judgement"});
 
         const fileHandle = await page.$('#file');
-        await fileHandle.uploadFile(sourceFileTest);
+        // TODO: also do file test here
+        await fileHandle.uploadFile(sourceFileTemplate);
 
         await page.waitFor(50);
 
         if (DEBUG) {
             await page.evaluate(() => {
-                //debugger;
+                debugger;
             });
         }
 
@@ -193,7 +186,7 @@ class Judge {
         }
 
         // END JUDGE
-        toDodona({command: "close-judgement"});
+        this.toDodona({command: "close-judgement"});
     }
 }
 

@@ -1,0 +1,1462 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`01_mad_hatter 1`] = `
+Array [
+  Object {
+    "command": "start-judgement",
+  },
+  Object {
+    "command": "start-tab",
+    "title": "Testen uit het testplan",
+  },
+  Object {
+    "command": "start-context",
+  },
+  Object {
+    "command": "close-context",
+  },
+  Object {
+    "command": "start-context",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Klik op sprite: Hat",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Na 1 klik op de hoed",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Klik op sprite: Hat",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Klik op sprite: Stage",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Klik op sprite: Nori",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Klik op sprite: Hat",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Klik op sprite: Hat",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Klik op sprite: Hat",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Klik op sprite: Hat",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Klik op sprite: Stage",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Klik op sprite: Nori",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Klik op sprite: Nori",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Klik op sprite: Hat",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Klik op sprite: Hat",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Klik op sprite: Hat",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "close-context",
+  },
+  Object {
+    "command": "start-context",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Kostuum na 1 klik",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "2",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "2",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Kostuum na 1 klik",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "3",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "3",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Kostuum na 1 klik",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "0",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "0",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Kostuum na 1 klik",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "0",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "0",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Kostuum na 1 klik",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "4",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "4",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Kostuum na 1 klik",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "0",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "0",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Kostuum na 1 klik",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "1",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "1",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Kostuum na 1 klik",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "2",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "2",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Kostuum na 1 klik",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "0",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "0",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Kostuum na 1 klik",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "0",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "0",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Kostuum na 1 klik",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "0",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "0",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Kostuum na 1 klik",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "3",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "3",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Kostuum na 1 klik",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "4",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "4",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Kostuum na 1 klik",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "0",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "0",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "De correcte blokken werden gebruikt",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "close-context",
+  },
+  Object {
+    "command": "close-tab",
+  },
+  Object {
+    "command": "close-judgement",
+  },
+]
+`;
+
+exports[`02_papegaai 1`] = `
+Array [
+  Object {
+    "command": "start-judgement",
+  },
+  Object {
+    "command": "start-tab",
+    "title": "Testen uit het testplan",
+  },
+  Object {
+    "command": "start-context",
+  },
+  Object {
+    "command": "close-context",
+  },
+  Object {
+    "command": "start-context",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "De papegaai heeft nog niet bewogen",
+  },
+  Object {
+    "command": "append-message",
+    "message": "De papegaai mag niet bewegen voor er op geklikt wordt",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Klik op sprite: Papegaai",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "close-context",
+  },
+  Object {
+    "command": "start-context",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "De papegaai beweegt niet verticaal",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "De papegaai raakt de rand bij het veranderen van richting",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "De papegaai vliegt horizontaal",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "De papegaai raakt de rand bij het veranderen van richting",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "De papegaai vliegt horizontaal",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "De papegaai raakt de rand bij het veranderen van richting",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "De papegaai vliegt horizontaal",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "De papegaai raakt de rand bij het veranderen van richting",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "De papegaai vliegt horizontaal",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "De papegaai raakt de rand bij het veranderen van richting",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "De papegaai vliegt horizontaal",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "De papegaai raakt de rand bij het veranderen van richting",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "De papegaai vliegt horizontaal",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "De papegaai raakt de rand bij het veranderen van richting",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "De papegaai vliegt horizontaal",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "De papegaai raakt de rand bij het veranderen van richting",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "De papegaai vliegt horizontaal",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "De papegaai raakt de rand bij het veranderen van richting",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "De papegaai vliegt horizontaal",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "De papegaai veranderde minimum 2 keer van richting",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Papegaai klappert met vleugels",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Gebruik van een lus",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Correcte gebruik van de lus",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "close-context",
+  },
+  Object {
+    "command": "close-tab",
+  },
+  Object {
+    "command": "close-judgement",
+  },
+]
+`;
+
+exports[`03_teken_een_vierkant 1`] = `
+Array [
+  Object {
+    "command": "start-judgement",
+  },
+  Object {
+    "command": "start-tab",
+    "title": "Testen uit het testplan",
+  },
+  Object {
+    "command": "start-context",
+  },
+  Object {
+    "command": "close-context",
+  },
+  Object {
+    "command": "start-context",
+  },
+  Object {
+    "command": "close-context",
+  },
+  Object {
+    "command": "start-context",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Aantal vierkanten",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "1",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "1",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Zijdes hebben lengte 200",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "De pen werd gebruikt",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "close-context",
+  },
+  Object {
+    "command": "close-tab",
+  },
+  Object {
+    "command": "close-judgement",
+  },
+]
+`;
+
+exports[`04_teken_een_driehoek 1`] = `
+Array [
+  Object {
+    "command": "start-judgement",
+  },
+  Object {
+    "command": "start-tab",
+    "title": "Testen uit het testplan",
+  },
+  Object {
+    "command": "start-context",
+  },
+  Object {
+    "command": "close-context",
+  },
+  Object {
+    "command": "start-context",
+  },
+  Object {
+    "command": "close-context",
+  },
+  Object {
+    "command": "start-context",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Aantal driehoeken",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "De pen werd gebruikt",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "close-context",
+  },
+  Object {
+    "command": "close-tab",
+  },
+  Object {
+    "command": "close-judgement",
+  },
+]
+`;
+
+exports[`05_teken_een_huis 1`] = `
+Array [
+  Object {
+    "command": "start-judgement",
+  },
+  Object {
+    "command": "start-tab",
+    "title": "Testen uit het testplan",
+  },
+  Object {
+    "command": "start-context",
+  },
+  Object {
+    "command": "close-context",
+  },
+  Object {
+    "command": "start-context",
+  },
+  Object {
+    "command": "close-context",
+  },
+  Object {
+    "command": "start-context",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "De pen werkt gebruikt",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "close-context",
+  },
+  Object {
+    "command": "close-tab",
+  },
+  Object {
+    "command": "close-judgement",
+  },
+]
+`;
+
+exports[`06_voetballende_kat 1`] = `
+Array [
+  Object {
+    "command": "start-judgement",
+  },
+  Object {
+    "command": "start-tab",
+    "title": "Testen uit het testplan",
+  },
+  Object {
+    "command": "start-context",
+  },
+  Object {
+    "command": "close-context",
+  },
+  Object {
+    "command": "start-context",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Druk op toets:  ",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "close-context",
+  },
+  Object {
+    "command": "start-context",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "De kat raakt de voetbal",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Afstand van kat tot voetbal wordt kleiner",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "close-context",
+  },
+  Object {
+    "command": "close-tab",
+  },
+  Object {
+    "command": "close-judgement",
+  },
+]
+`;
+
+exports[`07_heksenjacht 1`] = `
+Array [
+  Object {
+    "command": "start-judgement",
+  },
+  Object {
+    "command": "start-tab",
+    "title": "Testen uit het testplan",
+  },
+  Object {
+    "command": "start-context",
+  },
+  Object {
+    "command": "close-context",
+  },
+  Object {
+    "command": "start-context",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "De Heks beweegt niet voor de klik",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Klik op sprite: Heks",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "close-context",
+  },
+  Object {
+    "command": "start-context",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "De heks heeft bewogen",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "De heks heeft bewogen",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "na 1 seconde",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "na 2 secondes",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "tijdens een seconde",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "tijdens een seconde",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "tijdens een seconde",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "close-context",
+  },
+  Object {
+    "command": "close-tab",
+  },
+  Object {
+    "command": "close-judgement",
+  },
+]
+`;
+
+exports[`07_heksenjacht_eenvoudig 1`] = `
+Array [
+  Object {
+    "command": "start-judgement",
+  },
+  Object {
+    "command": "start-tab",
+    "title": "Testen uit het testplan",
+  },
+  Object {
+    "command": "start-context",
+  },
+  Object {
+    "command": "close-context",
+  },
+  Object {
+    "command": "start-context",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "De Heks beweegt niet voor de klik",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Klik op sprite: Heks",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "De heks is veranderd van positie",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "De heks is veranderd van positie",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "close-context",
+  },
+  Object {
+    "command": "start-context",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Gebruik van een lus",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Correcte gebruik van de lus",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "close-context",
+  },
+  Object {
+    "command": "close-tab",
+  },
+  Object {
+    "command": "close-judgement",
+  },
+]
+`;
+
+exports[`08_op_bezoek_bij_devin 1`] = `
+Array [
+  Object {
+    "command": "start-judgement",
+  },
+  Object {
+    "command": "start-tab",
+    "title": "Testen uit het testplan",
+  },
+  Object {
+    "command": "start-context",
+  },
+  Object {
+    "command": "close-context",
+  },
+  Object {
+    "command": "start-context",
+  },
+  Object {
+    "command": "close-context",
+  },
+  Object {
+    "command": "start-context",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Devin stelt zich voor",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "Hallo, ik ben Devin.",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "Hallo, ik ben Devin.",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Devin vraagt je naam",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "Wat is jouw naam?",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "Wat is jouw naam?",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Devin zegt hallo",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "Hallo, Louise",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "Hallo, Louise",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Devin stelt zich minstens 2 seconden lang voor",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "close-context",
+  },
+  Object {
+    "command": "close-tab",
+  },
+  Object {
+    "command": "close-judgement",
+  },
+]
+`;
+
+exports[`09_flauw_mopje 1`] = `
+Array [
+  Object {
+    "command": "start-judgement",
+  },
+  Object {
+    "command": "start-tab",
+    "title": "Testen uit het testplan",
+  },
+  Object {
+    "command": "start-context",
+  },
+  Object {
+    "command": "close-context",
+  },
+  Object {
+    "command": "start-context",
+  },
+  Object {
+    "command": "close-context",
+  },
+  Object {
+    "command": "start-context",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Bericht nummer 0 komt van de Kat",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Correcte text in bericht nummer 0",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "Klop, klop!",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "Klop, klop!",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Bericht nummer 1 komt van de Bananen",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Correcte text in bericht nummer 1",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "Wie is daar?",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "Wie is daar?",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Bericht nummer 2 komt van de Kat",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Correcte text in bericht nummer 2",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "Ki!",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "Ki!",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Bericht nummer 3 komt van de Bananen",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Correcte text in bericht nummer 3",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "Ki, wie?",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "Ki, wie?",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Bericht nummer 4 komt van de Kat",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Correcte text in bericht nummer 4",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "Neen, dank je. Ik heb liever bananen!",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "Neen, dank je. Ik heb liever bananen!",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "close-context",
+  },
+  Object {
+    "command": "close-tab",
+  },
+  Object {
+    "command": "close-judgement",
+  },
+]
+`;
+
+exports[`13_cijfersom 1`] = `
+Array [
+  Object {
+    "command": "start-judgement",
+  },
+  Object {
+    "command": "start-tab",
+    "title": "Testen uit het testplan",
+  },
+  Object {
+    "command": "start-context",
+  },
+  Object {
+    "command": "close-context",
+  },
+  Object {
+    "command": "start-context",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "De berekening van cijfersom 2586",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "21",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "21",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "De berekening van cijfersom 000",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "0",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "0",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "De berekening van cijfersom 199999",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "46",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "46",
+    "status": Object {
+      "enum": "correct",
+      "human": "Correct",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "close-context",
+  },
+  Object {
+    "command": "start-context",
+  },
+  Object {
+    "command": "close-context",
+  },
+  Object {
+    "command": "close-tab",
+  },
+  Object {
+    "command": "close-judgement",
+  },
+]
+`;
+
+exports[`draw_a_square 1`] = `
+Array [
+  Object {
+    "command": "start-judgement",
+  },
+  Object {
+    "command": "start-tab",
+    "title": "Testen uit het testplan",
+  },
+  Object {
+    "command": "start-context",
+  },
+  Object {
+    "command": "close-context",
+  },
+  Object {
+    "command": "start-context",
+  },
+  Object {
+    "command": "close-context",
+  },
+  Object {
+    "command": "start-context",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Squares were detected",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "Sides have length 200",
+  },
+  Object {
+    "command": "start-test",
+    "expected": "200",
+  },
+  Object {
+    "command": "append-message",
+    "message": "The detected square does not have sides with length 200.",
+  },
+  Object {
+    "command": "close-test",
+    "generated": "150",
+    "status": Object {
+      "enum": "wrong",
+      "human": "Fout",
+    },
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "start-testcase",
+    "description": "the Pen extension is used",
+  },
+  Object {
+    "command": "close-testcase",
+  },
+  Object {
+    "command": "append-message",
+    "message": "You could improve your solution by using a \\"repeat\\"-block.",
+  },
+  Object {
+    "command": "close-context",
+  },
+  Object {
+    "command": "close-tab",
+  },
+  Object {
+    "command": "close-judgement",
+  },
+]
+`;
