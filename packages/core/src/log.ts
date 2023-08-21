@@ -1,7 +1,7 @@
-import type Comment from '@ftrprf/judge-scratch-vm-types/types/engine/comment';
-import type Variable from '@ftrprf/judge-scratch-vm-types/types/engine/variable';
-import type RenderedTarget from '@ftrprf/judge-scratch-vm-types/types/sprites/rendered-target';
-import type VirtualMachine from '@ftrprf/judge-scratch-vm-types/types/virtual-machine';
+import type Comment from 'itch-scratch-vm-types/types/engine/comment';
+import type Variable from 'itch-scratch-vm-types/types/engine/variable';
+import type RenderedTarget from 'itch-scratch-vm-types/types/sprites/rendered-target';
+import type VirtualMachine from 'itch-scratch-vm-types/types/virtual-machine';
 import { cloneDeep, isEqual, last } from 'lodash-es';
 import { Line } from './lines';
 import { RotationStyle } from './matcher/patterns';

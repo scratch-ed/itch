@@ -18,7 +18,6 @@ The most important packages are:
 - The Scratch GUI.
   This is the graphical user interface that you see when you open Scratch.
   It is written in JavaScript and React.
-  FTRPRF has its own fork of this, integrating the Scratch GUI with the FTRPRF platform.
 - The Scratch VM.
   This is the "brain" of the operation.
   This takes the Scratch blocks, converts them to an internal representation and executes the code.
@@ -29,23 +28,6 @@ The Scratch blocks are executed directly.
 
 Finally, another Scratch package that is important for the judge is the Scratch renderer.
 This package takes commands from the Scratch VM and draws everything you see in the Stage.
-
-### Exercises
-
-Scratch exercises are managed on the FTRPRF platform.
-Each exercise has a "starter" version, which is the Scratch project the students receive when they open a new exercise.
-For teachers, there is also a "solution" version of the exercise, containing a sample solution.
-While students never see this version, we use it extensively in the judge to test stuff.
-
-Each exercise is also associated with a testplan.
-The testplan is a JavaScript file that contains the tests for a certain exercise.
-These are then executed by the judge when testing a solution.
-For those familiar with software development, the testplan is equivalent to a test suite, while the judge is equivalent to a testing library such as jUnit.
-
-Exercises are created in the FTRPRF Studio.
-This is also where the testplan is uploaded and attached to the exercise.
-The exercises are then published (resulting in a fully translated exercise, see the section [Translation](./translation.md)).
-Finally, they are included in lessons, making them accessible to the students and teachers.
 
 ### Scratch judge ("Itch")
 
@@ -73,7 +55,6 @@ The most important ones are:
 There are two more utility packages:
 
 - `packages/test-utils`: utilities to run the judge from jest tests, used in the exercises (see later)
-- `packages/ipm`: the "itch package manager", allows downloading SB3 files and translation data from the FTRPRF servers.
 
 Finally, there are exercises in `/exercises`.
 Each exercise is its own "JavaScript package", containing one or more test plans.

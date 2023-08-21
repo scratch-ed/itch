@@ -1,5 +1,5 @@
-import type Runtime from '@ftrprf/judge-scratch-vm-types/types/engine/runtime';
-import type Thread from '@ftrprf/judge-scratch-vm-types/types/engine/thread';
+import type Runtime from 'itch-scratch-vm-types/types/engine/runtime';
+import type Thread from 'itch-scratch-vm-types/types/engine/thread';
 import type VirtualMachine from 'scratch-vm';
 
 import { Deferred } from './deferred';

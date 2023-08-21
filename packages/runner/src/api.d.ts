@@ -1,8 +1,8 @@
-import type { OutputHandler } from '@ftrprf/judge-core/src/output';
+import type { OutputHandler } from 'itch-core/src/output';
 import type { Page as PuppeteerPage } from 'puppeteer';
 import type { Page as CorePage } from 'puppeteer-core';
-import type { LanguageData } from '@ftrprf/judge-core/src/i18n';
-import type { Judgement } from '@ftrprf/judge-core/src/output/full-schema';
+import type { LanguageData } from 'itch-core/src/i18n';
+import type { Judgement } from 'itch-core/src/output/full-schema';
 
 interface TestplanUrlOptions {
   /** Path to the testplan. */

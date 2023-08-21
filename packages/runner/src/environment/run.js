@@ -106,7 +106,7 @@ async function manualRun() {
   await loadLocalDependency('../../../../node_modules/scratch-vm/dist/web/scratch-vm.js');
   await loadLocalDependency('../../../../node_modules/lodash/lodash.min.js');
   await loadLocalDependency(
-    '../../../../node_modules/@ftrprf/judge-core/dist/js/judge.browser.js',
+    '../../../../node_modules/itch-core/dist/js/judge.browser.js',
   );
   await loadLocalDependency('./collector.js');
 

@@ -1,4 +1,4 @@
-import type RenderedTarget from '@ftrprf/judge-scratch-vm-types/types/sprites/rendered-target';
+import type RenderedTarget from 'itch-scratch-vm-types/types/sprites/rendered-target';
 
 import { castArray } from 'lodash-es';
 import { ScheduledAction } from './action';

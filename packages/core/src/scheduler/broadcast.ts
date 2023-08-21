@@ -3,7 +3,7 @@ import { ThreadListener } from '../listener';
 import { Context } from '../context';
 import { Event } from '../log';
 
-import type Target from '@ftrprf/judge-scratch-vm-types/types/engine/target';
+import type Target from 'itch-scratch-vm-types/types/engine/target';
 
 export class SendBroadcastAction extends ScheduledAction {
   private readonly name: string;

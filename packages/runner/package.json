@@ -1,14 +1,9 @@
 {
-  "name": "@ftrprf/judge-runner",
+  "name": "itch-runner",
   "version": "1.8.0",
   "description": "Judge runner",
   "main": "src/api.js",
   "types": "src/api.d.ts",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/FTRPRF/scratch-judge",
-    "directory": "packages/runner"
-  },
   "dependencies": {
     "scratch-audio": "0.1.0-prerelease.20221123180128",
     "scratch-render": "0.1.0-prerelease.20230318150639",
@@ -19,7 +14,7 @@
   },
   "//": "This is set as a peer dependency, so you can install the wanted version yourself.",
   "peerDependencies": {
-    "@ftrprf/judge-core": "*"
+    "itch-core": "*"
   },
   "devDependencies": {
     "puppeteer": "^20.8.3",

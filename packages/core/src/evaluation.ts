@@ -11,7 +11,7 @@ import { ScheduledEvent } from './scheduler/scheduled-event';
 import { broadcast, delay, sprite } from './scheduler/wait';
 import { asRange, ignoreWaitInProcedureFor } from './testplan';
 import { ResultManager, OutputHandler } from './output';
-import type VirtualMachine from '@ftrprf/judge-scratch-vm-types';
+import type VirtualMachine from 'itch-scratch-vm-types';
 import { angle, distSq, findSquares, findTriangles, mergeLines } from './lines';
 import { checkPredefinedBlocks } from './testplan/predefined-blocks';
 import { GroupLevel } from './testplan/hierarchy';

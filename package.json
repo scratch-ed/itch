@@ -1,11 +1,10 @@
 {
-  "name": "@ftrprf/scratch-judge",
+  "name": "itch",
   "private": true,
   "version": "1.8.0",
   "description": "Scratch judge for FTRPRF",
   "workspaces": [
     "packages/**",
-    "exercises/**",
     "types/**"
   ],
   "devDependencies": {

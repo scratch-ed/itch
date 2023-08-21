@@ -1,4 +1,4 @@
-# @ftrprf/judge-core
+# itch-core
 
 This is the core library used to run tests on scratch projects.
 

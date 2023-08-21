@@ -1,21 +1,16 @@
 {
-  "name": "@ftrprf/judge-test-utils",
+  "name": "itch-test-utils",
   "version": "1.8.0",
   "description": "Some utilities to run tests for exercises",
   "main": "src/index.js",
   "types": "src/index.d.ts",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/FTRPRF/scratch-judge",
-    "directory": "packages/test-utils"
-  },
   "files": [
     "src/index.js",
     "src/index.d.ts",
     "src/matchers.js"
   ],
   "dependencies": {
-    "@ftrprf/judge-runner": "*",
+    "itch-runner": "*",
     "puppeteer": "^20.8.3"
   },
   "devDependencies": {

@@ -43,7 +43,7 @@ For example, a debugger might also use the log facilities from the judge.
 To set up the log of the judge, without judging a project, you will need to use the `Context` class directly:
 
 ```javascript
-import { createContextWithVm, Context, snapshotFromVm } from '@ftrprf/judge-core';
+import { createContextWithVm, Context, snapshotFromVm } from 'itch-core';
 
 // Create a Context with an existing VM.
 const context = await createContextWithVm(vm);
