@@ -43,12 +43,6 @@ The properties are:
 - **plan**: plan to the testplan, relative to the root of the repo.
 - **debug**: if true and run with puppeteer, the browser will open, otherwise it will be headless.
 
-Getting the local files can be done with:
-
-```bash
-$ npm run ipm --workspace packages/ipm -- down ../../exercises/agario
-```
-
 ## Troubleshooting
 
 ### Puppeteer complains about my browser
@@ -76,8 +70,6 @@ To deploy the judge, you'll need to do 4 things:
 
 1. Tag a new version
 2. Create and publish that version as a npm package
-3. Update the AWS repo to point to that version
-4. Publish to AWS
 
 Steps to take:
 
@@ -87,37 +79,8 @@ Steps to take:
    3. `git tag <tagname>`
    4. `git push && git push --tags`
    5. GitHub maakt een nieuwe package
-2. On the scratch judge aws wrapper:
-   https://github.com/FTRPRF/scratch-judge-serverless-api-aws/edit/main/README.md#deploy-a-new-version
 
 ### Creating a new package
 
 After pushing the tag to GitHub, a new version will be made automatically.
 
-### Troubleshooting
-
-#### `npm ERR! code E404` in step 2.ii
-
-```
-➜  scratch-judge-serverless-api-aws git:(main) npm installnpm ERR! code E404
-npm ERR! 404 Not Found - GET https://registry.npmjs.org/@ftrprf%2fjudge-runner - Not found
-npm ERR! 404
-npm ERR! 404  '@ftrprf/judge-runner@^1.8.0' is not in this registry.
-npm ERR! 404
-npm ERR! 404 Note that you can also install from a
-npm ERR! 404 tarball, folder, http url, or git url.
-```
-
-Je hebt geen toegang tot de npm registry. Om ervoor te zorgen dat je wel aan de registry kan, moet je een `~/.npmrc` bestand aanmaken:
-
-```
-.npmrc:
-//npm.pkg.github.com/:_authToken=<TOKEN>
-@ftrprf:registry=https://npm.pkg.github.com/
-```
-
-Hier bij is `<TOKEN>` een github personal access token van jezelf.
-
-Meer info over de registry: https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry#publishing-a-package-using-a-local-npmrc-file
-
-Personal access tokens: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-personal-access-token-classic
