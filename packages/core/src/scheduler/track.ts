@@ -1,4 +1,4 @@
-import type Target from '@ftrprf/judge-scratch-vm-types/types/engine/target';
+import type Target from 'itch-scratch-vm-types/types/engine/target';
 
 import { ScheduledAction } from './action';
 import { Context } from '../context';

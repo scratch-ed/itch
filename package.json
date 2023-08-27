@@ -1,11 +1,10 @@
 {
-  "name": "@ftrprf/scratch-judge",
+  "name": "itch-judge",
   "private": true,
   "version": "1.2.1",
-  "description": "Scratch judge for FTRPRF",
+  "description": "Scratch Judge",
   "workspaces": [
     "packages/**",
-    "exercises/**",
     "types/**"
   ],
   "devDependencies": {
@@ -24,11 +23,10 @@
     "typescript-json-schema": "^0.54.0"
   },
   "scripts": {
-    "generate:output": "npm run generate:output --workspace @ftrprf/judge-core",
-    "watch": "npm run watch --workspace @ftrprf/judge-core",
+    "generate:output": "npm run generate:output --workspace itch-core",
+    "watch": "npm run watch --workspace itch-core",
     "build": "npm run build --workspaces --if-present",
     "type-check": "npm run type-check --workspaces --if-present",
-    "test:exercises": "jest exercises.test.js --silent",
     "clean": "npm run clean --workspaces --if-present && rimraf ./**/node_modules",
     "lint": "eslint .",
     "format": "prettier --write .",

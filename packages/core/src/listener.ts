@@ -1,7 +1,7 @@
 /* Copyright (C) 2019 Ghent University - All Rights Reserved */
 import { Deferred } from './deferred';
 
-import Thread from '@ftrprf/judge-scratch-vm-types/types/engine/thread';
+import Thread from 'itch-scratch-vm-types/types/engine/thread';
 
 class Listener {
   active = true;

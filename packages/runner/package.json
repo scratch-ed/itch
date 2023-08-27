@@ -1,5 +1,5 @@
 {
-  "name": "@ftrprf/judge-runner",
+  "name": "itch-runner",
   "version": "1.2.1",
   "description": "Judge runner",
   "main": "src/api.js",
@@ -19,7 +19,7 @@
   },
   "//": "This is set as a peer dependency, so you can install the wanted version yourself.",
   "peerDependencies": {
-    "@ftrprf/judge-core": "*"
+    "itch-core": "*"
   },
   "devDependencies": {
     "puppeteer": "^10.4.0",

@@ -22,8 +22,8 @@
  * 3. The `describe` directive groups a bunch of related tests, e.g. for one sprite.
  * 4. The `tab` groups a bunch of `describe` statements. These are mainly for UI purposes.
  */
-import type VirtualMachine from '@ftrprf/judge-scratch-vm-types';
-import type BlockUtility from '@ftrprf/judge-scratch-vm-types/types/engine/block-utility';
+import type VirtualMachine from 'itch-scratch-vm-types';
+import type BlockUtility from 'itch-scratch-vm-types/types/engine/block-utility';
 
 export class FatalErrorException extends Error {}
 

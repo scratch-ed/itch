@@ -26,10 +26,10 @@ module.exports = [
     },
     target: 'web',
     entry: {
-      '@ftrprf/judge-core': './src/index.ts',
+      'itch-core': './src/index.ts',
     },
     output: {
-      library: '@ftrprf/judge-core',
+      library: 'itch-core',
       libraryTarget: 'umd',
       path: path.resolve(path.dirname(pack.main)),
       filename: path.basename(pack.main),

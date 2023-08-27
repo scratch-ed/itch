@@ -58,7 +58,7 @@ async function runOnPage(page, options) {
   );
   await loadModuleInPage(page, 'scratch-vm');
   await loadModuleInPage(page, 'lodash', 'lodash.min.js');
-  await loadModuleInPage(page, '@ftrprf/judge-core');
+  await loadModuleInPage(page, 'itch-core');
 
   if (options.testplanData) {
     await page.addScriptTag({ content: options.testplanData });

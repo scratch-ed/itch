@@ -13,7 +13,7 @@ This is currently the only example of using part of the judge, but others might 
 To set up the log of the judge, without judging a project, you will need to use the `Context` class directly:
 
 ```javascript
-import { createContextWithVm, Context, snapshotFromVm } from '@ftrprf/judge-core';
+import { createContextWithVm, Context, snapshotFromVm } from 'itch-core';
 
 // Create a Context with an existing VM.
 const context = await createContextWithVm(vm);

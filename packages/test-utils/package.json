@@ -1,5 +1,5 @@
 {
-  "name": "@ftrprf/judge-test-utils",
+  "name": "itch-test-utils",
   "version": "1.2.1",
   "description": "Some utilities to run tests for exercises",
   "main": "src/index.js",
@@ -15,7 +15,7 @@
     "src/matchers.js"
   ],
   "dependencies": {
-    "@ftrprf/judge-runner": "*",
+    "itch-runner": "*",
     "puppeteer": "^10.4.0"
   },
   "devDependencies": {
