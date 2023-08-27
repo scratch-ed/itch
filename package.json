@@ -2,7 +2,7 @@
   "name": "itch",
   "private": true,
   "version": "1.8.0",
-  "description": "Scratch judge for FTRPRF",
+  "description": "Scratch Judge",
   "workspaces": [
     "packages/**",
     "types/**"
@@ -28,7 +28,6 @@
     "watch": "npm run watch --workspace itch-core",
     "build": "npm run build --workspaces --if-present",
     "type-check": "npm run type-check --workspaces --if-present",
-    "test:exercises": "jest exercises.test.js --silent",
     "clean": "npm run clean --workspaces --if-present && rimraf ./**/node_modules",
     "lint": "eslint .",
     "format": "prettier --write .",

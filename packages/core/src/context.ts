@@ -1,5 +1,6 @@
 import type Runtime from 'itch-scratch-vm-types/types/engine/runtime';
 import type Thread from 'itch-scratch-vm-types/types/engine/thread';
+import type Target from 'itch-scratch-vm-types/types/engine/target';
 import type VirtualMachine from 'scratch-vm';
 
 import { Deferred } from './deferred';

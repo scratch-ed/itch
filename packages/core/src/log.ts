@@ -24,8 +24,8 @@ import { ProfileEventData } from './profiler';
 import { SavedRangeEventData } from './scheduler/callback';
 import { ClickEventData } from './scheduler/click';
 import { assertType, ensure } from './utils';
-import Thread from "@ftrprf/judge-scratch-vm-types/types/engine/thread";
-import Runtime from "@ftrprf/judge-scratch-vm-types/types/engine/runtime";
+import Thread from "itch-scratch-vm-types/types/engine/thread";
+import Runtime from "itch-scratch-vm-types/types/engine/runtime";
 
 /**
  * Convert a scratch target from the VM to one we save in the log.
