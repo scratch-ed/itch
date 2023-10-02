@@ -10,7 +10,10 @@ export class Diff {
    * @param expected - The value that the test plan expected.
    * @param actual - The actual value produced by the submission under test.
    */
-  constructor(public readonly expected: string, public readonly actual: string) {}
+  constructor(
+    public readonly expected: string,
+    public readonly actual: string,
+  ) {}
 }
 
 /**
@@ -58,7 +61,10 @@ export class Group {
 }
 
 export class Meta {
-  constructor(public totalTests = 0, public correctTests = 0) {}
+  constructor(
+    public totalTests = 0,
+    public correctTests = 0,
+  ) {}
 }
 
 /**

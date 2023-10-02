@@ -280,7 +280,10 @@ export class Event {
   private previousSnapshot?: Snapshot;
   private nextSnapshot?: Snapshot;
 
-  constructor(readonly type: string | EventTypes, readonly data: EventData = {}) {}
+  constructor(
+    readonly type: string | EventTypes,
+    readonly data: EventData = {},
+  ) {}
 
   get previous(): Snapshot {
     return ensure(this.previousSnapshot, 'The previous snapshot is not available yet.');
