@@ -181,7 +181,12 @@ export class Snapshot {
     readonly targets: ScratchTarget[],
     runtime: Runtime | null = null
   ) {
-    this.runtimeSnapshot = runtime && new RuntimeSnapshot(runtime);
+    try {
+      this.runtimeSnapshot = runtime && new RuntimeSnapshot(runtime);
+    } catch (e) {
+      console.warn("VM has no Thread.toJSON method. Check depdencies.");
+      this.runtimeSnapshot = null;
+    }
   }
 
   get sprites(): ScratchSprite[] {
