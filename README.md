@@ -83,4 +83,3 @@ Steps to take:
 ### Creating a new package
 
 After pushing the tag to GitHub, a new version will be made automatically.
-
