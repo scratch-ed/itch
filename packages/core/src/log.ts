@@ -24,6 +24,8 @@ import { ProfileEventData } from './profiler';
 import { SavedRangeEventData } from './scheduler/callback';
 import { ClickEventData } from './scheduler/click';
 import { assertType, ensure } from './utils';
+import Thread from 'itch-scratch-vm-types/types/engine/thread';
+import Runtime from 'itch-scratch-vm-types/types/engine/runtime';
 
 /**
  * Convert a scratch target from the VM to one we save in the log.
@@ -134,6 +136,29 @@ function vmTargetToScratchTarget(
 }
 
 /**
+ * The state of the runtime threads at a certain point in time.
+ *
+ * The snapshot consists of all threads.
+ * It has no extra data (like timestamp) because it's meant to be used inside a Snapshot.
+ */
+export class RuntimeSnapshot {
+  readonly threads: string[];
+
+  /**
+   *
+   * @param runtime A Runtime object.
+   */
+  constructor(runtime: Runtime) {
+    this.threads = runtime.threads.map((thread: Thread) => thread.toJSON());
+  }
+
+  restore(runtime: Runtime) {
+    runtime.threads = [];
+    this.threads.map((thread: string) => runtime.restoreThread(thread));
+  }
+}
+
+/**
  * The state of the VM at a certain point in time.
  *
  * The snapshot consists of all the current sprites' state when the snapshot
@@ -142,17 +167,27 @@ function vmTargetToScratchTarget(
  * mode, which will contain more information.
  */
 export class Snapshot {
+  runtimeSnapshot: RuntimeSnapshot | null;
   /**
    *
    * @param timestamp When the snapshot was taken.
    * @param origin Why it was taken. You can use anything you want.
    * @param targets The actual data that was captured.
+   * @param runtime A Runtime object to make a runtime snapshot from
    */
   constructor(
     readonly timestamp: number,
     readonly origin: string,
     readonly targets: ScratchTarget[],
-  ) {}
+    runtime: Runtime | null = null,
+  ) {
+    try {
+      this.runtimeSnapshot = runtime && new RuntimeSnapshot(runtime);
+    } catch (e) {
+      console.warn('VM has no Thread.toJSON method. Check depdencies.');
+      this.runtimeSnapshot = null;
+    }
+  }
 
   get sprites(): ScratchSprite[] {
     return this.targets.filter((t) => t instanceof ScratchSprite) as ScratchSprite[];
@@ -180,6 +215,10 @@ export class Snapshot {
 
   sprite(name: string): ScratchSprite {
     return ensure(this.findSprite(name));
+  }
+
+  findTargetById(id: string): ScratchTarget | undefined {
+    return this.targets.find((t) => t.id === id);
   }
 
   target(name: string): ScratchTarget {
@@ -256,6 +295,13 @@ export class Snapshot {
 
   get time(): number {
     return this.timestamp;
+  }
+
+  restoreRuntime(runtime: Runtime): boolean {
+    if (this.runtimeSnapshot) {
+      this.runtimeSnapshot.restore(runtime);
+    }
+    return this.runtimeSnapshot != null;
   }
 }
 
@@ -449,16 +495,18 @@ class RenderLog {
  * information.
  */
 export class Log {
-  private readonly snapshotList: Snapshot[] = [];
-  private readonly eventList: Event[] = [];
+  private snapshotList: Snapshot[] = [];
+  private eventList: Event[] = [];
   private readonly startTime: number = Date.now();
   private readonly vm: VirtualMachine;
   public readonly renderer: RenderLog = new RenderLog();
   private templateSnapshot?: Snapshot;
   public started = false;
+  public readonly reloadable;
 
-  constructor(vm: VirtualMachine) {
+  constructor(vm: VirtualMachine, reloadable = false) {
     this.vm = vm;
+    this.reloadable = reloadable;
   }
 
   public reset(): void {
@@ -551,7 +599,7 @@ export class Log {
       );
     });
 
-    const snapshot = new Snapshot(this.timestamp(), origin, targets);
+    const snapshot = new Snapshot(this.timestamp(), origin, targets, this.vm.runtime);
     this.registerSnapshot(snapshot);
     return snapshot;
   }
@@ -614,5 +662,15 @@ export class Log {
     const end = e.next.timestamp;
 
     return this.events.filter((s) => s.timestamp >= start && s.timestamp <= end);
+  }
+
+  setRange(start: number, end: number) {
+    let index = 0;
+    this.eventList = this.eventList.filter((e) => {
+      if (e.type === 'ops') {
+        index += 1;
+      }
+      return start < index && index <= end;
+    });
   }
 }

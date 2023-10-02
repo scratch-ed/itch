@@ -8,6 +8,19 @@ import { OutputHandler } from './output';
 import { Context } from './context';
 import { EvalConfig } from './evaluation';
 
+export const Events: Record<string, string> = {
+  SCRATCH_PROJECT_START: 'PROJECT_START',
+  SCRATCH_PROJECT_RUN_STOP: 'PROJECT_RUN_STOP',
+  SCRATCH_SAY_OR_THINK: 'SAY',
+  SCRATCH_QUESTION: 'QUESTION',
+  SCRATCH_ANSWER: 'ANSWER',
+  // Custom events,
+  DONE_THREADS_UPDATE: 'DONE_THREADS_UPDATE',
+  BEFORE_HATS_START: 'BEFORE_HATS_START',
+  // Custom event for the debugger.
+  THREADS_EXECUTED: 'THREADS_EXECUTED',
+};
+
 /**
  * Create a context with an existing virtual machine.
  *
