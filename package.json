@@ -42,8 +42,7 @@
   },
   "jest": {
     "reporters": [
-      "default",
-      "@ftrprf/csv-reporter"
+      "default"
     ]
   }
 }

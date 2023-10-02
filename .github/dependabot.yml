@@ -19,6 +19,9 @@ updates:
       scratch:
         patterns:
           - '*scratch*'
+      eslint:
+        patterns:
+          - '*eslint*'
   - package-ecosystem: 'github-actions'
     # Workflow files stored in the
     # default location of `.github/workflows`
