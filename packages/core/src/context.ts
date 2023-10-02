@@ -1,6 +1,5 @@
 import type Runtime from 'itch-scratch-vm-types/types/engine/runtime';
 import type Thread from 'itch-scratch-vm-types/types/engine/thread';
-import type Target from 'itch-scratch-vm-types/types/engine/target';
 import type VirtualMachine from 'scratch-vm';
 
 import { Deferred } from './deferred';
@@ -12,26 +11,8 @@ import { proxiedRenderer, RendererMethods, unproxyRenderer } from './renderer';
 import { EndAction } from './scheduler/end';
 import { ScheduledEvent } from './scheduler/scheduled-event';
 import { memoize } from './utils';
+import { Events } from "./vm";
 
-// A list of event names...
-// These must be the same as in Scratch.
-const SCRATCH_PROJECT_START = 'PROJECT_START';
-const SCRATCH_PROJECT_RUN_STOP = 'PROJECT_RUN_STOP';
-const SCRATCH_SAY_OR_THINK = 'SAY';
-const SCRATCH_QUESTION = 'QUESTION';
-const SCRATCH_ANSWER = 'ANSWER';
-// Custom events we emit ourselves.
-const STOPPED_THREAD = 'STOPPED_THREAD';
-const BEFORE_HATS_START = 'BEFORE_HATS_START';
-// Custom event for the debugger.
-export const OPS = 'OPS_EXECUTED';
-
-/**
- * @typedef {object} Acceleration
- * @property {number} factor - Main acceleration factor.
- * @property {number} [time] - Scratch waiting times.
- * @property {number} [event] - Scheduled events waiting time.
- */
 interface Acceleration {
   factor: number;
   time?: number;
@@ -139,7 +120,7 @@ export class Context {
     this.vm.runtime._step = () => {
       const oldResult = oldStepFunction();
       this.vm.runtime._lastStepDoneThreads.forEach((t) =>
-        this.vm.runtime.emit(STOPPED_THREAD, t),
+        this.vm.runtime.emit(Events.STOPPED_THREAD, t),
       );
       return oldResult;
     };
@@ -148,13 +129,13 @@ export class Context {
       this.vm.runtime.sequencer,
     );
     this.vm.runtime.sequencer.retireThread = (thread: Thread): void => {
-      this.vm.emit(STOPPED_THREAD, thread);
+      this.vm.emit(Events.STOPPED_THREAD, thread);
       oldThreadFunction(thread);
     };
 
     const oldHatFunction = this.vm.runtime.startHats.bind(this.vm.runtime);
     this.vm.runtime.startHats = (requestedHatOpcode, optMatchFields, optTarget) => {
-      this.vm.runtime.emit(BEFORE_HATS_START, {
+      this.vm.runtime.emit(Events.BEFORE_HATS_START, {
         requestedHatOpcode,
         optMatchFields,
         optTarget,
@@ -233,7 +214,7 @@ export class Context {
           event.next = event.previous;
           this.log.registerEvent(event);
 
-          this.vm.runtime.emit(SCRATCH_ANSWER, x);
+          this.vm.runtime.emit(Events.SCRATCH_ANSWER, x);
         }
       },
       // The following is only used by the debugger
@@ -282,21 +263,21 @@ export class Context {
 
     if (logMode === 'judge') {
       console.log('Attaching event listeners for judge log mode...');
-      this.vm.runtime.on(SCRATCH_PROJECT_START, this.eventHandles.scratchProjectStart);
-      this.vm.runtime.on(SCRATCH_SAY_OR_THINK, this.eventHandles.scratchSayOrThink);
-      this.vm.runtime.on(SCRATCH_QUESTION, this.eventHandles.scratchQuestion);
+      this.vm.runtime.on(Events.SCRATCH_PROJECT_START, this.eventHandles.scratchProjectStart);
+      this.vm.runtime.on(Events.SCRATCH_SAY_OR_THINK, this.eventHandles.scratchSayOrThink);
+      this.vm.runtime.on(Events.SCRATCH_QUESTION, this.eventHandles.scratchQuestion);
       this.vm.runtime.on(
-        SCRATCH_PROJECT_RUN_STOP,
+          Events.SCRATCH_PROJECT_RUN_STOP,
         this.eventHandles.scratchProjectRunStop,
       );
-      this.vm.runtime.on(STOPPED_THREAD, this.eventHandles.threadStopped);
-      this.vm.runtime.on(BEFORE_HATS_START, this.eventHandles.beforeHatsStart);
+      this.vm.runtime.on(Events.STOPPED_THREAD, this.eventHandles.threadStopped);
+      this.vm.runtime.on(Events.BEFORE_HATS_START, this.eventHandles.beforeHatsStart);
     }
 
     if (logMode === 'debugger') {
       console.log('Attaching event listeners for debugger log mode...');
-      this.vm.runtime.on(THREADS_EXECUTED, this.eventHandles.ops);
-      this.vm.runtime.on(SCRATCH_ANSWER, this.eventHandles.scratchAnswer);
+      this.vm.runtime.on(Events.THREADS_EXECUTED, this.eventHandles.ops);
+      this.vm.runtime.on(Events.SCRATCH_ANSWER, this.eventHandles.scratchAnswer);
     }
   }
 
@@ -312,17 +293,17 @@ export class Context {
       console.log('No event handles found to detach, doing nothing.');
       return;
     }
-    this.vm.runtime.off(SCRATCH_PROJECT_START, this.eventHandles.scratchProjectStart);
-    this.vm.runtime.off(SCRATCH_SAY_OR_THINK, this.eventHandles.scratchSayOrThink);
-    this.vm.runtime.off(SCRATCH_QUESTION, this.eventHandles.scratchQuestion);
+    this.vm.runtime.off(Events.SCRATCH_PROJECT_START, this.eventHandles.scratchProjectStart);
+    this.vm.runtime.off(Events.SCRATCH_SAY_OR_THINK, this.eventHandles.scratchSayOrThink);
+    this.vm.runtime.off(Events.SCRATCH_QUESTION, this.eventHandles.scratchQuestion);
     this.vm.runtime.off(
-      SCRATCH_PROJECT_RUN_STOP,
+        Events.SCRATCH_PROJECT_RUN_STOP,
       this.eventHandles.scratchProjectRunStop,
     );
-    this.vm.runtime.off(STOPPED_THREAD, this.eventHandles.threadStopped);
-    this.vm.runtime.off(BEFORE_HATS_START, this.eventHandles.beforeHatsStart);
-    this.vm.runtime.off(THREADS_EXECUTED, this.eventHandles.ops);
-    this.vm.runtime.off(SCRATCH_ANSWER, this.eventHandles.scratchAnswer);
+    this.vm.runtime.off(Events.STOPPED_THREAD, this.eventHandles.threadStopped);
+    this.vm.runtime.off(Events.BEFORE_HATS_START, this.eventHandles.beforeHatsStart);
+    this.vm.runtime.off(Events.THREADS_EXECUTED, this.eventHandles.ops);
+    this.vm.runtime.off(Events.SCRATCH_ANSWER, this.eventHandles.scratchAnswer);
     this.eventHandles = undefined;
   }
 
