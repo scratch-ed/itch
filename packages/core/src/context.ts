@@ -11,7 +11,7 @@ import { proxiedRenderer, RendererMethods, unproxyRenderer } from './renderer';
 import { EndAction } from './scheduler/end';
 import { ScheduledEvent } from './scheduler/scheduled-event';
 import { memoize } from './utils';
-import { Events } from "./vm";
+import { Events } from './vm';
 
 interface Acceleration {
   factor: number;
@@ -198,7 +198,7 @@ export class Context {
           let x = this.providedAnswers.shift();
           if (x === undefined) {
             this.groupedOutput.appendMessage(
-                'Er werd een vraag gesteld waarop geen antwoord voorzien is.',
+              'Er werd een vraag gesteld waarop geen antwoord voorzien is.',
             );
             this.groupedOutput.escalateStatus('wrong');
             x = undefined;
@@ -263,11 +263,17 @@ export class Context {
 
     if (logMode === 'judge') {
       console.log('Attaching event listeners for judge log mode...');
-      this.vm.runtime.on(Events.SCRATCH_PROJECT_START, this.eventHandles.scratchProjectStart);
-      this.vm.runtime.on(Events.SCRATCH_SAY_OR_THINK, this.eventHandles.scratchSayOrThink);
+      this.vm.runtime.on(
+        Events.SCRATCH_PROJECT_START,
+        this.eventHandles.scratchProjectStart,
+      );
+      this.vm.runtime.on(
+        Events.SCRATCH_SAY_OR_THINK,
+        this.eventHandles.scratchSayOrThink,
+      );
       this.vm.runtime.on(Events.SCRATCH_QUESTION, this.eventHandles.scratchQuestion);
       this.vm.runtime.on(
-          Events.SCRATCH_PROJECT_RUN_STOP,
+        Events.SCRATCH_PROJECT_RUN_STOP,
         this.eventHandles.scratchProjectRunStop,
       );
       this.vm.runtime.on(Events.STOPPED_THREAD, this.eventHandles.threadStopped);
@@ -293,11 +299,14 @@ export class Context {
       console.log('No event handles found to detach, doing nothing.');
       return;
     }
-    this.vm.runtime.off(Events.SCRATCH_PROJECT_START, this.eventHandles.scratchProjectStart);
+    this.vm.runtime.off(
+      Events.SCRATCH_PROJECT_START,
+      this.eventHandles.scratchProjectStart,
+    );
     this.vm.runtime.off(Events.SCRATCH_SAY_OR_THINK, this.eventHandles.scratchSayOrThink);
     this.vm.runtime.off(Events.SCRATCH_QUESTION, this.eventHandles.scratchQuestion);
     this.vm.runtime.off(
-        Events.SCRATCH_PROJECT_RUN_STOP,
+      Events.SCRATCH_PROJECT_RUN_STOP,
       this.eventHandles.scratchProjectRunStop,
     );
     this.vm.runtime.off(Events.STOPPED_THREAD, this.eventHandles.threadStopped);
