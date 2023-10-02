@@ -14,11 +14,11 @@ updates:
     groups:
       babel:
         patterns:
-          - "@babel*"
-          - "babel*"
+          - '@babel*'
+          - 'babel*'
       scratch:
         patterns:
-          - "*scratch*"
+          - '*scratch*'
   - package-ecosystem: 'github-actions'
     # Workflow files stored in the
     # default location of `.github/workflows`
