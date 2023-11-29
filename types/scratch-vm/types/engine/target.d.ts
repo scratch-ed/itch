@@ -8,9 +8,10 @@ declare class Target extends EventEmitter {
     /**
      * @param {Runtime} runtime Reference to the runtime.
      * @param {?Blocks} blocks Blocks instance for the blocks owned by this target.
+     * @param {string=} id optional id for the target.
      * @constructor
      */
-    constructor(runtime: any, blocks: Blocks | null);
+    constructor(runtime: any, blocks: Blocks | null, id?: string | null);
     /**
      * Reference to the runtime.
      * @type {Runtime}

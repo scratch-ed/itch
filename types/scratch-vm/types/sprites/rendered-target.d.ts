@@ -40,9 +40,10 @@ declare class RenderedTarget extends Target {
     /**
      * @param {!Sprite} sprite Reference to the parent sprite.
      * @param {Runtime} runtime Reference to the runtime.
+     * @param {string=} id optional id for the target.
      * @constructor
      */
-    constructor(sprite: any, runtime: any);
+    constructor(sprite: any, runtime: any, id?: string | null);
     /**
      * Reference to the sprite that this is a render of.
      * @type {!Sprite}

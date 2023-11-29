@@ -66,10 +66,11 @@ declare class Sprite {
     /**
      * Create a clone of this sprite.
      * @param {string=} optLayerGroup Optional layer group the clone's drawable should be added to
+     * @param {string=} id optional id of the clone.
      * Defaults to the sprite layer group
      * @returns {!RenderedTarget} Newly created clone.
      */
-    createClone(optLayerGroup?: string | undefined): RenderedTarget;
+    createClone(optLayerGroup?: string | undefined, id?: string | null): RenderedTarget;
     /**
      * Disconnect a clone from this sprite. The clone is unmodified.
      * In particular, the clone's dispose() method is not called.
