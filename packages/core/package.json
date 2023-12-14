@@ -45,7 +45,7 @@
     "webpack-dev-server": "^4.15.1",
     "@types/lodash-es": "^4.17.9",
     "itch-scratch-vm-types": "^0.2.0",
-    "@types/seed-random": "^2.2.2",
+    "@types/seed-random": "^2.2.4",
     "rimraf": "^5.0.5",
     "typescript": "^5.2.2"
   },
