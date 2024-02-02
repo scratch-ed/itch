@@ -17,7 +17,7 @@
     "itch-core": "*"
   },
   "devDependencies": {
-    "puppeteer": "^21.5.2",
+    "puppeteer": "^21.10.0",
     "puppeteer-core": "^21.3.6"
   },
   "files": [
